@@ -1,0 +1,322 @@
+/*
+=============================================================================
+Licensed Materials - Property of LorinWare Prod.
+(C) Copyright Christophe LORIN 2021, All Rights Reserved.
+France Government Users Restricted Rights - Use, duplication or disclosure
+restricted by GSA ADP Schedule Contract with Christophe LORIN.
+=============================================================================
+Module: MDDTools Server Manager
+Date: 10.07.2020
+=============================================================================
+*/
+
+const codeFileType = {
+  "Javascript":     {color: "orange",         fileType: "text/javascript",                ext: "js"},
+  "Text":           {color: "yellow",         fileType: "text/text",                      ext: "txt"},
+  "JSON":           {color: "orange",         fileType: "text/json",                      ext: "json"},
+  "HTML":           {color: "lightsalmon",    fileType: "text/html",                      ext: "html"},
+  "CSS":            {color: "peachpuff",      fileType: "text/css",                       ext: "css"},
+  "Python":         {color: "firebrick",      fileType: "text/python",                    ext: "py"},
+  "C":              {color: "palegreen",      fileType: "text/c_cpp",                     ext: "c"},
+  "H":              {color: "palegreen",      fileType: "text/c_cpp",                     ext: "h"},
+  "C++":            {color: "mediumseagreen", fileType: "text/c_cpp",                     ext: "cpp"},
+  "H++":            {color: "mediumseagreen", fileType: "text/c_cpp",                     ext: "hpp"},
+  "C#":             {color: "seagreen",       fileType: "text/c_cpp",                     ext: "cs"},
+  "Binary":         {color: "white",          fileType: "application/octet-stream",       ext: "bin"},
+  "Rich Text EJS":  {color: "salmon",         fileType: "application/editorjs",           ext: "json"},
+  "Rich Text SBE":  {color: "cadetblue",      fileType: "application/smartblock",         ext: "html"},
+  "JPEG":           {color: "lavender",       fileType: "image/jpeg",                     ext: "jpeg"},
+  "PNG":            {color: "lavender",       fileType: "image/png",                      ext: "png"},
+};
+
+let urlParams = { name: 'DefaultUser' };
+function loadSystem() {
+  // Decode url parameter (remove firs char '?')
+  const urlStrParams = decodeURI( document.location.search.substring( 1 ) );
+  // Get url params values
+  urlParams = {};
+  eval( `urlParams = {${urlStrParams}}` );
+  console.log( urlParams );
+
+  // Define list of system scripts to be loaded
+  scriptList = [
+    `./${urlParams.name}_config.js`,
+    './EditorChangeManager.js',
+    './Graph.js',
+    './Editors.js',
+    './ModelExplorer.js',
+    './MainScript.js',
+    './EditorManager.js',
+    './BlockCodeEditor.js',
+    './SmartBlockEditor.js',
+    './ACESourceCodeEditor.js',
+    './GraphParser.js',
+  ];
+  loadScriptList( scriptList, ()=> {
+    console.log( 'Depentency loaded' );
+  }, false ); // The 'false' is for alowing caching files (don't load twice)
+}
+function getFileTypeInfoByName( name ) {
+  if( codeFileType[name] ) {
+    return( codeFileType[name] );
+  } else {
+    return( codeFileType['Binary'] );
+  }
+}
+function getExtByFileType( fileType ) {
+  let result = 'bin';
+  const fileTypeNameList = Object.keys( codeFileType );
+  for( const fileTypeName of fileTypeNameList ) {
+    const fileTypeInfo = codeFileType[fileTypeName];
+    if( fileTypeInfo.fileType == fileType ) {
+      result = fileTypeInfo.ext;
+    }
+  }
+  return( result );
+}
+function getNewFileServerURL( extension ) {
+  extension = ( extension? extension: 'bin' );
+  // Path creation function
+  const getPath = function( pathV ) {
+    let result = '';
+    for( let i = 0; i < pathV.length; i=i+2 ) {
+      result = result+'/'+pathV.substring( i, i+2 );
+    }
+    return( result );
+  }
+  // Get current fileServer info
+  let fsInfo = m.fileInfo.fileServer;
+
+  // Set FileName
+  let isNextPathNeeded = false;
+  if( fsInfo.currFile >= fsInfo.maxFileIndex ) {
+    isNextPathNeeded = true;
+    fsInfo.currFile = 0;
+  } else {
+    ++fsInfo.currFile;
+  }
+  const fileName = ( fsInfo.currFile < 10? '0'+fsInfo.currFile: fsInfo.currFile );
+  let newFile = fileName+'.'+extension;
+
+  // Set PathName
+  if( isNextPathNeeded ) {
+    fsInfo.currPath++;
+  }
+  let pathV = fsInfo.currPath.toString();
+  let pathVlen = pathV.length;
+  if( pathVlen % 2 == 1 ) {
+    pathV = pathV.substring( 0, pathVlen-1 )+'0'+pathV.substring( pathVlen-1 );
+  }
+  const newPath = getPath( pathV );
+  setStatus( (s)=> s.fileServer = fsInfo );
+  
+  // Generate next file/path
+  const host = ''; document.location.origin;
+  const newFilePath = `${host}${config.host.fileServerURL}${newPath}/${newFile}`;
+  // Update fileIndex file
+  const url = `${config.host.fileServerURL}/fileIndex.json`;
+  const source = JSON.stringify( m.fileInfo );
+  _saveFile( url, source );
+  return( newFilePath );
+}
+function loadScriptList( urlList, onLoad, isAvoidCache ) {
+  if( !Array.isArray( urlList ) ) {
+    if( onLoad ) {
+      onLoad();
+    }
+  } else {
+    const urlListCopy = [...urlList];
+    const url = urlListCopy.shift();
+
+    if ( url ) {
+      loadScript( url, ()=> {
+        loadScriptList( urlListCopy, onLoad, isAvoidCache );
+      }, isAvoidCache );
+    } else {
+      if( onLoad ) {
+        onLoad();
+      }
+    }
+  }
+}
+function loadScript( url, onLoad, isAvoidCache ) {
+  isAvoidCache = ( isAvoidCache == undefined? true: isAvoidCache );
+  const prevScript = document.getElementById( url );
+  if( prevScript ) {
+    document.head.removeChild( prevScript );
+  }
+  const script = document.createElement( 'script' );
+  script.id = url;
+  script.type = 'text/javascript';
+  script.onload = ()=> {
+    console.log( `Script ${url} loaded` );
+    if( onLoad ) {
+      onLoad();
+    }
+  };
+  script.onerror = ()=> {
+    console.log( `Error loading script ${url}` );
+  };
+  let uniqueURL = '';
+  if( isAvoidCache ) {
+    // Avoid server cache with timestamp
+    const timestamp = new Date().getTime();
+    uniqueURL = '?_='+timestamp;
+  }
+  script.src = url+uniqueURL;
+  document.head.append( script )
+}
+function loadNodeContent( nodeData, onLoaded ) {
+  if( nodeData.isModel ) {  // Check on isModel must be first
+    // Load content from main graph model
+    const source = nodeData.fileContent;
+    if( onLoaded ) {
+      onLoaded( source );
+    }
+  } else if( nodeData.fileURL != undefined ) { // Check on fileURL must be second
+    // Load content from file system
+    _openFile( nodeData.fileURL, onLoaded );
+  } else if( nodeData.fileContent != undefined ) { // Check on fileContent must be third
+    // Load content from node
+    const source = nodeData.fileContent;
+    if( onLoaded ) {
+      onLoaded( source );
+    }
+  } else {
+    console.log( 'Warning: no content could be loaded' );
+    if( onLoaded ) {
+      onLoaded( '' );
+    }
+  }
+}
+function saveNodeContent( nodeData, onSaved ) {
+  if( nodeData.isModel ) {  // Check on isModel must be first
+    const e = m.e.getEditor( config.htmlDiv.graphDiv );
+    e.setJSONModel( nodeData.fileContent );
+    if( onSaved ) {
+      onSaved();
+    }
+  } else if( nodeData.fileURL != undefined ) { // Check on fileURL must be second
+    const source = nodeData.fileContent;
+    _saveFile( nodeData.fileURL, source, onSaved );
+  } else if( nodeData.fileContent != undefined ) { // Check on fileContent must be third
+    const e = m.e.getEditor( config.htmlDiv.graphDiv );
+    if( e ) {
+      const source = nodeData.fileContent;
+      e.setNodeDataField( nodeData.key, 'fileContent', source );
+    }
+    if( onSaved ) {
+      onSaved();
+    }
+  } else {
+    console.log( 'Warning: no content could be saved' );
+    if( onSaved ) {
+      onSaved();
+    }
+  }
+}
+function executeScript( scriptName, onExecuted ) {
+  _openFile( '/executeScript/'+scriptName, onExecuted );
+}
+//------------------------
+// Private Functions
+//------------------------
+function _openFile( url, onLoad ) {
+  let source = '';
+  // read text from URL location
+  const request = new XMLHttpRequest();
+  // Avoid server cache with timestamp
+  const timestamp = new Date().getTime();
+  request.open( 'GET', url+'?_='+timestamp, true );
+  //request.setRequestHeader('Cache-Control', 'no-cache');
+  request.onerror = (e)=> {
+    alert( 'Server not responding' );
+    if( onLoad ) {
+      onLoad( '' );
+    }
+  };
+  request.send( '' );
+  request.onreadystatechange = function () {
+    if( request.readyState === 4 ) {
+      const status = request.status;
+      if( ( status === 0 ) || ( ( status >= 200 ) && ( status < 400 ) ) ) {
+        const type = request.getResponseHeader('Content-Type');
+        if( type.indexOf( "text" ) !== 1 ) {
+          source = request.responseText;
+          console.log( 'Loading: '+url );
+        } else {
+          console.log( 'Unsupported Content-Type: '+type );
+        }
+      }
+      if( onLoad ) {
+        onLoad( source );
+      }
+    } else {
+      // NOTE: you should not call the onLoad here!!!!!
+      // Only readyState 4 is the end of the HTTP request
+    }
+  }
+}
+function _saveFile( url, source, onSaveDone ) {
+  if( !m.status.isReadOnly ) {
+    const request = new XMLHttpRequest();
+    request.open( 'POST', '/fileServer' );
+    request.setRequestHeader( 'Content-Type', 'text/plain;charset=UTF-8' );
+    //request.setRequestHeader('Cache-Control', 'no-cache');
+    request.onerror = (e)=> {
+      alert( 'Server not responding' );
+      if( onSaveDone ) {
+        onSaveDone();
+      }
+    };
+    request.addEventListener( 'loadend', ()=> {
+      if( onSaveDone ) {
+        onSaveDone();
+      }
+    });
+    console.log( 'Saving: '+url );
+    const fileInfo = { url, source, };
+    request.send( JSON.stringify( fileInfo ) );
+  } else {
+    console.log( 'Read-only mode. No save request serverd' );
+    if( onSaveDone ) {
+      onSaveDone();
+    }
+  }
+}
+function saveRemoteFile( remoteServerURL, url, source, onSaveDone ) {
+  if( !m.status.isReadOnly ) {
+    const request = new XMLHttpRequest();
+    request.open( 'POST', '/remoteFileServer' );
+    request.setRequestHeader( 'Content-Type', 'text/plain;charset=UTF-8' );
+    //request.setRequestHeader('Cache-Control', 'no-cache');
+    request.onerror = (e)=> {
+      alert( 'Server not responding' );
+      if( onSaveDone ) {
+        onSaveDone();
+      }
+    };
+    request.addEventListener( 'loadend', ()=> {
+      if( onSaveDone ) {
+        onSaveDone();
+      }
+    });
+    console.log( `Saving to remote [${remoteServerURL}]: `+url );
+    const remoteHost = remoteServerURL.substring( 0, remoteServerURL.lastIndexOf( ':' ) );
+    const remotePort = remoteServerURL.substring( remoteServerURL.lastIndexOf( ':' )+1 );
+    const fileInfo = { 
+      remoteHost,
+      remotePort,
+      url, 
+      source, };
+    request.send( JSON.stringify( fileInfo ) );
+  } else {
+    console.log( 'Read-only mode. No save request serverd' );
+    if( onSaveDone ) {
+      onSaveDone();
+    }
+  }
+}
+function debug() {
+  const a = 1;
+}

@@ -1,0 +1,25 @@
+<html>
+  <body>
+    <script>
+      function onKeyUp(e) {
+        if( e.key == 'Enter') {
+          const list = document.getElementById('states');
+          var option = document.createElement('option');
+          option.value = e.currentTarget.value;
+          list.appendChild(option);
+        }
+      }
+    </script>
+    <input id='li', list="states" name="state-choice"/>
+
+<datalist id="states">
+    <option value="Maine">
+    <option value="Maryland">
+    <option value="Massachusetts">
+</datalist>
+<script>
+  const e = document.getElementById( 'li' );
+  e.onkeyup = onKeyUp;
+</script>
+  </body>
+</html>
