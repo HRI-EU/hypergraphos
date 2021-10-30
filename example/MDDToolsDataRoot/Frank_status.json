@@ -1,0 +1,528 @@
+{
+  "graphHistory": [
+    {
+      "label": " ----                       [Home]",
+      "size": "348 163",
+      "category": "Hierarchy_Folder",
+      "isDir": true,
+      "fileType": "text/json",
+      "fileURL": "/fileServer/00/42.json",
+      "key": 35,
+      "location": "153 853.9",
+      "group": 37
+    },
+    {
+      "label": "Learning Scenarios",
+      "size": "265 60",
+      "category": "Hierarchy_Project",
+      "isDir": true,
+      "fileURL": "/fileServer/00/47.bin",
+      "key": 2,
+      "location": "80 130",
+      "fileType": "text/json"
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": " ----                       [Home]",
+      "size": "348 163",
+      "category": "Hierarchy_Folder",
+      "isDir": true,
+      "fileType": "text/json",
+      "fileURL": "/fileServer/00/42.json",
+      "key": 35,
+      "location": "153 853.9",
+      "group": 37
+    },
+    {
+      "label": "Learning Scenarios",
+      "size": "265 60",
+      "category": "Hierarchy_Project",
+      "isDir": true,
+      "fileURL": "/fileServer/00/47.bin",
+      "key": 2,
+      "location": "80 130",
+      "fileType": "text/json"
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": "--                            Frankonello Home",
+      "size": "350 163",
+      "category": "Hierarchy_Folder",
+      "isDir": true,
+      "fileType": "text/json",
+      "fileURL": "/fileServer/00/01.json",
+      "key": 13,
+      "location": "580 457",
+      "group": 40
+    },
+    {
+      "label": "New Avatar Dialog 1.0 (flat)",
+      "size": "409 60",
+      "category": "Hierarchy_Project",
+      "isDir": true,
+      "fileType": "text/json",
+      "fileURL": "/fileServer/00/19.json",
+      "key": 4,
+      "location": "-720 980"
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": " ----                       [Home]",
+      "size": "348 163",
+      "category": "Hierarchy_Folder",
+      "isDir": true,
+      "fileType": "text/json",
+      "fileURL": "/fileServer/00/42.json",
+      "key": 35,
+      "location": "153 853.9",
+      "group": 37
+    },
+    {
+      "label": "Learning Scenarios",
+      "size": "265 60",
+      "category": "Hierarchy_Project",
+      "isDir": true,
+      "fileURL": "/fileServer/00/47.bin",
+      "key": 2,
+      "location": "80 130",
+      "fileType": "text/json"
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "key": "DSL Test Graph",
+      "color": "Violet",
+      "category": "Default",
+      "isDir": true,
+      "fileURL": "/fileServer/graphTest.json",
+      "fileType": "text/json",
+      "editorPosition": [
+        129,
+        180,
+        null,
+        null
+      ]
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": "--                            Frankonello Home",
+      "size": "350 163",
+      "category": "Hierarchy_Folder",
+      "isDir": true,
+      "fileType": "text/json",
+      "fileURL": "/fileServer/00/01.json",
+      "key": 44,
+      "location": "690 577",
+      "group": 43
+    },
+    {
+      "label": "Integrator test",
+      "size": "180 60",
+      "category": "Hierarchy_Project",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/00/52.json",
+      "key": 27,
+      "location": "-1470 -50"
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": "--                            Frankonello Home",
+      "size": "350 163",
+      "category": "Hierarchy_Folder",
+      "isDir": true,
+      "fileType": "text/json",
+      "fileURL": "/fileServer/00/01.json",
+      "key": 44,
+      "location": "690 577",
+      "group": 43
+    },
+    {
+      "label": "New Avatar 2.1 - Dialog 1.1 (flat)",
+      "size": "409 60",
+      "category": "Hierarchy_Project",
+      "isDir": true,
+      "fileType": "text/json",
+      "fileURL": "/fileServer/00/49.json",
+      "key": 22,
+      "location": "-720 1140"
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": "--                            Frankonello Home",
+      "size": "350 163",
+      "category": "Hierarchy_Folder",
+      "isDir": true,
+      "fileType": "text/json",
+      "fileURL": "/fileServer/00/01.json",
+      "key": 44,
+      "location": "690 577",
+      "group": 43
+    },
+    {
+      "label": "Integrator test",
+      "size": "180 60",
+      "category": "Hierarchy_Project",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/00/52.json",
+      "key": 27,
+      "location": "-1470 -50"
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": "--                            Frankonello Home",
+      "size": "350 163",
+      "category": "Hierarchy_Folder",
+      "isDir": true,
+      "fileType": "text/json",
+      "fileURL": "/fileServer/00/01.json",
+      "key": 44,
+      "location": "690 577",
+      "group": 43
+    },
+    {
+      "label": "Integrator test",
+      "size": "180 60",
+      "category": "Hierarchy_Project",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/00/52.json",
+      "key": 27,
+      "location": "-1470 -50"
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": "--                            Frankonello Home",
+      "size": "350 163",
+      "category": "Hierarchy_Folder",
+      "isDir": true,
+      "fileType": "text/json",
+      "fileURL": "/fileServer/00/01.json",
+      "key": 44,
+      "location": "690 577",
+      "group": 43
+    },
+    {
+      "label": "Integrator test",
+      "size": "180 60",
+      "category": "Hierarchy_Project",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/00/52.json",
+      "key": 27,
+      "location": "-1470 -50"
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": "--                            Frankonello Home",
+      "size": "350 163",
+      "category": "Hierarchy_Folder",
+      "isDir": true,
+      "fileType": "text/json",
+      "fileURL": "/fileServer/00/01.json",
+      "key": 44,
+      "location": "690 577",
+      "group": 43
+    }
+  ],
+  "currentGraphNode": {
+    "label": "Integrator test",
+    "size": "180 60",
+    "category": "Hierarchy_Project",
+    "fileType": "text/json",
+    "isDir": true,
+    "fileURL": "/fileServer/00/52.json",
+    "key": 27,
+    "location": "-1470 -50"
+  },
+  "openWindowList": {
+    "/fileServer/graphRoot.json": {
+      "32": [
+        1330,
+        39,
+        400,
+        350
+      ]
+    },
+    "/fileServer/graphTwo.json": {
+      "Alpha Node": [
+        775,
+        181,
+        335,
+        174
+      ]
+    },
+    "/fileServer/graphTest.json": {
+      "13": [
+        1293,
+        821,
+        807,
+        853
+      ],
+      "17": [
+        100,
+        100,
+        400,
+        350
+      ],
+      "18": [
+        1952,
+        909,
+        400,
+        350
+      ]
+    },
+    "undefined": {
+      "0": [
+        1740,
+        231,
+        537,
+        622
+      ],
+      "2": [
+        2000,
+        381,
+        424,
+        347
+      ],
+      "5": [
+        1468,
+        408,
+        514,
+        915
+      ],
+      "7": [
+        735,
+        96,
+        466,
+        385
+      ],
+      "16": [
+        38,
+        553,
+        390,
+        405
+      ],
+      "Show DSL List": [
+        966,
+        438,
+        260,
+        160
+      ]
+    },
+    "#systemMonitor#": {
+      "System Monitor": [
+        581,
+        380,
+        260,
+        160
+      ]
+    },
+    "/fileServer/DialogDSL.js": {
+      "244": [
+        909,
+        153,
+        878,
+        1308
+      ]
+    },
+    "/fileServer/00/11.json": {
+      "41": [
+        1420,
+        10,
+        400,
+        350
+      ],
+      "54": [
+        511,
+        279,
+        823,
+        1484
+      ],
+      "55": [
+        23,
+        1193,
+        400,
+        350
+      ],
+      "62": [
+        2222,
+        30,
+        1032,
+        1774
+      ]
+    },
+    "/fileServer/00/30.json": {},
+    "/fileServer/00/19.json": {
+      "19": [
+        3323,
+        646,
+        442,
+        1299
+      ],
+      "20": [
+        2895,
+        648,
+        422,
+        1297
+      ],
+      "23": [
+        1574,
+        640,
+        1308,
+        1345
+      ],
+      "34": [
+        177,
+        872,
+        412,
+        152
+      ],
+      "35": [
+        178,
+        689,
+        396,
+        173
+      ],
+      "38": [
+        174,
+        1092,
+        385,
+        154
+      ],
+      "39": [
+        165,
+        1251,
+        392,
+        193
+      ],
+      "43": [
+        165,
+        1604,
+        403,
+        165
+      ],
+      "44": [
+        160,
+        1773,
+        414,
+        164
+      ]
+    },
+    "/fileServer/00/01.json": {
+      "20": [
+        1339,
+        54,
+        400,
+        350
+      ],
+      "25": [
+        2379,
+        655,
+        769,
+        731
+      ],
+      "Show DSL List": [
+        910,
+        843,
+        160,
+        350
+      ]
+    },
+    "/fileServer/00/42.json": {},
+    "/fileServer/00/43.json": {},
+    "/fileServer/00/47.bin": {},
+    "/fileServer/00/52.json": {
+      "5": [
+        741,
+        375,
+        400,
+        350
+      ]
+    },
+    "/fileServer/00/49.json": {}
+  },
+  "pinnedWindow": {
+    "#systemPalette#": {
+      "key": "DSL Palette",
+      "isFile": true,
+      "fileURL": "#systemPalette#",
+      "fileType": "input/fields",
+      "editorPosition": [
+        63,
+        107,
+        369,
+        1483
+      ],
+      "isVisible": true
+    },
+    "#systemMonitor#": {
+      "key": "System Monitor",
+      "isFile": true,
+      "fileURL": "#systemMonitor#",
+      "fileType": "system/status",
+      "editorPosition": [
+        533,
+        40,
+        791,
+        303
+      ]
+    }
+  },
+  "isReadOnly": false,
+  "fileServer": {
+    "maxFileIndex": 99,
+    "currPath": 0,
+    "currFile": 57
+  }
+}

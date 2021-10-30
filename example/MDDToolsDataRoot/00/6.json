@@ -1,0 +1,23 @@
+{
+  "dslNameList": [
+    "DefaultDSL",
+    "HierarchyDSL",
+    "ThinkingDSL",
+    "TextLabelsDSL",
+    "PropertyDSL",
+    "IntegratorDSL",
+    "DialogDSL",
+    "DataFlowDSL",
+    "Connectors",
+    "ButtonDSL"
+  ],
+  "view": {
+    "scale": 1.7006242476205538,
+    "position": [
+      -98.41044034789263,
+      -133.09035082538958
+    ],
+    "isGridOn": false
+  },
+  "model": "{ \"class\": \"GraphLinksModel\",\n  \"copiesArrays\": true,\n  \"copiesArrayObjects\": true,\n  \"copiesKey\": false,\n  \"linkKeyProperty\": \"key\",\n  \"linkFromPortIdProperty\": \"fromPort\",\n  \"linkToPortIdProperty\": \"toPort\",\n  \"nodeDataArray\": [ {\"label\":\"Folder 2\", \"category\":\"TextLabels_Size5\", \"size\":\"514 30\", \"key\":0, \"location\":\"-4 120\"} ],\n  \"linkDataArray\": []}"
+}

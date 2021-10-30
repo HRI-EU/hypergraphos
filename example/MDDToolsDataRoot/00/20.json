@@ -1,0 +1,17 @@
+{
+  "dslNameList": [
+    "DefaultDSL",
+    "HierarchyDSL",
+    "TextLabelsDSL",
+    "DialogDSL"
+  ],
+  "view": {
+    "scale": 0.6463718834998654,
+    "position": [
+      -5699.270217208266,
+      -6364.227172954505
+    ],
+    "isGridOn": true
+  },
+  "model": "{ \"class\": \"GraphLinksModel\",\n  \"copiesArrays\": true,\n  \"copiesArrayObjects\": true,\n  \"copiesKey\": false,\n  \"linkKeyProperty\": \"key\",\n  \"linkFromPortIdProperty\": \"fromPort\",\n  \"linkToPortIdProperty\": \"toPort\",\n  \"nodeDataArray\": [ {\"label\":\"test 20\", \"category\":\"TextLabels_Size5\", \"size\":\"350 30\", \"key\":0, \"location\":\"-4190 -5200\"} ],\n  \"linkDataArray\": []}"
+}
