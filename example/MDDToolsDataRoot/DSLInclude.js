@@ -473,6 +473,7 @@
     $("ContextMenuButton", $(go.TextBlock, "Javascript"),     { defaultStretch: go.GraphObject.Horizontal, click: changeFileType }),
     $("ContextMenuButton", $(go.TextBlock, "JSON"),           { defaultStretch: go.GraphObject.Horizontal, click: changeFileType }),
     $("ContextMenuButton", $(go.TextBlock, "HTML"),           { defaultStretch: go.GraphObject.Horizontal, click: changeFileType }),
+    $("ContextMenuButton", $(go.TextBlock, "WebPage"),        { defaultStretch: go.GraphObject.Horizontal, click: changeFileType }),
     $("ContextMenuButton", $(go.TextBlock, "CSS"),            { defaultStretch: go.GraphObject.Horizontal, click: changeFileType }),
     $("ContextMenuButton", $(go.TextBlock, "Python"),         { defaultStretch: go.GraphObject.Horizontal, click: changeFileType }),
     $("ContextMenuButton", $(go.TextBlock, "C"),              { defaultStretch: go.GraphObject.Horizontal, click: changeFileType }),

@@ -15,6 +15,7 @@ const codeFileType = {
   "Text":           {color: "yellow",         fileType: "text/text",                      ext: "txt"},
   "JSON":           {color: "orange",         fileType: "text/json",                      ext: "json"},
   "HTML":           {color: "lightsalmon",    fileType: "text/html",                      ext: "html"},
+  "WebPage":        {color: "lightsalmon",    fileType: "application/html",               ext: "html"},
   "CSS":            {color: "peachpuff",      fileType: "text/css",                       ext: "css"},
   "Python":         {color: "firebrick",      fileType: "text/python",                    ext: "py"},
   "C":              {color: "palegreen",      fileType: "text/c_cpp",                     ext: "c"},
