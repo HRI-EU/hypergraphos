@@ -1063,7 +1063,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
                 font: ( param.font? param.font: "14px sans-serif" ),
                 overflow: go.TextBlock.OverflowEllipsis,
               },
-              new go.Binding("text", "portId").makeTwoWay(function(t, data) { return data.portId.trim(); })
+              new go.Binding("text", "portId", function(v) { return v.trim(); }).makeTwoWay(function(t) { return t.trim(); })
             )
           )  // end itemTemplate
         }
@@ -1152,7 +1152,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
                 font: ( param.portFont? param.portFont: "14px sans-serif" ),
                 overflow: go.TextBlock.OverflowEllipsis,
               },
-              new go.Binding("text", "portId").makeTwoWay(function(t, data) { return data.portId.trim(); })
+              new go.Binding("text", "portId", function(v) { return v.trim(); }).makeTwoWay(function(t) { return t.trim(); })
             )
           )  // end itemTemplate
         }
