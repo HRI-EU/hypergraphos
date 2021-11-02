@@ -1,2 +1,2 @@
 # MDDTools
-Graph-based Working Platform
+Graph-based Collaborative Platform
