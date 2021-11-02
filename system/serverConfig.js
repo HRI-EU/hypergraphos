@@ -94,6 +94,8 @@ if( config.host.hostname == 'Antonellos-Mini' ) {
 
 } else if( ( config.host.hostname == 'Main-PC' ) && 
            ( config.host.username == 'Frank Joublin' ) ) {
+  config.server.dataRoot = '../../../../../Dropbox/MDDTools/MDDTools/MDDToolsDataRoot';
+  config.server.tempRoot = '../../../../../Dropbox/MDDTools/MDDTools/MDDToolsTempRoot';
   config.client.host.name = 'Frank';
   config.client.host.statusURL = '/fileServer/Frank_status.json';
   config.client.graph.allowDeleteKey = true;
