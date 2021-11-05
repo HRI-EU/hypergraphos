@@ -46,6 +46,7 @@ const config = {
   },
   // Server Configuration Info
   server: {
+    // Path relative to the server.js script location
     debugOnFileContentOn: true,
     dataRoot:          '../../MDDToolsDataRoot',
     tempRoot:          '../../MDDToolsTempRoot',
