@@ -973,9 +973,9 @@ class Graph {
 				"linkingTool.portGravity": 0,
 				// allow Ctrl-G to call groupSelection()
 				"commandHandler.archetypeGroupData": { // TODO: Put in DSL
-					text: "Group",
+					label: "Group",
 					isGroup: true,
-					color: "lightGray"
+					color: "gray"
 				},
 				// enable undo & redo
 				"undoManager.isEnabled": true,
@@ -1188,7 +1188,7 @@ class Graph {
 			{
 			},
             $(go.Shape, "Rectangle",
-              { fill: "gray ",
+              { fill: "gray",
 				portId: "", 
 				cursor: "pointer",  // the Shape is the port, not the whole Node
 				// allow all kinds of links from this port
@@ -1210,7 +1210,7 @@ class Graph {
 				isMultiline: true,
 				editable: true
 			  },
-              new go.Binding("text", "text").makeTwoWay(),
+              new go.Binding("text", "label").makeTwoWay(),
 			)
           ),
           $(go.Panel, "Auto",
