@@ -87,6 +87,8 @@ config.server.webSocketURL = `ws://${config.server.webServerName}`;
 
 // User Configuration
 if( config.host.hostname == 'Antonellos-Mini' ) {
+  config.server.dataRoot = '../../../../../../Dropbox/DevAll/MDDToolsDataRoot';
+  config.server.tempRoot = '../../../../../../Dropbox/DevAll/MDDToolsTempRoot';
   config.client.host.name = 'Antonello';
   config.client.graph.colorSkema = 'dark';
   config.client.host.statusURL = '/fileServer/Antonello_status.json';
