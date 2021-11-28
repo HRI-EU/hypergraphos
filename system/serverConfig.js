@@ -114,6 +114,17 @@ if( config.host.hostname == 'Antonellos-Mini' ) {
   config.client.graph.isDoubleClickCreateNodeEnabled = false;
   // List of remote host
   config.client.remoteHost['NUC'] = '192.168.0.25:7575';
+} else if( ( config.host.hostname == 'work-manjaro' ) &&
+            ( config.host.username == 'chris' ) ) {
+  config.server.dataRoot = '../../../MDDToolsData/MDDToolsDataRoot';
+  config.server.tempRoot = '../../../MDDToolsData/MDDToolsTempRoot';
+  config.client.host.name = 'Cristian';
+  config.client.host.statusURL = '/fileServer/Cristian_status.json';
+  config.client.graph.allowDeleteKey = true;
+  config.client.graph.isDoubleClickCreateNodeEnabled = false;
+  // List of remote host
+  //config.client.remoteHost['NUC'] = '192.168.0.25:7575';
 }
+
 
 module.exports = config;
