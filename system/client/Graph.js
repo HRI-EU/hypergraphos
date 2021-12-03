@@ -789,7 +789,7 @@ class Graph {
 			}
 		}
 		return( result );
-	};
+	}
 	filterArrayData( a, level ) {
 		level = ( level != undefined? level: 2 );
 		let result = [];
