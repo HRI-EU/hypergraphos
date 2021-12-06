@@ -45,5 +45,5 @@
 
   .show-menu, .menu-item:hover > .menu {
     display: block;
-    opacity: 1;
+    opacity: 0.9;
   }
