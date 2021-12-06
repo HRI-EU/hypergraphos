@@ -981,6 +981,7 @@ class Graph {
 				"undoManager.isEnabled": true,
 			},
 		);
+
 		// Define grid
 		const mainColor = {
 			dark: {
@@ -1136,6 +1137,9 @@ class Graph {
 			}
 		});
 		
+		// Create context menu
+		this.contextMenu = new HTMLMenu( diagram, 'contextMenuContainer' );
+
 		return( diagram );
 	}
 	newNodeToolTip() {
