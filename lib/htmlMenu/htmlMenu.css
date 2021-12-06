@@ -18,7 +18,7 @@
     margin: 0;
     padding: 6px 16px;
     font: bold 12px sans-serif;
-    color: rgba(0, 0, 0, .87);
+    color: rgb(59, 59, 59);
     cursor: pointer;
   }
 
@@ -35,7 +35,7 @@
   }
 
   .menu-item:hover::before {
-    opacity: .04;
+    opacity: .2;
   }
 
   .menu .menu {
@@ -45,5 +45,5 @@
 
   .show-menu, .menu-item:hover > .menu {
     display: block;
-    opacity: 0.9;
+    opacity: 0.92;
   }
