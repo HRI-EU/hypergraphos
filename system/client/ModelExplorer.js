@@ -88,10 +88,11 @@ class ModelExplorer {
     if( subject ) {
       let nodeKeyList = [];
       if( toPort ) {
-        const linkList = this.getLinkListFaInByNodeKey( id, key );
+        const linkList = this.getLinkListFanInByNodeKey( id, key );
         for( const linkDataV of linkList ) {
-          if( linkDataV && linkDataV[0] && ( linkDataV[0].toPort == toPort ) ) {
-            nodeKeyList.push( linkDataV[0].from );
+          //if( linkDataV && linkDataV[0] && ( linkDataV[0].toPort == toPort ) ) {
+          if( linkDataV && ( linkDataV.toPort == toPort ) ) {
+            nodeKeyList.push( linkDataV.from );
           }
         }
       } else {
@@ -129,10 +130,11 @@ class ModelExplorer {
     if( subject ) {
       let nodeKeyList = [];
       if( fromPort ) {
-        const linkList = this.getLinkListFaOutByNodeKey( id, key );
+        const linkList = this.getLinkListFanOutByNodeKey( id, key );
         for( const linkDataV of linkList ) {
-          if( linkDataV && linkDataV[0] && ( linkDataV[0].fromPort == fromPort ) ) {
-            nodeKeyList.push( linkDataV[0].to );
+          //if( linkDataV && linkDataV[0] && ( linkDataV[0].fromPort == fromPort ) ) {
+          if( linkDataV && ( linkDataV.fromPort == fromPort ) ) {
+            nodeKeyList.push( linkDataV.to );
           }
         }
       } else {
