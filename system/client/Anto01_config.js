@@ -4,13 +4,11 @@
 */
 const config = {
   "host": {
-    "name": "Antonello",
+    "name": "Anto01",
     "fileServerURL": "/fileServer",
-    "statusURL": "/fileServer/Antonello_status.json"
+    "statusURL": "/fileServer/status.json"
   },
-  "remoteHost": {
-    "NUC": "192.168.1.11:7575"
-  },
+  "remoteHost": {},
   "htmlDiv": {
     "mainDiv": "mainDiv",
     "graphDiv": "diagram",
@@ -21,7 +19,7 @@ const config = {
   "graph": {
     "isDoubleClickCreateNodeEnabled": true,
     "allowDeleteKey": false,
-    "colorSkema": "dark",
+    "colorSkema": "light",
     "defaultDSL": "DefaultDSL",
     "rootGraphURL": "/fileServer/graphRoot.json",
     "rootGraphNodeData": {
