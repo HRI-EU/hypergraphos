@@ -12,6 +12,66 @@ Date: 10.07.2020
 
 var $ = go.GraphObject.make;  // for conciseness in defining templates
 
+class EventManager {
+	constructor() {
+		this.eventList = {};
+		this.call = {};
+	}
+	add( name, help, params ) {
+		if( name && !this.eventList[name] ) {  // Add a new event if not already there
+			const callbackList = [];
+			params = ( params? params: {} );
+			help = ( help? help: '' )
+			this.eventList[name] = { help, params, callbackList };
+			this.call[name] = (...paramList)=> this.fire( name, ...paramList );
+		}
+	}
+	addList( eventList ) {
+		if( eventList ) {
+			for( const name in eventList ) {
+				const info = eventList[name];
+				this.add( name, info.help, info.params );
+			}
+		}
+	}
+	register( name, callback ) {
+		if( name && this.eventList[name] ) {
+			if( callback ) { // Register the callback if defined
+				this.eventList[name].callbackList.push( callback );
+			}
+		}
+	}
+	registerList( callbackList ) {
+		if( callbackList ) {
+			for( const name in callbackList ) {
+				const callback = callbackList[name];
+				this.register( name, callback );
+			}
+		}
+	}
+	unregister( name, callback ) {
+		if( name && this.eventList[name] ) {
+			if( callback == undefined ) { // Unregister all callback
+				const callbackList = [];
+				this.eventList[name] = { paramInfo, callbackList };
+			} else {  // Unregister a single callback
+				const index = this.eventList[name].callbackList.indexOf( callback );
+				if( index > -1 ) {
+					this.eventList[name].callbackList.splice( index, 1 );
+				}
+			}
+		}
+	}
+	fire( name, ...paramList ) { // after name, all other parameters will be passed to the callback
+		if( name && this.eventList[name] &&
+			  this.eventList[name].callbackList.length ) { // Fire event if not empty
+			for( const callback of this.eventList[name].callbackList ) {
+				callback( ...paramList );
+			}
+		}
+	}
+}
+
 class Graph {
 	constructor( param ) {
 		// fullPaletteId, nodePaletteId, linkPaletteId, graphId
@@ -50,21 +110,62 @@ class Graph {
 		this.nodeContextMenu = this.newNodeContextMenu();
 
 		// Graph Evetns
-		this.onSaveGraphCallback = null;
-		this.onLoadGraphCallback = null;
-		this.onLoadFileCallback = null;
-		this.onShowRootGraphCallback = null;
-		this.onSetReadOnlyCallback = null;
-		this.onShowParentGraphCallback = null;
-		this.onShowPreviousGraphCallback = null;
-		this.onShowFindDialogCallback = null;
-		this.onShowAnimatorEditorCallback = null;
-		this.onShowDSLListDialogCallback = null;
-		this.onShowGraphTemplateDialogCallback = null;
-		this.onShowSysMonitorDialogCallback = null;
-		this.onGraphChangedCallback = null;
-		this.onFirstLayoutCompletedCallback = null;
-		this.onSelectionCallback = null;
+		this.em = new EventManager();
+		this.em.addList({
+			onSelection:								{ help: 	'Inofrm that the selection has changed in the graph',
+																		params: { dataList: 'List of selected node-data' } },
+			onGraphChanged:							{ help: 	'Inofrm that graph has changed' },
+			onFirstLayoutCompleted:			{ help: 	'Inofrm that graph has completed the first layout after load' },
+			onLoadGraph: 								{ help:   'Load a new graph in canvas', 
+			  	           								params: { nodeData: 'node-data of the the graph to load' } },
+		  onLoadFile:       					{ help:   'Open dialog with a file in a new editor',
+																		params: { nodeData: 'node-data of the the file to load', 
+																							x: 'last x mouse click position', 
+																							y: 'last y mouse click position' } },
+			onShowRootGraph: 						{ help: 	'Load system root graph' },
+			onSetReadOnly:   						{ help: 	'Set read-only navigation (never save changes to server)',
+																		params: { status: 'true/false' } },
+			onShowParentGraph:					{ help: 	'Load parent graph in canvas' },
+			onShowPreviousGraph:  			{ help: 	'Load previous graph in canvas' },
+			onShowFindDialog:						{ help: 	'Open dialog for searching in the current graph',
+																		params: { x: 'last x mouse click position', 
+																							y: 'last y mouse click position' } },
+			onShowAnimatorEditor:				{ help: 	'Open dialog for animating nodes in current graph',
+																		params: { x: 'last x mouse click position', 
+																							y: 'last y mouse click position' } },
+			onShowDSLListDialog:				{ help: 	'Open dialog for adding/removing DSL',
+																		params: { x: 'last x mouse click position', 
+																							y: 'last y mouse click position' } },
+			onShowGraphTemplateDialog:	{ help: 	'Open dialog for selecting a graph template',
+																		params: { x: 'last x mouse click position', 
+																							y: 'last y mouse click position' } },
+			onShowSysMonitorDialog:			{ help: 	'Open dialog for monitoring system information',
+																		params: { x: 'last x mouse click position', 
+																							y: 'last y mouse click position' } },
+		});
+		/*
+		this.em.add( 'LoadGraph', 'Load a new graph in the canvas', { nodeData: 'node-data of the the graph to load' } );
+		this.em.add( 'LoadFile',  'Load a file in a new editor',    { nodeData: 'node-data of the the file to load', 
+																																	x: 'last x mouse click position', 
+																																	y: 'last y mouse click position' } );
+		this.em.add( 'ShowRootGraph', 'Show system root graph' );
+		*/
+		// Old Events
+		this.onSaveGraphCallback = null; 			// Unused
+		this.onLoadGraphCallback = null; 			// Added
+		this.onLoadFileCallback = null;     	// Added
+		this.onShowRootGraphCallback = null;  // Added
+		this.onSetReadOnlyCallback = null;    // Added
+		this.onShowParentGraphCallback = null;// Added
+		this.onShowPreviousGraphCallback = null;// Added
+		this.onShowFindDialogCallback = null; // Added
+		this.onShowAnimatorEditorCallback = null; // Added
+		this.onShowDSLListDialogCallback = null;// Added
+		this.onShowGraphTemplateDialogCallback = null;// Added
+		this.onShowSysMonitorDialogCallback = null;// Added
+		this.onGraphChangedCallback = null;   // Added
+		this.onFirstLayoutCompletedCallback = null; // Added
+		this.onSelectionCallback = null;        // Added
 
 		// Initialize instance variables
 		this.clearInstance();
@@ -87,6 +188,12 @@ class Graph {
 			'points',
 		];
 		this.dslNodeFieldNameList = new Set( ['key'] );
+	}
+	registerEvent( name, callback ) {
+		this.em.register( name, callback );
+	}
+	registerEventList( callbackList ) {
+		this.em.registerList( callbackList );
 	}
 	setDSL( dsl ) {
 		// Node TemplateMap
@@ -733,9 +840,7 @@ class Graph {
 				}
 				this.diagram.model.setDataProperty( data, field, value );
 			}
-			if( this.onGraphChangedCallback ) {
-				this.onGraphChangedCallback();
-			}
+			this.em.call.onGraphChanged();
 		}
 	}
 	updateSystemNode( data ) {
@@ -913,16 +1018,12 @@ class Graph {
 			var txn = e.object;  // a Transaction
 			// Call callback only if there is a model change
 			if( txn !== null  ) {
-				//if( this.onGraphChangedCallback ) {
-				//	this.onGraphChangedCallback();
-				//}
+				//this.em.call.onGraphChanged();
 			}
 			//console.log( 'GoJS say graph is changed' );
 			this._callOnNodeModelChanged();
 			this._callOnNodeGraphSeleciotnChanged();
-			if( this.onGraphChangedCallback ) {
-				this.onGraphChangedCallback();
-			}
+			this.em.call.onGraphChanged();
 		}
 	}
 	newEmptyModel() {
@@ -1101,7 +1202,7 @@ class Graph {
 		// Allow to navigate out from a graph and go to parent graph (Alt+click)
 		diagram.addDiagramListener( 'BackgroundSingleClicked', ()=> {
 			if( diagram.lastInput.alt ) {
-				this.doShowParentGraph();
+				this.em.call.onShowParentGraph();
 			}
 		});
 		// Allow to navigate into a sub graph of a node (Alt+click)
@@ -1109,30 +1210,30 @@ class Graph {
 			if( diagram.lastInput.alt ) {
 				const data = this.getFirstSelectedNodeData();
 				if( data && ( data.isDir == true ) ) {
-					this.doLoadGraph( data );
+					this.em.call.onLoadGraph( data );
 				} else {
 					const mousePos = this.diagram.lastInput.viewPoint;
-					this.doLoadFile( data, mousePos.x, mousePos.y );
+					this.em.call.onLoadFile( data, mousePos.x, mousePos.y );
 				}
 			}
 		});
 
 		diagram.addDiagramListener( 'InitialLayoutCompleted', (diagramEvent)=> {
-			if( this.onFirstLayoutCompletedCallback ) {
-				this.onFirstLayoutCompletedCallback();
+			this.em.call.onFirstLayoutCompleted();
+			if( this.nodePalette ) {
 				// Scroll a bit up to show first node well
-			this.nodePalette.scroll( 'pixel', 'up', 20 );
-			// Scroll a bit up to show first link well
-			this.linkPalette.scroll( 'pixel', 'up', 20 );
+				this.nodePalette.scroll( 'pixel', 'up', 20 );
+			}
+			if( this.linkPalette ) {
+				// Scroll a bit up to show first link well
+				this.linkPalette.scroll( 'pixel', 'up', 20 );
 			}
 		});
 
 		diagram.addDiagramListener( 'ChangedSelection', ()=> {
 			if( this.diagram ) {
 				const dataList = this._getFilteredSelection();
-				if( this.onSelectionCallback ) {
-					this.onSelectionCallback( dataList );
-				}
+				this.em.call.onSelection( dataList );
 				this._callOnNodeGraphSeleciotnChanged();
 			}
 		});
@@ -1309,7 +1410,7 @@ class Graph {
 		);*/
 		return( groupTemplate );
 	}
-    newMenuItem( text, action, visiblePredicate ) {
+  newMenuItem( text, action, visiblePredicate ) {
 		// Define the appearance and behavior for Nodes:
 		// First, define the shared context menu for all Nodes, Links, and Groups.
 		// To simplify this code we define a function for creating a context menu button:
@@ -1420,54 +1521,54 @@ class Graph {
 				(e, obj) => { 
 					const mousePos = this.diagram.lastInput.viewPoint;
 					console.log( mousePos.x, mousePos.y );
-					this.doShowFindDialog( mousePos.x, mousePos.y );
+					this.em.call.onShowFindDialog( mousePos.x, mousePos.y );
 				},
 			),
 			this.newMenuItem("Show Animator",
 				(e, obj) => { 
 					const mousePos = this.diagram.lastInput.viewPoint;
 					console.log( mousePos.x, mousePos.y );
-					this.doShowAnimatorEditor( mousePos.x, mousePos.y );
+					this.em.call.onShowAnimatorEditor( mousePos.x, mousePos.y );
 				},
 			),
 			this.newMenuItem("Show DSL List",
 				(e, obj) => { 
 					const mousePos = this.diagram.lastInput.viewPoint;
 					console.log( mousePos.x, mousePos.y );
-					this.doShowDSLListDialog( mousePos.x, mousePos.y );
+					this.em.call.onShowDSLListDialog( mousePos.x, mousePos.y );
 				},
 			),
 			this.newMenuItem("Select Graph Template",
 				(e, obj) => { 
 					const mousePos = this.diagram.lastInput.viewPoint;
 					console.log( mousePos.x, mousePos.y );
-					this.doShowGraphTemplateDialog( mousePos.x, mousePos.y );
+					this.em.call.onShowGraphTemplateDialog( mousePos.x, mousePos.y );
 				},
 			),
 			this.newMenuItem("Show System Monitor",
 				(e, obj) => { 
 					const mousePos = this.diagram.lastInput.viewPoint;
-					this.doShowSysMonitorDialog( mousePos.x, mousePos.y );
+					this.em.call.onShowSysMonitorDialog( mousePos.x, mousePos.y );
 				},
 			),
 			this.newMenuItem( "Show Parent Graph", 
-				(e, obj) => { this.doShowParentGraph(); },
+				(e, obj) => { this.em.call.onShowParentGraph(); },
 				(o) => { return !this.isRootGraph; }
 			),
 			this.newMenuItem( "Back to Previous Graph", 
-				(e, obj) => { this.doShowPreviousGraph(); },
+				(e, obj) => { this.em.call.onShowPreviousGraph(); },
 				(o) => { return !this.isHistoryEmpty; }
 			),
 			this.newMenuItem( "Show Root Graph",
-				(e, obj) => { this.doShowRootGraph(); },
+				(e, obj) => { this.em.call.onShowRootGraph(); },
 				(o) => { return !this.isRootGraph; }
 			),
 			this.newMenuItem( "Set Read-only Mode",
-				(e, obj) => { this.doSetReadOnly( true ); },
+				(e, obj) => { this.em.call.onSetReadOnly( true ); },
 				(o) => { return !this.isReadOnly; }
 			),
 			this.newMenuItem( "Unset Read-only Mode",
-				(e, obj) => { this.doSetReadOnly( false ); },
+				(e, obj) => { this.em.call.onSetReadOnly( false ); },
 				(o) => { return this.isReadOnly; }
 			),
 			this.newMenuItem( "Toogle Visible Grid", 
@@ -1534,7 +1635,7 @@ class Graph {
 					const data = this.getFirstSelectedNodeData();
 					if( data ) {
 						const mousePos = this.diagram.lastInput.viewPoint;
-						this.doLoadFile( data, mousePos.x, mousePos.y );
+						this.em.call.onLoadFile( data, mousePos.x, mousePos.y );
 					}
 				},
 				(o) => { return ( o.data.isFile? true: false ); }),
@@ -1542,7 +1643,7 @@ class Graph {
 				(e, obj) => { 
 					const data = this.getFirstSelectedNodeData();
 					if( data ) {
-						this.doLoadGraph( data );
+						this.em.call.onLoadGraph( data );
 					}
 				},
 				(o) => { return ( o.data.isDir == true ); } // TODO: check if node is SubGraph

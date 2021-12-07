@@ -80,11 +80,6 @@ class GraphEditor extends EditorBase {
     // Pause tracking editor changes
     this.setPauseChange( true );
     // Saving events
-    this.editor.onGraphChanged( ()=> {
-      if( !this.isContentJustLoaded ) {
-        this.editorHasChanged();
-      }
-    });
     this.onDoSave( ()=> {
       console.log( 'Saving main graph...' );
       this.saveEditorContent();
@@ -94,31 +89,8 @@ class GraphEditor extends EditorBase {
     const history = getStatus( 'graphHistory' );
     this.editor.setIsHistoryEmpty( history.length <= 0 );
     this.editor.setIsRootGraph( nodeData.fileURL == config.graph.rootGraphURL );
-    // Setup events
-    this.editor.onLoadGraph( ( nodeData )=> {
-      // Get a copy of the node data
-      const newNodeData = this.editor.getNodeData( nodeData.key, true );
-      // Give a new url in case fileURL is empty
-      this._verifyFileURL( newNodeData );
-      // Navigate to node
-      this.navigateToGraph( newNodeData );
-    });
-    this.editor.onLoadFile( ( nodeData, x, y )=> {
-      // Get a copy of the node data
-      const newNodeData = this.editor.getNodeData( nodeData.key, true );
-      // Give a new url in case fileURL is empty
-      this._verifyFileURL( newNodeData );
-      // Open node window
-      m.e.openWindowFromNodeData( newNodeData, x, y );
-    });
-    this.editor.onShowRootGraph( ()=> {
-      const newNodeData = config.graph.rootGraphNodeData;
-      this.navigateToGraph( newNodeData );
-    });
-    this.editor.onSetReadOnly( ( status )=> {
-      setSystemReadOnly( status );
-    });
 
+    // Helper function to show previous graph
     const showPreviousGraph = ()=> {
       const newNodeData = popFromHistory();
       const history = getStatus( 'graphHistory' );
@@ -127,6 +99,129 @@ class GraphEditor extends EditorBase {
       this.navigateToGraph( newNodeData, true );
     };
 
+    // Setup events
+    this.editor.registerEventList({
+      onGraphChanged: ()=> {
+        if( !this.isContentJustLoaded ) {
+          this.editorHasChanged();
+        }
+      },
+      onSelection: ( dataList )=> {
+        const e = m.e.getEditor( config.htmlDiv.graphDiv );
+        const jsonSelection = e.getJSONSelection();
+      },
+      onLoadGraph: ( nodeData )=> {
+        // Get a copy of the node data
+        const newNodeData = this.editor.getNodeData( nodeData.key, true );
+        // Give a new url in case fileURL is empty
+        this._verifyFileURL( newNodeData );
+        // Navigate to node
+        this.navigateToGraph( newNodeData );
+      },
+      onLoadFile: ( nodeData, x, y )=> {
+        // Get a copy of the node data
+        const newNodeData = this.editor.getNodeData( nodeData.key, true );
+        // Give a new url in case fileURL is empty
+        this._verifyFileURL( newNodeData );
+        // Open node window
+        m.e.openWindowFromNodeData( newNodeData, x, y );
+      },
+      onShowRootGraph: ()=> {
+        const newNodeData = config.graph.rootGraphNodeData;
+        this.navigateToGraph( newNodeData );
+      },
+      onSetReadOnly: ( status )=> {
+        setSystemReadOnly( status );
+      },
+      onShowParentGraph: ()=> {
+        //TODO: temporary fix because I don't know how to handle parent
+        showPreviousGraph();
+        //const newNodeData = this.getParentGraph();
+        //this.navigateToGraph( newNodeData );
+      },
+      onShowPreviousGraph: ()=> {
+        showPreviousGraph();
+      },
+      onShowFindDialog: ( x, y )=> {
+        const nodeData = {
+          key: 'Find in Graph',
+          isFile: true,
+          fileType: 'input/fields',
+        };
+        const id = m.e._getDOMUniqueId( nodeData );
+        m.e.openWindow( id, 'FindViewer', nodeData, [x, y, 470, 200 ] );
+      },
+      onShowAnimatorEditor: ( x, y )=> {
+        const nodeData = {
+          key: 'Animate Graph',
+          isFile: true,
+          fileType: 'input/fields',
+          fileURL: '',
+        };
+        const id = m.e._getDOMUniqueId( nodeData );
+        m.e.openWindow( id, 'AnimatorEditor', nodeData, [x, y, 470, 200 ] );
+      },
+      onShowDSLListDialog: ( x, y )=> {
+        const nodeData = {
+          key: 'Show DSL List',
+          isFile: true,
+          fileType: 'input/fields',
+        };
+        const id = m.e._getDOMUniqueId( nodeData );
+        m.e.openWindow( id, 'DSLViewer', nodeData, [x, y, 160, 350 ] );
+      },
+      onShowGraphTemplateDialog: ( x, y )=> {
+        const nodeData = {
+          key: 'Graph Templates',
+          isFile: true,
+          fileType: 'input/fields',
+        };
+        const id = m.e._getDOMUniqueId( nodeData );
+        m.e.openWindow( id, 'GraphTemplateViewer', nodeData, [x, y, 260, 160 ] );
+      },
+      onShowSysMonitorDialog: ( x, y )=> {
+        const nodeData = {
+          key: 'System Monitor',
+          isFile: true,
+          fileType: 'system/status',
+          fileURL: '#systemMonitor#',
+        };
+        const id = m.e._getDOMUniqueId( nodeData );
+        m.e.openWindow( id, 'SystemMonitorViewer', nodeData, [x, y, 540, 170 ] );
+      },
+    });
+    /*
+    this.editor.onGraphChanged( ()=> {
+      if( !this.isContentJustLoaded ) {
+        this.editorHasChanged();
+      }
+    });
+    //this.editor.onLoadGraph( ( nodeData )=> {
+    this.editor.registerEvent( 'LoadGraph', ( nodeData )=> {
+      // Get a copy of the node data
+      const newNodeData = this.editor.getNodeData( nodeData.key, true );
+      // Give a new url in case fileURL is empty
+      this._verifyFileURL( newNodeData );
+      // Navigate to node
+      this.navigateToGraph( newNodeData );
+    });
+    //this.editor.onLoadFile( ( nodeData, x, y )=> {
+    this.editor.registerEvent( 'LoadFile', ( nodeData, x, y )=> {
+      // Get a copy of the node data
+      const newNodeData = this.editor.getNodeData( nodeData.key, true );
+      // Give a new url in case fileURL is empty
+      this._verifyFileURL( newNodeData );
+      // Open node window
+      m.e.openWindowFromNodeData( newNodeData, x, y );
+    });
+    //this.editor.onShowRootGraph( ()=> {
+    this.editor.registerEvent( 'ShowRootGraph', ()=> {
+      const newNodeData = config.graph.rootGraphNodeData;
+      this.navigateToGraph( newNodeData );
+    });
+    this.editor.onSetReadOnly( ( status )=> {
+      setSystemReadOnly( status );
+    });
     this.editor.onShowParentGraph( ()=> {
       //TODO: temporary fix because I don't know how to handle parent
       showPreviousGraph();
@@ -136,10 +231,6 @@ class GraphEditor extends EditorBase {
     this.editor.onShowPreviousGraph( ()=> {
       //TODO: temporary fix because I don't know how to handle parent
       showPreviousGraph();
-    });
-    this.editor.onSelection( ()=> {
-      const e = m.e.getEditor( config.htmlDiv.graphDiv );
-      const jsonSelection = e.getJSONSelection();
     });
     this.editor.onShowFindDialog( (x, y)=> {
       const nodeData = {
@@ -165,30 +256,35 @@ class GraphEditor extends EditorBase {
         key: 'Show DSL List',
         isFile: true,
         fileType: 'input/fields',
-      };
-      const id = m.e._getDOMUniqueId( nodeData );
-      m.e.openWindow( id, 'DSLViewer', nodeData, [x, y, 160, 350 ] );
-    });
-    this.editor.onShowGraphTemplateDialog( (x, y)=> {
-      const nodeData = {
-        key: 'Graph Templates',
-        isFile: true,
-        fileType: 'input/fields',
-      };
-      const id = m.e._getDOMUniqueId( nodeData );
-      m.e.openWindow( id, 'GraphTemplateViewer', nodeData, [x, y, 260, 160 ] );
-    });
-    this.editor.onShowSysMonitorDialog( (x, y)=> {
-      const nodeData = {
-        key: 'System Monitor',
-        isFile: true,
-        fileType: 'system/status',
-        fileURL: '#systemMonitor#',
-      };
-      const id = m.e._getDOMUniqueId( nodeData );
-      m.e.openWindow( id, 'SystemMonitorViewer', nodeData, [x, y, 540, 170 ] );
-    });
-
+       };
+       const id = m.e._getDOMUniqueId( nodeData );
+       m.e.openWindow( id, 'DSLViewer', nodeData, [x, y, 160, 350 ] );
+      });
+      this.editor.onShowGraphTemplateDialog( (x, y)=> {
+        const nodeData = {
+          key: 'Graph Templates',
+          isFile: true,
+          fileType: 'input/fields',
+        };
+        const id = m.e._getDOMUniqueId( nodeData );
+        m.e.openWindow( id, 'GraphTemplateViewer', nodeData, [x, y, 260, 160 ] );
+      });
+      this.editor.onShowSysMonitorDialog( (x, y)=> {
+       const nodeData = {
+         key: 'System Monitor',
+         isFile: true,
+         fileType: 'system/status',
+         fileURL: '#systemMonitor#',
+       };
+       const id = m.e._getDOMUniqueId( nodeData );
+       m.e.openWindow( id, 'SystemMonitorViewer', nodeData, [x, y, 540, 170 ] );
+      });
+      this.editor.onSelection( ()=> {
+        const e = m.e.getEditor( config.htmlDiv.graphDiv );
+        const jsonSelection = e.getJSONSelection();
+      });
+    */
+    
     this.setPauseChange( false );
     this.loadEditorContent( nodeData );
   }
