@@ -143,29 +143,6 @@ class Graph {
 																		params: { x: 'last x mouse click position', 
 																							y: 'last y mouse click position' } },
 		});
-		/*
-		this.em.add( 'LoadGraph', 'Load a new graph in the canvas', { nodeData: 'node-data of the the graph to load' } );
-		this.em.add( 'LoadFile',  'Load a file in a new editor',    { nodeData: 'node-data of the the file to load', 
-																																	x: 'last x mouse click position', 
-																																	y: 'last y mouse click position' } );
-		this.em.add( 'ShowRootGraph', 'Show system root graph' );
-		*/
-		// Old Events
-		this.onSaveGraphCallback = null; 			// Unused
-		this.onLoadGraphCallback = null; 			// Added
-		this.onLoadFileCallback = null;     	// Added
-		this.onShowRootGraphCallback = null;  // Added
-		this.onSetReadOnlyCallback = null;    // Added
-		this.onShowParentGraphCallback = null;// Added
-		this.onShowPreviousGraphCallback = null;// Added
-		this.onShowFindDialogCallback = null; // Added
-		this.onShowAnimatorEditorCallback = null; // Added
-		this.onShowDSLListDialogCallback = null;// Added
-		this.onShowGraphTemplateDialogCallback = null;// Added
-		this.onShowSysMonitorDialogCallback = null;// Added
-		this.onGraphChangedCallback = null;   // Added
-		this.onFirstLayoutCompletedCallback = null; // Added
-		this.onSelectionCallback = null;        // Added
 
 		// Initialize instance variables
 		this.clearInstance();
@@ -911,107 +888,13 @@ class Graph {
 		}
 		return( result );
 	}
-	onLoadGraph( onLoadGraphCallback ) {
-		this.onLoadGraphCallback = onLoadGraphCallback;
-	}
-	onLoadFile( onLoadFileCallback ) {
-		this.onLoadFileCallback = onLoadFileCallback;
-	}
-	onShowRootGraph( onShowRootGraphCallback ) {
-		this.onShowRootGraphCallback = onShowRootGraphCallback;
-	}
-	onSetReadOnly( onSetReadOnlyCallback ) {
-		this.onSetReadOnlyCallback = onSetReadOnlyCallback;
-	}
-	onShowParentGraph( onShowParentGraphCallback ) {
-		this.onShowParentGraphCallback = onShowParentGraphCallback;
-	}
-	onShowPreviousGraph( onShowPeviousGraphCallback ) {
-		this.onShowPeviousGraphCallback = onShowPeviousGraphCallback;
-	}
-	onShowFindDialog( onShowFindDialogCallback ) {
-		this.onShowFindDialogCallback = onShowFindDialogCallback;
-	}
-	onShowAnimatorEditor( onShowAnimatorEditorCallback ) {
-		this.onShowAnimatorEditorCallback = onShowAnimatorEditorCallback;
-	}
-	onShowDSLListDialog( onShowDSLListDialogCallback ) {
-		this.onShowDSLListDialogCallback = onShowDSLListDialogCallback;
-	}
-	onShowGraphTemplateDialog( onShowGraphTemplateDialogCallback ) {
-		this.onShowGraphTemplateDialogCallback = onShowGraphTemplateDialogCallback;
-	}
-	onShowSysMonitorDialog( onShowSysMonitorDialogCallback ) {
-		this.onShowSysMonitorDialogCallback = onShowSysMonitorDialogCallback;
-	}
-	onGraphChanged( onGraphChangedCallback ) {
-		this.onGraphChangedCallback = onGraphChangedCallback;
-	}
-	onFirstLayoutCompleted( onFirstLayoutCompletedCallback ) {
-		this.onFirstLayoutCompletedCallback = onFirstLayoutCompletedCallback;
-	}
-	onSelection( onSelectionCallback ) {
-		this.onSelectionCallback = onSelectionCallback;
+	doSetReadOnly( status ) {
+		this.isReadOnly = status;
+		this.em.call.onSetReadOnly( false );
 	}
 	//------------------------------------------
 	// Private Functions
 	//------------------------------------------
-	doLoadGraph( data ) {
-		if( this.onLoadGraphCallback ) {
-			this.onLoadGraphCallback( data );
-		}
-	}
-	doLoadFile( data, x, y ) {
-		if( this.onLoadFileCallback ) {
-			this.onLoadFileCallback( data, x, y );
-		}
-	}
-	doShowRootGraph() {
-		if( this.onShowRootGraphCallback ) {
-			this.onShowRootGraphCallback();
-		}
-	}
-	doSetReadOnly( status ) {
-		this.isReadOnly = status;
-		if( this.onSetReadOnlyCallback ) {
-			this.onSetReadOnlyCallback( status );
-		}
-	}
-	doShowParentGraph() {
-		if( !this.isRootGraph && this.onShowParentGraphCallback ) {
-			this.onShowParentGraphCallback();
-		}
-	}
-	doShowPreviousGraph() {
-		if( !this.isHistoryEmpty && this.onShowPeviousGraphCallback ) {
-			this.onShowPeviousGraphCallback();
-		}
-	}
-	doShowFindDialog( x, y ) {
-		if( this.onShowFindDialogCallback ) {
-			this.onShowFindDialogCallback( x, y );
-		}
-	}
-	doShowAnimatorEditor( x, y ) {
-		if( this.onShowAnimatorEditorCallback ) {
-			this.onShowAnimatorEditorCallback( x, y );
-		}
-	}
-	doShowDSLListDialog( x, y ) {
-		if( this.onShowDSLListDialogCallback ) {
-			this.onShowDSLListDialogCallback( x, y );
-		}
-	}
-	doShowGraphTemplateDialog( x, y ) {
-		if( this.onShowGraphTemplateDialogCallback ) {
-			this.onShowGraphTemplateDialogCallback( x, y );
-		}
-	}
-	doShowSysMonitorDialog( x, y ) {
-		if( this.onShowSysMonitorDialogCallback ) {
-			this.onShowSysMonitorDialogCallback( x, y );
-		}
-	}
 	_onGraphChangedFilter( e ) {
 		// Ignore unimportant Transaction events
 		if ( e.isTransactionFinished ) {
@@ -1552,11 +1435,11 @@ class Graph {
 				},
 			),
 			this.newMenuItem( "Show Parent Graph", 
-				(e, obj) => { this.em.call.onShowParentGraph(); },
+				(e, obj) => { if( !this.isRootGraph) this.em.call.onShowParentGraph(); },
 				(o) => { return !this.isRootGraph; }
 			),
 			this.newMenuItem( "Back to Previous Graph", 
-				(e, obj) => { this.em.call.onShowPreviousGraph(); },
+				(e, obj) => { if( !this.isHistoryEmpty ) this.em.call.onShowPreviousGraph(); },
 				(o) => { return !this.isHistoryEmpty; }
 			),
 			this.newMenuItem( "Show Root Graph",
@@ -1564,11 +1447,17 @@ class Graph {
 				(o) => { return !this.isRootGraph; }
 			),
 			this.newMenuItem( "Set Read-only Mode",
-				(e, obj) => { this.em.call.onSetReadOnly( true ); },
+				(e, obj) => { 
+					this.isReadOnly = true;
+					this.em.call.onSetReadOnly( true ); 
+				},
 				(o) => { return !this.isReadOnly; }
 			),
 			this.newMenuItem( "Unset Read-only Mode",
-				(e, obj) => { this.em.call.onSetReadOnly( false ); },
+				(e, obj) => { 
+					this.isReadOnly = false;
+					this.em.call.onSetReadOnly( false );
+				},
 				(o) => { return this.isReadOnly; }
 			),
 			this.newMenuItem( "Toogle Visible Grid", 
