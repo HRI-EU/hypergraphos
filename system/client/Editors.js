@@ -995,7 +995,7 @@ class AnimatorEditor extends EditorBase {
                                          this.storeWindowPosition.bind(this),
                                          position );
 
-    this.editor = new SourceCodeEditor( this.editorDivId );
+    this.editor = new ACESourceCodeEditor( this.editorDivId );
     const language = 'text';
     this.editor.setEditorMode( 'ace/mode/'+language );
     this.editor.setEditorSource( '// Put here animation info, like: {"key":10}' );
