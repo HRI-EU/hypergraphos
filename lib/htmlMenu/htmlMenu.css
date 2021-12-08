@@ -19,6 +19,9 @@
   margin-right: 10px;
 }
 
+.menu-item b {
+  float: right;
+}
 .menu-item {
   display: block;
   position: relative;

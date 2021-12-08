@@ -147,47 +147,47 @@ class Graph {
 		this.contextMenu.add({
       'diagramContextMenu': [
         { label: 'Properties',					do: ( o )=> alert( this.getDiagramInfo( this.diagram.model ) )},
-        { label: 'View...',      				sub: [
-        	{ label: 'Center Graph',		do: (o)=> { // Store last view in ViewLast
+        { label: 'View',      					sub: [
+        	{ label: 'Center Graph',			do: (o)=> { // Store last view in ViewLast
 																											this.viewBookmark[4] = this.getCurrentView();
 																											// Go to new view 
 																											this.diagram.zoomToFit(); }},
 					{ label: '---' },
-					{ label: 'Show View 1',					do: (o)=> { if( o.event.shift ) {
-																												this.viewBookmark[1] = this.getCurrentView();
-																											} else if( this.viewBookmark[1] != undefined ) {
-																												// Store last view in ViewLast
-																												this.viewBookmark[0] = this.getCurrentView();
-																												// Go to new view
-																												this.setCurrentView( this.viewBookmark[1] );
-																											} }},
-					{ label: 'Show View 2',					do: (o)=> { if( o.event.shift ) {
-																												this.viewBookmark[2] = this.getCurrentView();
-																											} else if( this.viewBookmark[2] != undefined ) {
-																												// Store last view in ViewLast
-																												this.viewBookmark[0] = this.getCurrentView();
-																												// Go to new view
-																												this.setCurrentView( this.viewBookmark[2] );
-																											} }},
-					{ label: 'Show View 3',					do: (o)=> { if( o.event.shift ) {
-																												this.viewBookmark[3] = this.getCurrentView();
-																											} else if( this.viewBookmark[3] != undefined ) {
-																												// Store last view in ViewLast
-																												this.viewBookmark[0] = this.getCurrentView();
-																												// Go to new view
-																												this.setCurrentView( this.viewBookmark[3] );
-																											} }},
-					{ label: 'Show View 4',					do: (o)=> { if( o.event.shift ) {
-																												this.viewBookmark[4] = this.getCurrentView();
-																											} else if( this.viewBookmark[4] != undefined ) {
-																												// Store last view in ViewLast
-																												this.viewBookmark[0] = this.getCurrentView();
-																												// Go to new view
-																												this.setCurrentView( this.viewBookmark[4] );
-																											} }},
-					{ label: 'Show Last View',			do: (o)=> { if( this.viewBookmark[0] != undefined ) {
-																												this.setCurrentView( this.viewBookmark[0] );
-																											} }},
+					{ label: 'Show View 1',				do: (o)=> { if( o.event.shift ) {
+																											this.viewBookmark[1] = this.getCurrentView();
+																										} else if( this.viewBookmark[1] != undefined ) {
+																											// Store last view in ViewLast
+																											this.viewBookmark[0] = this.getCurrentView();
+																											// Go to new view
+																											this.setCurrentView( this.viewBookmark[1] );
+																										} }},
+					{ label: 'Show View 2',				do: (o)=> { if( o.event.shift ) {
+																											this.viewBookmark[2] = this.getCurrentView();
+																										} else if( this.viewBookmark[2] != undefined ) {
+																											// Store last view in ViewLast
+																											this.viewBookmark[0] = this.getCurrentView();
+																											// Go to new view
+																											this.setCurrentView( this.viewBookmark[2] );
+																										} }},
+					{ label: 'Show View 3',				do: (o)=> { if( o.event.shift ) {
+																											this.viewBookmark[3] = this.getCurrentView();
+																										} else if( this.viewBookmark[3] != undefined ) {
+																											// Store last view in ViewLast
+																											this.viewBookmark[0] = this.getCurrentView();
+																											// Go to new view
+																											this.setCurrentView( this.viewBookmark[3] );
+																										} }},
+					{ label: 'Show View 4',				do: (o)=> { if( o.event.shift ) {
+																											this.viewBookmark[4] = this.getCurrentView();
+																										} else if( this.viewBookmark[4] != undefined ) {
+																											// Store last view in ViewLast
+																											this.viewBookmark[0] = this.getCurrentView();
+																											// Go to new view
+																											this.setCurrentView( this.viewBookmark[4] );
+																										} }},
+					{ label: 'Show Last View',		do: (o)=> { if( this.viewBookmark[0] != undefined ) {
+																											this.setCurrentView( this.viewBookmark[0] );
+																										} }},
 				]},
 				{ label: '---',                 if: (o)=> { // NOTE: if we define a location, paste do not showup in the popup menu
 																										//const location = o.d.cmt.mouseDownPoint;
@@ -202,7 +202,7 @@ class Graph {
 																										this.em.call.onShowFindDialog( mousePos.x, mousePos.y );
 																									} },
 				{ label: '---' },
-				{ label: 'Tools...',      					sub: [
+				{ label: 'Tools',      					sub: [
 					{ label: 'Toogle Visible Palette', 	if: (o)=> (this.fullPaletteId? true: false),
 					       														 	do: (o)=> { const htmlObj = document.querySelector( `#${this.fullPaletteId}` );
 																													const v = htmlObj.style.visibility;
@@ -212,13 +212,13 @@ class Graph {
 					{ label: 'Show DSL List',			do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
 																										this.em.call.onShowDSLListDialog( mousePos.x, mousePos.y ); } },
 					{ label: 'Show Graph Template',	do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
-																												this.em.call.onShowGraphTemplateDialog( mousePos.x, mousePos.y ); } },
+																											this.em.call.onShowGraphTemplateDialog( mousePos.x, mousePos.y ); } },
 					{ label: 'Show System Monitor',		do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
 																												this.em.call.onShowSysMonitorDialog( mousePos.x, mousePos.y ); } },
 					{ label: 'Show Animator',			do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
 																										this.em.call.onShowAnimatorEditor( mousePos.x, mousePos.y ); } },
 				]},
-				{ label: 'Navigate...',   				sub: [
+				{ label: 'Navigate',		   				sub: [
 					{ label: 'Go To Parent Graph',	if: (o)=> !this.isRootGraph,
 																					do: (o)=> { if( !this.isRootGraph) this.em.call.onShowParentGraph(); } },
 					{ label: 'Back To Parevious Graph',	if: (o)=> !this.isHistoryEmpty,
@@ -1437,253 +1437,6 @@ class Graph {
 			}
 		);*/
 		return( groupTemplate );
-	}
-  newMenuItem( text, action, visiblePredicate ) {
-		// Define the appearance and behavior for Nodes:
-		// First, define the shared context menu for all Nodes, Links, and Groups.
-		// To simplify this code we define a function for creating a context menu button:
-		let vPredicate;
-		if( visiblePredicate ) {
-			const eventCallback = (o, e) => {
-				return( o.diagram? visiblePredicate( o, e ): false );
-			}
-			vPredicate = new go.Binding( "visible", "", eventCallback ).ofObject();
-		} else {
-			// don't bother with binding GraphObject.visible if there's no predicate
-			vPredicate = {};
-		}
-		const menuEntry = $( "ContextMenuButton", 
-			$(go.TextBlock, text), 
-			{ click: action }, 
-			vPredicate
-		);
-		return( menuEntry );
-	}
-	newDiagramContextMenu() {
-		// provide a context menu for the background of the Diagram, when not over any Part
-		const contextMenu = $("ContextMenu",
-			this.newMenuItem("Properties",
-				(e, obj) => {  // OBJ is this Button
-					alert( this.getDiagramInfo( this.diagram.model ) );
-				}),
-			this.newMenuItem("Go View: Center Graph",
-				(e, obj) => {  // OBJ is this Button
-					// Store last view in ViewLast
-					this.viewBookmark[4] = this.getCurrentView();
-					// Go to new view 
-					this.diagram.zoomToFit();
-				}),
-				this.newMenuItem("Go View: 1",
-				(e, obj) => {  // OBJ is this Button
-					if( e.shift ) {
-						this.viewBookmark[0] = this.getCurrentView();
-					} else if( this.viewBookmark[0] != undefined ) {
-						// Store last view in ViewLast
-						this.viewBookmark[4] = this.getCurrentView();
-						// Go to new view
-						this.setCurrentView( this.viewBookmark[0] );
-					}
-				}),
-				this.newMenuItem("Go View: 2",
-				(e, obj) => {  // OBJ is this Button
-					if( e.shift ) {
-						this.viewBookmark[1] = this.getCurrentView();
-					} else if( this.viewBookmark[1] != undefined ) {
-						// Store last view in ViewLast
-						this.viewBookmark[4] = this.getCurrentView();
-						// Go to new view
-						this.setCurrentView( this.viewBookmark[1] );
-					}
-				}),
-				this.newMenuItem("Go View: 3",
-				(e, obj) => {  // OBJ is this Button
-					if( e.shift ) {
-						this.viewBookmark[2] = this.getCurrentView();
-					} else if( this.viewBookmark[2] != undefined ) {
-						// Store last view in ViewLast
-						this.viewBookmark[4] = this.getCurrentView();
-						// Go to new view
-						this.setCurrentView( this.viewBookmark[2] );
-					}
-				}),
-				this.newMenuItem("Go View: 4",
-				(e, obj) => {  // OBJ is this Button
-					if( e.shift ) {
-						this.viewBookmark[3] = this.getCurrentView();
-					} else if( this.viewBookmark[3] != undefined ) {
-						// Store last view in ViewLast
-						this.viewBookmark[4] = this.getCurrentView();
-						// Go to new view
-						this.setCurrentView( this.viewBookmark[3] );
-					}
-				}),
-				this.newMenuItem("Go View: Last",
-				(e, obj) => {  // OBJ is this Button
-					if( e.shift ) {
-						this.viewBookmark[4] = this.getCurrentView();
-					} else if( this.viewBookmark[4] != undefined ) {
-						this.setCurrentView( this.viewBookmark[4] );
-					}
-				}),
-			this.newMenuItem("Paste",
-				(e, obj) => { 
-					const location = e.diagram.toolManager.contextMenuTool.mouseDownPoint;
-					e.diagram.commandHandler.pasteSelection( location ); 
-				},
-				(o) => { 
-					// NOTE: if we define a location, paste do not showup in the popup menu
-					//const location = e.diagram.toolManager.contextMenuTool.mouseDownPoint;
-					const result = o.diagram.commandHandler.canPasteSelection( location );
-					return result;
-				}
-			),
-			this.newMenuItem("Undo",
-				(e, obj) => { e.diagram.commandHandler.undo(); },
-				(o) => { return o.diagram.commandHandler.canUndo(); }
-			),
-			this.newMenuItem("Redo",
-				(e, obj) => { e.diagram.commandHandler.redo(); },
-				(o) => { return o.diagram.commandHandler.canRedo(); }
-			),
-			this.newMenuItem("Find",
-				(e, obj) => { 
-					const mousePos = this.diagram.lastInput.viewPoint;
-					console.log( mousePos.x, mousePos.y );
-					this.em.call.onShowFindDialog( mousePos.x, mousePos.y );
-				},
-			),
-			this.newMenuItem("Show Animator",
-				(e, obj) => { 
-					const mousePos = this.diagram.lastInput.viewPoint;
-					console.log( mousePos.x, mousePos.y );
-					this.em.call.onShowAnimatorEditor( mousePos.x, mousePos.y );
-				},
-			),
-			this.newMenuItem("Show DSL List",
-				(e, obj) => { 
-					const mousePos = this.diagram.lastInput.viewPoint;
-					console.log( mousePos.x, mousePos.y );
-					this.em.call.onShowDSLListDialog( mousePos.x, mousePos.y );
-				},
-			),
-			this.newMenuItem("Select Graph Template",
-				(e, obj) => { 
-					const mousePos = this.diagram.lastInput.viewPoint;
-					console.log( mousePos.x, mousePos.y );
-					this.em.call.onShowGraphTemplateDialog( mousePos.x, mousePos.y );
-				},
-			),
-			this.newMenuItem("Show System Monitor",
-				(e, obj) => { 
-					const mousePos = this.diagram.lastInput.viewPoint;
-					this.em.call.onShowSysMonitorDialog( mousePos.x, mousePos.y );
-				},
-			),
-			this.newMenuItem( "Show Parent Graph", 
-				(e, obj) => { if( !this.isRootGraph) this.em.call.onShowParentGraph(); },
-				(o) => { return !this.isRootGraph; }
-			),
-			this.newMenuItem( "Back to Previous Graph", 
-				(e, obj) => { if( !this.isHistoryEmpty ) this.em.call.onShowPreviousGraph(); },
-				(o) => { return !this.isHistoryEmpty; }
-			),
-			this.newMenuItem( "Show Root Graph",
-				(e, obj) => { this.em.call.onShowRootGraph(); },
-				(o) => { return !this.isRootGraph; }
-			),
-			this.newMenuItem( "Set Read-only Mode",
-				(e, obj) => { 
-					this.isReadOnly = true;
-					this.em.call.onSetReadOnly( true ); 
-				},
-				(o) => { return !this.isReadOnly; }
-			),
-			this.newMenuItem( "Unset Read-only Mode",
-				(e, obj) => { 
-					this.isReadOnly = false;
-					this.em.call.onSetReadOnly( false );
-				},
-				(o) => { return this.isReadOnly; }
-			),
-			this.newMenuItem( "Toogle Visible Grid", 
-				(e, obj) => { this.diagram.grid.visible = !this.diagram.grid.visible; },
-				(o) => { return true }
-			),
-			this.newMenuItem( "Toogle Visible Palette", 
-				(e, obj) => { 
-					const htmlObj = document.querySelector( `#${this.fullPaletteId}` );
-					const v = htmlObj.style.visibility;
-					htmlObj.style.visibility = ( v == 'visible'? 'hidden': 'visible' );
-				},
-				(o) => { return (this.fullPaletteId? true: false) }
-			)
-		);
-		return( contextMenu );
-	}
-	newNodeContextMenu() {
-		// a context menu is an Adornment with a bunch of buttons in them
-		const menuEntry = $("ContextMenu",
-			this.newMenuItem("Cut",
-				(e, obj) => { e.diagram.commandHandler.cutSelection(); },
-				(o) => { return o.diagram.commandHandler.canCutSelection(); }),
-			this.newMenuItem("Duplicate",
-				(e, obj) => { 
-					const location = e.diagram.toolManager.contextMenuTool.mouseDownPoint;
-					e.diagram.commandHandler.copySelection();
-					e.diagram.commandHandler.pasteSelection( location );
-				},
-				(o) => { 
-					const location = o.diagram.toolManager.contextMenuTool.mouseDownPoint;
-					return( o.diagram.commandHandler.canCopySelection() ); 
-				}),
-			this.newMenuItem("Copy",
-				(e, obj) => { e.diagram.commandHandler.copySelection(); },
-				(o) => { return o.diagram.commandHandler.canCopySelection(); }),
-			this.newMenuItem("Paste",
-				(e, obj) => {
-					const location = e.diagram.toolManager.contextMenuTool.mouseDownPoint;
-					e.diagram.commandHandler.pasteSelection( location ); 
-				},
-				(o) => { return o.diagram.commandHandler.canPasteSelection( location ); }),
-			this.newMenuItem("Delete",
-				(e, obj) => { e.diagram.commandHandler.deleteSelection(); },
-				(o) => { return o.diagram.commandHandler.canDeleteSelection(); }),
-			this.newMenuItem( "Set From Palette", 
-				(e, obj) => { this._reSetSelectionFromPalette( e, obj ); },
-				(o) => { return true; } // TODO: check if node is SubGraph
-			),
-			this.newMenuItem("Undo",
-				(e, obj) => { e.diagram.commandHandler.undo(); },
-				(o) => { return o.diagram.commandHandler.canUndo(); }),
-			this.newMenuItem("Redo",
-				(e, obj) => { e.diagram.commandHandler.redo(); },
-				(o) => { return o.diagram.commandHandler.canRedo(); }),
-			this.newMenuItem("Group",
-				(e, obj) => { e.diagram.commandHandler.groupSelection(); },
-				(o) => { return o.diagram.commandHandler.canGroupSelection(); }),
-			this.newMenuItem("Ungroup",
-				(e, obj) => { e.diagram.commandHandler.ungroupSelection(); },
-				(o) => { return o.diagram.commandHandler.canUngroupSelection(); }),
-			this.newMenuItem("Open File",
-				(e, obj) => { 
-					const data = this.getFirstSelectedNodeData();
-					if( data ) {
-						const mousePos = this.diagram.lastInput.viewPoint;
-						this.em.call.onLoadFile( data, mousePos.x, mousePos.y );
-					}
-				},
-				(o) => { return ( o.data.isFile? true: false ); }),
-			this.newMenuItem( "Open Sub-Graph", 
-				(e, obj) => { 
-					const data = this.getFirstSelectedNodeData();
-					if( data ) {
-						this.em.call.onLoadGraph( data );
-					}
-				},
-				(o) => { return ( o.data.isDir == true ); } // TODO: check if node is SubGraph
-			)
-		);
-		return( menuEntry );
 	}
 	getGroupInfo( adornment ) {
 		// takes the tooltip or context menu, not a group node data object
