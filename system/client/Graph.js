@@ -107,8 +107,6 @@ class Graph {
 			//this.diagram = this.newDiagram( '' );
 		}
 
-		this.nodeContextMenu = this.newNodeContextMenu();
-
 		// Graph Evetns
 		this.em = new EventManager();
 		this.em.addList({
@@ -143,6 +141,158 @@ class Graph {
 																		params: { x: 'last x mouse click position', 
 																							y: 'last y mouse click position' } },
 		});
+
+		// Create context menu object
+		this.contextMenu = new HTMLMenu( this.diagram, 'contextMenuContainer' );
+		this.contextMenu.add({
+      'diagramContextMenu': [
+        { label: 'Properties',					do: ( o )=> alert( this.getDiagramInfo( this.diagram.model ) )},
+        { label: 'View...',      				sub: [
+        	{ label: 'Center Graph',		do: (o)=> { // Store last view in ViewLast
+																											this.viewBookmark[4] = this.getCurrentView();
+																											// Go to new view 
+																											this.diagram.zoomToFit(); }},
+					{ label: '---' },
+					{ label: 'Show View 1',					do: (o)=> { if( o.event.shift ) {
+																												this.viewBookmark[1] = this.getCurrentView();
+																											} else if( this.viewBookmark[1] != undefined ) {
+																												// Store last view in ViewLast
+																												this.viewBookmark[0] = this.getCurrentView();
+																												// Go to new view
+																												this.setCurrentView( this.viewBookmark[1] );
+																											} }},
+					{ label: 'Show View 2',					do: (o)=> { if( o.event.shift ) {
+																												this.viewBookmark[2] = this.getCurrentView();
+																											} else if( this.viewBookmark[2] != undefined ) {
+																												// Store last view in ViewLast
+																												this.viewBookmark[0] = this.getCurrentView();
+																												// Go to new view
+																												this.setCurrentView( this.viewBookmark[2] );
+																											} }},
+					{ label: 'Show View 3',					do: (o)=> { if( o.event.shift ) {
+																												this.viewBookmark[3] = this.getCurrentView();
+																											} else if( this.viewBookmark[3] != undefined ) {
+																												// Store last view in ViewLast
+																												this.viewBookmark[0] = this.getCurrentView();
+																												// Go to new view
+																												this.setCurrentView( this.viewBookmark[3] );
+																											} }},
+					{ label: 'Show View 4',					do: (o)=> { if( o.event.shift ) {
+																												this.viewBookmark[4] = this.getCurrentView();
+																											} else if( this.viewBookmark[4] != undefined ) {
+																												// Store last view in ViewLast
+																												this.viewBookmark[0] = this.getCurrentView();
+																												// Go to new view
+																												this.setCurrentView( this.viewBookmark[4] );
+																											} }},
+					{ label: 'Show Last View',			do: (o)=> { if( this.viewBookmark[0] != undefined ) {
+																												this.setCurrentView( this.viewBookmark[0] );
+																											} }},
+				]},
+				{ label: '---',                 if: (o)=> { // NOTE: if we define a location, paste do not showup in the popup menu
+																										//const location = o.d.cmt.mouseDownPoint;
+																										return( o.d.cmd.canPasteSelection( location ) ); }},
+        { label: 'Paste',      					if: (o)=> { // NOTE: if we define a location, paste do not showup in the popup menu
+																										//const location = o.d.cmt.mouseDownPoint;
+																										return( o.d.cmd.canPasteSelection( location ) ); },
+                                				do: (o)=> { const location = o.d.cmt.mouseDownPoint;
+																											o.d.cmd.pasteSelection( location ); }},
+        { label: '---' },
+				{ label: 'Find',      					do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
+																										this.em.call.onShowFindDialog( mousePos.x, mousePos.y );
+																									} },
+				{ label: '---' },
+				{ label: 'Tools...',      					sub: [
+					{ label: 'Toogle Visible Palette', 	if: (o)=> (this.fullPaletteId? true: false),
+					       														 	do: (o)=> { const htmlObj = document.querySelector( `#${this.fullPaletteId}` );
+																													const v = htmlObj.style.visibility;
+																													htmlObj.style.visibility = ( v == 'visible'? 'hidden': 'visible' ); } },
+					{ label: 'Toogle Visible Grid', do: (o)=> this.diagram.grid.visible = !this.diagram.grid.visible },
+					{ label: '---' },
+					{ label: 'Show DSL List',			do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
+																										this.em.call.onShowDSLListDialog( mousePos.x, mousePos.y ); } },
+					{ label: 'Show Graph Template',	do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
+																												this.em.call.onShowGraphTemplateDialog( mousePos.x, mousePos.y ); } },
+					{ label: 'Show System Monitor',		do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
+																												this.em.call.onShowSysMonitorDialog( mousePos.x, mousePos.y ); } },
+					{ label: 'Show Animator',			do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
+																										this.em.call.onShowAnimatorEditor( mousePos.x, mousePos.y ); } },
+				]},
+				{ label: 'Navigate...',   				sub: [
+					{ label: 'Go To Parent Graph',	if: (o)=> !this.isRootGraph,
+																					do: (o)=> { if( !this.isRootGraph) this.em.call.onShowParentGraph(); } },
+					{ label: 'Back To Parevious Graph',	if: (o)=> !this.isHistoryEmpty,
+																					do: (o)=> { if( !this.isHistoryEmpty ) this.em.call.onShowPreviousGraph(); } },
+					{ label: 'Go To Root Graph',		if: (o)=> !this.isRootGraph,
+																					do: (o)=> this.em.call.onShowRootGraph() },
+				]},
+				{ label: '---' },
+				{ label: 'Set Read-only Mode',    if: (o)=> !this.isReadOnly,
+																					do: (o)=> { this.isReadOnly = true;
+																											this.em.call.onSetReadOnly( true ); } },
+				{ label: 'Unset Read-only Mode',  if: (o)=> this.isReadOnly,
+																					do: (o)=> { this.isReadOnly = false;
+																											this.em.call.onSetReadOnly( false ); } },
+        { label: '---',         if: (o)=> o.d.cmd.canUndo() || o.d.cmd.canRedo() },
+        { label: 'Undo',      					if: (o)=> o.d.cmd.canUndo(),
+																				do: (o)=> o.d.cmd.undo() },
+				{ label: 'Redo',      					if: (o)=> o.d.cmd.canRedo(),
+																				do: (o)=> o.d.cmd.redo() },
+			],
+			'nodeContextMenu': [
+				{ label: 'Duplicate',   if: (o)=> {	const location = o.d.cmt.mouseDownPoint;
+																						return( o.d.cmd.canCopySelection() ); },
+                                do: (o)=> { const location = o.d.cmt.mouseDownPoint;
+																						o.d.cmd.copySelection();
+																						o.d.cmd.pasteSelection( location ); } },
+				{ label: 'Cut',         if: (o)=> o.d.cmd.canCutSelection(),
+                                do: (o)=> o.d.cmd.cutSelection() },
+				{ label: 'Copy',        if: (o)=> o.d.cmd.canCopySelection(),
+                                do: (o)=> o.d.cmd.copySelection() },
+				{ label: 'Paste',       if: (o)=> { // TODO: check, I do not define location
+																						// but, it seems that with location, paste become unavailable
+					 																	o.d.cmd.canPasteSelection( location ); },
+                                do: (o)=> { const location = o.d.cmt.mouseDownPoint;
+																						o.d.cmd.pasteSelection( location ); } },
+				{ label: 'Delete',      if: (o)=> o.d.cmd.canDeleteSelection(),
+                                do: (o)=> o.d.cmd.deleteSelection() },
+				{ label: '---' },
+				{ label: 'Set From Palette',	do: (o)=> this._reSetSelectionFromPalette() },
+				{ label: '---' },
+				{ label: 'Group',       if: (o)=> o.d.cmd.canGroupSelection(),
+                                do: (o)=> o.d.cmd.groupSelection() },
+				{ label: 'Ungroup',     if: (o)=> o.d.cmd.canUngroupSelection(),
+                                do: (o)=> o.d.cmd.ungroupSelection() },
+				{ label: '---',         if: (o)=> this._canOpenFile() || this._canOpenSubGraph() },
+				{ label: 'Open File',   if: (o)=> this._canOpenFile(),
+                                do: (o)=> { const data = this.getFirstSelectedNodeData();
+																						if( data ) {
+																							const mousePos = this.diagram.lastInput.viewPoint;
+																							this.em.call.onLoadFile( data, mousePos.x, mousePos.y );
+																						} }},
+				{ label: 'Open Sub-Graph',	if: (o)=> this._canOpenSubGraph(),
+                                		do: (o)=> { const data = this.getFirstSelectedNodeData();
+																								if( data ) {
+																									this.em.call.onLoadGraph( data );
+																								} }},
+				{ label: '---',         if: (o)=> o.d.cmd.canUndo() || o.d.cmd.canRedo() },
+				{ label: 'Undo',        if: (o)=> o.d.cmd.canUndo(),
+                                do: (o)=> o.d.cmd.undo() },
+				{ label: 'Redo',        if: (o)=> o.d.cmd.canRedo(),
+                                do: (o)=> o.d.cmd.redo() },
+			],
+		});
+
+		const diagramContextMenu = $(go.HTMLInfo, {
+			show: this.contextMenu.getShowCallback( 'diagramContextMenu' ),
+			hide: this.contextMenu.getHideCallback( 'diagramContextMenu' ),
+		});
+		this.diagram.contextMenu = diagramContextMenu; //this.newDiagramContextMenu();
+		this.nodeContextMenu = $(go.HTMLInfo, {
+			show: this.contextMenu.getShowCallback( 'nodeContextMenu' ),
+			hide: this.contextMenu.getHideCallback( 'nodeContextMenu' ),
+		});
+		//this.nodeContextMenu = this.newNodeContextMenu();
 
 		// Initialize instance variables
 		this.clearInstance();
@@ -764,11 +914,10 @@ class Graph {
 	}
 	getFirstSelectedNodeData() {
 		let result = null;
-		if( this.diagram.selection ) {
+		if( this.diagram && this.diagram.selection.count ) {
 			const node = this.diagram.selection.first();
 			if( node ) {
-				const data = node.data;
-				result = data;
+				result = node.data;
 			}
 		}
 		return( result );
@@ -1007,7 +1156,6 @@ class Graph {
 		diagram.commandHandler.zoomFactor = 1.5;
 		
 		diagram.scrollMode = go.Diagram.InfiniteScroll;
-		diagram.contextMenu = this.newDiagramContextMenu();
 		diagram.groupTemplate = this.newGroupTemplate();
 
 		// Pan with right mouse button drag
@@ -1120,9 +1268,6 @@ class Graph {
 				this._callOnNodeGraphSeleciotnChanged();
 			}
 		});
-		
-		// Create context menu
-		this.contextMenu = new HTMLMenu( diagram, 'contextMenuContainer' );
 
 		return( diagram );
 	}
@@ -1558,6 +1703,22 @@ class Graph {
 								 "Graph URL: "+this.graphPath;
 		return( info );
 	}
+	_canOpenFile() {
+		let result = false;
+		const data = this.getFirstSelectedNodeData();
+		if( data ) {
+			result = ( data.isFile == true );
+		}
+		return( result );
+	}
+	_canOpenSubGraph() {
+		let result = false;
+		const data = this.getFirstSelectedNodeData();
+		if( data ) {
+			result = ( data.isDir == true );
+		}
+		return( result );
+	}
 	_onFinishDrop( e, grp ) {
 		// Upon a drop onto a Group, we try to add the selection as members of the Group.
 		// Upon a drop onto the background, or onto a top-level Node, make selection top-level.
@@ -1576,7 +1737,7 @@ class Graph {
 			}
 		}
 	}
-	_reSetSelectionFromPalette( e, obj ) {
+	_reSetSelectionFromPalette() {
 		const selection = this.getSelection();
 		selection.each( (node) => {
 			let templateData = null;
