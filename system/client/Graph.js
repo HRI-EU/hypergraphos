@@ -283,16 +283,8 @@ class Graph {
 			],
 		});
 
-		const diagramContextMenu = $(go.HTMLInfo, {
-			show: this.contextMenu.getShowCallback( 'diagramContextMenu' ),
-			hide: this.contextMenu.getHideCallback( 'diagramContextMenu' ),
-		});
-		this.diagram.contextMenu = diagramContextMenu; //this.newDiagramContextMenu();
-		this.nodeContextMenu = $(go.HTMLInfo, {
-			show: this.contextMenu.getShowCallback( 'nodeContextMenu' ),
-			hide: this.contextMenu.getHideCallback( 'nodeContextMenu' ),
-		});
-		//this.nodeContextMenu = this.newNodeContextMenu();
+		this.diagram.contextMenu = this.contextMenu.getGoJSMenu( 'diagramContextMenu' );
+		this.nodeContextMenu = this.contextMenu.getGoJSMenu( 'nodeContextMenu' );
 
 		// Initialize instance variables
 		this.clearInstance();
