@@ -238,6 +238,8 @@ class Graph {
 																				do: (o)=> o.d.cmd.undo() },
 				{ label: 'Redo',      					if: (o)=> o.d.cmd.canRedo(),
 																				do: (o)=> o.d.cmd.redo() },
+				{ icon:  [ 'action-undo',   'action-redo'] ,
+				  label: [ 'Undo (CTRL-Z)', 'Redo (CTRL-SHIFT-Z)' ], do: (o)=> console.log(o) },
 			],
 			'nodeContextMenu': [
 				{ label: 'Duplicate',   if: (o)=> {	const location = o.d.cmt.mouseDownPoint;
