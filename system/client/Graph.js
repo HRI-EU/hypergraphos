@@ -145,16 +145,17 @@ class Graph {
 		// Create context menu object
 		this.contextMenu = new HTMLMenu( this.diagram, 'contextMenuContainer' );
 		this.contextMenu.add({
-      'diagramContextMenu': [
-				{ layout: 'vertical', itemList: [
+      'diagramContextMenu': 
+				{	layout: 'vertical', itemList: [
 					{ label: 'Properties',					do: ( o )=> alert( this.getDiagramInfo( this.diagram.model ) )},
-					{ label: 'View',      					sub: [
+					{ label: 'View',       layout: 'vertical',	itemList: [
 						{ label: 'Center Graph',			do: (o)=> { // Store last view in ViewLast
 																												this.viewBookmark[4] = this.getCurrentView();
 																												// Go to new view 
 																												this.diagram.zoomToFit(); }},
-						{ label: '---' },
-						{ label: 'Show View 1',				do: (o)=> { if( o.event.shift ) {
+						{ separator: '-' },
+						{ label: 'Show View 1',				if: (o)=> false,
+																					do: (o)=> { if( o.event.shift ) {
 																												this.viewBookmark[1] = this.getCurrentView();
 																											} else if( this.viewBookmark[1] != undefined ) {
 																												// Store last view in ViewLast
@@ -190,7 +191,7 @@ class Graph {
 																												this.setCurrentView( this.viewBookmark[0] );
 																											} }},
 					]},
-					{ label: '---',                 if: (o)=> { // NOTE: if we define a location, paste do not showup in the popup menu
+					{ separator: '-',                 if: (o)=> { // NOTE: if we define a location, paste do not showup in the popup menu
 																											//const location = o.d.cmt.mouseDownPoint;
 																											return( o.d.cmd.canPasteSelection( location ) ); }},
 					{ label: 'Paste',      					if: (o)=> { // NOTE: if we define a location, paste do not showup in the popup menu
@@ -198,18 +199,18 @@ class Graph {
 																											return( o.d.cmd.canPasteSelection( location ) ); },
 																					do: (o)=> { const location = o.d.cmt.mouseDownPoint;
 																												o.d.cmd.pasteSelection( location ); }},
-					{ label: '---' },
+					{ separator: '-' },
 					{ label: 'Find',      					do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
 																											this.em.call.onShowFindDialog( mousePos.x, mousePos.y );
 																										} },
-					{ label: '---' },
-					{ label: 'Tools',      					sub: [
+					{ separator: '-' },
+					{ label: 'Tools',       layout: 'vertical', itemList: [
 						{ label: 'Toogle Visible Palette', 	if: (o)=> (this.fullPaletteId? true: false),
 																								do: (o)=> { const htmlObj = document.querySelector( `#${this.fullPaletteId}` );
 																														const v = htmlObj.style.visibility;
 																														htmlObj.style.visibility = ( v == 'visible'? 'hidden': 'visible' ); } },
 						{ label: 'Toogle Visible Grid', do: (o)=> this.diagram.grid.visible = !this.diagram.grid.visible },
-						{ label: '---' },
+						{ separator: '-' },
 						{ label: 'Show DSL List',			do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
 																											this.em.call.onShowDSLListDialog( mousePos.x, mousePos.y ); } },
 						{ label: 'Show Graph Template',	do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
@@ -219,7 +220,7 @@ class Graph {
 						{ label: 'Show Animator',			do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
 																											this.em.call.onShowAnimatorEditor( mousePos.x, mousePos.y ); } },
 					]},
-					{ label: 'Navigate',		   				sub: [
+					{ label: 'Navigate',		layout: 'vertical', itemList: [
 						{ label: 'Go To Parent Graph',	if: (o)=> !this.isRootGraph,
 																						do: (o)=> { if( !this.isRootGraph) this.em.call.onShowParentGraph(); } },
 						{ label: 'Back To Parevious Graph',	if: (o)=> !this.isHistoryEmpty,
@@ -227,68 +228,68 @@ class Graph {
 						{ label: 'Go To Root Graph',		if: (o)=> !this.isRootGraph,
 																						do: (o)=> this.em.call.onShowRootGraph() },
 					]},
-					{ label: '---' },
+					{ separator: '-' },
 					{ label: 'Set Read-only Mode',    if: (o)=> !this.isReadOnly,
 																						do: (o)=> { this.isReadOnly = true;
 																												this.em.call.onSetReadOnly( true ); } },
 					{ label: 'Unset Read-only Mode',  if: (o)=> this.isReadOnly,
 																						do: (o)=> { this.isReadOnly = false;
 																												this.em.call.onSetReadOnly( false ); } },
-					{ label: '---',         if: (o)=> o.d.cmd.canUndo() || o.d.cmd.canRedo() },
-					{ label: 'Undo',      					if: (o)=> o.d.cmd.canUndo(),
+					{ separator: '-',         if: (o)=> o.d.cmd.canUndo() || o.d.cmd.canRedo() },
+					/*{ label: 'Undo',      					if: (o)=> o.d.cmd.canUndo(),
 																					do: (o)=> o.d.cmd.undo() },
 					{ label: 'Redo',      					if: (o)=> o.d.cmd.canRedo(),
-																					do: (o)=> o.d.cmd.redo() },
+																					do: (o)=> o.d.cmd.redo() },*/
 					{ layout: 'horizontal', itemList: [
-						{ icon: 'action-undo', label: 'Undo (CTRL-Z)',     do: (o)=> console.log(o) },
-						{ icon: 'action-redo', label: 'Undo (CTRL-Z)',     do: (o)=> console.log(o) },
+						{ fontIcon: 'action-undo', hint: 'Undo (CTRL-Z)',     if: (o)=> o.d.cmd.canUndo(),
+																																	do: (o)=> o.d.cmd.undo() },
+						{ fontIcon: 'action-redo', hint: 'Undo (CTRL-Z)',     if: (o)=> o.d.cmd.canRedo(),
+																																	do: (o)=> o.d.cmd.redo() },
 					]},
 				]},
-			],
-			'nodeContextMenu': [
-					{ layout: 'vertical', itemList: [
-						{ label: 'Duplicate',   if: (o)=> {	const location = o.d.cmt.mouseDownPoint;
-																								return( o.d.cmd.canCopySelection() ); },
-																		do: (o)=> { const location = o.d.cmt.mouseDownPoint;
-																								o.d.cmd.copySelection();
-																								o.d.cmd.pasteSelection( location ); } },
-						{ label: 'Cut',         if: (o)=> o.d.cmd.canCutSelection(),
-																		do: (o)=> o.d.cmd.cutSelection() },
-						{ label: 'Copy',        if: (o)=> o.d.cmd.canCopySelection(),
-																		do: (o)=> o.d.cmd.copySelection() },
-						{ label: 'Paste',       if: (o)=> { // TODO: check, I do not define location
-																								// but, it seems that with location, paste become unavailable
-																								o.d.cmd.canPasteSelection( location ); },
-																		do: (o)=> { const location = o.d.cmt.mouseDownPoint;
-																								o.d.cmd.pasteSelection( location ); } },
-						{ label: 'Delete',      if: (o)=> o.d.cmd.canDeleteSelection(),
-																		do: (o)=> o.d.cmd.deleteSelection() },
-						{ label: '---' },
-						{ label: 'Set From Palette',	do: (o)=> this._reSetSelectionFromPalette() },
-						{ label: '---' },
-						{ label: 'Group',       if: (o)=> o.d.cmd.canGroupSelection(),
-																		do: (o)=> o.d.cmd.groupSelection() },
-						{ label: 'Ungroup',     if: (o)=> o.d.cmd.canUngroupSelection(),
-																		do: (o)=> o.d.cmd.ungroupSelection() },
-						{ label: '---',         if: (o)=> this._canOpenFile() || this._canOpenSubGraph() },
-						{ label: 'Open File',   if: (o)=> this._canOpenFile(),
-																		do: (o)=> { const data = this.getFirstSelectedNodeData();
-																								if( data ) {
-																									const mousePos = this.diagram.lastInput.viewPoint;
-																									this.em.call.onLoadFile( data, mousePos.x, mousePos.y );
-																								} }},
-						{ label: 'Open Sub-Graph',	if: (o)=> this._canOpenSubGraph(),
-																				do: (o)=> { const data = this.getFirstSelectedNodeData();
-																										if( data ) {
-																											this.em.call.onLoadGraph( data );
-																										} }},
-						{ label: '---',         if: (o)=> o.d.cmd.canUndo() || o.d.cmd.canRedo() },
-						{ label: 'Undo',        if: (o)=> o.d.cmd.canUndo(),
-																		do: (o)=> o.d.cmd.undo() },
-						{ label: 'Redo',        if: (o)=> o.d.cmd.canRedo(),
-																		do: (o)=> o.d.cmd.redo() },
-					]},
-			],
+			'nodeContextMenu':
+				{ layout: 'vertical', itemList: [
+					{ label: 'Duplicate',   if: (o)=> {	const location = o.d.cmt.mouseDownPoint;
+																							return( o.d.cmd.canCopySelection() ); },
+																	do: (o)=> { const location = o.d.cmt.mouseDownPoint;
+																							o.d.cmd.copySelection();
+																							o.d.cmd.pasteSelection( location ); } },
+					{ label: 'Cut',         if: (o)=> o.d.cmd.canCutSelection(),
+																	do: (o)=> o.d.cmd.cutSelection() },
+					{ label: 'Copy',        if: (o)=> o.d.cmd.canCopySelection(),
+																	do: (o)=> o.d.cmd.copySelection() },
+					{ label: 'Paste',       if: (o)=> { // TODO: check, I do not define location
+																							// but, it seems that with location, paste become unavailable
+																							o.d.cmd.canPasteSelection( location ); },
+																	do: (o)=> { const location = o.d.cmt.mouseDownPoint;
+																							o.d.cmd.pasteSelection( location ); } },
+					{ label: 'Delete',      if: (o)=> o.d.cmd.canDeleteSelection(),
+																	do: (o)=> o.d.cmd.deleteSelection() },
+					{ separator: '-' },
+					{ label: 'Set From Palette',	do: (o)=> this._reSetSelectionFromPalette() },
+					{ separator: '-' },
+					{ label: 'Group',       if: (o)=> o.d.cmd.canGroupSelection(),
+																	do: (o)=> o.d.cmd.groupSelection() },
+					{ label: 'Ungroup',     if: (o)=> o.d.cmd.canUngroupSelection(),
+																	do: (o)=> o.d.cmd.ungroupSelection() },
+					{ separator: '-',         if: (o)=> this._canOpenFile() || this._canOpenSubGraph() },
+					{ label: 'Open File',   if: (o)=> this._canOpenFile(),
+																	do: (o)=> { const data = this.getFirstSelectedNodeData();
+																							if( data ) {
+																								const mousePos = this.diagram.lastInput.viewPoint;
+																								this.em.call.onLoadFile( data, mousePos.x, mousePos.y );
+																							} }},
+					{ label: 'Open Sub-Graph',	if: (o)=> this._canOpenSubGraph(),
+																			do: (o)=> { const data = this.getFirstSelectedNodeData();
+																									if( data ) {
+																										this.em.call.onLoadGraph( data );
+																									} }},
+					{ separator: '-',         if: (o)=> o.d.cmd.canUndo() || o.d.cmd.canRedo() },
+					{ label: 'Undo',        if: (o)=> o.d.cmd.canUndo(),
+																	do: (o)=> o.d.cmd.undo() },
+					{ label: 'Redo',        if: (o)=> o.d.cmd.canRedo(),
+																	do: (o)=> o.d.cmd.redo() },
+				]},
 		});
 
 		this.diagram.contextMenu = this.contextMenu.getGoJSMenu( 'diagramContextMenu' );
