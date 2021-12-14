@@ -16,7 +16,8 @@ const config = {
     "graphDiv": "diagram",
     "paletteDiv": "palette",
     "nodePaletteDiv": "nodePalette",
-    "linePaletteDiv": "linkPalette"
+    "groupPaletteDiv": "groupPalette",
+    "linkPaletteDiv": "linkPalette"
   },
   "graph": {
     "isDoubleClickCreateNodeEnabled": true,

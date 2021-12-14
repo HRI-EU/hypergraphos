@@ -12,66 +12,6 @@ Date: 10.07.2020
 
 var $ = go.GraphObject.make;  // for conciseness in defining templates
 
-class EventManager {
-	constructor() {
-		this.eventList = {};
-		this.call = {};
-	}
-	add( name, help, params ) {
-		if( name && !this.eventList[name] ) {  // Add a new event if not already there
-			const callbackList = [];
-			params = ( params? params: {} );
-			help = ( help? help: '' )
-			this.eventList[name] = { help, params, callbackList };
-			this.call[name] = (...paramList)=> this.fire( name, ...paramList );
-		}
-	}
-	addList( eventList ) {
-		if( eventList ) {
-			for( const name in eventList ) {
-				const info = eventList[name];
-				this.add( name, info.help, info.params );
-			}
-		}
-	}
-	register( name, callback ) {
-		if( name && this.eventList[name] ) {
-			if( callback ) { // Register the callback if defined
-				this.eventList[name].callbackList.push( callback );
-			}
-		}
-	}
-	registerList( callbackList ) {
-		if( callbackList ) {
-			for( const name in callbackList ) {
-				const callback = callbackList[name];
-				this.register( name, callback );
-			}
-		}
-	}
-	unregister( name, callback ) {
-		if( name && this.eventList[name] ) {
-			if( callback == undefined ) { // Unregister all callback
-				const callbackList = [];
-				this.eventList[name] = { paramInfo, callbackList };
-			} else {  // Unregister a single callback
-				const index = this.eventList[name].callbackList.indexOf( callback );
-				if( index > -1 ) {
-					this.eventList[name].callbackList.splice( index, 1 );
-				}
-			}
-		}
-	}
-	fire( name, ...paramList ) { // after name, all other parameters will be passed to the callback
-		if( name && this.eventList[name] &&
-			  this.eventList[name].callbackList.length ) { // Fire event if not empty
-			for( const callback of this.eventList[name].callbackList ) {
-				callback( ...paramList );
-			}
-		}
-	}
-}
-
 class Graph {
 	constructor( param ) {
 		// fullPaletteId, nodePaletteId, linkPaletteId, graphId
@@ -81,6 +21,7 @@ class Graph {
 		this.diagram = null;
 		this.fullPaletteId = null;
 		this.nodePalette = null;
+		this.groupPalette = null;
 		this.linkPalette = null;
 		this.lastNodeKey = null;
 		this.dslNameList = [];
@@ -97,6 +38,9 @@ class Graph {
 		if( param.nodePaletteId ) {
 			this.nodePalette = this.newNodePalette( param.nodePaletteId );
 		}
+		if( param.groupPaletteId ) {
+			this.groupPalette = this.newGroupPalette( param.groupPaletteId );
+		}
 		if( param.linkPaletteId ) {
 			this.linkPalette = this.newLinkPalette( param.linkPaletteId );
 		}
@@ -104,7 +48,7 @@ class Graph {
 			this.diagram = this.newDiagram( param.graphId );
 		} else {
 			// Case of no DIV diagram (no visual part)
-			//this.diagram = this.newDiagram( '' );
+			this.diagram = this.newDiagram(); // TODO: test this case if works well
 		}
 
 		// Graph Evetns
@@ -143,12 +87,19 @@ class Graph {
 		});
 
 		// Create context menu object
-		this.contextMenu = new HTMLMenu( this.diagram, 'contextMenuContainer' );
+		this.contextMenu = new HTMLMenu2( 'contextMenuContainer' );
+		// GoJS Parameter for each item
+		this.contextMenu.addMenuItemParams( 'gojs', {
+			diagram: this.diagram,
+			tool:    this.diagram.currentTool,
+			cmd:     this.diagram.commandHandler,
+			cmt:     this.diagram.toolManager.contextMenuTool,
+		});
 		this.contextMenu.add({
       'diagramContextMenu': 
 				{	layout: 'vertical', itemList: [
 					{ label: 'Properties',					do: ( o )=> alert( this.getDiagramInfo( this.diagram.model ) )},
-					{ label: 'View',       layout: 'vertical',	itemList: [
+					{ label: 'View',       layout: 'vertical',	subMenu: [
 						{ label: 'Center Graph',			do: (o)=> { // Store last view in ViewLast
 																												this.viewBookmark[4] = this.getCurrentView();
 																												// Go to new view 
@@ -204,7 +155,7 @@ class Graph {
 																											this.em.call.onShowFindDialog( mousePos.x, mousePos.y );
 																										} },
 					{ separator: '-' },
-					{ label: 'Tools',       layout: 'vertical', itemList: [
+					{ label: 'Tools',       layout: 'vertical', subMenu: [
 						{ label: 'Toogle Visible Palette', 	if: (o)=> (this.fullPaletteId? true: false),
 																								do: (o)=> { const htmlObj = document.querySelector( `#${this.fullPaletteId}` );
 																														const v = htmlObj.style.visibility;
@@ -220,7 +171,7 @@ class Graph {
 						{ label: 'Show Animator',			do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
 																											this.em.call.onShowAnimatorEditor( mousePos.x, mousePos.y ); } },
 					]},
-					{ label: 'Navigate',		layout: 'vertical', itemList: [
+					{ label: 'Navigate',		layout: 'vertical', subMenu: [
 						{ label: 'Go To Parent Graph',	if: (o)=> !this.isRootGraph,
 																						do: (o)=> { if( !this.isRootGraph) this.em.call.onShowParentGraph(); } },
 						{ label: 'Back To Parevious Graph',	if: (o)=> !this.isHistoryEmpty,
@@ -324,61 +275,41 @@ class Graph {
 		this.em.registerList( callbackList );
 	}
 	setDSL( dsl ) {
-		// Node TemplateMap
-		let dNodeMap = new go.Map();
-		let pNodeMap = new go.Map();
-		for( const item of dsl.templateNodeList ) {
-			const category = item.category;
-			const param = ( item.param? item.param: undefined );
-
-			const nInstance = item.template( param );
-			nInstance.contextMenu = this.nodeContextMenu;
-			nInstance.toolTip = this.newNodeToolTip();
-			nInstance.locationSpot = go.Spot.Left;
-			dNodeMap.add( category, nInstance );
-			const pInstance = item.template( param );
-			pInstance.locationSpot = go.Spot.Center;
-			pNodeMap.add( category, pInstance );
-		}
-		if( this.diagram ) {
-			this.diagram.nodeTemplateMap = dNodeMap;
-		}
-		if( this.nodePalette ) {
-			this.nodePalette.nodeTemplateMap = pNodeMap;
-			this.setPaletteDataNodeList( dsl.dataNodeList );
-			this.nodePalette.scale = 0.7;
-		}
-
-		// Link TemplateMap
-		let dLinkMap = new go.Map();
-		let pLinkMap = new go.Map();
-		for( const item of dsl.templateLinkList ) {
-			const category = item.category;
-			const param = ( item.param? item.param: undefined );
-
-			const lInstance = item.template( param );
-			lInstance.contextMenu = this.nodeContextMenu;
-			lInstance.toolTip = this.newLinkToolTip();
-			lInstance.adjusting = go.Link.End;
-			dLinkMap.add( category, lInstance );
-			const plInstance = item.template( param );
-			plInstance.selectable = false;
-			pLinkMap.add( category, plInstance );
-		}
-		if( this.diagram ) {
-			this.diagram.linkTemplateMap = dLinkMap;
-		}
-		if( this.linkPalette ) {
-			this.linkPalette.linkTemplateMap = pLinkMap;
-			this.setPaletteDataLinkList( dsl.dataLinkList );
-			this.linkPalette.scale = 0.7;
-		}
+		this._setNodeDSL( dsl );
+		this._setLinkDSL( dsl );
+		this._setGroupDSL( dsl );
 	}
 	addDSL( dslDest, dslSrc ) {
-		dslDest.templateNodeList = dslDest.templateNodeList.concat( dslSrc.templateNodeList );
-		dslDest.dataNodeList = dslDest.dataNodeList.concat( dslSrc.dataNodeList );
-		dslDest.templateLinkList = dslDest.templateLinkList.concat( dslSrc.templateLinkList );
-		dslDest.dataLinkList = dslDest.dataLinkList.concat( dslSrc.dataLinkList );
+		if( dslSrc.templateNodeList && dslSrc.dataNodeList ) {
+			if( !dslDest.templateNodeList ) {
+				dslDest.templateNodeList = [];
+			}
+			if( !dslDest.dataNodeList ) {
+				dslDest.dataNodeList = [];
+			}
+			dslDest.templateNodeList = dslDest.templateNodeList.concat( dslSrc.templateNodeList );
+			dslDest.dataNodeList = dslDest.dataNodeList.concat( dslSrc.dataNodeList );
+		}
+		if( dslSrc.templateLinkList && dslSrc.dataLinkList ) {
+			if( !dslDest.templateLinkList ) {
+				dslDest.templateLinkList = [];
+			}
+			if( !dslDest.dataLinkList ) {
+				dslDest.dataLinkList = [];
+			}
+			dslDest.templateLinkList = dslDest.templateLinkList.concat( dslSrc.templateLinkList );
+			dslDest.dataLinkList = dslDest.dataLinkList.concat( dslSrc.dataLinkList );
+		}
+		if( dslSrc.templateGroupList && dslSrc.dataGroupList ) {
+			if( !dslDest.templateGroupList ) {
+				dslDest.templateGroupList = [];
+			}
+			if( !dslDest.dataGroupList ) {
+				dslDest.dataGroupList = [];
+			}
+			dslDest.templateGroupList = dslDest.templateGroupList.concat( dslSrc.templateGroupList );
+			dslDest.dataGroupList = dslDest.dataGroupList.concat( dslSrc.dataGroupList );
+		}
 	}
 	setDSLNameList( dslNameList ) {
 		this.dslNameList = dslNameList;
@@ -417,105 +348,6 @@ class Graph {
 		};
 		loadDSLScriptList( dslNameList, onAllDSLLoaded );
 		this.setDSLNameList( dslNameList );
-	}
-	setPaletteDataNodeList( dataNodeList ) {
-		if( this.nodePalette ) {
-			for( let i = 0; i < dataNodeList.length; ++i ) {
-				dataNodeList[i].key = i+1;
-			}
-			this.nodePalette.model.nodeDataArray = dataNodeList;
-			this.nodePalette.toolManager.dragSelectingTool.isEnabled = false;
-			this.nodePalette.maxSelectionCount = 1;
-			this.nodePalette.lastSelectedNode = null;
-
-			// Once the graph and palette are shown, we need to scroll a bit
-			// the node/link palette to show the first entry well
-			this.nodePalette.addDiagramListener( 'LayoutCompleted', (diagramEvent)=> {
-				// Scroll a bit up to show first node well
-				this.nodePalette.scroll( 'pixel', 'up', 50 );
-			});
-
-			if( this.diagram ) {
-				const setArchetypeOnSelection = ()=> {
-					const node = this.nodePalette.selection.first();
-					if( node ) {
-						this.nodePalette.lastSelectedNode = node;
-						const dataNode = node.data;
-						if( this.diagram.toolManager.clickCreatingTool ) {
-							this.diagram.toolManager.clickCreatingTool.archetypeNodeData = dataNode;
-						}
-					} else {
-						this.nodePalette.select( this.nodePalette.lastSelectedNode );
-					}
-				};
-				this.nodePalette.addDiagramListener( 'ChangedSelection', setArchetypeOnSelection );
-			}
-
-			// Select by default the first node
-			const defaultNode = this.nodePalette.findNodeForKey(1);
-			if( defaultNode ) {
-				this.nodePalette.select( defaultNode );
-			}
-		}
-	}
-	setPaletteDataLinkList( dataLinkList ) {
-		if( this.linkPalette ) {
-			const nodeDataArray = [];
-			let i = 1;
-			for( const dataLink of dataLinkList ) {
-				nodeDataArray.push( { key: i, category: 'LinkSource' } );
-				// In palette we show either the 'text' property if specified
-				// in link.data or category otherwise 
-				const linkText = ( dataLink.text? dataLink.text: dataLink.category );
-				nodeDataArray.push({ key: i+1, text: linkText, category: 'LinkDestination' });
-				dataLink.from = i;
-				dataLink.to   = i+1;
-				i += 2;
-			}
-			let pNodeMap = new go.Map();
-			pNodeMap.add( 'LinkSource', $(go.Node) );
-			pNodeMap.add( 'LinkDestination', $(go.Node, 'Auto',
-				{ locationSpot: go.Spot.Left },
-				$(go.TextBlock, 
-					{ margin: 4 },  // the tooltip shows the result of calling linkInfo(data)
-					new go.Binding("text", "text")
-				)
-			));
-			this.linkPalette.model.nodeDataArray = nodeDataArray;
-			this.linkPalette.nodeTemplateMap = pNodeMap;
-			this.linkPalette.model.linkDataArray = dataLinkList;
-			this.linkPalette.toolManager.dragSelectingTool.isEnabled = false;
-			this.linkPalette.maxSelectionCount = 1;
-			this.linkPalette.lastSelectedLink = null;
-
-			// Once the graph and palette are shown, we need to scroll a bit
-			// the node/link palette to show the first entry well
-			this.linkPalette.addDiagramListener( 'LayoutCompleted', (diagramEvent)=> {
-				// Scroll a bit up to show first link well
-				this.linkPalette.scroll( 'pixel', 'up', 50 );
-			});
-
-			if( this.diagram ) {
-				const setArchetypeOnSelection = ()=> {
-					const node = this.linkPalette.selection.first();
-					if( node ) {
-						this.linkPalette.lastSelectedNode = node;
-						const link = node.findLinksInto().first();
-						const dataLink = link.data;
-						this.diagram.toolManager.linkingTool.archetypeLinkData = dataLink;
-					} else {
-						this.linkPalette.select( this.linkPalette.lastSelectedNode );
-					}
-				};
-				this.linkPalette.addDiagramListener( 'ChangedSelection', setArchetypeOnSelection );
-			}
-
-			// Select by default the second node (linked to)
-			const defaultNode = this.linkPalette.findNodeForKey(2);
-			if( defaultNode ) {
-				this.linkPalette.select( defaultNode );
-			}
-		}
 	}
 	getPaletteInfo() {
 		let result = null;
@@ -1045,6 +877,225 @@ class Graph {
 	//------------------------------------------
 	// Private Functions
 	//------------------------------------------
+	_setNodeDSL( dsl ) {
+		if( dsl.templateNodeList && dsl.dataNodeList ) {
+			// Node TemplateMap
+			let dNodeMap = new go.Map();
+			let pNodeMap = new go.Map();
+			for( const item of dsl.templateNodeList ) {
+				const category = item.category;
+				const param = ( item.param? item.param: undefined );
+	
+				const nInstance = item.template( param );
+				nInstance.contextMenu = this.nodeContextMenu;
+				nInstance.toolTip = this.newNodeToolTip();
+				nInstance.locationSpot = go.Spot.Left;
+				dNodeMap.add( category, nInstance );
+				const pInstance = item.template( param );
+				pInstance.locationSpot = go.Spot.Center;
+				pNodeMap.add( category, pInstance );
+			}
+			if( this.diagram ) {
+				this.diagram.nodeTemplateMap = dNodeMap;
+			}
+			if( this.nodePalette ) {
+				this.nodePalette.nodeTemplateMap = pNodeMap;
+				this._setPaletteDataNodeList( dsl.dataNodeList );
+				this.nodePalette.scale = 0.7;
+			}
+		}
+	}
+	_setLinkDSL( dsl ) {
+		if( dsl.templateLinkList && dsl.dataLinkList ) {
+			// Link TemplateMap
+			let dLinkMap = new go.Map();
+			let pLinkMap = new go.Map();
+			for( const item of dsl.templateLinkList ) {
+				const category = item.category;
+				const param = ( item.param? item.param: undefined );
+	
+				const lInstance = item.template( param );
+				lInstance.contextMenu = this.nodeContextMenu;
+				lInstance.toolTip = this.newLinkToolTip();
+				lInstance.adjusting = go.Link.End;
+				dLinkMap.add( category, lInstance );
+				const plInstance = item.template( param );
+				plInstance.selectable = false;
+				pLinkMap.add( category, plInstance );
+			}
+			if( this.diagram ) {
+				this.diagram.linkTemplateMap = dLinkMap;
+			}
+			if( this.linkPalette ) {
+				this.linkPalette.linkTemplateMap = pLinkMap;
+				this._setPaletteDataLinkList( dsl.dataLinkList );
+				this.linkPalette.scale = 0.7;
+			}
+		}
+	}
+	_setGroupDSL( dsl ) {
+		if( dsl.templateGroupList && dsl.dataGroupList ) {
+			// Group TemplateMap
+			let dGroupMap = new go.Map();
+			let pGroupMap = new go.Map();
+			for( const item of dsl.templateGroupList ) {
+				const category = item.category;
+				const param = ( item.param? item.param: undefined );
+	
+				const gInstance = item.template( param );
+				gInstance.contextMenu = this.nodeContextMenu;
+				gInstance.toolTip = this.newGroupToolTip();
+				gInstance.locationSpot = go.Spot.Left;
+				dGroupMap.add( category, gInstance );
+				const pInstance = item.template( param );
+				pInstance.locationSpot = go.Spot.Center;
+				pGroupMap.add( category, pInstance );
+			}
+			if( this.diagram ) {
+				this.diagram.groupTemplateMap = dGroupMap;
+			}
+			if( this.groupPalette ) {
+				this.groupPalette.groupTemplateMap = pGroupMap;
+				this._setPaletteDataGroupList( dsl.dataGroupList ); // TODO
+				this.groupPalette.scale = 0.7;
+			}
+		}
+	}
+	_setPaletteDataNodeList( dataNodeList ) {
+		if( this.nodePalette ) {
+			for( let i = 0; i < dataNodeList.length; ++i ) {
+				dataNodeList[i].key = i+1;
+			}
+			this.nodePalette.model.nodeDataArray = dataNodeList;
+			this.nodePalette.toolManager.dragSelectingTool.isEnabled = false;
+			this.nodePalette.maxSelectionCount = 1;
+			this.nodePalette.lastSelectedNode = null;
+
+			// Once the graph and palette are shown, we need to scroll a bit
+			// the node/link palette to show the first entry well
+			this.nodePalette.addDiagramListener( 'LayoutCompleted', (diagramEvent)=> {
+				// Scroll a bit up to show first node well
+				this.nodePalette.scroll( 'pixel', 'up', 50 );
+			});
+
+			if( this.diagram ) {
+				const setArchetypeOnSelection = ()=> {
+					const node = this.nodePalette.selection.first();
+					if( node && this.diagram.toolManager.clickCreatingTool ) {
+						this.nodePalette.lastSelectedNode = node;
+						const dataNode = node.data;
+						this.diagram.toolManager.clickCreatingTool.archetypeNodeData = dataNode;
+					} else {
+						this.nodePalette.select( this.nodePalette.lastSelectedNode );
+					}
+				};
+				this.nodePalette.addDiagramListener( 'ChangedSelection', setArchetypeOnSelection );
+			}
+
+			// Select by default the first node
+			const defaultNode = this.nodePalette.findNodeForKey(1);
+			if( defaultNode ) {
+				this.nodePalette.select( defaultNode );
+			}
+		}
+	}
+	_setPaletteDataLinkList( dataLinkList ) {
+		if( this.linkPalette ) {
+			const nodeDataArray = [];
+			let i = 1;
+			for( const dataLink of dataLinkList ) {
+				nodeDataArray.push( { key: i, category: 'LinkSource' } );
+				// In palette we show either the 'text' property if specified
+				// in link.data or category otherwise 
+				const linkText = ( dataLink.text? dataLink.text: dataLink.category );
+				nodeDataArray.push({ key: i+1, text: linkText, category: 'LinkDestination' });
+				dataLink.from = i;
+				dataLink.to   = i+1;
+				i += 2;
+			}
+			let pNodeMap = new go.Map();
+			pNodeMap.add( 'LinkSource', $(go.Node) );
+			pNodeMap.add( 'LinkDestination', $(go.Node, 'Auto',
+				{ locationSpot: go.Spot.Left },
+				$(go.TextBlock, 
+					{ margin: 4 },  // the tooltip shows the result of calling linkInfo(data)
+					new go.Binding("text", "text")
+				)
+			));
+			this.linkPalette.model.nodeDataArray = nodeDataArray;
+			this.linkPalette.nodeTemplateMap = pNodeMap;
+			this.linkPalette.model.linkDataArray = dataLinkList;
+			this.linkPalette.toolManager.dragSelectingTool.isEnabled = false;
+			this.linkPalette.maxSelectionCount = 1;
+			this.linkPalette.lastSelectedLink = null;
+
+			// Once the graph and palette are shown, we need to scroll a bit
+			// the node/link palette to show the first entry well
+			this.linkPalette.addDiagramListener( 'LayoutCompleted', (diagramEvent)=> {
+				// Scroll a bit up to show first link well
+				this.linkPalette.scroll( 'pixel', 'up', 50 );
+			});
+
+			if( this.diagram ) {
+				const setArchetypeOnSelection = ()=> {
+					const node = this.linkPalette.selection.first();
+					if( node ) {
+						this.linkPalette.lastSelectedNode = node;
+						const link = node.findLinksInto().first();
+						const dataLink = link.data;
+						this.diagram.toolManager.linkingTool.archetypeLinkData = dataLink;
+					} else {
+						this.linkPalette.select( this.linkPalette.lastSelectedNode );
+					}
+				};
+				this.linkPalette.addDiagramListener( 'ChangedSelection', setArchetypeOnSelection );
+			}
+
+			// Select by default the second node (linked to)
+			const defaultNode = this.linkPalette.findNodeForKey(2);
+			if( defaultNode ) {
+				this.linkPalette.select( defaultNode );
+			}
+		}
+	}
+	_setPaletteDataGroupList( dataGroupList ) {
+		if( this.groupPalette ) {
+			for( let i = 0; i < dataGroupList.length; ++i ) {
+				dataGroupList[i].key = i+1;
+			}
+			this.groupPalette.model.nodeDataArray = dataGroupList;
+			this.groupPalette.toolManager.dragSelectingTool.isEnabled = false;
+			this.groupPalette.maxSelectionCount = 1;
+			this.groupPalette.lastSelectedNode = null;
+
+			// Once the graph and palette are shown, we need to scroll a bit
+			// the node/link palette to show the first entry well
+			this.groupPalette.addDiagramListener( 'LayoutCompleted', (diagramEvent)=> {
+				// Scroll a bit up to show first node well
+				this.groupPalette.scroll( 'pixel', 'up', 50 );
+			});
+
+			if( this.diagram ) {
+				const setArchetypeOnSelection = ()=> {
+					const node = this.groupPalette.selection.first();
+					if( node && this.diagram.commandHandler ) {
+						this.groupPalette.lastSelectedNode = node;
+						const dataNode = node.data;
+						this.diagram.commandHandler.archetypeGroupData = dataNode;
+					} else {
+						this.groupPalette.select( this.groupPalette.lastSelectedNode );
+					}
+				};
+				this.groupPalette.addDiagramListener( 'ChangedSelection', setArchetypeOnSelection );
+			}
+
+			// Select by default the first node
+			const defaultNode = this.groupPalette.findNodeForKey(1);
+			if( defaultNode ) {
+				this.groupPalette.select( defaultNode );
+			}
+		}
+	}
 	_onGraphChangedFilter( e ) {
 		// Ignore unimportant Transaction events
 		if ( e.isTransactionFinished ) {
@@ -1082,6 +1133,17 @@ class Graph {
 		);
 		return( palette );
 	}
+	newGroupPalette( divId ) {
+		const palette = $(go.Palette, divId,
+			{ // customize the GridLayout to align the centers of the locationObjects
+				layout: $(go.GridLayout, { 
+					alignment: go.GridLayout.Location,
+					wrappingColumn: 1,
+				})
+			}
+		);
+		return( palette );
+	}
 	newLinkPalette( divId ) {
 		const palette = $(go.Palette, divId,
 			{ // customize the GridLayout to align the centers of the locationObjects
@@ -1095,26 +1157,41 @@ class Graph {
 		return( palette );
 	}
 	newDiagram( divId ) {
-		const diagram = $( go.Diagram, divId, 
-			{
-				clickCreatingTool: new InGroupClickCreatingTool(),
+		let diagram = null;
+		if( divId ) {
+			diagram = $( go.Diagram, divId ); // Create visual diagram
+		} else {
+			diagram = $( go.Diagram ); // Create batch diagram
+		}
 
-				'animationManager.isInitial': false,
-				// what to do when a drag-drop occurs in the Diagram's background
-				mouseDrop: (e)=> { this._onFinishDrop( e, null ); },
+		diagram.clickCreatingTool = new InGroupClickCreatingTool();
+		diagram.animationManager.isInitial = false;
+		// what to do when a drag-drop occurs in the Diagram's background
+		diagram.mouseDrop = (e)=> this._onFinishDrop( e, null );
+		// Use mouse wheel for zoom
+		diagram.toolManager.mouseWheelBehavior = go.ToolManager.WheelZoom;
+		// Disable port gravity (snap to port)
+		diagram.toolManager.linkingTool.portGravity = 0;
 
-				"toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
-				"linkingTool.portGravity": 0,
-				// allow Ctrl-G to call groupSelection()
-				"commandHandler.archetypeGroupData": { // TODO: Put in DSL
-					label: "Group",
-					isGroup: true,
-					color: "gray"
-				},
-				// enable undo & redo
-				"undoManager.isEnabled": true,
-			},
-		);
+		/*
+		// allow Ctrl-G to call groupSelection()
+		"commandHandler.archetypeGroupData": { // TODO: Put in DSL
+			label: "Group",
+			isGroup: true,
+			color: "gray"
+		},*/
+		// enable undo & redo
+		diagram.undoManager.isEnabled = true;
+
+		/*
+		// allow Ctrl-G to call groupSelection()
+		diagram.commandHandler.archetypeGroupData = { // TODO: Put in DSL
+			label: "Group",
+			isGroup: true,
+			color: "gray"
+		};
+		diagram.groupTemplate = this.newGroupTemplate();
+		*/
 
 		// Define grid
 		const mainColor = {
@@ -1145,6 +1222,7 @@ class Graph {
 			$(go.Shape, "LineV", { stroke: mainColor[schema].lineColor2, strokeWidth: 1.0, interval: 10 })
 		);
 
+		// By default grid is not visible
 		diagram.grid.visible = false;
 		diagram.div.style.background = mainColor[schema].backgroundColor;
 
@@ -1155,9 +1233,8 @@ class Graph {
 
 		// Set zoom speed
 		diagram.commandHandler.zoomFactor = 1.5;
-		
+		// Allow infinite canvas
 		diagram.scrollMode = go.Diagram.InfiniteScroll;
-		diagram.groupTemplate = this.newGroupTemplate();
 
 		// Pan with right mouse button drag
 		diagram.toolManager.panningTool.canStart = function() {
@@ -1304,9 +1381,19 @@ class Graph {
 			)
 		);
 	}
+	newGroupToolTip() {
+		// this tooltip Adornment is shared by all groups
+		return $("ToolTip",
+			$(go.TextBlock, { margin: 4 },
+				// bind to tooltip, not to Group.data, to allow access to Group properties
+				new go.Binding("text", "", this.getGroupInfo.bind(this)).ofObject()
+			)
+		);
+	}
+	/*
 	newGroupTemplate() { // TODO: Put in DSL
-        const groupTemplate = $(go.Group, "Vertical",
-          { defaultStretch: go.GraphObject.Horizontal,
+		const groupTemplate = $(go.Group, "Vertical",
+			{ defaultStretch: go.GraphObject.Horizontal,
 				ungroupable: true,  // enable Ctrl-Shift-G to ungroup a selected Group
 				mouseDrop: (e)=> { this._onFinishDrop( e, null ); },
 				mouseDragEnter: ( e, grp, prev )=> { 
@@ -1317,56 +1404,50 @@ class Graph {
 						// NOTE: this do not work in this case: this.diagram.commandHandler.ungroupSelection();
 					}
 				},
-		  },
-          $(go.Panel, "Auto",
-			{
 			},
-            $(go.Shape, "Rectangle",
-              { fill: "gray",
-				portId: "", 
-				cursor: "pointer",  // the Shape is the port, not the whole Node
-				// allow all kinds of links from this port
-				fromLinkable: true, 
-				fromLinkableSelfNode: false, 
-				fromLinkableDuplicates: true,
-				// allow all kinds of links to this port
-				toLinkable: true, 
-				toLinkableSelfNode: false, 
-				toLinkableDuplicates: true,
-			  },
-			  new go.Binding("fill", "color")
+			$(go.Panel, "Auto",
+				{
+				},
+				$(go.Shape, "Rectangle",
+					{ fill: "gray",
+						portId: "", 
+						cursor: "pointer",  // the Shape is the port, not the whole Node
+						// allow all kinds of links from this port
+						fromLinkable: true, 
+						fromLinkableSelfNode: false, 
+						fromLinkableDuplicates: true,
+						// allow all kinds of links to this port
+						toLinkable: true, 
+						toLinkableSelfNode: false, 
+						toLinkableDuplicates: true,
+					},
+					new go.Binding("fill", "color")
+				),
+				$(go.TextBlock,
+					{ margin: new go.Margin(2, 2, 0, 2), 
+						textAlign: "center",
+						stroke: "lightgray",
+						font: "bold 40px sans-serif",
+						isMultiline: true,
+						editable: true
+					},
+					new go.Binding("text", "label").makeTwoWay(),
+				)
 			),
-            $(go.TextBlock,
-              { margin: new go.Margin(2, 2, 0, 2), 
-				textAlign: "center",
-				stroke: "lightgray",
-				font: "bold 40px sans-serif",
-				isMultiline: true,
-				editable: true
-			  },
-              new go.Binding("text", "label").makeTwoWay(),
-			)
-          ),
-          $(go.Panel, "Auto",
-			{ 
-				pickable: false,
-				contextMenu: this.nodeContextMenu,
-			},
-            $(go.Shape, { fill: "rgba(128,128,128,0.2)" }),
-            $(go.Placeholder, { padding: 20 }),
-          ),
-		  { // this tooltip Adornment is shared by all groups
-				toolTip:
-					$("ToolTip",
-						$(go.TextBlock, { margin: 4 },
-							// bind to tooltip, not to Group.data, to allow access to Group properties
-							new go.Binding("text", "", this.getGroupInfo.bind(this)).ofObject()
-						)
-					),
+			$(go.Panel, "Auto",
+				{ 
+					pickable: false,
+					//contextMenu: this.nodeContextMenu,
+				},
+				$(go.Shape, { fill: "rgba(128,128,128,0.2)" }),
+				$(go.Placeholder, { padding: 20 }),
+			),
+			{ // this tooltip Adornment is shared by all groups
+				toolTip: this.newGroupToolTip(),
 				// the same context menu Adornment is shared by all groups
 				//contextMenu: this.nodeContextMenu
 			}
-        );
+		);
 		// Define the appearance and behavior for Groups:
 		// Groups consist of a title in the color given by the group node data
 		// above a translucent gray rectangle surrounding the member parts
@@ -1436,9 +1517,10 @@ class Graph {
 				// the same context menu Adornment is shared by all groups
 				//contextMenu: this.nodeContextMenu
 			}
-		);*/
+		);*-/
 		return( groupTemplate );
 	}
+	*/
 	getGroupInfo( adornment ) {
 		// takes the tooltip or context menu, not a group node data object
 		var g = adornment.adornedPart;  // get the Group that the tooltip adorns

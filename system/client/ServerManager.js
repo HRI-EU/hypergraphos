@@ -43,6 +43,7 @@ function loadSystem() {
   scriptList = [
     `./${urlParams.name}_config.js`,
     './EditorChangeManager.js',
+    './EventManager.js',
     './Graph.js',
     './Editors.js',
     './ModelExplorer.js',

@@ -67,7 +67,8 @@ class GraphEditor extends EditorBase {
       graphId: id,  
       fullPaletteId: config.htmlDiv.paletteDiv,
       nodePaletteId: config.htmlDiv.nodePaletteDiv,
-      linkPaletteId: config.htmlDiv.linePaletteDiv,
+      groupPaletteId: config.htmlDiv.groupPaletteDiv,
+      linkPaletteId: config.htmlDiv.linkPaletteDiv,
     });
 
     // Enable/disable delete key in graph editing

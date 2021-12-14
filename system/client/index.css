@@ -36,7 +36,13 @@ Date: 10.07.2020
 	background: rgb(158, 157, 157);
 	top: 0%;
 	width: 99%; 
-	height: 80%;
+	height: 60%;
+}
+#groupPalette {
+	background: rgb(158, 157, 157);
+	top: 60%;
+	width: 99%; 
+	height: 20%;
 }
 #linkPalette {
 	background: rgb(158, 157, 157);
