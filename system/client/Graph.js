@@ -89,7 +89,7 @@ class Graph {
 		// Create context menu object
 		this.contextMenu = new HTMLMenu2( 'contextMenuContainer' );
 		// GoJS Parameter for each item
-		this.contextMenu.addMenuItemParams( 'gojs', {
+		this.contextMenu.addParams( 'gojs', {
 			diagram: this.diagram,
 			tool:    this.diagram.currentTool,
 			cmd:     this.diagram.commandHandler,
@@ -243,8 +243,8 @@ class Graph {
 				]},
 		});
 
-		this.diagram.contextMenu = this.contextMenu.getGoJSMenu( 'diagramContextMenu' );
-		this.nodeContextMenu = this.contextMenu.getGoJSMenu( 'nodeContextMenu' );
+		this.diagram.contextMenu = this.contextMenu.getMenu( 'diagramContextMenu' );
+		this.nodeContextMenu = this.contextMenu.getMenu( 'nodeContextMenu' );
 
 		// Initialize instance variables
 		this.clearInstance();
