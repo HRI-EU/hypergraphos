@@ -20,6 +20,17 @@ html{
    overflow: hidden;
    margin: 0;
  }
+ #mdd-status {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border: 10px;
+  border-color: #3f3f3f7d;
+  border-style: solid;
+  z-index: 100;
+  pointer-events: none;
+ }
 .diagramDiv {
   position: absolute;
   width: 100%;
