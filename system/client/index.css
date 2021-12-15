@@ -12,11 +12,13 @@ Date: 10.07.2020
 
  body {
    background-color: gray;
+   overflow: hidden;
+   margin: 0;
  }
 .diagramDiv {
   position: absolute;
-  width: 98.5%;
-  height: 98.5%;
+  width: 100%;
+  height: 100%;
   background: rgb(160, 160, 160);
 }
 .paletteDiv {
