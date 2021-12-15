@@ -10,6 +10,11 @@ Date: 10.07.2020
 =============================================================================
 */
 
+/*
+html{
+  border: solid;
+  border-width: thick;
+}*/
  body {
    background-color: gray;
    overflow: hidden;
