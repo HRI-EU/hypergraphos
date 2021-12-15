@@ -183,13 +183,13 @@ function setSystemReadOnly( status ) {
 function setSystemNeedSave() {
   if( !m.status.isReadOnly ) {
     //document.body.style["background-color"] = 'orange';
-    m.mddStatus.className = 'mdd-status warning';
+    m.mddStatus.className = 'warning';
   }
 }
 function setSystemSaved() {
   if( !m.status.isReadOnly ) {
     //document.body.style["background-color"] = 'gray';
-    m.mddStatus.className = 'mdd-status default';
+    m.mddStatus.className = 'saved';
   }
 }
 function setStatus( setFunction ) {
