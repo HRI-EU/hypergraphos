@@ -26,10 +26,26 @@ html{
   height: 100%;
   box-sizing: border-box;
   border: 10px;
-  border-color: #3f3f3f7d;
   border-style: solid;
   z-index: 100;
   pointer-events: none;
+ }
+ #mdd-status.default {
+  border-color: rgba(125, 125, 125, 0.6);
+ }
+ #mdd-status.error {
+  border-color: rgba(255, 0, 0, 0.6);
+ }
+ #mdd-status.warning {
+  border-color: rgba(255, 221, 0, 0.6);
+ }
+ #mdd-status.saved {
+  animation-name: 'saved';
+  animation-duration: 2s;
+ }
+ @keyframes saved {
+   from { border-color: rgba(123, 255, 0, 0.6); }
+   to { border-color: rgba(125, 125, 125, 0.6); }
  }
 .diagramDiv {
   position: absolute;

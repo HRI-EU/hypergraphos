@@ -154,6 +154,7 @@ const m = {
 };
 
 function _init() {
+  m.mddStatus = document.getElementById( 'mdd-status' );
   // Set reziable control buttons
   setDivAsResizable( `#palette`, 'px', ()=> {
     _resizeWindow();
@@ -175,16 +176,20 @@ function popFromHistory() {
 function setSystemReadOnly( status ) {
   status = ( status == undefined? true: status );
   m.status.isReadOnly = status;
-  document.body.style["background-color"] = ( status? 'red': 'gray' );
+  //document.body.style["background-color"] = ( status? 'red': 'gray' );
+  //m.mddStatus.style.className = 'mdd-status saved';
+  m.mddStatus.style['border-style'] = ( status? 'dashed': 'solid' );
 }
 function setSystemNeedSave() {
   if( !m.status.isReadOnly ) {
-    document.body.style["background-color"] = 'orange';
+    //document.body.style["background-color"] = 'orange';
+    m.mddStatus.className = 'mdd-status warning';
   }
 }
 function setSystemSaved() {
   if( !m.status.isReadOnly ) {
-    document.body.style["background-color"] = 'gray';
+    //document.body.style["background-color"] = 'gray';
+    m.mddStatus.className = 'mdd-status default';
   }
 }
 function setStatus( setFunction ) {
