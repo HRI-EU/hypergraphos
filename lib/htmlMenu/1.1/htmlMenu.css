@@ -1,3 +1,14 @@
+/*
+=============================================================================
+Licensed Materials - Property of LorinWare Prod.
+(C) Copyright Christophe LORIN 2021, All Rights Reserved.
+France Government Users Restricted Rights - Use, duplication or disclosure
+restricted by GSA ADP Schedule Contract with Christophe LORIN.
+=============================================================================
+Module: HTML menu styles
+Date: 10.07.2020
+=============================================================================
+*/
 
 .mdd-menu.vertical {
   display: inline-flex;
@@ -47,19 +58,12 @@
   display: none;
 }
 .mdd-menu-fontIcon {
-  /*display: inline-flex;*/
-  float: left;
+  /*float: left;*/
   padding-right: 2px;
   font-size: 20px;
   color: rgb(59, 59, 59);
   cursor: pointer;
 }
-/*
-.show-mdd-menu, .mdd-menu-fontIcon:hover > .mdd-menu {
-  visibility: visible;
-  opacity: 0.92;
-}
-*/
 .mdd-menu-fontIcon:hover {
   background-color: rgba(0, 0, 0, 0.2)
 }
@@ -70,7 +74,6 @@
   margin-right: 10px;
 }
 .mdd-menu-label {
-  /*display: inline-flex;*/
   position: relative;
   min-width: 60px;
   margin: 0;
@@ -82,13 +85,6 @@
 .mdd-menu-label b {
   float: right;
 }
-/*
-.show-mdd-menu, .mdd-menu-label:hover > .mdd-menu {
-  visibility: visible;
-  opacity: 0.92;
-  z-index: 1000;
-}
-*/
 .mdd-menu-label:hover {
   background-color: rgba(0, 0, 0, 0.2)
 }
