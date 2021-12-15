@@ -97,7 +97,7 @@ class Graph {
 		});
 		this.contextMenu.add({
       'diagramContextMenu': 
-				{	layout: 'horizontal', itemList: [
+				{	layout: 'vertical', itemList: [
 					{ label: 'Properties',					do: ( o )=> alert( this.getDiagramInfo( this.diagram.model ) )},
 					{ label: 'View',       layout: 'vertical',	subMenu: [
 						{ label: 'Center Graph',			do: (o)=> { // Store last view in ViewLast
