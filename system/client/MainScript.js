@@ -12,6 +12,7 @@ Date: 10.07.2020
 
 // Frankonello graphURL "fileURL": "/fileServer/00/01.json"
 /*
+  v Now the sever can save text or binary files (via fileInfo.sourceEncoding)
   - Test Case: if we create a new Dir node, we enter it, the graph is loaded, then we exit 
     without touching the graph (no node added from palette), I should not save an empty
     file of the newly opened graph. But, it seems I do save. I should avoid to save the 

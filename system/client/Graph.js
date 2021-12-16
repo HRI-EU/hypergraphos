@@ -456,6 +456,7 @@ class Graph {
 			image = this.diagram.makeImageData({ 
 				returnType: 'string',
 				size: new go.Size( 400, 400 ),
+				padding: new go.Margin( 100, 10, 0, 10 ),
 			});
 		}
 		return( image );
