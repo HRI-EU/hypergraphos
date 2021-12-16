@@ -313,14 +313,36 @@ class GraphEditor extends EditorBase {
     }
   }
   saveEditorContent( onSaved ) {
-    const onEditorSaved = ()=> {
+    let nodeDataTemp = null; // Node used to save the graph
+    const graphImageData = { // Node used to save the image of the graph
+      fileURL: '',
+      fileContent: '',
+      fileEncoding: 'base64',
+    }
+    const onImageSaved = ()=> {
+      // Third, notify save done
       this.editorSaved();
       if( onSaved ) {
         onSaved();
       }
     };
+    const onEditorSaved = ()=> {
+      // Second, get the image of the graph
+      const image = this.editor.getGraphImage();
+      if( image && nodeDataTemp ) {
+        const idx = nodeDataTemp.fileURL.lastIndexOf( '.' );
+        const ext = nodeDataTemp.fileURL.substring( idx );
+        if( idx && ( ext == '.json' ) ) {
+          const imageData = image.replace( /^data:image\/\w+;base64,/, '' );
+          graphImageData.fileURL = nodeDataTemp.fileURL.substring( 0, idx )+'.png';
+          graphImageData.fileContent = imageData;
+          saveNodeContent( graphImageData, onImageSaved );
+        }
+      }
+    };
     if( this.nodeData ) {
-      const nodeDataTemp = this.editor._getNodeDataCopy( this.nodeData );
+      // First, save the json graph
+      nodeDataTemp = this.editor._getNodeDataCopy( this.nodeData );
       const source = this.editor.getEditorSource();
       nodeDataTemp.fileContent = source;
       console.log( 'Graph call saveNodeContent()')

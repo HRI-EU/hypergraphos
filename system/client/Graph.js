@@ -450,6 +450,16 @@ class Graph {
 		// Restore grid
 		this.diagram.grid.visible = viewInfo.isGridOn;
 	}
+	getGraphImage() {
+		let image = null;
+		if( this.diagram ) {
+			image = this.diagram.makeImageData({ 
+				returnType: 'string',
+				size: new go.Size( 400, 400 ),
+			});
+		}
+		return( image );
+	}
 	getRootNodes() {
 		return( this.diagram.nodes );
 	}

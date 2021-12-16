@@ -192,6 +192,7 @@ function loadNodeContent( nodeData, onLoaded ) {
   }
 }
 function saveNodeContent( nodeData, onSaved ) {
+  // TODO: check, I guess 'isModel' is not used at all -> check all json graphs
   if( nodeData.isModel ) {  // Check on isModel must be first
     const e = m.e.getEditor( config.htmlDiv.graphDiv );
     e.setJSONModel( nodeData.fileContent );
@@ -199,8 +200,9 @@ function saveNodeContent( nodeData, onSaved ) {
       onSaved();
     }
   } else if( nodeData.fileURL != undefined ) { // Check on fileURL must be second
+    const sourceEncoding = ( nodeData.fileEncoding? nodeData.fileEncoding: 'utf8' );
     const source = nodeData.fileContent;
-    _saveFile( nodeData.fileURL, source, onSaved );
+    _saveFile( nodeData.fileURL, source, onSaved, sourceEncoding );
   } else if( nodeData.fileContent != undefined ) { // Check on fileContent must be third
     const e = m.e.getEditor( config.htmlDiv.graphDiv );
     if( e ) {
@@ -259,7 +261,7 @@ function _openFile( url, onLoad ) {
     }
   }
 }
-function _saveFile( url, source, onSaveDone ) {
+function _saveFile( url, source, onSaveDone, sourceEncoding ) {
   if( !m.status.isReadOnly ) {
     const request = new XMLHttpRequest();
     request.open( 'POST', '/fileServer' );
@@ -277,7 +279,7 @@ function _saveFile( url, source, onSaveDone ) {
       }
     });
     console.log( 'Saving: '+url );
-    const fileInfo = { url, source, };
+    const fileInfo = { url, source, sourceEncoding, };
     request.send( JSON.stringify( fileInfo ) );
   } else {
     console.log( 'Read-only mode. No save request serverd' );
