@@ -70,7 +70,6 @@ class POSTServer {
           } else {
             fs.writeFileSync( filePathName, source, 'utf8' );
           }
-          //console.log( `writeFileSync( ${filePathName}, source[${source.length}] )` );
         }
       } else {
         console.log( 'Error in saving request '+request.url );

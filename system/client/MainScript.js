@@ -12,6 +12,12 @@ Date: 10.07.2020
 
 // Frankonello graphURL "fileURL": "/fileServer/00/01.json"
 /*
+  - Test Case: if we create a new Dir node, we enter it, the graph is loaded, then we exit 
+    without touching the graph (no node added from palette), I should not save an empty
+    file of the newly opened graph. But, it seems I do save. I should avoid to save the 
+    just entered a graph into an empty file...I guess I am wrongly triggering a save graph
+    as soon as I enter the new empty graph...I should avoid that and only save if you add 
+    component in the graph
   v Add beside EditorJS the edito SmartBlock
      https://codepen.io/appleple/pen/povGeQq#html-box
   - TOP: Create a DSL with single groups that implements
