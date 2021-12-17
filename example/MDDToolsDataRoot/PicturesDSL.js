@@ -1,3 +1,7 @@
+function HierarchyDSL_includeList() {
+  return(['/fileServer/DSLInclude.js']);
+}
+
 /*
    DSL for Basic Test
     - This DSL is used to test visual models
@@ -9,14 +13,7 @@ function PicturesDSL_getDSL( g ) {
       if( text == 'PicturePath' ) {
         return( '' ); 
       } else {
-        /*
-        // This code makes the path relative to the position of the graph where
-        // the image is included
-        let currGraphPath = g.getGraphPath();
-        currGraphPath = currGraphPath.substring( 0, currGraphPath.lastIndexOf('/') );
-        return( currGraphPath+'/'+text );
-        */
-       return( config.host.fileServerURL+'/'+text );
+        return( config.host.fileServerURL+'/'+text );
       }
     };
     const computeBackground = ( text )=> {
@@ -73,12 +70,32 @@ function PicturesDSL_getDSL( g ) {
   const dsl = {
     templateNodeList: [
       { category: 'Pictures_NodeType0', template: dsl_Pictures_NodeType0, },
+      { category: 'Pictures_Basic', template: dsl_Pictures, },
+      { category: 'Pictures_Link', template: dsl_Pictures, param:{ isLinkFromPicture: true }},
     ],
     dataNodeList: [
       {
         text: 'PicturePath',
         category: 'Pictures_NodeType0',
         size: '100 100',
+      },
+      {
+        label: 'Basic Image',
+        category: 'Pictures_Basic',
+        size: '100 100',
+        'isFile': true,
+        'fileTypeName': 'Image',
+        'fileType': 'image/png',
+        'fileURL': '',
+      },
+      {
+        label: 'Link Image',
+        category: 'Pictures_Link',
+        size: '100 100',
+        'isFile': true,
+        'fileTypeName': 'Image',
+        'fileType': 'image/jpg',
+        'fileURL': '',
       },
     ],
     templateLinkList: [],

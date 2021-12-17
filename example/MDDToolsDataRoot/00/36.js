@@ -196,6 +196,12 @@ function getFieldList() {
         'Hi',
       ],
     },
+    'see': {
+      'field': [
+        'see',
+        'recognize',
+      ],
+    },
   });
 }
 
@@ -1265,11 +1271,6 @@ function getMironList() {
           'hint': 'Type your first name',
         },
       },
-      'Inner Action': {
-        'template': [
-          'Inner Action',
-        ],
-      },
       'request_InformAtPhone_Done': {
         'template': [
           'request_InformAtPhone_Done',
@@ -1300,42 +1301,51 @@ function getMironList() {
       },
       'ask_Basic_S1_C0': {
         'template': [
-          'Could you please give me your fullname or your company name?',
+          '(Could you )please give me your fullname or your company name?',
         ],
       },
       'say_NotUnderstood_S2': {
         'template': [
           'Sorry I did not understand what you said.',
+          'I am sorry, I am not sure I understood you.',
+          'I am afraid I did not understand you.',
         ],
       },
       'ask_NotUnderstood_S3_C0': {
         'template': [
-          'Could you please type your first and last name or your company name?',
+          '(Could you )please type your first and last name or your company name?',
         ],
       },
       'say_NoInput_S4': {
         'template': [
-          'Please used the keyboard on the screen to type your answer and press okay. Let\'s try again...',
+          'Please use the keyboard on the screen to type your answer and press okay. Let\'s try again...',
+          'Please, type your answer with the screen keyboard and then press okay. Let\'s try again...',
+          'Let\'s try again. Please type your answer using the keyboard on the screen, and then press okay',
         ],
       },
       'ask_NoInput_S4_C0': {
         'template': [
-          'Could you please retype your first and last name or your company name?',
+          'Could you (please )retype your first and last name or your company name?',
+          'May I ask you to type again your first and last name or your company name?',
         ],
       },
       'inform_VisitorNotFound': {
         'template': [
-          'I am sorry but I cannot find any visit for you today.',
+          'I am (very )sorry (but )I cannot find any visit for you today.',
+          'I am afraid I have no visit for you today.',
         ],
       },
       'inform_GoToWatchman': {
         'template': [
-          'Please go to the watchman and ask him for help.',
+          '(Could you )please go to the watchman and ask him for help.',
+          'Please, just go by the watchman, he will be able to help you.',
         ],
       },
       'say_Goodbye': {
         'template': [
           'Have a nice day.',
+          'Have a great day.',
+          'I wish you a nice day.',
         ],
       },
       'ask_ToRepeat': {
@@ -1356,21 +1366,26 @@ function getMironList() {
       'inform_ThanksForRegistering': {
         'template': [
           'Thank you for using H.R.I. virtual receptionist.',
+          'I am very pleased I could help you',
+          'Glad I could help you',
         ],
       },
       'ask_NoInput_S2_C0': {
         'template': [
-          'Could you tell me your fullname or your company name, please?',
+          'Could you tell (me )your full name or your company name, please?',
+          'Could you please tell (me )your full name or your company name?',
         ],
       },
       'say_NoInput_S2_C0': {
         'template': [
-          'Sorry I did not hear you. Just speak to me naturally, in English of course.',
+          'Sorry I did not hear you. Just speak (to me )naturally(, in English of course).',
+          'Unfortunately I could not hear you. Just speak (to me )naturally(, in English of course).',
         ],
       },
       'ask_Help_S2_C0': {
         'template': [
-          'Could you tell me your fullname or your company name?',
+          'Could you (please )tell (me )your full name or your company name?',
+          'Please, just tell (me )your full name or your company name?',
         ],
       },
       'say_Help_S2_V0': {
@@ -1392,11 +1407,12 @@ function getMironList() {
       'say_TooNoisy_S3': {
         'template': [
           'I am sorry but I hardly understand you. I guess that the room is too noisy. Let\'s try with the screen.',
+          'I guess that the room is too noisy. I am sorry but I hardly understand you. Let\'s try with the screen.',
         ],
       },
       'ask_TooNoisy_S3_C0': {
         'template': [
-          'Could you please type your first and last name or your company name?',
+          '(Could you )please type your first and last name or your company name?',
         ],
       },
       'say_NoInput_S3_V0': {
@@ -1406,7 +1422,7 @@ function getMironList() {
       },
       'ask_NoInput_S3_V0': {
         'template': [
-          'Are you ({Dr} ){visitorFirstName} {visitorLastName}? Please, press yes or no.',
+          'Are you {Dr} {visitorFirstName} {visitorLastName}? Please, press yes or no.',
         ],
         'slot': {
           'interlocutorFirstName': 'visitorFirstName',
@@ -1416,17 +1432,21 @@ function getMironList() {
       },
       'say_NotUnderstood_S4_C0': {
         'template': [
-          'Sorry, I cannot find any visit for this name. ',
+          '(I am )sorry, I cannot find any visit for this name. ',
+          '(I am )sorry, I do not find a visit for this name. ',
         ],
       },
       'ask_NotUnderstood_S4': {
         'template': [
-          'Could you please check your input?',
+          'Could you (please )check your input?',
+          'Could you (please )verify what you typed?',
         ],
       },
       'inform_CallingContact': {
         'template': [
-          'wait a moment (please, )I am calling your contact person {Dr} {contactLastName}. ',
+          'wait a moment (please, )I am (just )calling your contact person {Dr} {contactLastName}. ',
+          'just a moment (please, )I now call your contact person {Dr} {contactLastName}. ',
+          'one moment (please, )Let me call your contact person {Dr} {contactLastName}. ',
         ],
         'slot': {
           'contactLastName': 'contactLastName',
@@ -1455,7 +1475,10 @@ function getMironList() {
       },
       'inform_ContactComing': {
         'template': [
-          'Thank you for waiting {Sir}. Your contact will come to pick you up.',
+          'Thank you(( for waiting ){Sir}). Your contact will come to pick you up( in a moment).',
+          'Thanks (( for waiting ){Sir}). Your contact is going to come to pick you up( soon).',
+          'Your contact will come to pick you up( in a moment). Thanks for waiting( {Sir}). ',
+          'Your contact is going to pick you up( in a moment). Thanks for waiting( {Sir}). ',
         ],
         'slot': {
           'interlocutorGender': 'Sir',
@@ -1463,7 +1486,10 @@ function getMironList() {
       },
       'inform_ContactNotReached': {
         'template': [
-          'It seems that {Dr} {contactLastName} cannot take my call, so I just sent an email. I will try to reach our Management Support Team instead.',
+          'It seems (that ){Dr} {contactLastName} cannot take my call(, (so )I just sent an email). I will (try to )reach our Management Support Team instead.',
+          '{Dr} {contactLastName} is not reachable(, I just sent an email). Let me (try to )reach our Management Support Team instead.',
+          'I am not reaching {Dr} {contactLastName}( with the phone )(, I just sent an email). Let me (try(, instead) to )reach our Management Support Team instead.',
+          '{Dr} {contactLastName} did not answer the phone(, I just sent an email). Let me (try(, instead) to )reach our Management Support Team instead.',
         ],
         'slot': {
           'contactLastName': 'contactLastName',
@@ -1472,7 +1498,9 @@ function getMironList() {
       },
       'inform_MSTComing': {
         'template': [
-          'Thank you for waiting {Sir}. Someone from our Management Support Team will come to pick you up.',
+          'Thank you for waiting( {Sir}). Someone from our Management Support Team will come( to pick you up).',
+          'Someone from our Management Support Team will come( to pick you up). Thank you for waiting( {Sir}).',
+          'Thanks for waiting( {Sir}). Somebody from our Management Support Team will come( to pick you up).',
         ],
         'slot': {
           'interlocutorGender': 'Sir',
@@ -1480,7 +1508,9 @@ function getMironList() {
       },
       'inform_MSTNotReached': {
         'template': [
-          'I cannot reach anybody.',
+          '(Unfortunately )I cannot reach anybody.',
+          'Nobody answered my call (unfortunately)',
+          '(Unfortunately )I did not reach somebody at the phone.',
         ],
       },
       'play_EmailSending': {
@@ -1490,7 +1520,7 @@ function getMironList() {
       },
       'inform_ToReadGDPR': {
         'template': [
-          'We would like you to participate to our Living Lab research. Please tell if you accept or deny.',
+          '(If ok for you )we would like you to participate to our Living Lab research. Please tell if you accept or deny.',
         ],
       },
       'say_Ok': {
@@ -1501,6 +1531,8 @@ function getMironList() {
       'inform_TryAgainLater': {
         'template': [
           'Can you please wait and try again later?',
+          'Could you please wait and try again later?',
+          'Sorry, do you mind to try again later?',
         ],
       },
       'play_PhoneRinging': {
@@ -1510,12 +1542,16 @@ function getMironList() {
       },
       'propose_ToPressConsent': {
         'template': [
-          'Please, click the checkbox before giving your consent',
+          'Please, (you (would )need to )click the checkbox before giving your consent',
+          'Please, (you should )click the checkbox before giving your consent',
         ],
       },
       'inform_Restarting': {
         'template': [
           'I am sorry. I could not complete the registration.',
+          'I am sorry. I can not complete the registration.',
+          'I am sorry. The registration could not completed.',
+          'I am sorry. The registration can not be completed.',
         ],
       },
       'ask_Help_S3_V0': {
@@ -1525,7 +1561,7 @@ function getMironList() {
       },
       'say_Help_S3_V0': {
         'template': [
-          'To make it easier, use the touch screen.',
+          'To make it easier, (just )use the touch screen.',
         ],
       },
       'ask_Help_S4_C0': {
@@ -1541,36 +1577,44 @@ function getMironList() {
       'inform_CaseNotHandled': {
         'template': [
           'I am sorry. My intelligence is limited.',
+          'I am sorry. Sometimes I wish to be more intelligent.',
         ],
       },
       'inform_NoVisitToday': {
         'template': [
           'I am sorry. I was not informed about your visit today.',
+          'I am sorry. I did not know about your visit of today.',
+          'I am sorry. I did not know you had a visit today.',
+          'I am sorry. I I have not been informed of your today visit.',
         ],
       },
       'say_NoInput_S2_K0': {
         'template': [
-          'Please use the buttons on the screen. Let us try again',
+          'Please (just )use the buttons on the screen. Let us try again',
+          'Let us try again by using the buttons on the screen.',
         ],
       },
       'ask_NoInput_S2_K0': {
         'template': [
-          'Select now the person I should contact?',
+          '(Please )select now the person I should contact?',
+          '(Please )now you can select the person I should contact?',
         ],
       },
       'ask_Basic_S1_K0': {
         'template': [
-          'Could you please select who I should call?',
+          '(Could you )please touch the name I should call?',
         ],
       },
       'say_Basic_S1_K0': {
         'template': [
-          'I can see that you have different appointments for today.',
+          'I (can )see (that )you have different appointments for today.',
+          'Today, it seems, you have several appointments.',
         ],
       },
       'inform_NoOtherContact': {
         'template': [
-          'I am sorry, ({Sir} )but I have no other contact registered for you today.',
+          'I am sorry, ({Sir} )(but )I have no other contact registered for you today.',
+          'I am sorry, ({Sir} )(but ) today I have no other contact registered for you.',
         ],
         'slot': {
           'interlocutorGender': 'Sir',
@@ -1583,7 +1627,8 @@ function getMironList() {
       },
       'say_Basic_S1_V0': {
         'template': [
-          'Sorry to ask but, are you ({Dr} ){visitorFirstName} {visitorLastName}?',
+          'Sorry to ask but, are you {Dr} {visitorFirstName} {visitorLastName}?',
+          'Just let me ask, are you {Dr} {visitorFirstName} {visitorLastName}?',
         ],
         'slot': {
           'interlocutorFirstName': 'visitorFirstName',
@@ -1593,7 +1638,7 @@ function getMironList() {
       },
       'ask_Basic_S1_V0': {
         'template': [
-          'Please answer with yes or no',
+          '(Could you )please answer with yes or no',
         ],
       },
       'say_NoInput_S2_V0': {
@@ -1603,7 +1648,7 @@ function getMironList() {
       },
       'ask_NoInput_S2_V0': {
         'template': [
-          'Sorry but I did not hear your answer. Are you ({Dr} ){visitorFirstName} {visitorLastName}?',
+          '(Sorry but )I did not hear your answer. Are you ({Dr} ){visitorFirstName} {visitorLastName}?',
         ],
         'slot': {
           'interlocutorFirstName': 'visitorFirstName',
@@ -1614,11 +1659,12 @@ function getMironList() {
       'say_Help_S2_C0': {
         'template': [
           'You can present yourself saying, I am Mister John Doe, or, I am from the Alpha company. So please...',
+          'You can introduce yourself by saying, I am Mister Hanry Doson, or, I am from the company Tele System. So please...',
         ],
       },
       'say_Help_S3_C0': {
         'template': [
-          'To make it easier, let us use a keyboard.',
+          'To make it easier, (just )let us use a keyboard.',
         ],
       },
       'ask_Help_S3_C0': {
@@ -1633,12 +1679,13 @@ function getMironList() {
       },
       'ask_NoInput_S3_C0': {
         'template': [
-          'Could you please type your first and last name or your company name?',
+          'Could you (please )type your first and last name or your company name?',
         ],
       },
       'say_NotUnderstood_S3': {
         'template': [
-          'I am sorry but I hardly understand you. Let\'s try with the screen.',
+          '(I am )sorry but I hardly understand you. Let\'s try with the screen.',
+          'I hardly understand you, I am sorry. Let\'s try with the screen.',
         ],
       },
       'say_YesIAm': {
@@ -1672,12 +1719,14 @@ function getMironList() {
       },
       'say_IAmMeisy': {
         'template': [
-          'I\'m Meisy, H.R.I. virtual receptionist.',
+          'I am Meisy, H.R.I. virtual receptionist.',
+          'My name is Meisy, (I am )H.R.I. virtual receptionist.',
         ],
       },
       'say_ThanksWithName': {
         'template': [
           'Thank you {Dr} {visitorLastName}.',
+          'Thanks {Dr} {visitorLastName}.',
         ],
         'slot': {
           'interlocutorTitle': 'Dr',
@@ -1697,6 +1746,7 @@ function getMironList() {
       'say_Basic_S1_C2': {
         'template': [
           'Well, {Sir} but I am expecting another person with the same name as yours.',
+          'I am actually expecting another person with the same name as yours.',
         ],
         'slot': {
           'interlocutorGender': 'Sir',
@@ -1704,32 +1754,36 @@ function getMironList() {
       },
       'ask_Basic_S1_C2': {
         'template': [
-          'Could you please tell me your company name?',
+          '(Could you )please tell me your company name?',
         ],
       },
       'say_Help_S2_C2': {
         'template': [
           'You can tell me something such as I am from the Alpha company. So please...',
+          'You could tell something like, I am from the company Multi Comm. So please...',
         ],
       },
       'ask_Help_S2_C2': {
         'template': [
-          'Could you tell me your company name?',
+          'Could you (please )tell (me )your company name?',
+          'Please, tell (me )the name of your company?',
         ],
       },
       'say_NoInput_S2_C2': {
         'template': [
-          'Sorry I did not hear you. Just speak to me naturally, in English of course.',
+          'Sorry I did not hear you. Just speak (to me )naturally(, in English of course).',
+          'Unfortunately I could not hear you. Just speak (to me )naturally(, in English of course).',
         ],
       },
       'ask_NoInput_S2_C2': {
         'template': [
-          'Could you tell me your company name, please?',
+          'Could you tell (me )your company name, please?',
+          'Could you please tell (me )your company name?',
         ],
       },
       'say_Help_S3_C2': {
         'template': [
-          'To make it easier, let us use a keyboard.',
+          'To make it easier, (just )let us use a keyboard.',
         ],
       },
       'ask_Help_S3_C2': {
@@ -1744,27 +1798,29 @@ function getMironList() {
       },
       'ask_NoInput_S3_C2': {
         'template': [
-          'Could you please type your company name?',
+          'Could you (please )type your company name?',
         ],
       },
       'ask_NotUnderstood_S3_C2': {
         'template': [
-          'Could you please type your company name?',
+          '(Could you )please type your company name?',
         ],
       },
       'ask_TooNoisy_S3_C2': {
         'template': [
-          'Could you please type your company name?',
+          '(Could you )please type your company name?',
         ],
       },
       'ask_NoInput_S4_C2': {
         'template': [
-          'Could you please retype your company name?',
+          '(Could you )please retype your company name?',
+          '(Could you )please type your company name again?',
         ],
       },
       'say_NotUnderstood_S4_C2': {
         'template': [
-          'Sorry, I cannot find any visit for this company name. ',
+          '(I am )sorry, I cannot find any visit for this company name. ',
+          '(I am )sorry, I do not find a visit for this company name. ',
         ],
       },
       'ask_Help_S4_C2': {
@@ -1775,6 +1831,7 @@ function getMironList() {
       'say_Basic_S1_C3': {
         'template': [
           'I am sorry {Sir}, but I am still not able to find your contact.',
+          'Sorry {Sir}, I am still not able to find your contact.',
         ],
         'slot': {
           'interlocutorGender': 'Sir',
@@ -1782,32 +1839,36 @@ function getMironList() {
       },
       'ask_Basic_S1_C3': {
         'template': [
-          'Could you please tell me your last name?',
+          '(Could you )please tell me your last name?',
         ],
       },
       'say_Help_S2_C3': {
         'template': [
           'You can tell me something such as my last name is Doe. So please...',
+          'You could say something like, my last name is Doson. So please...',
         ],
       },
       'ask_Help_S2_C3': {
         'template': [
-          'Could you tell me your last name?',
+          'Could you (please )tell (me )your last name?',
+          'Please, tell (me )what is your last name.',
         ],
       },
       'say_NoInput_S2_C3': {
         'template': [
-          'Sorry I did not hear you. Just speak to me naturally, in English of course.',
+          'Sorry I did not hear you. Just speak (to me )naturally(, in English of course).',
+          'Unfortunately I could not hear you. Just speak (to me )naturally(, in English of course).',
         ],
       },
       'ask_NoInput_S2_C3': {
         'template': [
-          'Could you tell me your last name, please?',
+          'Could you tell (me )your last name, please?',
+          'Could you please tell (me )your last name?',
         ],
       },
       'say_Help_S3_C3': {
         'template': [
-          'To make it easier, let us use a keyboard.',
+          'To make it easier, (just )let us use a keyboard.',
         ],
       },
       'ask_Help_S3_C3': {
@@ -1822,17 +1883,17 @@ function getMironList() {
       },
       'ask_NoInput_S3_C3': {
         'template': [
-          'Could you please type your last name?',
+          'Could you (please )type your last name?',
         ],
       },
       'ask_NotUnderstood_S3_C3': {
         'template': [
-          'Could you please type your last name?',
+          '(Could you )please type your last name?',
         ],
       },
       'ask_TooNoisy_S3_C3': {
         'template': [
-          'Could you please type your last name?',
+          '(Could you )please type your last name?',
         ],
       },
       'ask_Help_S4_C3': {
@@ -1842,17 +1903,20 @@ function getMironList() {
       },
       'ask_NoInput_S4_C3': {
         'template': [
-          'Could you please retype your last name?',
+          '(Could you )please retype your last name?',
+          '(Could you )please type your last name again?',
         ],
       },
       'say_NotUnderstood_S4_C3': {
         'template': [
-          'Sorry, I cannot find any visit for this last name. ',
+          '(I am )sorry, I cannot find any visit for this last name. ',
+          '(I am )sorry, I do not find a visit for this last name. ',
         ],
       },
       'say_Basic_S1_V1': {
         'template': [
           'Sorry to ask but, is your first name {visitorFirstName}?',
+          'Let me ask, is your first name {visitorFirstName}?',
         ],
         'slot': {
           'interlocutorFirstName': 'visitorFirstName',
@@ -1861,6 +1925,7 @@ function getMironList() {
       'say_Basic_S1_V2': {
         'template': [
           'Sorry to ask but, is your last name {visitorLastName}?',
+          'Let me ask, is your last name {visitorLastName}?',
         ],
         'slot': {
           'interlocutorLastName': 'visitorLastName',
@@ -1868,12 +1933,12 @@ function getMironList() {
       },
       'ask_Basic_S1_V1': {
         'template': [
-          'Please answer with yes or no',
+          '(Could you )please answer with yes or no',
         ],
       },
       'ask_Basic_S1_V2': {
         'template': [
-          'Please answer with yes or no',
+          '(Could you )please answer with yes or no',
         ],
       },
       'say_Help_S2_V1': {
@@ -1888,7 +1953,7 @@ function getMironList() {
       },
       'ask_NoInput_S2_V1': {
         'template': [
-          'Sorry but I did not hear your answer. Is your firstname {visitorFirstName}?',
+          '(Sorry but )I did not hear your answer. Is your first name {visitorFirstName}?',
         ],
         'slot': {
           'interlocutorFirstName': 'visitorFirstName',
@@ -1896,7 +1961,7 @@ function getMironList() {
       },
       'ask_NoInput_S2_V2': {
         'template': [
-          'Sorry but I did not hear your answer. Is your lastname {visitorLastName}?',
+          '(Sorry but )I did not hear your answer. Is your last name {visitorLastName}?',
         ],
         'slot': {
           'interlocutorLastName': 'visitorLastName',
@@ -1914,27 +1979,27 @@ function getMironList() {
       },
       'ask_NotUnderstood_S2_C3': {
         'template': [
-          'Could you please repeat your last name?',
+          'Could you (please )repeat your last name?',
         ],
       },
       'ask_NotUnderstood_S2_C2': {
         'template': [
-          'Could you please repeat your company name?',
+          'Could you (please )repeat your company name?',
         ],
       },
       'ask_NotUnderstood_S2_C0': {
         'template': [
-          'Could you please repeat your fullname or your company name?',
+          'Could you (please )repeat your full name or your company name?',
         ],
       },
       'say_Help_S3_V1': {
         'template': [
-          'To make it easier, use the touch screen.',
+          'To make it easier, (just )use the touch screen.',
         ],
       },
       'say_Help_S3_V2': {
         'template': [
-          'To make it easier, use the touch screen.',
+          'To make it easier, (just )use the touch screen.',
         ],
       },
       'ask_Help_S3_V1': {
@@ -1976,6 +2041,7 @@ function getMironList() {
       'say_Help_S1_V2': {
         'template': [
           'So, is your last name {visitorLastName}?',
+          'Then, is your last name {visitorLastName}?',
         ],
         'slot': {
           'interlocutorLastName': 'visitorLastName',
@@ -1984,6 +2050,7 @@ function getMironList() {
       'say_Help_S1_V1': {
         'template': [
           'So, is your first name {visitorFirstName}?',
+          'Then, is your first name {visitorFirstName}?',
         ],
         'slot': {
           'interlocutorFirstName': 'visitorFirstName',
@@ -1992,6 +2059,7 @@ function getMironList() {
       'say_Help_S1_V0': {
         'template': [
           'So, are you ({Dr} ){visitorFirstName} {visitorLastName}?',
+          'Then, are you ({Dr} ){visitorFirstName} {visitorLastName}?',
         ],
         'slot': {
           'interlocutorFirstName': 'visitorFirstName',
@@ -2002,6 +2070,7 @@ function getMironList() {
       'say_Basic_S1_C5': {
         'template': [
           'I am sorry {Sir}, but I am expecting two persons named {visitorLastName} today.',
+          'I am actually expecting two persons named {visitorLastName} today.',
         ],
         'slot': {
           'interlocutorLastName': 'visitorLastName',
@@ -2010,37 +2079,41 @@ function getMironList() {
       },
       'ask_Basic_S1_C5': {
         'template': [
-          'Could you please tell me your first name?',
+          '(Could you )please tell me your first name?',
         ],
       },
       'say_Help_S2_C5': {
         'template': [
           'You can tell me something such as my first name is John. So please...',
+          'You say something like, my first name is Julian. So please...',
         ],
       },
       'ask_Help_S2_C5': {
         'template': [
-          'Could you tell me your first name?',
+          'Could you (please )tell (me )your first name?',
+          'Please, tell (me )what is your first name.',
         ],
       },
       'say_NoInput_S2_C5': {
         'template': [
-          'Sorry I did not hear you. Just speak to me naturally, in English of course.',
+          'Sorry I did not hear you. Just speak (to me )naturally(, in English of course).',
+          'Unfortunately I could not hear you. Just speak (to me )naturally(, in English of course).',
         ],
       },
       'ask_NoInput_S2_C5': {
         'template': [
           'Could you tell me your first name, please?',
+          'Could you please tell (me )your first name?',
         ],
       },
       'ask_NotUnderstood_S2_C5': {
         'template': [
-          'Could you please repeat your first name?',
+          'Could you (please )repeat your first name?',
         ],
       },
       'say_Help_S3_C5': {
         'template': [
-          'To make it easier, let us use a keyboard.',
+          'To make it easier, (just )let us use a keyboard.',
         ],
       },
       'ask_Help_S3_C5': {
@@ -2055,17 +2128,17 @@ function getMironList() {
       },
       'ask_NoInput_S3_C5': {
         'template': [
-          'Could you please type your first name?',
+          'Could you (please )type your first name?',
         ],
       },
       'ask_NotUnderstood_S3_C5': {
         'template': [
-          'Could you please type your first name?',
+          '(Could you )please type your first name?',
         ],
       },
       'ask_TooNoisy_S3_C5': {
         'template': [
-          'Could you please type your first name?',
+          '(Could you )please type your first name?',
         ],
       },
       'ask_Help_S4_C5': {
@@ -2075,17 +2148,20 @@ function getMironList() {
       },
       'ask_NoInput_S4_C5': {
         'template': [
-          'Could you please retype your first name?',
+          '(Could you )please retype your first name?',
+          '(Could you )please type your first name again?',
         ],
       },
       'say_NotUnderstood_S4_C5': {
         'template': [
-          'Sorry, I cannot find any visit for this last name. ',
+          '(I am )sorry, I cannot find any visit for this first name. ',
+          '(I am )sorry, I do not find a visit for this first name. ',
         ],
       },
       'say_Basic_S1_V3': {
         'template': [
           'Sorry to ask but, is your company {companyName}?',
+          'Let me ask, is your company {companyName}?',
         ],
         'slot': {
           'interlocutorCompany': 'companyName',
@@ -2093,7 +2169,8 @@ function getMironList() {
       },
       'say_Basic_S1_V4': {
         'template': [
-          'Sorry to ask but, are you ({Dr} ){visitorFirstName} {visitorLastName}?',
+          'Sorry to ask but, are you {Dr} {visitorFirstName} {visitorLastName}?',
+          'Let me ask, are you {Dr} {visitorFirstName} {visitorLastName}?',
         ],
         'slot': {
           'interlocutorFirstName': 'visitorFirstName',
@@ -2103,12 +2180,12 @@ function getMironList() {
       },
       'ask_Basic_S1_V3': {
         'template': [
-          'Please answer with yes or no',
+          '(Could you )please answer with yes or no',
         ],
       },
       'ask_Basic_S1_V4': {
         'template': [
-          'Please answer with yes or no',
+          '(Could you )please answer with yes or no',
         ],
       },
       'say_Help_S2_V3': {
@@ -2124,6 +2201,8 @@ function getMironList() {
       'say_Help_S1_V3': {
         'template': [
           'So, is your company {companyName}?',
+          'Then, is your company {companyName}?',
+          'So, your company is (companyName), right?',
         ],
         'slot': {
           'interlocutorCompany': 'companyName',
@@ -2132,6 +2211,8 @@ function getMironList() {
       'say_Help_S1_V4': {
         'template': [
           'So, are you from {companyName}?',
+          'Then, are you from {companyName}?',
+          'So, your company is (companyName), right?',
         ],
         'slot': {
           'interlocutorCompany': 'companyName',
@@ -2149,7 +2230,7 @@ function getMironList() {
       },
       'ask_NoInput_S2_V3': {
         'template': [
-          'Sorry but I did not hear your answer. Is your company {companyName}?',
+          '(Sorry but )I did not hear your answer. Is your company {companyName}?',
         ],
         'slot': {
           'interlocutorCompany': 'companyName',
@@ -2157,7 +2238,7 @@ function getMironList() {
       },
       'ask_NoInput_S2_V4': {
         'template': [
-          'Sorry but I did not hear your answer. Are you ({Dr} ){visitorFirstName} {visitorLastName}?',
+          '(Sorry but )I did not hear your answer. Are you {Dr} {visitorFirstName} {visitorLastName}?',
         ],
         'slot': {
           'interlocutorFirstName': 'visitorFirstName',
@@ -2167,12 +2248,12 @@ function getMironList() {
       },
       'say_Help_S3_V3': {
         'template': [
-          'To make it easier, use the touch screen.',
+          'To make it easier, (just )use the touch screen.',
         ],
       },
       'say_Help_S3_V4': {
         'template': [
-          'To make it easier, use the touch screen.',
+          'To make it easier, (just )use the touch screen.',
         ],
       },
       'ask_Help_S3_V3': {
@@ -2205,7 +2286,7 @@ function getMironList() {
       },
       'ask_NoInput_S3_V4': {
         'template': [
-          'Are you ({Dr} ){visitorFirstName} {visitorLastName}? Please, press yes or no.',
+          'Are you {Dr} {visitorFirstName} {visitorLastName}? Please, press yes or no.',
         ],
         'slot': {
           'interlocutorFirstName': 'visitorFirstName',
@@ -2216,6 +2297,7 @@ function getMironList() {
       'say_Basic_S1_C7': {
         'template': [
           'Well, {Dr} {contactLastName} is expecting several visitors from {companyName} today.',
+          'As far as I can see, today {Dr} {contactLastName} is expecting several visitors from {companyName}.',
         ],
         'slot': {
           'interlocutorCompany': 'companyName',
@@ -2225,37 +2307,41 @@ function getMironList() {
       },
       'ask_Basic_S1_C7': {
         'template': [
-          'Could you please tell me your fullname?',
+          '(Could you )please tell me your full name?',
         ],
       },
       'say_Help_S2_C7': {
         'template': [
           'You can tell me something such as, I am Mister John Doe. So please...',
+          'You could tell something like, I am Missis Janna Coleman. So please...',
         ],
       },
       'ask_Help_S2_C7': {
         'template': [
-          'Could you tell me your fullname?',
+          'Could you (please )tell (me )your full name?',
+          'Please, tell (me )what is your full name.',
         ],
       },
       'say_NoInput_S2_C7': {
         'template': [
-          'Sorry I did not hear you. Just speak to me naturally, in English of course.',
+          'Sorry I did not hear you. Just speak (to me )naturally(, in English of course).',
+          'Unfortunately I could not hear you. Just speak (to me )naturally(, in English of course).',
         ],
       },
       'ask_NoInput_S2_C7': {
         'template': [
-          'Could you tell me your fullname, please?',
+          'Could you tell (me )your full name, please?',
+          'Could you please tell (me )your full name?',
         ],
       },
       'ask_NotUnderstood_S2_C7': {
         'template': [
-          'Could you please repeat your fullname?',
+          'Could you (please )repeat your full name?',
         ],
       },
       'say_Help_S3_C7': {
         'template': [
-          'To make it easier, let us use a keyboard.',
+          'To make it easier, (just )let us use a keyboard.',
         ],
       },
       'ask_Help_S3_C7': {
@@ -2270,57 +2356,64 @@ function getMironList() {
       },
       'ask_NoInput_S3_C7': {
         'template': [
-          'Could you please type your fullname?',
+          'Could you (please )type your full name?',
         ],
       },
       'ask_NotUnderstood_S3_C7': {
         'template': [
-          'Could you please type your fullname?',
+          '(Could you )please type your full name?',
         ],
       },
       'ask_TooNoisy_S3_C7': {
         'template': [
-          'Could you please type your fullname?',
+          '(Could you )please type your full name?',
         ],
       },
       'ask_NoInput_S4_C7': {
         'template': [
-          'Could you please retype your fullname?',
+          '(Could you )please retype your full name?',
+          '(Could you )please type your full name again?',
         ],
       },
       'say_NotUnderstood_S4_C7': {
         'template': [
-          'Sorry, I cannot find any visit for this name. ',
+          '(I am )sorry, I cannot find any visit for this name. ',
+          '(I am )sorry, I do not find a visit for this name. ',
         ],
       },
       'say_Thanks': {
         'template': [
           'Thank you.',
+          'Thanks.',
         ],
       },
       'say_Basic_S1_K1': {
         'template': [
           'I can see that your company has different appointments for today.',
+          'Today, it seems, your company has several appointments.',
         ],
       },
       'ask_Basic_S1_K1': {
         'template': [
-          'Could you please select who I should call?',
+          '(Could you )please touch the name  I should call?',
         ],
       },
       'say_NoInput_S2_K1': {
         'template': [
           'Please use the buttons on the screen. Let us try again',
+          'Let us try again by using the buttons on the screen.',
         ],
       },
       'ask_NoInput_S2_K1': {
         'template': [
-          'Select now the person I should contact?',
+          '(Please )select now the person I should contact?',
+          '(Please )now you can select the person I should contact?',
         ],
       },
       'say_Basic_S1_V5': {
         'template': [
           'Sorry but {Dr} {contactLastName} is expecting many visitors today. Are you from {companyName}?',
+          'I know that today {Dr} {contactLastName} is expecting several visitors. Are you from {companyName}?',
         ],
         'slot': {
           'contactLastName': 'contactLastName',
@@ -2330,7 +2423,7 @@ function getMironList() {
       },
       'ask_Basic_S1_V5': {
         'template': [
-          'Please answer with yes or no',
+          '(Could you )please answer with yes or no',
         ],
       },
       'say_Help_S2_V5': {
@@ -2345,7 +2438,7 @@ function getMironList() {
       },
       'ask_NoInput_S2_V5': {
         'template': [
-          'Sorry but I did not hear your answer. Is your company {companyName}?',
+          '(Sorry but )I did not hear your answer. Is your company {companyName}?',
         ],
         'slot': {
           'interlocutorCompany': 'companyName',
@@ -2353,7 +2446,7 @@ function getMironList() {
       },
       'say_Help_S3_V5': {
         'template': [
-          'To make it easier, use the touch screen.',
+          'To make it easier, (just )use the touch screen.',
         ],
       },
       'ask_Help_S3_V5': {
@@ -2364,6 +2457,7 @@ function getMironList() {
       'ask_NoInput_S3_V5': {
         'template': [
           'Is your company {companyName}? Please, press yes or no.',
+          'Your company is {companyName}. Just press yes or no.',
         ],
         'slot': {
           'interlocutorCompany': 'companyName',
@@ -2372,6 +2466,7 @@ function getMironList() {
       'say_Basic_S1_C8-1': {
         'template': [
           'Well, {Dr} {contactLastName} is expecting several visitors today.',
+          'As far as I see, {Dr} {contactLastName} is expecting several visitors today.',
         ],
         'slot': {
           'contactLastName': 'contactLastName',
@@ -2380,37 +2475,41 @@ function getMironList() {
       },
       'ask_Basic_S1_C8-1': {
         'template': [
-          'Could you please tell me your fullname?',
+          '(Could you )please tell me your full name?',
         ],
       },
       'say_Help_S2_C8-1': {
         'template': [
           'You can tell me something such as, I am Mister John Doe. So please...',
+          'You could tell something like, I am Missis Janna Coleman. So please...',
         ],
       },
       'ask_Help_S2_C8-1': {
         'template': [
-          'Could you tell me your fullname?',
+          'Could you (please )tell (me )your full name?',
+          'Please, tell (me )what is your full name.',
         ],
       },
       'say_NoInput_S2_C8-1': {
         'template': [
-          'Sorry I did not hear you. Just speak to me naturally, in English of course.',
+          'Sorry I did not hear you. Just speak (to me )naturally(, in English of course).',
+          'Unfortunately I could not hear you. Just speak (to me )naturally(, in English of course).',
         ],
       },
       'ask_NoInput_S2_C8-1': {
         'template': [
-          'Could you tell me your fullname, please?',
+          'Could you tell (me )your full name, please?',
+          'Could you please tell (me )your full name?',
         ],
       },
       'ask_NotUnderstood_S2_C8-1': {
         'template': [
-          'Could you please repeat your fullname?',
+          'Could you (please )repeat your full name?',
         ],
       },
       'say_Help_S3_C8-1': {
         'template': [
-          'To make it easier, let us use a keyboard.',
+          'To make it easier, (just )let us use a keyboard.',
         ],
       },
       'ask_Help_S3_C8-1': {
@@ -2425,37 +2524,40 @@ function getMironList() {
       },
       'ask_NoInput_S3_C8-1': {
         'template': [
-          'Could you please type your fullname?',
+          'Could you (please )type your full name?',
         ],
       },
       'ask_NotUnderstood_S3_C8-1': {
         'template': [
-          'Could you please type your fullname?',
+          '(Could you )please type your full name?',
         ],
       },
       'ask_Help_S4_C7': {
         'template': [
-          'Then type your fullname and press enter on the keyboard or the okay button.',
+          'Then type your full name and press enter on the keyboard or the okay button.',
         ],
       },
       'ask_Help_S4_C8-1': {
         'template': [
-          'Then type your fullname and press enter on the keyboard or the okay button.',
+          'Then type your full name and press enter on the keyboard or the okay button.',
         ],
       },
       'ask_NoInput_S4_C8-1': {
         'template': [
-          'Could you please retype your fullname?',
+          '(Could you )please retype your full name?',
+          '(Could you )please type your full name again?',
         ],
       },
       'say_NotUnderstood_S4_C8-1': {
         'template': [
-          'Sorry, I cannot find any visit for this name. ',
+          '(I am )sorry, I cannot find any visit for this name. ',
+          '(I am )sorry, I do not find a visit for this name. ',
         ],
       },
       'say_Basic_S1_C8-2': {
         'template': [
           'Well, {Dr} {contactLastName} is expecting several visitors today.',
+          'As far as I see, {Dr} {contactLastName} is expecting several visitors today.',
         ],
         'slot': {
           'contactLastName': 'contactLastName',
@@ -2464,37 +2566,41 @@ function getMironList() {
       },
       'ask_Basic_S1_C8-2': {
         'template': [
-          'Could you please tell me your company name?',
+          '(Could you )please tell me your company name?',
         ],
       },
       'say_Help_S2_C8-2': {
         'template': [
           'You can tell me something such as I am from the Alpha company. So please...',
+          'You could tell something like, I am from the company Multi Comm. So please...',
         ],
       },
       'ask_Help_S2_C8-2': {
         'template': [
-          'Could you tell me your company name?',
+          'Could you (please )tell (me )your company name?',
+          'Please, tell (me )what is your company name.',
         ],
       },
       'say_NoInput_S2_C8-2': {
         'template': [
-          'Sorry I did not hear you. Just speak to me naturally, in English of course.',
+          'Sorry I did not hear you. Just speak (to me )naturally(, in English of course).',
+          'Unfortunately I could not hear you. Just speak (to me )naturally(, in English of course).',
         ],
       },
       'ask_NoInput_S2_C8-2': {
         'template': [
-          'Could you tell me your company name, please?',
+          'Could you tell (me )your company name, please?',
+          'Could you please tell (me )your company name?',
         ],
       },
       'ask_NotUnderstood_S2_C8-2': {
         'template': [
-          'Could you please repeat your company name?',
+          'Could you (please )repeat your company name?',
         ],
       },
       'say_Help_S3_C8-2': {
         'template': [
-          'To make it easier, let us use a keyboard.',
+          'To make it easier, (just )let us use a keyboard.',
         ],
       },
       'ask_Help_S3_C8-2': {
@@ -2509,12 +2615,12 @@ function getMironList() {
       },
       'ask_NoInput_S3_C8-2': {
         'template': [
-          'Could you please type your company name?',
+          'Could you (please )type your company name?',
         ],
       },
       'ask_NotUnderstood_S3_C8-2': {
         'template': [
-          'Could you please type your company name?',
+          '(Could you )please type your company name?',
         ],
       },
       'ask_Help_S4_C8-2': {
@@ -2524,12 +2630,14 @@ function getMironList() {
       },
       'ask_NoInput_S4_C8-2': {
         'template': [
-          'Could you please retype your company name?',
+          '(Could you )please retype your company name?',
+          '(Could you )please type your company name again?',
         ],
       },
       'say_NotUnderstood_S4_C8-2': {
         'template': [
-          'Sorry, I cannot find any visit for this company name. ',
+          '(I am )sorry, I cannot find any visit for this company name. ',
+          '(I am )sorry, I do not find a visit for this company name. ',
         ],
       },
       'ask_NotUnderstood_S3_V5': {
@@ -2542,7 +2650,7 @@ function getMironList() {
       },
       'ask_NotUnderstood_S3_V4': {
         'template': [
-          'Are you ({Dr} ){visitorFirstName} {visitorLastName}? Please, press yes or no.',
+          'Are you {Dr} {visitorFirstName} {visitorLastName}? Please, press yes or no.',
         ],
         'slot': {
           'interlocutorFirstName': 'visitorFirstName',
@@ -2576,7 +2684,7 @@ function getMironList() {
       },
       'ask_NotUnderstood_S3_V0': {
         'template': [
-          'Are you ({Dr} ){visitorFirstName} {visitorLastName}? Please, press yes or no.',
+          'Are you {Dr} {visitorFirstName} {visitorLastName}? Please, press yes or no.',
         ],
         'slot': {
           'interlocutorFirstName': 'visitorFirstName',
@@ -2587,16 +2695,19 @@ function getMironList() {
       'inform_CriticalError': {
         'template': [
           'I am really sorry but an error occured in the system. Please try again.',
+          'Sorry, there was an error in the system. Please, try again later.',
         ],
       },
       'ask_NotUnderstood_S2_V0': {
         'template': [
-          'Are you ({Dr} ){visitorFirstName} {visitorLastName}? Please, say yes or no.',
+          'Are you {Dr} {visitorFirstName} {visitorLastName}? Please, say yes or no.',
+          'Are you {Dr} {visitorFirstName} {visitorLastName}? Just say yes or no.',
         ],
       },
       'ask_NotUnderstood_S2_V1': {
         'template': [
           'Is your first name {visitorFirstName}? Please, say yes or no.',
+          'Is your first name {visitorFirstName}? Just say yes or no.',
         ],
         'slot': {
           'interlocutorFirstName': 'visitorFirstName',
@@ -2605,6 +2716,7 @@ function getMironList() {
       'ask_NotUnderstood_S2_V2': {
         'template': [
           'Is your last name {visitorLastName}? Please, say yes or no.',
+          'Is your last name {visitorLastName}? Just say yes or no.',
         ],
         'slot': {
           'interlocutorLastName': 'visitorLastName',
@@ -2613,6 +2725,7 @@ function getMironList() {
       'ask_NotUnderstood_S2_V3': {
         'template': [
           'Is your company {companyName}? Please, say yes or no.',
+          'Is your company {companyName}? Just say yes or no.',
         ],
         'slot': {
           'interlocutorCompany': 'companyName',
@@ -2620,7 +2733,8 @@ function getMironList() {
       },
       'ask_NotUnderstood_S2_V4': {
         'template': [
-          'Are you ({Dr} ){visitorFirstName} {visitorLastName}? Please, say yes or no.',
+          'Are you {Dr} {visitorFirstName} {visitorLastName}? Please, say yes or no.',
+          'Are you {Dr} {visitorFirstName} {visitorLastName}? Just say yes or no.',
         ],
         'slot': {
           'interlocutorFirstName': 'visitorFirstName',
@@ -2631,6 +2745,7 @@ function getMironList() {
       'ask_NotUnderstood_S2_V5': {
         'template': [
           'Is your company {companyName}? Please, say yes or no.',
+          'Is your company {companyName}? Just say yes or no.',
         ],
         'slot': {
           'interlocutorCompany': 'companyName',
@@ -2639,6 +2754,7 @@ function getMironList() {
       'say_Basic_S1_C10': {
         'template': [
           'I am sorry, but I am expecting several visitors from {companyName} today.',
+          'Sorry, but today I am expecting several visitors from {companyName}.',
         ],
         'slot': {
           'interlocutorCompany': 'companyName',
@@ -2646,37 +2762,41 @@ function getMironList() {
       },
       'ask_Basic_S1_C10': {
         'template': [
-          'Could you please tell me your fullname?',
+          '(Could you )please tell me your full name?',
         ],
       },
       'say_Help_S2_C10': {
         'template': [
           'You can tell me something such as, I am Mister John Doe. So please...',
+          'You could tell something like, I am Missis Janna Coleman. So please...',
         ],
       },
       'ask_Help_S2_C10': {
         'template': [
-          'Could you tell me your fullname?',
+          'Could you (please )tell (me )your full name?',
+          'Please, tell (me )what is your full name.',
         ],
       },
       'say_NoInput_S2_C10': {
         'template': [
-          'Sorry I did not hear you. Just speak to me naturally, in English of course.',
+          'Sorry I did not hear you. Just speak (to me )naturally(, in English of course).',
+          'Unfortunately I could not hear you. Just speak (to me )naturally(, in English of course).',
         ],
       },
       'ask_NoInput_S2_C10': {
         'template': [
-          'Could you tell me your fullname, please?',
+          'Could you tell (me )your full name, please?',
+          'Could you please tell (me )your full name?',
         ],
       },
       'ask_NotUnderstood_S2_C10': {
         'template': [
-          'Could you please repeat your fullname?',
+          'Could you (please )repeat your full name?',
         ],
       },
       'say_Help_S3_C10': {
         'template': [
-          'To make it easier, let us use a keyboard.',
+          'To make it easier, (just )let us use a keyboard.',
         ],
       },
       'ask_Help_S3_C10': {
@@ -2691,47 +2811,49 @@ function getMironList() {
       },
       'ask_NoInput_S3_C10': {
         'template': [
-          'Could you please type your fullname?',
+          'Could you (please )type your full name?',
         ],
       },
       'ask_NotUnderstood_S3_C10': {
         'template': [
-          'Could you please type your fullname?',
+          '(Could you )please type your full name?',
         ],
       },
       'ask_TooNoisy_S3_C8-2': {
         'template': [
-          'Could you please type your company name?',
+          '(Could you )please type your company name?',
         ],
       },
       'ask_TooNoisy_S3_C8-1': {
         'template': [
-          'Could you please type your fullname?',
+          '(Could you )please type your full name?',
         ],
       },
       'ask_TooNoisy_S3_C10': {
         'template': [
-          'Could you please type your fullname?',
+          '(Could you )please type your full name?',
         ],
       },
       'ask_Help_S4_C10': {
         'template': [
-          'Then type your fullname and press enter on the keyboard or the okay button.',
+          'Then type your full name and press enter on the keyboard or the okay button.',
         ],
       },
       'ask_NoInput_S4_C10': {
         'template': [
-          'Could you please retype your fullname?',
+          '(Could you )please retype your full name?',
+          '(Could you )please type your full name again?',
         ],
       },
       'say_NotUnderstood_S4_C10': {
         'template': [
-          'Sorry, I cannot find any visit for this name. ',
+          '(I am )sorry, I cannot find any visit for this name. ',
+          '(I am )sorry, I do not find a visit for this name. ',
         ],
       },
       'say_HelloVisitorRecognized': {
         'template': [
-          'Good {morning} {Dr} {visitorLastName}',
+          'Good {morning}, I <see>( that) you are {Dr} {visitorLastName}',
         ],
         'slot': {
           'interlocutorLastName': 'visitorLastName',
@@ -2771,7 +2893,7 @@ function getMironList() {
       },
       'say_ContactVisitorWaitingAtLobby': {
         'template': [
-          'your visitor ({Dr} ){visitorLastName} is waiting for you at the lobby.',
+          'your visitor {Dr} {visitorLastName} is waiting for you at the lobby.',
         ],
         'slot': {
           'interlocutorTitle': 'Dr',
@@ -3768,6 +3890,86 @@ function getMironList() {
       'clear_AllRules': {
         'template': [
           'clear_AllRules',
+        ],
+      },
+      'log_Stat_Visitor': {
+        'template': [
+          '%Visitor',
+        ],
+      },
+      'log_Stat_RegisteredVisitor': {
+        'template': [
+          '%RegisteredVisitor',
+        ],
+      },
+      'log_Stat_ContactCall': {
+        'template': [
+          '%ContactCall',
+        ],
+      },
+      'log_Stat_SecretariatCall': {
+        'template': [
+          '%SecretariatCall',
+        ],
+      },
+      'log_Stat_Email': {
+        'template': [
+          '%Email',
+        ],
+      },
+      'log_Stat_NewVisitor': {
+        'template': [
+          '%NewVisitor',
+        ],
+      },
+      'log_Stat_KnownVisitor': {
+        'template': [
+          '%KnownVisitor',
+        ],
+      },
+      'log_Stat_DeniedConsent': {
+        'template': [
+          '%DeniedConsent',
+        ],
+      },
+      'log_Stat_AcceptedConsent': {
+        'template': [
+          '%AcceptedConsent',
+        ],
+      },
+      'log_Stat_NonRegisteredVisitor': {
+        'template': [
+          '%NonRegisteredVisitor',
+        ],
+      },
+      'log_Stat_ClosedDialog': {
+        'template': [
+          '%ClosedDialog',
+        ],
+      },
+      'log_Stat_NoReaction': {
+        'template': [
+          '%NoReaction',
+        ],
+      },
+      'log_Stat_WentAway': {
+        'template': [
+          '%WentAway',
+        ],
+      },
+      'log_Stat_FullyUnderstood': {
+        'template': [
+          '%FullyUnderstood',
+        ],
+      },
+      'log_Stat_NotUnderstood': {
+        'template': [
+          '%NotUnderstood',
+        ],
+      },
+      'log_Stat_Silence': {
+        'template': [
+          '%Silence',
         ],
       },
     },

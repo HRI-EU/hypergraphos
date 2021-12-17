@@ -13,24 +13,18 @@ function DialogDSL_getDSL( g ) {
   //-----------------------
   // Define specific menus
   //-----------------------   
-  
+  /*
   function changeModality(e, button) {
     e.handled = true;  // don't let the click bubble up
     let menuText = e.targetObject.text;
-    button.diagram.startTransaction("changeModality");
-      // Change modality in model with the menu text
-      button.diagram.model.set(button.part.data, "modality", menuText);
-      console.log(button.part.data)
-    button.diagram.commitTransaction("changeModality");
+    updateModality( menuText );
   }
   function changeType(e, button) {
     e.handled = true;  // don't let the click bubble up
     let menuText = e.targetObject.text;
-    button.diagram.startTransaction("changeAspect");
-      // Change type in model with the menu text
-      button.diagram.model.set(button.part.data, "type", menuText);
-    button.diagram.commitTransaction("changeAspect");
+    updateType( menuText );
   }
+
   const modalityMenuTemplate = 
   $("ContextMenu",
     $("ContextMenuButton", $(go.TextBlock, "internal"),  { defaultStretch: go.GraphObject.Horizontal, click: changeModality }),
@@ -64,7 +58,71 @@ function DialogDSL_getDSL( g ) {
     $("ContextMenuButton", $(go.TextBlock, "changedSlot"),    { defaultStretch: go.GraphObject.Horizontal, click: changeModality }),
     $("ContextMenuButton", $(go.TextBlock, "unchangedSlot"),  { defaultStretch: go.GraphObject.Horizontal, click: changeModality })
   );
-  
+  */
+  function updateModality( modality, diagram ) {
+    const node = diagram.selection.first();
+    if( node ) {
+      const data = node.data;
+      diagram.startTransaction( "changeModality" );
+      // Change modality in model with the menu text
+      diagram.model.set( data, "modality", modality );
+      //console.log(button.part.data)
+      diagram.commitTransaction( "changeModality" );
+    }
+  }
+  function updateType( type, diagram ) {
+    const node = diagram.selection.first();
+    if( node ) {
+      const data = node.data;
+      diagram.startTransaction( "changeAspect" );
+      // Change type in model with the menu text
+      diagram.model.set( data, "type", type );
+      diagram.commitTransaction( "changeAspect" );
+    }
+  }
+
+  const cm = g.contextMenu;
+  cm.add({
+    'modalityContextMenu':
+      { layout: 'vertical', itemList: [
+        { label: 'internal',    do: (o)=> updateModality( o.item.label, o.d.diagram ) },
+        { label: 'emotion',     do: (o)=> updateModality( o.item.label, o.d.diagram ) },
+        { label: 'body',        do: (o)=> updateModality( o.item.label, o.d.diagram ) },
+        { label: 'leftHand',    do: (o)=> updateModality( o.item.label, o.d.diagram ) },
+        { label: 'rightHand',   do: (o)=> updateModality( o.item.label, o.d.diagram ) },
+        { label: 'gaze',        do: (o)=> updateModality( o.item.label, o.d.diagram ) },
+        { label: 'eyeLid',      do: (o)=> updateModality( o.item.label, o.d.diagram ) },
+        { label: 'speech',      do: (o)=> updateModality( o.item.label, o.d.diagram ) },
+        { label: 'vision',      do: (o)=> updateModality( o.item.label, o.d.diagram ) },
+        { label: 'signal',      do: (o)=> updateModality( o.item.label, o.d.diagram ) },
+      ]},
+    'doWMContextMenu':
+      { layout: 'vertical', itemList: [
+        { label: 'activate wm!',  do: (o)=> updateType( o.item.label, o.d.diagram ) },
+        { label: 'reset wm!',     do: (o)=> updateType( o.item.label, o.d.diagram ) },
+        { label: 'inhibit wm!',   do: (o)=> updateType( o.item.label, o.d.diagram ) },
+      ]},
+    'isWMContextMenu':
+      { layout: 'vertical', itemList: [
+        { label: 'is wm activated?',   do: (o)=> updateType( o.item.label, o.d.diagram ) },
+        { label: 'is wm inhibited?',   do: (o)=> updateType( o.item.label, o.d.diagram ) },
+      ]},
+    'isSlotContextMenu':
+      { layout: 'vertical', itemList: [
+        { label: 'emptySlot',       do: (o)=> updateModality( o.item.label, o.d.diagram ) },
+        { label: 'filledSlot',      do: (o)=> updateModality( o.item.label, o.d.diagram ) },
+        { label: 'changedSlot',     do: (o)=> updateModality( o.item.label, o.d.diagram ) },
+        { label: 'unchangedSlot',   do: (o)=> updateModality( o.item.label, o.d.diagram ) },
+      ]},
+  });
+
+  const modalityMenuTemplate = cm.getMenu( 'modalityContextMenu' );
+  const doWMMenuTemplate = cm.getMenu( 'doWMContextMenu' );
+  // Define menu for WM conditions
+  const isWMMenuTemplate = cm.getMenu( 'isWMContextMenu' );
+  // Define menu for slot conditions
+  const isSlotMenuTemplate = cm.getMenu( 'isSlotContextMenu' );
+
   //-----------------------
   // Define specific maps
   //-----------------------   
@@ -100,6 +158,7 @@ function DialogDSL_getDSL( g ) {
     "reset wm!":                  "SquareLevelMiddle",
     "inhibit wm!":                "SquareLevelDown",
   };
+  
   const modalities = {
     "internal":       {color: "BurlyWood",    textColor: "Black", isMenu: modalityMenuTemplate, doMenu: modalityMenuTemplate},
     "emptySlot":      {color: "Gold",         textColor: "Black", isMenu: isSlotMenuTemplate},

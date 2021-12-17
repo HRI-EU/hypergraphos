@@ -1,0 +1,25 @@
+{
+  "dslNameList": [
+    "DefaultDSL",
+    "HierarchyDSL",
+    "ThinkingDSL",
+    "TextLabelsDSL",
+    "PropertyDSL",
+    "IntegratorDSL",
+    "DialogDSL",
+    "DataFlowDSL",
+    "ConnectorsDSL",
+    "ButtonDSL",
+    "PicturesDSL",
+    "NoteDSL"
+  ],
+  "view": {
+    "scale": 1.011854731731146,
+    "position": [
+      1826.0249175890347,
+      2462.052217497841
+    ],
+    "isGridOn": false
+  },
+  "model": "{ \"class\": \"GraphLinksModel\",\n  \"copiesArrays\": true,\n  \"copiesArrayObjects\": true,\n  \"copiesKey\": false,\n  \"linkKeyProperty\": \"key\",\n  \"linkFromPortIdProperty\": \"fromPort\",\n  \"linkToPortIdProperty\": \"toPort\",\n  \"nodeDataArray\": [ \n{\"label\":\"File\", \"size\":\"180 35\", \"category\":\"Hierarchy_DataInFile\", \"isFile\":true, \"fileTypeName\":\"Javascript\", \"fileType\":\"text/javascript\", \"fileURL\":\"\", \"key\":0, \"location\":\"2620 3000\"},\n{\"label\":\"Code in File\", \"color\":\"orange\", \"size\":\"180 35\", \"category\":\"Hierarchy_CodeInFile\", \"isFile\":true, \"fileTypeName\":\"Javascript\", \"fileType\":\"text/javascript\", \"fileURL\":\"\", \"key\":2, \"location\":\"2740 3190\"},\n{\"label\":\"Code in File\", \"color\":\"orange\", \"size\":\"180 35\", \"category\":\"Hierarchy_CodeInFile\", \"isFile\":true, \"fileTypeName\":\"Javascript\", \"fileType\":\"text/javascript\", \"fileURL\":\"\", \"key\":4, \"location\":\"2750 3090\"},\n{\"label\":\"Folder\", \"size\":\"180 60\", \"fileType\":\"text/json\", \"category\":\"Hierarchy_Folder\", \"isDir\":true, \"fileURL\":\"\", \"key\":6, \"location\":\"2720 3270\"},\n{\"label\":\"Big Comment\", \"tag\":\"tag\", \"type\":\"type\", \"category\":\"Thinking_BigComment\", \"key\":8, \"location\":\"2990 3170\"},\n{\"label\":\"DSL name\", \"size\":\"180 60\", \"category\":\"Hierarchy_DSL\", \"isFile\":true, \"fileType\":\"text/json\", \"isSystem\":\"$GraphDSL$\", \"key\":7, \"location\":\"2560 3150\"},\n{\"label\":\"Big Comment\", \"tag\":\"tag\", \"type\":\"type\", \"category\":\"Thinking_BigComment\", \"key\":10, \"location\":\"2340 3060\"},\n{\"label\":\"Big Comment\", \"tag\":\"tag\", \"type\":\"type\", \"category\":\"Thinking_BigComment\", \"key\":12, \"location\":\"2360 3260\"}\n ],\n  \"linkDataArray\": []}"
+}
