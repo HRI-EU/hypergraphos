@@ -174,7 +174,7 @@ class Graph {
 					{ label: 'Navigate',		layout: 'vertical', subMenu: [
 						{ label: 'Go To Parent Graph',	if: (o)=> !this.isRootGraph,
 																						do: (o)=> { if( !this.isRootGraph) this.em.call.onShowParentGraph(); } },
-						{ label: 'Back To Parevious Graph',	if: (o)=> !this.isHistoryEmpty,
+						{ label: 'Back To Previous Graph',	if: (o)=> !this.isHistoryEmpty,
 																						do: (o)=> { if( !this.isHistoryEmpty ) this.em.call.onShowPreviousGraph(); } },
 						{ label: 'Go To Root Graph',		if: (o)=> !this.isRootGraph,
 																						do: (o)=> this.em.call.onShowRootGraph() },
@@ -400,7 +400,7 @@ class Graph {
 	setGraphPath( path ) {
 		this.graphPath = path;
 	}
-	getGraphPath( path ) {
+	getGraphPath() {
 		return( this.graphPath );
 	}
 	setAllowDeleteKey( isDeleteEnabled ) {
@@ -602,7 +602,8 @@ class Graph {
 				const fieldList = Object.keys( dataNode );
 				for( const field of fieldList ) {
 					const value = dataNode[field];
-					this.setNodeDataField( oKey, field, value );
+					//this.setNodeDataField( oKey, field, value );
+					setNodeDataField( this, oKey, field, value );
 				}
 			}
 		}
