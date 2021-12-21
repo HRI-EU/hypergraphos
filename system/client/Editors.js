@@ -27,7 +27,7 @@ function getNodeData( g, key, isCopy ) {
   return( result );
 }
 function setNodeDataField( g, key, field, value ) {
-  let result = g.getNodeData( key, isCopy );
+  let result = g.getNodeData( key );
   if( result.isLink && ( field == 'fileContent' ) ) {
     const fileURL = result.fileURL;
     const [ url, refKey ] = fileURL.split( '#' );
