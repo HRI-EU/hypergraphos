@@ -4,9 +4,9 @@
 */
 const config = {
   "host": {
-    "name": "Anto01",
+    "name": "NoName",
     "fileServerURL": "/fileServer",
-    "statusURL": "/fileServer/status.json"
+    "statusURL": "/fileServer/NoName_status.json"
   },
   "remoteHost": {},
   "htmlDiv": {
