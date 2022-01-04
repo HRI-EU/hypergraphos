@@ -105,8 +105,7 @@ class Graph {
 																												// Go to new view 
 																												this.diagram.zoomToFit(); }},
 						{ separator: '-' },
-						{ label: 'Show View 1',				if: (o)=> false,
-																					do: (o)=> { if( o.event.shift ) {
+						{ label: 'Show View 1',				do: (o)=> { if( o.event.shift ) {
 																												this.viewBookmark[1] = this.getCurrentView();
 																											} else if( this.viewBookmark[1] != undefined ) {
 																												// Store last view in ViewLast
