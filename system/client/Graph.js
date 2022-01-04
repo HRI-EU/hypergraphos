@@ -105,7 +105,7 @@ class Graph {
 																												// Go to new view 
 																												this.diagram.zoomToFit(); }},
 						{ separator: '-' },
-						{ label: 'Show View 1',				do: (o)=> { if( o.event.shift ) {
+						{ label: 'Show View 1',				do: (o)=> { if( o.event.shiftKey ) {
 																												this.viewBookmark[1] = this.getCurrentView();
 																											} else if( this.viewBookmark[1] != undefined ) {
 																												// Store last view in ViewLast
@@ -113,7 +113,7 @@ class Graph {
 																												// Go to new view
 																												this.setCurrentView( this.viewBookmark[1] );
 																											} }},
-						{ label: 'Show View 2',				do: (o)=> { if( o.event.shift ) {
+						{ label: 'Show View 2',				do: (o)=> { if( o.event.shiftKey ) {
 																												this.viewBookmark[2] = this.getCurrentView();
 																											} else if( this.viewBookmark[2] != undefined ) {
 																												// Store last view in ViewLast
@@ -121,7 +121,7 @@ class Graph {
 																												// Go to new view
 																												this.setCurrentView( this.viewBookmark[2] );
 																											} }},
-						{ label: 'Show View 3',				do: (o)=> { if( o.event.shift ) {
+						{ label: 'Show View 3',				do: (o)=> { if( o.event.shiftKey ) {
 																												this.viewBookmark[3] = this.getCurrentView();
 																											} else if( this.viewBookmark[3] != undefined ) {
 																												// Store last view in ViewLast
@@ -129,7 +129,7 @@ class Graph {
 																												// Go to new view
 																												this.setCurrentView( this.viewBookmark[3] );
 																											} }},
-						{ label: 'Show View 4',				do: (o)=> { if( o.event.shift ) {
+						{ label: 'Show View 4',				do: (o)=> { if( o.event.shiftKey ) {
 																												this.viewBookmark[4] = this.getCurrentView();
 																											} else if( this.viewBookmark[4] != undefined ) {
 																												// Store last view in ViewLast
