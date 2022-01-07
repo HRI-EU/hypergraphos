@@ -85,7 +85,7 @@ config.host['hostname'] = os.hostname();
 
 // Definition of dynamic values
 config.server.webSocketURL = `ws://${config.server.webServerName}`;
-ß
+
 // User Configuration
 if( ( config.host.hostname == 'Antonellos-Mini' ) ||
     ( config.host.hostname == 'Antonellos-Mac-mini.local' ) ) {
