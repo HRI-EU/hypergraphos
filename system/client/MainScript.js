@@ -12,6 +12,11 @@ Date: 10.07.2020
 
 // Frankonello graphURL "fileURL": "/fileServer/00/01.json"
 /*
+  - We could use JSS to create CSS directly in JavaScript
+    https://cssinjs.org/repl/
+  - Use JSClipper for operation on shapes (union, intersection, difference, ...)
+    https://github.com/Delapouite/JsClipper
+    we will use this for defining user shapes for DSL visual elements
   v Now the sever can save text or binary files (via fileInfo.sourceEncoding)
   - Test Case: if we create a new Dir node, we enter it, the graph is loaded, then we exit 
     without touching the graph (no node added from palette), I should not save an empty

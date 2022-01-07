@@ -243,7 +243,7 @@ function getRuleList_Receptionist() {
         name:  'rule280',
         index: 280,
         fanIn:  [
-                  [ { src: 'previousRule', mironName: 'rule305', type: 'rule', weight: 1 } ], // is previous rule active?: rule305 
+                  [ { src: 'previousRule', mironName: 'rule4595', type: 'rule', weight: 1 } ], // is previous rule active?: rule4595 
                 ],
         fanOut: [ { dest: 'goal', mironName: 'setLoopAnimationTo_Sleeping', type: 'internalEmotion', weight: 1 },   // do inner miron!: setLoopAnimationTo_Sleeping 
                   { dest: 'goal', mironName: 'animate_Out',                 type: 'internalEmotion', weight: 1 } ], // do inner miron!: animate_Out
@@ -560,7 +560,8 @@ function getRuleList_Receptionist() {
                 ],
         fanOut: [ { dest: 'goal',    mironName: 'setMironSlot{mironType:"speech",mironName:"inform_VisitorNotFound"}', type: 'internal',       weight: 1 },   // do inner miron!: setMironSlot{mironType:"speech",mironName:"inform_VisitorNotFound"} 
                   { dest: 'goal',    mironName: 'say_Something',                                                       type: 'internalSpeech', weight: 1 },   // do inner miron!: say_Something 
-                  { dest: 'resetWM', mironName: 'isVisitorUnknown',                                                    type: 'wm',             weight: 1 } ], // reset wm!: isVisitorUnknown
+                  { dest: 'resetWM', mironName: 'isVisitorUnknown',                                                    type: 'wm',             weight: 1 },   // reset wm!: isVisitorUnknown 
+                  { dest: 'goal',    mironName: 'log_Stat_NonRegisteredVisitor',                                       type: 'internal',       weight: 1 } ], // do inner miron!: log_Stat_NonRegisteredVisitor
       },
       { // RULE 567 (567): Inform to go to watchman
         name:  'rule567',
@@ -595,14 +596,13 @@ function getRuleList_Receptionist() {
                 ],
         fanOut: [ { dest: 'goal',    mironName: 'say_Something',                                            type: 'internalSpeech', weight: 1 },   // do inner miron!: say_Something 
                   { dest: 'goal',    mironName: 'setMironSlot{mironType:"speech",mironName:"say_Goodbye"}', type: 'internal',       weight: 1 },   // do inner miron!: setMironSlot{mironType:"speech",mironName:"say_Goodbye"} 
-                  { dest: 'resetWM', mironName: 'NoGDPRReaction',                                           type: 'wm',             weight: 1 } ], // reset wm!: NoGDPRReaction
+                  { dest: 'resetWM', mironName: 'NoGDPRReaction',                                           type: 'wm',             weight: 1 },   // reset wm!: NoGDPRReaction 
+                  { dest: 'goal',    mironName: 'log_Stat_ClosedDialog',                                    type: 'internal',       weight: 1 } ], // do inner miron!: log_Stat_ClosedDialog
       },
       { // RULE 583 (583): Restart session
         name:  'rule583',
         index: 583,
         fanIn:  [
-                  [ { src: 'previousRule', mironName: 'rule580',            type: 'rule',           weight: 0.5 },   // is previous rule active?: rule580 
-                    { src: 'intention',    mironName: 'say_Something_Done', type: 'internalSpeech', weight: 0.5 } ], // is inner miron recognized?: say_Something_Done
                   [ { src: 'intention',    mironName: 'animate_In_Done', type: 'internalEmotion', weight: 0.5 },   // is inner miron recognized?: animate_In_Done 
                     { src: 'previousRule', mironName: 'rule707',         type: 'rule',            weight: 0.5 } ], // is previous rule active?: rule707
                   [ { src: 'previousRule', mironName: 'rule3904',           type: 'rule',           weight: 0.5 },   // is previous rule active?: rule3904 
@@ -621,7 +621,8 @@ function getRuleList_Receptionist() {
         fanOut: [ { dest: 'goal',      mironName: 'log_VisitorNotUnderstood', type: 'internal',       weight: 1 },   // do inner miron!: log_VisitorNotUnderstood 
                   { dest: 'resetWM',   mironName: 'isLastSpeechKnown',        type: 'wm',             weight: 1 },   // reset wm!: isLastSpeechKnown 
                   { dest: 'inhibitWM', mironName: 'isVisitorUnderstood',      type: 'wm',             weight: 1 },   // inhibit wm!: isVisitorUnderstood 
-                  { dest: 'goal',      mironName: 'request_NextQuestion',     type: 'internalSpeech', weight: 1 } ], // do inner miron!: request_NextQuestion
+                  { dest: 'goal',      mironName: 'request_NextQuestion',     type: 'internalSpeech', weight: 1 },   // do inner miron!: request_NextQuestion 
+                  { dest: 'goal',      mironName: 'log_Stat_NotUnderstood',   type: 'internal',       weight: 1 } ], // do inner miron!: log_Stat_NotUnderstood
       },
       { // RULE 603 (603): Visitor last utterance is not understood
         name:  'rule603',
@@ -648,9 +649,10 @@ function getRuleList_Receptionist() {
                   [ { src: 'activatedWM', mironName: 'isLastSpeechKnown',     type: 'wm',             weight: 0.5 },   // is wm activated?: isLastSpeechKnown 
                     { src: 'intention',   mironName: 'request_ToCheckAnswer', type: 'internalSpeech', weight: 0.5 } ], // is inner miron recognized?: request_ToCheckAnswer
                 ],
-        fanOut: [ { dest: 'goal',       mironName: 'log_VisitorUnderstood', type: 'internal', weight: 1 },   // do inner miron!: log_VisitorUnderstood 
-                  { dest: 'resetWM',    mironName: 'isLastSpeechKnown',     type: 'wm',       weight: 1 },   // reset wm!: isLastSpeechKnown 
-                  { dest: 'activateWM', mironName: 'isVisitorUnderstood',   type: 'wm',       weight: 1 } ], // activate wm!: isVisitorUnderstood
+        fanOut: [ { dest: 'goal',       mironName: 'log_VisitorUnderstood',    type: 'internal', weight: 1 },   // do inner miron!: log_VisitorUnderstood 
+                  { dest: 'resetWM',    mironName: 'isLastSpeechKnown',        type: 'wm',       weight: 1 },   // reset wm!: isLastSpeechKnown 
+                  { dest: 'activateWM', mironName: 'isVisitorUnderstood',      type: 'wm',       weight: 1 },   // activate wm!: isVisitorUnderstood 
+                  { dest: 'goal',       mironName: 'log_Stat_FullyUnderstood', type: 'internal', weight: 1 } ], // do inner miron!: log_Stat_FullyUnderstood
       },
       { // RULE 621 (621): Visitor is silent by voice 
         name:  'rule621',
@@ -663,7 +665,8 @@ function getRuleList_Receptionist() {
                 ],
         fanOut: [ { dest: 'activateWM', mironName: 'isNoInput',                  type: 'wm',             weight: 1 },   // activate wm!: isNoInput 
                   { dest: 'goal',       mironName: 'request_NextQuestion',       type: 'internalSpeech', weight: 1 },   // do inner miron!: request_NextQuestion 
-                  { dest: 'goal',       mironName: 'log_VisitorIsSilentByVoice', type: 'internal',       weight: 1 } ], // do inner miron!: log_VisitorIsSilentByVoice
+                  { dest: 'goal',       mironName: 'log_VisitorIsSilentByVoice', type: 'internal',       weight: 1 },   // do inner miron!: log_VisitorIsSilentByVoice 
+                  { dest: 'goal',       mironName: 'log_Stat_Silence',           type: 'internal',       weight: 1 } ], // do inner miron!: log_Stat_Silence
       },
       { // RULE 626 (626): Wait for visitor to answer by voice
         name:  'rule626',
@@ -826,6 +829,8 @@ function getRuleList_Receptionist() {
         name:  'rule707',
         index: 707,
         fanIn:  [
+                  [ { src: 'previousRule', mironName: 'rule580',            type: 'rule',           weight: 0.5 },   // is previous rule active?: rule580 
+                    { src: 'intention',    mironName: 'say_Something_Done', type: 'internalSpeech', weight: 0.5 } ], // is inner miron recognized?: say_Something_Done
                 ],
         fanOut: [ { dest: 'goal', mironName: 'setAnimationTo_GoToSleep', type: 'internalEmotion', weight: 1 },   // do inner miron!: setAnimationTo_GoToSleep 
                   { dest: 'goal', mironName: 'animate_In',               type: 'internalEmotion', weight: 1 } ], // do inner miron!: animate_In
@@ -990,7 +995,8 @@ function getRuleList_Receptionist() {
                 ],
         fanOut: [ { dest: 'goal',       mironName: 'log_VisitorIsSilentByKeyboard', type: 'internal',       weight: 1 },   // do inner miron!: log_VisitorIsSilentByKeyboard 
                   { dest: 'goal',       mironName: 'request_NextQuestion',          type: 'internalSpeech', weight: 1 },   // do inner miron!: request_NextQuestion 
-                  { dest: 'activateWM', mironName: 'isNoInput',                     type: 'wm',             weight: 1 } ], // activate wm!: isNoInput
+                  { dest: 'activateWM', mironName: 'isNoInput',                     type: 'wm',             weight: 1 },   // activate wm!: isNoInput 
+                  { dest: 'goal',       mironName: 'log_Stat_Silence',              type: 'internal',       weight: 1 } ], // do inner miron!: log_Stat_Silence
       },
       { // RULE 1085 (1085): Ask for help
         name:  'rule1085',
@@ -1216,9 +1222,11 @@ function getRuleList_Receptionist() {
         fanIn:  [
                   [ { src: 'previousRule', mironName: 'rule1148', type: 'rule', weight: 1 } ], // is previous rule active?: rule1148 
                 ],
-        fanOut: [ { dest: 'goal',       mironName: 'recall_VisitorAndContact', type: 'internal', weight: 1 },   // do inner miron!: recall_VisitorAndContact 
-                  { dest: 'goal',       mironName: 'log_MakeQuery',            type: 'internal', weight: 1 },   // do inner miron!: log_MakeQuery 
-                  { dest: 'activateWM', mironName: 'isMakingQuery',            type: 'wm',       weight: 1 } ], // activate wm!: isMakingQuery
+        fanOut: [ { dest: 'goal',       mironName: 'recall_VisitorAndContact', type: 'internal',        weight: 1 },   // do inner miron!: recall_VisitorAndContact 
+                  { dest: 'goal',       mironName: 'log_MakeQuery',            type: 'internal',        weight: 1 },   // do inner miron!: log_MakeQuery 
+                  { dest: 'activateWM', mironName: 'isMakingQuery',            type: 'wm',              weight: 1 },   // activate wm!: isMakingQuery 
+                  { dest: 'goal',       mironName: 'setAnimationTo_Reflexion', type: 'internalEmotion', weight: 1 },   // do inner miron!: setAnimationTo_Reflexion 
+                  { dest: 'goal',       mironName: 'animate_In',               type: 'internalEmotion', weight: 1 } ], // do inner miron!: animate_In
       },
       { // RULE 1208 (1208): Check what to do
         name:  'rule1208',
@@ -1228,7 +1236,9 @@ function getRuleList_Receptionist() {
                     { src: 'previousRule', mironName: 'rule1169',                 type: 'rule',     weight: 0.5 } ], // is previous rule active?: rule1169
                   [ { src: 'previousRule', mironName: 'rule1073', type: 'rule', weight: 1 } ], // is previous rule active?: rule1073 
                 ],
-        fanOut: [ { dest: 'goal', mironName: 'log_CheckWhatToDo', type: 'internal', weight: 1 } ], // do inner miron!: log_CheckWhatToDo 
+        fanOut: [ { dest: 'goal', mironName: 'log_CheckWhatToDo',        type: 'internal',        weight: 1 },   // do inner miron!: log_CheckWhatToDo 
+                  { dest: 'goal', mironName: 'setAnimationTo_Reflexion', type: 'internalEmotion', weight: 1 },   // do inner miron!: setAnimationTo_Reflexion 
+                  { dest: 'goal', mironName: 'animate_Out',              type: 'internalEmotion', weight: 1 } ], // do inner miron!: animate_Out
       },
       { // RULE 1073 (1073): Skip query
         name:  'rule1073',
@@ -1337,7 +1347,8 @@ function getRuleList_Receptionist() {
                   [ { src: 'previousRule', mironName: 'rule2671',                 type: 'rule', weight: 0.5 },   // is previous rule active?: rule2671 
                     { src: 'activatedWM',  mironName: 'isUserVisuallyRecognized', type: 'wm',   weight: 0.5 } ], // is wm activated?: isUserVisuallyRecognized
                 ],
-        fanOut: [ { dest: 'goal', mironName: 'close_Microphone', type: 'rightHand', weight: 1 } ], // do outer miron!: close_Microphone 
+        fanOut: [ { dest: 'goal', mironName: 'close_Microphone',           type: 'rightHand', weight: 1 },   // do outer miron!: close_Microphone 
+                  { dest: 'goal', mironName: 'log_Stat_RegisteredVisitor', type: 'internal',  weight: 1 } ], // do inner miron!: log_Stat_RegisteredVisitor
       },
       { // RULE 1499 (1499): Inform visitor I call the contact person
         name:  'rule1499',
@@ -1397,7 +1408,8 @@ function getRuleList_Receptionist() {
                 ],
         fanOut: [ { dest: 'goal',       mironName: 'setMironSlot{mironType:"speech",mironName:"inform_ContactComing"}', type: 'internal',       weight: 1 },   // do inner miron!: setMironSlot{mironType:"speech",mironName:"inform_ContactComing"} 
                   { dest: 'goal',       mironName: 'say_Something',                                                     type: 'internalSpeech', weight: 1 },   // do inner miron!: say_Something 
-                  { dest: 'activateWM', mironName: 'isDialogCompleted',                                                 type: 'wm',             weight: 1 } ], // activate wm!: isDialogCompleted
+                  { dest: 'activateWM', mironName: 'isDialogCompleted',                                                 type: 'wm',             weight: 1 },   // activate wm!: isDialogCompleted 
+                  { dest: 'goal',       mironName: 'log_Stat_ContactCall',                                              type: 'internal',       weight: 1 } ], // do inner miron!: log_Stat_ContactCall
       },
       { // RULE 1572 (1572): Inform visitor contact is not reached
         name:  'rule1572',
@@ -1434,12 +1446,11 @@ function getRuleList_Receptionist() {
         fanIn:  [
                   [ { src: 'previousRule', mironName: 'rule1657',         type: 'rule', weight: 0.5 },   // is previous rule active?: rule1657 
                     { src: 'activatedWM',  mironName: 'isCallSuccessful', type: 'wm',   weight: 0.5 } ], // is wm activated?: isCallSuccessful
-                  [ { src: 'inhibitedWM',  mironName: 'isCallSuccessful', type: 'wm',   weight: 0.5 },   // is wm inhibited?: isCallSuccessful 
-                    { src: 'previousRule', mironName: 'rule1657',         type: 'rule', weight: 0.5 } ], // is previous rule active?: rule1657
                 ],
         fanOut: [ { dest: 'activateWM', mironName: 'isDialogCompleted',                                             type: 'wm',             weight: 1 },   // activate wm!: isDialogCompleted 
                   { dest: 'goal',       mironName: 'say_Something',                                                 type: 'internalSpeech', weight: 1 },   // do inner miron!: say_Something 
-                  { dest: 'goal',       mironName: 'setMironSlot{mironType:"speech",mironName:"inform_MSTComing"}', type: 'internal',       weight: 1 } ], // do inner miron!: setMironSlot{mironType:"speech",mironName:"inform_MSTComing"}
+                  { dest: 'goal',       mironName: 'setMironSlot{mironType:"speech",mironName:"inform_MSTComing"}', type: 'internal',       weight: 1 },   // do inner miron!: setMironSlot{mironType:"speech",mironName:"inform_MSTComing"} 
+                  { dest: 'goal',       mironName: 'log_Stat_SecretariatCall',                                      type: 'internal',       weight: 1 } ], // do inner miron!: log_Stat_SecretariatCall
       },
       { // RULE 1611 (1611): Inform visitor MST is not reached
         name:  'rule1611',
@@ -1450,12 +1461,15 @@ function getRuleList_Receptionist() {
                 ],
         fanOut: [ { dest: 'goal',       mironName: 'setMironSlot{mironType:"speech",mironName:"inform_MSTNotReached"}', type: 'internal',       weight: 1 },   // do inner miron!: setMironSlot{mironType:"speech",mironName:"inform_MSTNotReached"} 
                   { dest: 'goal',       mironName: 'say_Something',                                                     type: 'internalSpeech', weight: 1 },   // do inner miron!: say_Something 
-                  { dest: 'activateWM', mironName: 'isNobodyAnswered',                                                  type: 'wm',             weight: 1 } ], // activate wm!: isNobodyAnswered
+                  { dest: 'activateWM', mironName: 'isNobodyAnswered',                                                  type: 'wm',             weight: 1 },   // activate wm!: isNobodyAnswered 
+                  { dest: 'goal',       mironName: 'log_Stat_Email',                                                    type: 'internal',       weight: 1 } ], // do inner miron!: log_Stat_Email
       },
       { // RULE 1619 (1619): Send email to MST
         name:  'rule1619',
         index: 1619,
         fanIn:  [
+                  [ { src: 'inhibitedWM',  mironName: 'isCallSuccessful', type: 'wm',   weight: 0.5 },   // is wm inhibited?: isCallSuccessful 
+                    { src: 'previousRule', mironName: 'rule1657',         type: 'rule', weight: 0.5 } ], // is previous rule active?: rule1657
                 ],
         fanOut: [ { dest: 'goal', mironName: 'request_ToSendEmailToMST', type: 'internalSpeech', weight: 1 } ], // do inner miron!: request_ToSendEmailToMST 
       },
@@ -1540,7 +1554,8 @@ function getRuleList_Receptionist() {
                     { src: 'emptySlot',    mironName: 'noNameVLastNameFound',    type: 'slot', weight: 0.3333333333333333 } ], // is active?: noNameVLastNameFound
                 ],
         fanOut: [ { dest: 'goal', mironName: 'setMironSlot{mironType:"speech",mironName:"inform_ToReadGDPR"}', type: 'internal',       weight: 1 },   // do inner miron!: setMironSlot{mironType:"speech",mironName:"inform_ToReadGDPR"} 
-                  { dest: 'goal', mironName: 'say_Something',                                                  type: 'internalSpeech', weight: 1 } ], // do inner miron!: say_Something
+                  { dest: 'goal', mironName: 'say_Something',                                                  type: 'internalSpeech', weight: 1 },   // do inner miron!: say_Something 
+                  { dest: 'goal', mironName: 'log_Stat_NewVisitor',                                            type: 'internal',       weight: 1 } ], // do inner miron!: log_Stat_NewVisitor
       },
       { // RULE 1748 (1748): Clean faceId and consent flag
         name:  'rule1748',
@@ -1577,20 +1592,18 @@ function getRuleList_Receptionist() {
                   { dest: 'goal',      mironName: 'log_GDPRNotAgreed',                                   type: 'internal',       weight: 1 },   // do inner miron!: log_GDPRNotAgreed 
                   { dest: 'goal',      mironName: 'set_VisitorRegistered',                               type: 'internalSpeech', weight: 1 },   // do inner miron!: set_VisitorRegistered 
                   { dest: 'goal',      mironName: 'say_Something',                                       type: 'internalSpeech', weight: 1 },   // do inner miron!: say_Something 
-                  { dest: 'inhibitWM', mironName: 'isDenyClicked',                                       type: 'wm',             weight: 1 } ], // inhibit wm!: isDenyClicked
+                  { dest: 'inhibitWM', mironName: 'isDenyClicked',                                       type: 'wm',             weight: 1 },   // inhibit wm!: isDenyClicked 
+                  { dest: 'goal',      mironName: 'log_Stat_DeniedConsent',                              type: 'internal',       weight: 1 } ], // do inner miron!: log_Stat_DeniedConsent
       },
       { // RULE 1780 (1780): End dialog
         name:  'rule1780',
         index: 1780,
         fanIn:  [
-                  [ { src: 'previousRule', mironName: 'rule1721',                type: 'rule', weight: 0.5 },   // is previous rule active?: rule1721 
-                    { src: 'filledSlot',   mironName: 'interlocutorConsentFlag', type: 'slot', weight: 0.5 } ], // is active?: interlocutorConsentFlag
                   [ { src: 'actionDone',   mironName: 'store_IdentityOfInterlocutor', type: 'internal', weight: 0.5 },   // is inner miron done?: store_IdentityOfInterlocutor 
                     { src: 'previousRule', mironName: 'rule1753',                     type: 'rule',     weight: 0.5 } ], // is previous rule active?: rule1753
-                  [ { src: 'filledSlot',   mironName: 'noNameVLastNameFound', type: 'slot', weight: 0.5 },   // is active?: noNameVLastNameFound 
-                    { src: 'previousRule', mironName: 'rule1721',             type: 'rule', weight: 0.5 } ], // is previous rule active?: rule1721
-                  [ { src: 'previousRule', mironName: 'rule1721', type: 'rule', weight: 0.5 },   // is previous rule active?: rule1721 
-                    { src: 'activatedWM',  mironName: 'skipGDPR', type: 'wm',   weight: 0.5 } ], // is wm activated?: skipGDPR
+                  [ { src: 'previousRule', mironName: 'rule5136', type: 'rule', weight: 1 } ], // is previous rule active?: rule5136 
+                  [ { src: 'previousRule', mironName: 'rule5176', type: 'rule', weight: 1 } ], // is previous rule active?: rule5176 
+                  [ { src: 'previousRule', mironName: 'rule5180', type: 'rule', weight: 1 } ], // is previous rule active?: rule5180 
                 ],
         fanOut: [ { dest: 'goal',    mironName: 'request_EndDialog',  type: 'internalSpeech', weight: 1 },   // do inner miron!: request_EndDialog 
                   { dest: 'goal',    mironName: 'hide_MessageWindow', type: 'rightHand',      weight: 1 },   // do outer miron!: hide_MessageWindow 
@@ -1621,7 +1634,8 @@ function getRuleList_Receptionist() {
                   { dest: 'goal',      mironName: 'set_ConsentFlag',                                     type: 'internalSpeech', weight: 1 },   // do inner miron!: set_ConsentFlag 
                   { dest: 'goal',      mironName: 'set_VisitorRegistered',                               type: 'internalSpeech', weight: 1 },   // do inner miron!: set_VisitorRegistered 
                   { dest: 'goal',      mironName: 'say_Something',                                       type: 'internalSpeech', weight: 1 },   // do inner miron!: say_Something 
-                  { dest: 'inhibitWM', mironName: 'isConsentClicked',                                    type: 'wm',             weight: 1 } ], // inhibit wm!: isConsentClicked
+                  { dest: 'inhibitWM', mironName: 'isConsentClicked',                                    type: 'wm',             weight: 1 },   // inhibit wm!: isConsentClicked 
+                  { dest: 'goal',      mironName: 'log_Stat_AcceptedConsent',                            type: 'internal',       weight: 1 } ], // do inner miron!: log_Stat_AcceptedConsent
       },
       { // RULE 1346 (1346): Play ring tone
         name:  'rule1346',
@@ -1672,7 +1686,8 @@ function getRuleList_Receptionist() {
                 ],
         fanOut: [ { dest: 'goal',    mironName: 'setMironSlot{mironType:"speech",mironName:"inform_Restarting"}', type: 'internal',       weight: 1 },   // do inner miron!: setMironSlot{mironType:"speech",mironName:"inform_Restarting"} 
                   { dest: 'goal',    mironName: 'say_Something',                                                  type: 'internalSpeech', weight: 1 },   // do inner miron!: say_Something 
-                  { dest: 'resetWM', mironName: 'isNoReaction',                                                   type: 'wm',             weight: 1 } ], // reset wm!: isNoReaction
+                  { dest: 'resetWM', mironName: 'isNoReaction',                                                   type: 'wm',             weight: 1 },   // reset wm!: isNoReaction 
+                  { dest: 'goal',    mironName: 'log_Stat_NoReaction',                                            type: 'internal',       weight: 1 } ], // do inner miron!: log_Stat_NoReaction
       },
       { // RULE 1647 (1647): Check call status
         name:  'rule1647',
@@ -1922,7 +1937,8 @@ function getRuleList_Receptionist() {
                     { src: 'previousRule', mironName: 'rule553',      type: 'rule', weight: 0.5 } ], // is previous rule active?: rule553
                 ],
         fanOut: [ { dest: 'goal', mironName: 'setMironSlot{mironType:"speech",mironName:"inform_NoVisitToday"}', type: 'internal',       weight: 1 },   // do inner miron!: setMironSlot{mironType:"speech",mironName:"inform_NoVisitToday"} 
-                  { dest: 'goal', mironName: 'say_Something',                                                    type: 'internalSpeech', weight: 1 } ], // do inner miron!: say_Something
+                  { dest: 'goal', mironName: 'say_Something',                                                    type: 'internalSpeech', weight: 1 },   // do inner miron!: say_Something 
+                  { dest: 'goal', mironName: 'log_Stat_NonRegisteredVisitor',                                    type: 'internal',       weight: 1 } ], // do inner miron!: log_Stat_NonRegisteredVisitor
       },
       { // RULE 2146 (2146): Visitor is silent by keyboard
         name:  'rule2146',
@@ -1934,7 +1950,8 @@ function getRuleList_Receptionist() {
                 ],
         fanOut: [ { dest: 'activateWM', mironName: 'isNoInput',                   type: 'wm',             weight: 1 },   // activate wm!: isNoInput 
                   { dest: 'goal',       mironName: 'request_NextQuestion',        type: 'internalSpeech', weight: 1 },   // do inner miron!: request_NextQuestion 
-                  { dest: 'goal',       mironName: 'log_VisitorIsSilentByButton', type: 'internal',       weight: 1 } ], // do inner miron!: log_VisitorIsSilentByButton
+                  { dest: 'goal',       mironName: 'log_VisitorIsSilentByButton', type: 'internal',       weight: 1 },   // do inner miron!: log_VisitorIsSilentByButton 
+                  { dest: 'goal',       mironName: 'log_Stat_Silence',            type: 'internal',       weight: 1 } ], // do inner miron!: log_Stat_Silence
       },
       { // RULE 2150 (2150): Wait for visitor to answer by button
         name:  'rule2150',
@@ -2085,7 +2102,8 @@ function getRuleList_Receptionist() {
                 ],
         fanOut: [ { dest: 'goal',    mironName: 'setMironSlot{mironType:"speech",mironName:"inform_NoOtherContact"}', type: 'internal',       weight: 1 },   // do inner miron!: setMironSlot{mironType:"speech",mironName:"inform_NoOtherContact"} 
                   { dest: 'goal',    mironName: 'say_Something',                                                      type: 'internalSpeech', weight: 1 },   // do inner miron!: say_Something 
-                  { dest: 'resetWM', mironName: 'isContactNotInList',                                                 type: 'wm',             weight: 1 } ], // reset wm!: isContactNotInList
+                  { dest: 'resetWM', mironName: 'isContactNotInList',                                                 type: 'wm',             weight: 1 },   // reset wm!: isContactNotInList 
+                  { dest: 'goal',    mironName: 'log_Stat_NonRegisteredVisitor',                                      type: 'internal',       weight: 1 } ], // do inner miron!: log_Stat_NonRegisteredVisitor
       },
       { // RULE 2221 (2221): Say my contact is not in the list
         name:  'rule2221',
@@ -3824,7 +3842,8 @@ function getRuleList_Receptionist() {
                     { src: 'intention',   mironName: 'request_NextQuestion', type: 'internalSpeech', weight: 0.25 } ], // is inner miron recognized?: request_NextQuestion
                 ],
         fanOut: [ { dest: 'inhibitWM', mironName: 'isVisitorUnderstood',      type: 'wm',       weight: 1 },   // inhibit wm!: isVisitorUnderstood 
-                  { dest: 'goal',      mironName: 'log_CaseMissingYesNoInVx', type: 'internal', weight: 1 } ], // do inner miron!: log_CaseMissingYesNoInVx
+                  { dest: 'goal',      mironName: 'log_CaseMissingYesNoInVx', type: 'internal', weight: 1 },   // do inner miron!: log_CaseMissingYesNoInVx 
+                  { dest: 'goal',      mironName: 'log_Stat_NotUnderstood',   type: 'internal', weight: 1 } ], // do inner miron!: log_Stat_NotUnderstood
       },
       { // RULE 3624 (3624): Security Timer
         name:  'rule3624',
@@ -3939,13 +3958,15 @@ function getRuleList_Receptionist() {
                     { src: 'actionDone',   mironName: 'wait_Timeout{timeout:1,id:"outOfProximity"}', type: 'internal', weight: 0.5 } ], // is inner miron done?: wait_Timeout{timeout:1,id:"outOfProximity"}
                 ],
         fanOut: [ { dest: 'inhibitWM', mironName: 'isSomethingInFrontOfMe', type: 'wm',       weight: 1 },   // inhibit wm!: isSomethingInFrontOfMe 
-                  { dest: 'goal',      mironName: 'log_NoPresenceDetected', type: 'internal', weight: 1 } ], // do inner miron!: log_NoPresenceDetected
+                  { dest: 'goal',      mironName: 'log_NoPresenceDetected', type: 'internal', weight: 1 },   // do inner miron!: log_NoPresenceDetected 
+                  { dest: 'goal',      mironName: 'log_Stat_WentAway',      type: 'internal', weight: 1 } ], // do inner miron!: log_Stat_WentAway
       },
       { // RULE 4436 (4436): Nothing Detected by Proximity Sensor
         name:  'rule4436',
         index: 4436,
         fanIn:  [
-                  [ { src: 'intention', mironName: 'nobody_Detected', type: 'vision', weight: 1 } ], // is outer miron recognized?: nobody_Detected 
+                  [ { src: 'intention',    mironName: 'nobody_Detected', type: 'vision', weight: 0.5 },   // is outer miron recognized?: nobody_Detected 
+                    { src: 'previousRule', mironName: 'rule3825',        type: 'rule',   weight: 0.5 } ], // is previous rule active?: rule3825
                 ],
         fanOut: [ { dest: 'goal', mironName: 'wait_Timeout{timeout:1,id:"outOfProximity"}', type: 'internal', weight: 1 } ], // do inner miron!: wait_Timeout{timeout:1,id:"outOfProximity"} 
       },
@@ -4505,6 +4526,43 @@ function getRuleList_Receptionist() {
                     { src: 'activatedWM', mironName: 'isContactNotInList',  type: 'wm',             weight: 0.3333333333333333 } ], // is wm activated?: isContactNotInList
                 ],
         fanOut: [ { dest: 'goal', mironName: 'request_EndDialog', type: 'internalSpeech', weight: 1 } ], // do inner miron!: request_EndDialog 
+      },
+      { // RULE 4595 (4595): 
+        name:  'rule4595',
+        index: 4595,
+        fanIn:  [
+                  [ { src: 'previousRule', mironName: 'rule305', type: 'rule', weight: 1 } ], // is previous rule active?: rule305 
+                ],
+        fanOut: [ { dest: 'goal', mironName: 'log_Stat_Visitor', type: 'internal', weight: 1 } ], // do inner miron!: log_Stat_Visitor 
+      },
+      { // RULE 5136 (5136): FaceId unreliable
+        name:  'rule5136',
+        index: 5136,
+        fanIn:  [
+                  [ { src: 'previousRule', mironName: 'rule1721', type: 'rule', weight: 0.5 },   // is previous rule active?: rule1721 
+                    { src: 'activatedWM',  mironName: 'skipGDPR', type: 'wm',   weight: 0.5 } ], // is wm activated?: skipGDPR
+                ],
+        fanOut: [ { dest: 'goal', mironName: 'log_Stat_NewVisitor',    type: 'internal', weight: 1 },   // do inner miron!: log_Stat_NewVisitor 
+                  { dest: 'goal', mironName: 'log_Stat_DeniedConsent', type: 'internal', weight: 1 } ], // do inner miron!: log_Stat_DeniedConsent
+      },
+      { // RULE 5176 (5176): noName visitor
+        name:  'rule5176',
+        index: 5176,
+        fanIn:  [
+                  [ { src: 'filledSlot',   mironName: 'noNameVLastNameFound', type: 'slot', weight: 0.5 },   // is active?: noNameVLastNameFound 
+                    { src: 'previousRule', mironName: 'rule1721',             type: 'rule', weight: 0.5 } ], // is previous rule active?: rule1721
+                ],
+        fanOut: [ { dest: 'goal', mironName: 'log_Stat_NewVisitor',    type: 'internal', weight: 1 },   // do inner miron!: log_Stat_NewVisitor 
+                  { dest: 'goal', mironName: 'log_Stat_DeniedConsent', type: 'internal', weight: 1 } ], // do inner miron!: log_Stat_DeniedConsent
+      },
+      { // RULE 5180 (5180): Known visitor
+        name:  'rule5180',
+        index: 5180,
+        fanIn:  [
+                  [ { src: 'previousRule', mironName: 'rule1721',                type: 'rule', weight: 0.5 },   // is previous rule active?: rule1721 
+                    { src: 'filledSlot',   mironName: 'interlocutorConsentFlag', type: 'slot', weight: 0.5 } ], // is active?: interlocutorConsentFlag
+                ],
+        fanOut: [ { dest: 'goal', mironName: 'log_Stat_KnownVisitor', type: 'internal', weight: 1 } ], // do inner miron!: log_Stat_KnownVisitor 
       },
     ];
   } 

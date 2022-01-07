@@ -6,7 +6,12 @@ function IntegratorDSL_includeList() {
 }
 function IntegratorDSL_getDSL( g ) {
   let diagram = (g.diagram? g.diagram: g.nodePalette);
-  
+
+  const cm = g.contextMenu;
+  cm.add( menuDSL, 'fileTypeMenu' );
+
+  const fileTypeContextMenu = cm.getMenu( 'fileTypeMenu' );
+ 
   //-----------------------
   // Event Listener
   //-----------------------
@@ -96,7 +101,7 @@ function IntegratorDSL_getDSL( g ) {
       const uncheckedColor = nodeData.buttons[0].color;
       diagram.model.setDataProperty( nodeData, "color", uncheckedColor );
       diagram.model.setDataProperty( nodeData.buttons[0], "color", partColor );
-      const groupList = diagram.findNodesByExample({ text: nodeData.label, isGroup: true });
+      const groupList = diagram.findNodesByExample({ label: nodeData.label, isGroup: true });
       if( groupList ) {
         const it = groupList.iterator;
         while( it.next() ) {
@@ -169,7 +174,7 @@ function IntegratorDSL_getDSL( g ) {
   const dsl = {
     templateNodeList: [
       { category: 'Integrator_Operator',        template: dsl_Component, param: { portId: '',        fromLinkable: false, toLinkable: false, hasTag: false,  hasType: true,  editableType: false, type: '@fileTypeName', hasValue: false, hasUnit: false,  figure: 'SquareUShape',    hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: true, canAddOutput: true, } },
-      { category: 'Integrator_Code',            template: dsl_Component, param: { portId: '',        fromLinkable: false, toLinkable: false, hasTag: false,  hasType: true,  editableType: false, type: '@fileTypeName', hasValue: true,  hasUnit: false,  figure: 'Rectangle',       hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: true,      typeMenu: fileTypeMenuTemplate, canAddInput: true, canAddOutput: true, } },
+      { category: 'Integrator_Code',            template: dsl_Component, param: { portId: '',        fromLinkable: false, toLinkable: false, hasTag: false,  hasType: true,  editableType: false, type: '@fileTypeName', hasValue: true,  hasUnit: false,  figure: 'Rectangle',       hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: true,      typeMenu: fileTypeContextMenu, canAddInput: true, canAddOutput: true, } },
       { category: 'Integrator_Merge',           template: dsl_Component, param: { portId: '',        fromLinkable: false, toLinkable: false, hasTag: false,  hasType: false, editableType: false,                        hasValue: false, hasUnit: false,  figure: 'Rectangle',       hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false,            canAddInput: true, canAddOutput: false, resizable: false, editable: false, maxSize: new go.Size(10, NaN),  } },
       { category: 'Integrator_Library',         template: dsl_Component, param: { portId: '',        fromLinkable: false, toLinkable: false, hasTag: false,  hasType: true,  editableType: false, type: '@fileTypeName', hasValue: false, hasUnit: false,  figure: 'Rectangle',       hasInputs: false, hasOutputs: false, hasFunctionButtons: false, hasProperties: false,  } },
       { category: 'Property_GraphInfo',         template: dsl_Component, param: { portId: '',        fromLinkable: false, toLinkable: false, hasTag: false,  hasType: false, editableType: false,                        hasValue: true,  hasUnit: false,  figure: 'File',            hasInputs: false, hasOutputs: false, hasFunctionButtons: false, hasProperties: true,  canAddProperties: false} },
@@ -177,7 +182,7 @@ function IntegratorDSL_getDSL( g ) {
       { category: 'Integrator_Button',          template: dsl_Component, param: { portId: '',        fromLinkable: false, toLinkable: false, hasTag: false,  hasType: false, editableType: false,                        hasValue: true,  hasUnit: false,  figure: 'Rectangle',       hasInputs: false, hasOutputs: false, hasFunctionButtons: true,  hasProperties: true,  canAddProperties: false,  fromLinkable: true,  toLinkable: false, fromSpot: go.Spot.Center, toSpot:go.Spot.Center, buttonMinSize: new go.Size(70, 20), textAlign: 'left', } },
       { category: 'Integrator_FeatureOnOff',    template: dsl_Component, param: { portId: 'Feature', fromLinkable: true,  toLinkable: true,  hasTag: false,  hasType: false, editableType: false,                        hasValue: false, hasUnit: false,  figure: 'Rectangle',       hasInputs: false, hasOutputs: false, hasFunctionButtons: true,  hasProperties: false, buttonInternalCallback: featureOnOff, hasCheckBoxes: true, hasProperties: false, labelStroke: 'white',     fromSpot: go.Spot.Center, toSpot:go.Spot.Center, buttonStroke: 'white', textAlign: 'left',} },
       { category: 'Integrator_Feature',         template: dsl_Component, param: { portId: 'Feature', fromLinkable: true,  toLinkable: true,  hasTag: false,  hasType: false, editableType: false,                        hasValue: false, hasUnit: false,  figure: 'Rectangle',       hasInputs: false, hasOutputs: false, hasFunctionButtons: false, hasProperties: false, labelStroke: 'white',     fromSpot: go.Spot.Right, toSpot:go.Spot.Left, buttonStroke: 'white', textAlign: 'left',} },
-      { category: 'Integrator_File',            template: dsl_BasicNode, param: { portId: 'File',    fromLinkable: true,  toLinkable: true,  hasTag: false,  hasType: true,  editableType: false, type: '@fileTypeName', hasValue: false, hasUnit: false,  figure: 'File',            minSize: new go.Size(150,40), textAlign: 'center',                  labelStroke: 'black', typeMenu: fileTypeMenuTemplate,  } },
+      { category: 'Integrator_File',            template: dsl_BasicNode, param: { portId: 'File',    fromLinkable: true,  toLinkable: true,  hasTag: false,  hasType: true,  editableType: false, type: '@fileTypeName', hasValue: false, hasUnit: false,  figure: 'File',            minSize: new go.Size(150,40), textAlign: 'center',                  labelStroke: 'black', typeMenu: fileTypeContextMenu,  } },
     ],
     dataNodeList: [
       {

@@ -14,7 +14,8 @@ const config = {
     "graphDiv": "diagram",
     "paletteDiv": "palette",
     "nodePaletteDiv": "nodePalette",
-    "linePaletteDiv": "linkPalette"
+    "groupPaletteDiv": "groupPalette",
+    "linkPaletteDiv": "linkPalette"
   },
   "graph": {
     "isDoubleClickCreateNodeEnabled": true,
@@ -31,6 +32,6 @@ const config = {
     "maxHistoryLength": 30
   },
   "server": {
-    "ip": "192.168.1.29"
+    "ip": "192.168.1.21"
   }
 };

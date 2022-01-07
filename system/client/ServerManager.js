@@ -207,7 +207,8 @@ function saveNodeContent( nodeData, onSaved ) {
     const e = m.e.getEditor( config.htmlDiv.graphDiv );
     if( e ) {
       const source = nodeData.fileContent;
-      e.setNodeDataField( nodeData.key, 'fileContent', source );
+      //e.setNodeDataField( nodeData.key, 'fileContent', source );
+      setNodeDataField( e, nodeData.key, 'fileContent', source );
     }
     if( onSaved ) {
       onSaved();

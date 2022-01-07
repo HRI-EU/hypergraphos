@@ -105,8 +105,7 @@ class Graph {
 																												// Go to new view 
 																												this.diagram.zoomToFit(); }},
 						{ separator: '-' },
-						{ label: 'Show View 1',				if: (o)=> false,
-																					do: (o)=> { if( o.event.shift ) {
+						{ label: 'Show View 1',				do: (o)=> { if( o.event.shiftKey ) {
 																												this.viewBookmark[1] = this.getCurrentView();
 																											} else if( this.viewBookmark[1] != undefined ) {
 																												// Store last view in ViewLast
@@ -114,7 +113,7 @@ class Graph {
 																												// Go to new view
 																												this.setCurrentView( this.viewBookmark[1] );
 																											} }},
-						{ label: 'Show View 2',				do: (o)=> { if( o.event.shift ) {
+						{ label: 'Show View 2',				do: (o)=> { if( o.event.shiftKey ) {
 																												this.viewBookmark[2] = this.getCurrentView();
 																											} else if( this.viewBookmark[2] != undefined ) {
 																												// Store last view in ViewLast
@@ -122,7 +121,7 @@ class Graph {
 																												// Go to new view
 																												this.setCurrentView( this.viewBookmark[2] );
 																											} }},
-						{ label: 'Show View 3',				do: (o)=> { if( o.event.shift ) {
+						{ label: 'Show View 3',				do: (o)=> { if( o.event.shiftKey ) {
 																												this.viewBookmark[3] = this.getCurrentView();
 																											} else if( this.viewBookmark[3] != undefined ) {
 																												// Store last view in ViewLast
@@ -130,7 +129,7 @@ class Graph {
 																												// Go to new view
 																												this.setCurrentView( this.viewBookmark[3] );
 																											} }},
-						{ label: 'Show View 4',				do: (o)=> { if( o.event.shift ) {
+						{ label: 'Show View 4',				do: (o)=> { if( o.event.shiftKey ) {
 																												this.viewBookmark[4] = this.getCurrentView();
 																											} else if( this.viewBookmark[4] != undefined ) {
 																												// Store last view in ViewLast
@@ -174,7 +173,7 @@ class Graph {
 					{ label: 'Navigate',		layout: 'vertical', subMenu: [
 						{ label: 'Go To Parent Graph',	if: (o)=> !this.isRootGraph,
 																						do: (o)=> { if( !this.isRootGraph) this.em.call.onShowParentGraph(); } },
-						{ label: 'Back To Parevious Graph',	if: (o)=> !this.isHistoryEmpty,
+						{ label: 'Back To Previous Graph',	if: (o)=> !this.isHistoryEmpty,
 																						do: (o)=> { if( !this.isHistoryEmpty ) this.em.call.onShowPreviousGraph(); } },
 						{ label: 'Go To Root Graph',		if: (o)=> !this.isRootGraph,
 																						do: (o)=> this.em.call.onShowRootGraph() },
@@ -400,7 +399,7 @@ class Graph {
 	setGraphPath( path ) {
 		this.graphPath = path;
 	}
-	getGraphPath( path ) {
+	getGraphPath() {
 		return( this.graphPath );
 	}
 	setAllowDeleteKey( isDeleteEnabled ) {
@@ -602,7 +601,8 @@ class Graph {
 				const fieldList = Object.keys( dataNode );
 				for( const field of fieldList ) {
 					const value = dataNode[field];
-					this.setNodeDataField( oKey, field, value );
+					//this.setNodeDataField( oKey, field, value );
+					setNodeDataField( this, oKey, field, value );
 				}
 			}
 		}

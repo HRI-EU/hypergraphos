@@ -10,6 +10,41 @@ Date: 10.07.2020
 =============================================================================
 */
 
+function getNodeData( g, key, isCopy ) {
+  let result = g.getNodeData( key, isCopy );
+  if( result.isLink ) {
+    const fileURL = result.fileURL;
+    const [ url, refKey ] = fileURL.split( '#' );
+    if( url && refKey ) {
+      const currentGraphURL = g.getGraphPath(); // TODO: rename this function with URL
+      if( url == currentGraphURL ) {
+        result = g.getNodeData( refKey, isCopy );
+      } else {
+        // ask server
+      }
+    }
+  }
+  return( result );
+}
+function setNodeDataField( g, key, field, value ) {
+  let result = g.getNodeData( key );
+  if( result.isLink && ( field == 'fileContent' ) ) {
+    const fileURL = result.fileURL;
+    const [ url, refKey ] = fileURL.split( '#' );
+    if( url && refKey ) {
+      if( url == currentGraphURL ) {
+        g.setNodeDataField( refKey, field, value );
+      } else {
+        // ask server
+      }
+    } else {
+      g.setNodeDataField( key, field, value );
+    }
+  } else {
+    g.setNodeDataField( key, field, value );
+  }
+}
+
 class EditorBase extends EditorChangeManager {
   constructor() {
     super( 10 ); // Saving timeout: 10 seconds
@@ -113,7 +148,8 @@ class GraphEditor extends EditorBase {
       },
       onLoadGraph: ( nodeData )=> {
         // Get a copy of the node data
-        const newNodeData = this.editor.getNodeData( nodeData.key, true );
+        //const newNodeData = this.editor.getNodeData( nodeData.key, true );
+        const newNodeData = getNodeData( this.editor, nodeData.key, true );
         // Give a new url in case fileURL is empty
         this._verifyFileURL( newNodeData );
         // Navigate to node
@@ -121,7 +157,8 @@ class GraphEditor extends EditorBase {
       },
       onLoadFile: ( nodeData, x, y )=> {
         // Get a copy of the node data
-        const newNodeData = this.editor.getNodeData( nodeData.key, true );
+        //const newNodeData = this.editor.getNodeData( nodeData.key, true );
+        const newNodeData = getNodeData( this.editor, nodeData.key, true );
         // Give a new url in case fileURL is empty
         this._verifyFileURL( newNodeData );
         // Open node window
@@ -353,13 +390,14 @@ class GraphEditor extends EditorBase {
     }
   }
   _verifyFileURL( nodeData ) {
-    if( nodeData.isDir || nodeData.isFile ) {
+    if( !nodeData.isLink && ( nodeData.isDir || nodeData.isFile ) ) {
       if( ( nodeData.fileURL != undefined ) && ( nodeData.fileURL == '' ) ) {
         const ext = getExtByFileType( nodeData.fileType );
         const url = getNewFileServerURL( ext );
         nodeData.fileURL = url;
         // NOTE: the setNodeDataField trigger the editorChange event
-        this.editor.setNodeDataField( nodeData.key, 'fileURL', url );
+        //this.editor.setNodeDataField( nodeData.key, 'fileURL', url );
+        setNodeDataField( this.editor, nodeData.key, 'fileURL', url );
       }
     }
   }

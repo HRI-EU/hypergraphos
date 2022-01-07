@@ -17,9 +17,9 @@ const config = {
   // Client Configuration Info
   client: {
     host: {
-      name: 'Anto01',
+      name: 'NoName',
       fileServerURL: '/fileServer',
-      statusURL: '/fileServer/status.json',
+      statusURL: '/fileServer/NoName_status.json',
     },
     remoteHost: {},
     htmlDiv: {
@@ -87,7 +87,8 @@ config.host['hostname'] = os.hostname();
 config.server.webSocketURL = `ws://${config.server.webServerName}`;
 
 // User Configuration
-if( config.host.hostname == 'Antonellos-Mac-mini.local' ) {
+if( ( config.host.hostname == 'Antonellos-Mini' ) ||
+    ( config.host.hostname == 'Antonellos-Mac-mini.local' ) ) {
   config.server.dataRoot = '../../../../../../Dropbox/DevAll/MDDToolsDataRoot';
   config.server.tempRoot = '../../../../../../Dropbox/DevAll/MDDToolsTempRoot';
   config.client.host.name = 'Antonello';

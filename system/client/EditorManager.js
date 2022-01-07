@@ -74,7 +74,8 @@ class EditorManager extends EditorChangeManager {
     if( nodeData ) {
       e.updateSystemNode( nodeData );
       // Get a copy of the node data
-      const newNodeData = e.getNodeData( nodeData.key, true );
+      //const newNodeData = e.getNodeData( nodeData.key, true );
+      const newNodeData = getNodeData( e, nodeData.key, true );
       // Open window
       this.openWindowFromNodeData( newNodeData );
     }
@@ -85,7 +86,8 @@ class EditorManager extends EditorChangeManager {
     if( nodeData ) {
       e.updateSystemNode( nodeData );
       // Get a copy of the node data
-      const newNodeData = e.getNodeData( nodeData.key, true );
+      //const newNodeData = e.getNodeData( nodeData.key, true );
+      const newNodeData = getNodeData( e, nodeData.key, true );
       // Open window
       this.openWindowFromNodeData( newNodeData );
     }
@@ -254,7 +256,8 @@ class EditorManager extends EditorChangeManager {
       const owlKyeList = Object.keys( owl[graphURL] );
       for( const key of owlKyeList ) {
         // Ger window related info
-        const nodeData = e.getNodeData( key );
+        //const nodeData = e.getNodeData( key );
+        const nodeData = getNodeData( e, key );
         const wId = m.e._getDOMUniqueId( nodeData );
         const we = document.getElementById( wId );
         if( we ) {
@@ -438,7 +441,8 @@ class EditorManager extends EditorChangeManager {
         const keyList = Object.keys( owl[url] );
         // Load opened window for this graph
         for( const key of keyList ) {
-          const nodeData = e.getNodeData( key );
+          //const nodeData = e.getNodeData( key );
+          const nodeData = getNodeData( e, key );
           if( nodeData ) {
             const position = owl[url][key];
             if( nodeData ) {
