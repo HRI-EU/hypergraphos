@@ -12,6 +12,28 @@ Date: 10.07.2020
 
 // Frankonello graphURL "fileURL": "/fileServer/00/01.json"
 /*
+  INTERESTING REFERENCES
+  - Visual Programming Environment on a general purpose language:
+    https://visualprogramming.net/
+    https://nodeforum.org/about/organization/
+    https://derivative.ca/feature/application-building
+  - Bret Victor: smartest computer science guy promoting realitme responsive programming
+    making programming visual and with immediate feedback
+    http://worrydream.com
+  - ProseMirror: Another very nice HTML/JavaScript editor
+    https://prosemirror.net/
+  - FileSystem Access from the browser (likd VSC in the browser)
+    https://web.dev/file-system-access/
+  - RethinkDB: a new database system very responsive (it could be the one
+    that stores nodes and graphs in a single db)
+    https://rethinkdb.com/
+  - MatQuill: javascript library to write math in the browser (the best I found)
+    http://docs.mathquill.com/en/latest/
+    https://github.com/desmosinc/mathquill
+*/
+
+/*
+  TODO
   - We could use JSS to create CSS directly in JavaScript
     https://cssinjs.org/repl/
   - Use JSClipper for operation on shapes (union, intersection, difference, ...)
