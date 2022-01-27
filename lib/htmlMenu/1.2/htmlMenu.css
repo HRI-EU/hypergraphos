@@ -95,4 +95,32 @@ Date: 10.07.2020
   cursor: pointer;
   padding-inline-start: 16px;
 }
+.mdd-menu-svgIcon:hover {
+  background-color: rgba(0, 0, 0, 0.2)
+}
+.mdd-menu-svgIcon {
+  fill: rgb(212, 68, 68);
+  width: 20px;
+  height: 20px;
+  margin: 2px;
+}
+#action-undo {
+  background-image: url(../../open-iconic-master/svg/action-undo.svg) no-repeat center;
+}
+#action-redo {
+  background-image: url(../../open-iconic-master/svg/action-redo.svg) no-repeat center;
+
+}
+/*#action-undo {
+  mask: url(../../open-iconic-master/svg/action-undo.svg) no-repeat center;
+  -webkit-mask: url(../../open-iconic-master/svg/action-undo.svg) no-repeat center;
+  mask-size: 100%;
+  -webkit-mask-size: 100%;
+}
+#action-redo {
+  mask: url(../../open-iconic-master/svg/action-redo.svg);
+  -webkit-mask: url(../../open-iconic-master/svg/action-redo.svg) no-repeat center;
+  mask-size: 100%;
+  -webkit-mask-size: 100%;
+}*/
 
