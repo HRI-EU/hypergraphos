@@ -329,6 +329,7 @@ class Graph {
 			let dsl = null;
 			for( const dslName of dslNameList ) {
 				if( window[dslName+'_getDSL'] ) {
+					// Call the DSLName_getDSL() function to get the dsl data
 					dsl = window[dslName+'_getDSL']( this );
 					this._storeDSLNodeFieldNameList( dsl );
 					if( allDSL ) { // If we already loaded one dsl, then we add
@@ -340,6 +341,12 @@ class Graph {
 			}
 			if( allDSL ) {
 				this.setDSL( allDSL );
+				for( const dslName of dslNameList ) {
+					if( window[dslName+'_setupDSL'] ) {
+						// Call the DSLName_setupDSL() function to configure nodes/links/groups
+						window[dslName+'_setupDSL']( this );
+					}
+				}
 			}
 			if( onLoaded ) {
 				onLoaded();
