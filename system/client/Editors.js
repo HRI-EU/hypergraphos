@@ -12,7 +12,7 @@ Date: 10.07.2020
 
 function getNodeData( g, key, isCopy ) {
   let result = g.getNodeData( key, isCopy );
-  if( result.isLink ) {
+  if( result && result.isLink ) {
     const fileURL = result.fileURL;
     const [ url, refKey ] = fileURL.split( '#' );
     if( url && refKey ) {

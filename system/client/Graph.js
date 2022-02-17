@@ -1597,10 +1597,22 @@ class Graph {
 			let templateData = null;
 			let systemFieldList = null;
 			if( node instanceof go.Node ) {
-				templateData = this.diagram.toolManager.clickCreatingTool.archetypeNodeData;
+				if( this.nodePalette ) {
+					const it = this.nodePalette.selection;
+					const node = it.first();
+					if( node ) {
+						templateData = node.data;
+					}
+				}
 				systemFieldList = this.systemNodeDataFieldList;
 			} else if( node instanceof go.Link ) {
-				templateData = this.diagram.toolManager.linkingTool.archetypeLinkData;
+				if( this.linkPalette ) {
+					const it = this.linkPalette.selection;
+					const link = it.first();
+					if( link ) {
+						templateData = link.data;
+					}
+				}
 				systemFieldList = this.systemLinkDataFieldList;
 			}
 			if( templateData ) {
