@@ -30,6 +30,8 @@ Date: 10.07.2020
   - MatQuill: javascript library to write math in the browser (the best I found)
     http://docs.mathquill.com/en/latest/
     https://github.com/desmosinc/mathquill
+  - Web Browser FileSystem API:
+    https://developer.mozilla.org/en-US/docs/Web/API/File_System_Access_API
 */
 
 /*
