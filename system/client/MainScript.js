@@ -36,6 +36,7 @@ Date: 10.07.2020
 
 /*
   TODO
+  - URL params: use in ServerManager.js the URLSearchParams class to get url params
   - We could use JSS to create CSS directly in JavaScript
     https://cssinjs.org/repl/
   - Use JSClipper for operation on shapes (union, intersection, difference, ...)

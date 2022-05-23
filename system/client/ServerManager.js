@@ -30,7 +30,10 @@ const codeFileType = {
   "PNG":            {color: "lavender",       fileType: "image/png",                      ext: "png"},
 };
 
+/* TODO: Use this way to get url params */
+//const urlParams = new URLSearchParams( window.location.search );
 let urlParams = { name: 'DefaultUser' };
+
 function loadSystem() {
   // Decode url parameter (remove firs char '?')
   const urlStrParams = decodeURI( document.location.search.substring( 1 ) );

@@ -89,8 +89,8 @@ config.server.webSocketURL = `ws://${config.server.webServerName}`;
 // User Configuration
 if( ( config.host.hostname == 'Antonellos-Mini' ) ||
     ( config.host.hostname == 'Antonellos-Mac-mini.local' ) ) {
-  config.server.dataRoot = '../../../../../../Dropbox/DevAll/MDDToolsDataRoot';
-  config.server.tempRoot = '../../../../../../Dropbox/DevAll/MDDToolsTempRoot';
+  config.server.dataRoot = '/Users/antonelloceravola/Dropbox/DevAll/MDDToolsDataRoot';
+  config.server.tempRoot = '/Users/antonelloceravola/Dropbox/DevAll/MDDToolsTempRoot';
   config.client.host.name = 'Antonello';
   config.client.graph.colorSkema = 'dark';
   config.client.host.statusURL = '/fileServer/Antonello_status.json';

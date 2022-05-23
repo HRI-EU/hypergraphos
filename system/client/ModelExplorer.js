@@ -285,12 +285,12 @@ class ModelExplorer {
   }
   getLoopObjListFromArray( nodeList, SubClass ) {
     let result = [];
-	if( nodeList ) {
-	  for( const nodeItem  of nodeList ) {
-		let resultItem = ( SubClass? new SubClass( this, nodeItem ): nodeItem );
-		result.push( resultItem );
-	  }
-	}
+    if( nodeList ) {
+      for( const nodeItem  of nodeList ) {
+      let resultItem = ( SubClass? new SubClass( this, nodeItem ): nodeItem );
+      result.push( resultItem );
+      }
+    }
     return( result );
   }
   //------------------------

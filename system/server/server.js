@@ -89,19 +89,19 @@ class ExecuteScript {
   serve( request, response ) {
     const execScript = (scriptFilePathName)=> {
       exec( scriptFilePathName, (error, stdout, stderr)=> {
-		if( stdout ) {
-		  response.writeHead( 200, {'Content-Type': 'text/text' } );
-		  response.end( stdout );	
-        } else if( error ) {
-          response.writeHead( 400, {'Content-Type': 'text/text' } );
-          response.end( 'Error: '+error.message );
-        }
+        if( stdout ) {
+          response.writeHead( 200, {'Content-Type': 'text/text' } );
+          response.end( stdout );	
+            } else if( error ) {
+              response.writeHead( 400, {'Content-Type': 'text/text' } );
+              response.end( 'Error: '+error.message );
+            }
       });
     };
     let path = recomputeURL( request.url, this.virtualPath, this.realPath );
-	path = this.realPath+path;
-	console.log( 'Received path-------------:'+path );
-	console.log( '**********config path:'+ config.server.scriptPath );
+    path = this.realPath+path;
+    console.log( 'Received path-------------:'+path );
+    console.log( '**********config path:'+ config.server.scriptPath );
     var params = '';
     const paramIdx = path.indexOf( '?' );
     if( paramIdx != -1 ) {
@@ -110,7 +110,7 @@ class ExecuteScript {
     }
     const pathInfo = getPathInfo( path );
     console.log( JSON.stringify( pathInfo ));
-	console.log( '---- path:'+path );
+	  console.log( '---- path:'+path );
     const scriptExt = ( process.platform == 'win32'? '.bat': '.sh' );
     // In case the path do not exist -> create it
     if( fs.existsSync( path+scriptExt ) ) {
