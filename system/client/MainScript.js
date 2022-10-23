@@ -263,6 +263,13 @@ function setViewFromLabel( nodeLabel, deltaX, deltaY ) {
   }
   return( isNodeFound );
 }
+function selectNodesByKey( keyList ) {
+  // Get main Graph
+  const mg = getMainGraph();
+  for( const key of keyList ) {
+    mg.selectNodeByKey( key );
+  }
+}
 function getNodeDataOutPortContent( nodeData, outPort ) {
   let result = '';
   // Get output component from fan-out
