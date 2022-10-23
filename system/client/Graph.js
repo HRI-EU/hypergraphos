@@ -449,12 +449,18 @@ class Graph {
 		return( viewInfo );
 	}
 	setCurrentView( viewInfo ) {
-		// Restore first scale (must be first)
-		this.diagram.scale = viewInfo.scale;
-		// Restore position
-		this.diagram.position = new go.Point( viewInfo.position.x, viewInfo.position.y );
-		// Restore grid
-		this.diagram.grid.visible = viewInfo.isGridOn;
+		if( viewInfo.scale ) {
+			// Restore first scale (must be first)
+			this.diagram.scale = viewInfo.scale;
+		}
+		if( viewInfo.position ) {
+			// Restore position
+			this.diagram.position = new go.Point( viewInfo.position.x, viewInfo.position.y );
+		}
+		if( typeof( viewInfo.isGridOn ) == 'boolean' ) {
+			// Restore grid
+			this.diagram.grid.visible = viewInfo.isGridOn;
+		}
 	}
 	getGraphImage() {
 		let image = null;
