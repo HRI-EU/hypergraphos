@@ -137,7 +137,7 @@ class Graph {
 																												// Go to new view
 																												this.setCurrentView( this.viewBookmark[4] );
 																											} }},
-						{ label: 'Show Last View',		do: (o)=> { if( this.viewBookmark[0] != undefined ) {
+						{ label: 'Show Prev View',		do: (o)=> { if( this.viewBookmark[0] != undefined ) {
 																												this.setCurrentView( this.viewBookmark[0] );
 																											} }},
 					]},
