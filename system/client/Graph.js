@@ -620,8 +620,46 @@ class Graph {
 			}
 		}
 	}
-	selectNodeByKey(key) {
+	selectNodeByKey( key ) {
 		this.diagram.select( this.diagram.findPartForKey( key ) );
+	}
+	selectAllNodeByKey( keyList ) {
+		let nodeList = [];
+		for( const key of keyList ) {
+			nodeList.push( this.diagram.findPartForKey( key ) );
+		}
+		this.diagram.selectCollection( nodeList );
+	}
+	doEditCut() {
+		const cmd = this.diagram.commandHandler;
+		if( cmd.canCutSelection() ) {
+			cmd.cutSelection();
+		}
+	}
+	doEditCopy() {
+		const cmd = this.diagram.commandHandler;
+		if( cmd.canCopySelection() ) {
+			cmd.copySelection();
+		}
+	}
+	doEditPaste( location ) {
+		const cmd = this.diagram.commandHandler;
+		if( cmd.canPasteSelection() ) {
+			cmd.pasteSelection( location );
+		}
+	}
+	doEditDuplicate( location ) {
+		const cmd = this.diagram.commandHandler;
+		if( cmd.canCopySelection() ) {
+			cmd.copySelection();
+			cmd.pasteSelection( location );
+		}
+	}
+	doEditDelete() {
+		const cmd = this.diagram.commandHandler;
+		if( cmd.canDeleteSelection() ) {
+			cmd.deleteSelection();
+		}
 	}
 	centerGraphToNodeKey( key ) {
 		const node = this.diagram.findNodeForKey( key );
