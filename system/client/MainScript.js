@@ -250,25 +250,25 @@ function setViewFromLabel( nodeLabel, deltaX, deltaY ) {
   const nd = mg.findAllNodeData( 'label', nodeLabel );
   const isNodeFound = ( nd && nd[0] );
   if( isNodeFound ) {
-    //console.log( nd[0] );
-    const locInfo = nd[0].location.split( ' ' );
-    const x = parseInt( locInfo[0] )+deltaX;
-    const y = parseInt( locInfo[1] )+deltaY;
-    // Define view info to jump to
-    const viewInfo = {
-      position: { x, y }
-    };
-    // Jump to slide
-    mg.setCurrentView( viewInfo );
+    mg.setViewFromNode( nd[0], deltaX, deltaY );
+  }
+  return( isNodeFound );
+}
+function setViewFromKey( nodeKey, deltaX, deltaY ) {
+  // Get main Graph
+  const mg = getMainGraph();
+  // Find node
+  const node = mg.diagram.model.findNodeDataForKey( nodeKey );
+  const isNodeFound = ( node != null );
+  if( isNodeFound ) {
+    mg.setViewFromNode( node, deltaX, deltaY );
   }
   return( isNodeFound );
 }
 function selectNodesByKey( keyList ) {
   // Get main Graph
   const mg = getMainGraph();
-  for( const key of keyList ) {
-    mg.selectNodeByKey( key );
-  }
+  mg.selectAllNodeByKey( keyList );
 }
 function getNodeDataOutPortContent( nodeData, outPort ) {
   let result = '';

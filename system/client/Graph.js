@@ -462,6 +462,22 @@ class Graph {
 			this.diagram.grid.visible = viewInfo.isGridOn;
 		}
 	}
+	setViewFromNode( node, deltaX, deltaY ) {
+		let result = false;
+		if( node ) {
+			const locInfo = node.location.split( ' ' );
+			const x = parseInt( locInfo[0] )+deltaX;
+			const y = parseInt( locInfo[1] )+deltaY;
+			// Define view info to jump to
+			const viewInfo = {
+				position: { x, y }
+			};
+			// Jump to slide
+			this.setCurrentView( viewInfo );
+			result = true;
+		}
+		return( result );
+	}
 	getGraphImage() {
 		let image = null;
 		if( this.diagram ) {
