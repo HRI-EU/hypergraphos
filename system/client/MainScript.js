@@ -240,6 +240,29 @@ function setStatus( setFunction ) {
 function getStatus( property ) {
   return( m.status[property] );
 }
+function getMainGraph() {
+  return( m.e.getEditor( config.htmlDiv.graphDiv ) );
+}
+function setViewFromLabel( nodeLabel, deltaX, deltaY ) {
+  // Get main Graph
+  const mg = getMainGraph();
+  // Find node
+  const nd = mg.findAllNodeData( 'label', nodeLabel );
+  const isNodeFound = ( nd && nd[0] );
+  if( isNodeFound ) {
+    //console.log( nd[0] );
+    const locInfo = nd[0].location.split( ' ' );
+    const x = parseInt( locInfo[0] )+deltaX;
+    const y = parseInt( locInfo[1] )+deltaY;
+    // Define view info to jump to
+    const viewInfo = {
+      position: { x, y }
+    };
+    // Jump to slide
+    mg.setCurrentView( viewInfo );
+  }
+  return( isNodeFound );
+}
 function getNodeDataOutPortContent( nodeData, outPort ) {
   let result = '';
   // Get output component from fan-out
