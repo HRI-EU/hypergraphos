@@ -325,6 +325,3 @@ function saveRemoteFile( remoteServerURL, url, source, onSaveDone ) {
     }
   }
 }
-function debug() {
-  const a = 1;
-}
