@@ -247,10 +247,11 @@ function setViewFromLabel( nodeLabel, deltaX, deltaY ) {
   // Get main Graph
   const mg = getMainGraph();
   // Find node
-  const nodeList = mg.findAllNodeData( 'label', nodeLabel );
-  const isNodeFound = ( nodeList && nodeList[0] );
+  //const nodeList = mg.findAllNodeData( 'label', nodeLabel );
+  const nodeList = mg.diagram.findNodesByExample( { label: nodeLabel } );
+  const isNodeFound = ( nodeList && nodeList.count > 0 );
   if( isNodeFound ) {
-    mg.setViewFromNode( nodeList[0], deltaX, deltaY );
+    mg.setViewFromNode( nodeList.first(), deltaX, deltaY );
   }
   return( isNodeFound );
 }
@@ -258,7 +259,7 @@ function setViewFromKey( nodeKey, deltaX, deltaY ) {
   // Get main Graph
   const mg = getMainGraph();
   // Find node
-  const node = mg.diagram.model.findNodeDataForKey( nodeKey );
+  const node = mg.diagram.findNodeForKey( nodeKey );
   const isNodeFound = ( node != null );
   if( isNodeFound ) {
     mg.setViewFromNode( node, deltaX, deltaY );
