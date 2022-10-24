@@ -247,10 +247,10 @@ function setViewFromLabel( nodeLabel, deltaX, deltaY ) {
   // Get main Graph
   const mg = getMainGraph();
   // Find node
-  const nd = mg.findAllNodeData( 'label', nodeLabel );
-  const isNodeFound = ( nd && nd[0] );
+  const nodeList = mg.findAllNodeData( 'label', nodeLabel );
+  const isNodeFound = ( nodeList && nodeList[0] );
   if( isNodeFound ) {
-    mg.setViewFromNode( nd[0], deltaX, deltaY );
+    mg.setViewFromNode( nodeList[0], deltaX, deltaY );
   }
   return( isNodeFound );
 }

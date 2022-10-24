@@ -465,9 +465,8 @@ class Graph {
 	setViewFromNode( node, deltaX, deltaY ) {
 		let result = false;
 		if( node ) {
-			const locInfo = node.location.split( ' ' );
-			const x = parseInt( locInfo[0] )+deltaX;
-			const y = parseInt( locInfo[1] )+deltaY;
+			const x = node.position.x+deltaX;
+			const y = node.position.y+deltaY;
 			// Define view info to jump to
 			const viewInfo = {
 				position: { x, y }
@@ -875,10 +874,21 @@ class Graph {
 				if( data.isSystem && data.fileContent ) {
 					delete data.fileContent;
 				}
+				this.diagram.startTransaction( 'Set Data Propery' );
 				this.diagram.model.setDataProperty( data, field, value );
+				this.diagram.commitTransaction( 'Set Data Propery' );
 			}
 			this.em.call.onGraphChanged();
 		}
+	}
+	moveSelectionRel( dx, dy ) {
+		// TODO: this function do not work the second time it is called
+		this.diagram.startTransaction( 'Move Selection Relative' );
+		for( const node of this.diagram.selection.toArray() ) {
+			const p = node.position;
+			node.moveTo( p.x+dx, p.y+dy );
+		}
+		this.diagram.commitTransaction( 'Move Selection Relative' );
 	}
 	updateSystemNode( data ) {
 		// NOTE: system node can not have a fileURL field
