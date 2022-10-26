@@ -145,7 +145,7 @@ html{
   width: 100%;
   height: 100%;
   background: #1d1f21;
-  overflow: auto;
+  overflow: hidden;
 }
 .webViewer {
   width: 100%;
