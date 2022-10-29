@@ -28,6 +28,9 @@ class Graph {
 		this.isReadOnly = false;
 		// Path of the loaded graph
 		this.graphPath = '';
+		// Last modification time of the currently loaded graph 
+		// from the server (file modification time)
+		this.mtime = null;
 
 		// Store fullPaletteId for hide/show palette
 		if( param.fullPaletteId ) {
@@ -272,6 +275,12 @@ class Graph {
 	}
 	registerEventList( callbackList ) {
 		this.em.registerList( callbackList );
+	}
+	getSourceLastModificationTime() {
+		return( this.mtime );
+	}
+	setSourceLastModificationTime( mtime ) {
+		this.mtime = mtime;
 	}
 	setDSL( dsl ) {
 		this._setNodeDSL( dsl );
@@ -883,12 +892,14 @@ class Graph {
 	}
 	moveSelectionRel( dx, dy ) {
 		// TODO: this function do not work the second time it is called
-		this.diagram.startTransaction( 'Move Selection Relative' );
-		for( const node of this.diagram.selection.toArray() ) {
-			const p = node.position;
-			node.moveTo( p.x+dx, p.y+dy );
+		if( this.diagram.selection ) {
+			this.diagram.startTransaction( 'Move Selection Relative' );
+			for( const node of this.diagram.selection.toArray() ) {
+				const p = node.position;
+				node.moveTo( p.x+dx, p.y+dy );
+			}
+			this.diagram.commitTransaction( 'Move Selection Relative' );
 		}
-		this.diagram.commitTransaction( 'Move Selection Relative' );
 	}
 	updateSystemNode( data ) {
 		// NOTE: system node can not have a fileURL field

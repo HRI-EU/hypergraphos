@@ -224,19 +224,44 @@ function saveNodeContent( nodeData, onSaved ) {
     }
   }
 }
+function getNodeInfoFromServer( nodeData, onInfo ) {
+  const onLoaded = ( source ) => {
+    //console.log( `File status for "${nodeData.fileURL}": ${source}` );
+    const fileInfo = JSON.parse( source );
+    onInfo( fileInfo );
+  };
+  // Get only info from nodes with fileURL
+  if( nodeData.fileURL != undefined ) {
+    let url = nodeData.fileURL;
+    if( url.startsWith( config.host.fileServerURL ) ) {
+      url = url.replace( config.host.fileServerURL, config.host.fileStatusURL );
+      // Load content from file system
+      _openFile( url, onLoaded, true ); // noTimeStamp = true
+    }
+  } else {
+    // Empty info
+    onInfo( {} );
+  }
+}
 function executeScript( scriptName, onExecuted ) {
   _openFile( '/executeScript/'+scriptName, onExecuted );
 }
 //------------------------
 // Private Functions
 //------------------------
-function _openFile( url, onLoad ) {
+function _openFile( url, onLoad, noTimeStamp ) {
+  // Decide if attach a timestamp or not (timestamp used to avoid chache)
+  noTimeStamp = ( noTimeStamp != undefined? noTimeStamp: false );
+
   let source = '';
   // read text from URL location
   const request = new XMLHttpRequest();
   // Avoid server cache with timestamp
-  const timestamp = new Date().getTime();
-  request.open( 'GET', url+'?_='+timestamp, true );
+  if( !noTimeStamp ) {
+    const timestamp = new Date().getTime();
+    url = url+'?_='+timestamp;
+  }
+  request.open( 'GET', url, true );
   //request.setRequestHeader('Cache-Control', 'no-cache');
   request.onerror = (e)=> {
     alert( 'Server not responding' );

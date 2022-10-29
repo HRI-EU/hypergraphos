@@ -261,7 +261,11 @@ class GraphEditor extends EditorBase {
     this.setPauseChange( true );
     this.isContentJustLoaded = true;
 
-    const onDone = ()=> {
+    const onDone = ( fileInfo )=> {
+      // Store fileInfo last modification date if available
+      if( fileInfo.mtime ) {
+        this.editor.setSourceLastModificationTime( fileInfo.mtime );
+      }
       // Reopen windows in case we have some for this url
       setStatus( (s)=> s.currentGraphNode = nodeData );
       m.e.reopenGraphSession( nodeData.fileURL );
@@ -299,15 +303,19 @@ class GraphEditor extends EditorBase {
         onLoaded();
       }
     };
+    const onLoadDone = ()=> {
+      // Get last modification time of loaded graph from server
+      getNodeInfoFromServer( nodeData, onDone );
+    };
     const onNewGraphLoaded = (source)=> {
       const history = getStatus( 'graphHistory' );
       if( !source && ( history.length <= 0 ) ) {
         nodeData = config.graph.rootGraphNodeData;
-        this.loadEditorContent( nodeData, onDone );
+        this.loadEditorContent( nodeData, onLoadDone );
         // NOTE: return to abort current loading
         return;
       }
-      this.editor.setEditorSource( source, onDone );
+      this.editor.setEditorSource( source, onLoadDone );
       this.editor.setGraphPath( nodeData.fileURL );
     };
     const onSaveCloseDone = ()=> {
@@ -363,7 +371,11 @@ class GraphEditor extends EditorBase {
         onSaved();
       }
     };
-    const onEditorSaved = ()=> {
+    const onEditorSaved = ( fileInfo )=> {
+      // Store fileInfo last modification date if available
+      if( fileInfo.mtime ) {
+        this.editor.setSourceLastModificationTime( fileInfo.mtime );
+      }
       // Second, get the image of the graph
       const image = this.editor.getGraphImage();
       if( image && nodeDataTemp ) {
@@ -377,16 +389,48 @@ class GraphEditor extends EditorBase {
         }
       }
     };
-    if( this.nodeData ) {
+    const onGraphSaved = ()=> {
+      // First get destination file info from the server
+      // to avoid to overwrite a newer version of the graph
+      getNodeInfoFromServer( this.nodeData, onEditorSaved );
+    };
+    const onInfo = ( fileInfo )=> {
+      // Get current graph last modificatio time at loading of the graph
+      const graphDate = this.editor.getSourceLastModificationTime();
+      // If we get info
+      if( fileInfo.mtime && graphDate ) {
+        const currGraphDate = new Date( graphDate ).getTime();
+        // Last modification time of last version of file from server
+        const fInfoDate = new Date( fileInfo.mtime ).getTime();
+        // If time from server is newer than current time ==> inform we may override
+        if( fInfoDate > currGraphDate ) {
+          const isSaveAnyway = confirm( 'Graph in the server is newer than current graph. Do you want to overwrite?' );
+          if( !isSaveAnyway ) {
+            // We clear save status
+            this.clearStatus();
+            // We call the callback anyway, but...
+            if( onSaved ) {
+              onSaved();
+            }
+            // We do not save, we stop the action
+            return;
+          }
+        }
+      }
       // First, save the json graph
       nodeDataTemp = this.editor._getNodeDataCopy( this.nodeData );
       const source = this.editor.getEditorSource();
       nodeDataTemp.fileContent = source;
       console.log( 'Graph call saveNodeContent()')
-      saveNodeContent( nodeDataTemp, onEditorSaved );
+      saveNodeContent( nodeDataTemp, onGraphSaved );
+    };
+    if( this.nodeData ) {
+      // First get destination file info from the server
+      // to avoid to overwrite a newer version of the graph
+      getNodeInfoFromServer( this.nodeData, onInfo );
     } else {
       console.log( 'Graph NOT call saveNodeContent(), nodeData is NULL' );
-      onEditorSaved();
+      onGraphSaved();
     }
   }
   _verifyFileURL( nodeData ) {

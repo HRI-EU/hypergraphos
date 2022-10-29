@@ -19,6 +19,7 @@ const config = {
     host: {
       name: 'NoName',
       fileServerURL: '/fileServer',
+      fileStatusURL: '/fileStatus',
       statusURL: '/fileServer/NoName_status.json',
     },
     remoteHost: {},
