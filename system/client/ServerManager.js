@@ -26,6 +26,7 @@ const codeFileType = {
   "Binary":         {color: "white",          fileType: "application/octet-stream",       ext: "bin"},
   "Rich Text EJS":  {color: "salmon",         fileType: "application/editorjs",           ext: "json"},
   "Rich Text SBE":  {color: "cadetblue",      fileType: "application/smartblock",         ext: "html"},
+  "Rich Text Q":    {color: "aquamarine",     fileType: "application/quill",              ext: "json"},
   "JPEG":           {color: "lavender",       fileType: "image/jpeg",                     ext: "jpeg"},
   "PNG":            {color: "lavender",       fileType: "image/png",                      ext: "png"},
 };
