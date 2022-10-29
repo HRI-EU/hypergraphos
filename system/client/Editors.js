@@ -491,6 +491,9 @@ class HTMLBlockEditor extends EditorBase {
                                           config.htmlDiv.mainDiv,
                                           this.storeWindowPosition.bind(this),
                                           position );
+    // Make editor with document scrollable
+    document.getElementById(this.editorDivId).style['overflow'] = 'scroll';
+    // Instantiate Editor
     this.editor = new BlockCodeEditor( this.editorDivId );
 
     // Pause tracking editor changes
@@ -571,6 +574,9 @@ class HTMLSmartBlockEditor extends EditorBase {
                                           config.htmlDiv.mainDiv,
                                           this.storeWindowPosition.bind(this),
                                           position );
+    // Make editor with document scrollable
+    document.getElementById(this.editorDivId).style['overflow'] = 'scroll';
+    // Instantiate Editor
     this.editor = new SmartBlockEditor( this.editorDivId );
 
     // Pause tracking editor changes

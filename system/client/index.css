@@ -76,8 +76,11 @@ html{
 #groupPalette {
 	background: rgb(158, 157, 157);
 	top: 0%;
-	width: 99%; 
+	width: 96%; 
 	height: 20%;
+  border-width: medium;
+  border: #908e8e;
+  border-style: solid;
 }
 #linkPalette {
 	background: rgb(158, 157, 157);
