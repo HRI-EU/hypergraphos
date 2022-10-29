@@ -657,29 +657,34 @@ class HTMLQuillEditor extends EditorBase {
                                           position );
 
     // Instantiate Editor
-    const fonts = ['sofia', 'slabo', 'roboto', 'inconsolata', 'ubuntu'];
-    const Font = Quill.import( 'formats/font' );
-    Font.whitelist = fonts;
-    Quill.register( Font, true );
+    // const fonts = ['sofia', 'slabo', 'roboto', 'inconsolata', 'ubuntu'];
+    // const Font = Quill.import( 'formats/font' );
+    // Font.whitelist = fonts;
+    // Quill.register( Font, true );
 
-    function loadFonts() {
-      window.WebFontConfig = {
-        google: { families: [ 'Inconsolata::latin', 'Ubuntu+Mono::latin', 'Slabo+27px::latin', 'Roboto+Slab::latin' ] }
-      };
-      (function() {
-        var wf = document.createElement('script');
-        wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
-        wf.type = 'text/javascript';
-        wf.async = 'true';
-        var s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(wf, s);
-      })();
-    }
+    // function loadFonts() {
+    //   window.WebFontConfig = {
+    //     google: { families: [ 'Inconsolata::latin', 'Ubuntu+Mono::latin', 'Slabo+27px::latin', 'Roboto+Slab::latin' ] }
+    //   };
+    //   (function() {
+    //     var wf = document.createElement('script');
+    //     wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+    //     wf.type = 'text/javascript';
+    //     wf.async = 'true';
+    //     var s = document.getElementsByTagName('script')[0];
+    //     s.parentNode.insertBefore(wf, s);
+    //   })();
+    // }
+    // add an array of values
+    const fontFamilyArr = ["Roboto Condensed", "Times New Roman", "Calibri", "Calibri Light", "Sans-Serif"];
+    let fonts = Quill.import("attributors/style/font");
+    fonts.whitelist = fontFamilyArr;
+    Quill.register(fonts, true);
     
     const modules = {
         'syntax': true,
         'toolbar': [
-          [{ 'font': fonts }, { 'size': [] }],
+          [{ 'font': fontFamilyArr }, { 'size': [] }],
           [ 'bold', 'italic', 'underline', 'strike' ],
           [{ 'color': [] }, { 'background': [] }],
           [{ 'script': 'super' }, { 'script': 'sub' }],
@@ -697,11 +702,11 @@ class HTMLQuillEditor extends EditorBase {
     // Make editor with document scrollable and set color
     const editorDiv = document.getElementById( this.editorDivId );
     if( editorDiv ){
-      editorDiv.style['overflow'] = 'scroll';
+      // editorDiv.style['overflow'] = 'scroll';
       editorDiv.style['background-color'] = 'antiquewhite';
       editorDiv.parentElement.style['background']='lightgray';
     }
-    loadFonts();
+    //loadFonts();
 
     // Pause tracking editor changes
     this.setPauseChange( true );

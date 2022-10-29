@@ -60,6 +60,58 @@ Date: 10.07.2020
   <!--End-->
 
   <!--Quill Editor Includes-->
+  <!-- Style -->
+  <style>
+    /* @font-face {
+      font-family: 'Sofia Pro';
+      src: url('//cdn.quilljs.com/fonts/sofia-pro.eot');
+      src: url('//cdn.quilljs.com/fonts/sofia-pro.eot?#iefix')
+          format('embedded-opentype'),
+        url('//cdn.quilljs.com/fonts/sofia-pro.woff2') format('woff2'),
+        url('//cdn.quilljs.com/fonts/sofia-pro.woff') format('woff'),
+        url('//cdn.quilljs.com/fonts/sofia-pro.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'Sofia Pro';
+      font-weight: bold;
+      src: url('//cdn.quilljs.com/fonts/sofia-pro-bold.eot');
+      src: url('//cdn.quilljs.com/fonts/sofia-pro-bold.eot?#iefix')
+          format('embedded-opentype'),
+        url('//cdn.quilljs.com/fonts/sofia-pro-bold.woff2') format('woff2'),
+        url('//cdn.quilljs.com/fonts/sofia-pro-bold.woff') format('woff'),
+        url('//cdn.quilljs.com/fonts/sofia-pro-bold.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'Sailec Light';
+      src: url('//cdn.quilljs.com/fonts/sailec-light.eot');
+      src: url('//cdn.quilljs.com/fonts/sailec-light.eot?#iefix')
+          format('embedded-opentype'),
+        url('//cdn.quilljs.com/fonts/sailec-light.woff2') format('woff2'),
+        url('//cdn.quilljs.com/fonts/sailec-light.woff') format('woff'),
+        url('//cdn.quilljs.com/fonts/sailec-light.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'Sailec Light';
+      font-weight: bold;
+      src: url('//cdn.quilljs.com/fonts/sailec-bold.eot');
+      src: url('//cdn.quilljs.com/fonts/sailec-bold.eot?#iefix')
+          format('embedded-opentype'),
+        url('//cdn.quilljs.com/fonts/sailec-bold.woff2') format('woff2'),
+        url('//cdn.quilljs.com/fonts/sailec-bold.woff') format('woff'),
+        url('//cdn.quilljs.com/fonts/sailec-bold.ttf') format('truetype');
+    } */
+    /*for font-family*/
+
+    .ql-snow .ql-picker.ql-font .ql-picker-label[data-value]::before,
+    .ql-snow .ql-picker.ql-font .ql-picker-item[data-value]::before {
+      content: attr(data-value) !important;
+    }
+
+    .ql-snow .ql-picker.ql-font {
+      width: 150px !important;
+      white-space: nowrap;
+    }
+  </style>
   <script src="/library/KaTeX/0.7.1/katex.min.js"></script>
   <script src="/library/highlight.js/9.12.0/highlight.min.js"></script>
   <link href="/library/quill/1.3.6/quill.snow.css" rel="stylesheet">
