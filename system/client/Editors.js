@@ -655,9 +655,29 @@ class HTMLQuillEditor extends EditorBase {
                                           config.htmlDiv.mainDiv,
                                           this.storeWindowPosition.bind(this),
                                           position );
+
     // Instantiate Editor
+    const fonts = ['sofia', 'slabo', 'roboto', 'inconsolata', 'ubuntu'];
+    const Font = Quill.import( 'formats/font' );
+    Font.whitelist = fonts;
+    Quill.register( Font, true );
+    
+    const modules = {
+        'syntax': true,
+        'toolbar': [
+          [{ 'font': fonts }, { 'size': [] }],
+          [ 'bold', 'italic', 'underline', 'strike' ],
+          [{ 'color': [] }, { 'background': [] }],
+          [{ 'script': 'super' }, { 'script': 'sub' }],
+          [{ 'header': '1' }, { 'header': '2' }, 'blockquote', 'code-block' ],
+          [{ 'list': 'ordered' }, { 'list': 'bullet'}, { 'indent': '-1' }, { 'indent': '+1' }],
+          [ {'direction': 'rtl'}, { 'align': [] }],
+          [ 'link', 'image', 'video', 'formula' ],
+          [ 'clean' ]
+        ],
+      };
     this.editor = new Quill( `#${this.editorDivId}`, {
-      modules: { }, //toolbar: '#toolbar' },
+      modules, //: { }, //toolbar: '#toolbar' },
       theme: 'snow',
     });
     // Make editor with document scrollable and set color
