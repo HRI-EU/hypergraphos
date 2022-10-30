@@ -27,6 +27,7 @@ const codeFileType = {
   "Rich Text EJS":  {color: "salmon",         fileType: "application/editorjs",           ext: "json"},
   "Rich Text SBE":  {color: "cadetblue",      fileType: "application/smartblock",         ext: "html"},
   "Rich Text Q":    {color: "aquamarine",     fileType: "application/quill",              ext: "json"},
+  "Rich Text Ex":   {color: "aquamarine",     fileType: "application/explore",            ext: "html"},
   "JPEG":           {color: "lavender",       fileType: "image/jpeg",                     ext: "jpeg"},
   "PNG":            {color: "lavender",       fileType: "image/png",                      ext: "png"},
 };

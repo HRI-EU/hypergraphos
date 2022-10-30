@@ -848,6 +848,125 @@ class HTMLQuillEditor extends EditorBase {
     }
   }
 }
+class HTMLExploreEditor extends EditorBase {
+  constructor( id, nodeData, position ) {
+    super();
+    this.isJustStarted = true;
+    this.id = id;
+    this.fileType = '';
+    this.editorDiv = null;
+    
+    this.fileType = ( nodeData.fileType? nodeData.fileType: 'application/explore' );
+    this.editorDivId = m.e.newDOMWindow( id, this.title, 
+                                          config.htmlDiv.mainDiv,
+                                          this.storeWindowPosition.bind(this),
+                                          position );
+
+    // Make editor with document scrollable and set color
+    const editorDiv = document.getElementById( this.editorDivId );
+    // Instantiate the editor
+    this.editor = ExploreEditor.create( editorDiv, {
+      width: 'auto',
+      height: 'auto',
+      mode: 'inline',
+      //lang: ExploreEditor_LANG['en'],
+      //plugins: plugins,
+      katex: katex,
+      toolbarItem: [
+        ['undo', 'redo'],
+        ['font', 'fontSize', 'formatBlock'],
+        ['bold', 'underline', 'italic', 'strike', 'subscript', 'superscript', 'fontColor', 'hiliteColor'],
+        ['outdent', 'indent', 'align', 'list', 'horizontalRule'],
+        ['link', 'table', 'image', 'audio', 'video'],
+        //'/', // Line break
+        ['lineHeight', 'paragraphStyle', 'textStyle'],
+        ['showBlocks', 'codeView'],
+        ['math'],
+        ['preview', 'print', 'fullScreen'],
+        ['save', 'template'],
+        ['removeFormat']
+      ],
+      templates: [
+        {
+        name: 'Template-1',
+        html: '<p>HTML source1</p>'
+        },
+        {
+        name: 'Template-2',
+        html: '<p>HTML source2</p>'
+        },
+      ],
+      charCounter: true,
+    });
+
+    if( editorDiv ){
+      // editorDiv.style['overflow'] = 'scroll';
+      editorDiv.style['background-color'] = 'white';
+      editorDiv.parentElement.style['background']='white';
+    }
+
+    // Pause tracking editor changes
+    this.setPauseChange( true );
+
+    // Saving events
+    this.editor.onChange = ()=> {
+      if( !this.isJustStarted ) {
+        this.editorHasChanged();
+      }
+      this.isJustStarted = false;
+    };
+
+    //this.onNeedSave( ... ) // Show star in title...
+    this.onDoSave( ()=> {
+      console.log( 'Saving text editor: '+this.nodeData.key );
+      this.saveEditorContent();
+    });
+
+    this.setPauseChange( false );
+    this.loadEditorContent( nodeData );
+  }
+  loadEditorContent( nodeData ) {
+    // Pause tracking editor changes
+    this.setPauseChange( true );
+
+    this.fileType = ( nodeData.fileType? nodeData.fileType: 'application/explore' );
+    // Update current nodeData
+    this.nodeData = nodeData;
+    // Set window title
+    this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${this.fileType}]`;
+    this.setTitle( this.title );
+    // Update pin
+    if( nodeData.fileURL ) {
+      m.e.showWindowPin( this.id );
+    }
+    // Set editor content
+    loadNodeContent( nodeData, (source)=> {
+      this.editor.setContents( source );
+      this.setPauseChange( false );
+    });
+    // Register on changes of the node if available
+    if( nodeData.onNodeChanged ) {
+      nodeData.onNodeChanged( this.loadEditorContent.bind(this) );
+    }
+  }
+  saveEditorContent( onSaved ) {
+    const onEditorSaved = ()=> {
+      this.editorSaved();
+      if( onSaved ) {
+        onSaved();
+      }
+    };
+    if( this.nodeData ) {
+      const source = this.editor.getContents();
+      const e = m.e.getEditor( config.htmlDiv.graphDiv );
+      const nodeDataTemp = e._getNodeDataCopy( this.nodeData );
+      nodeDataTemp.fileContent = source;
+      saveNodeContent( nodeDataTemp, onEditorSaved );
+    } else {
+      onEditorSaved();
+    }
+  }
+}
 class ImageEditor extends EditorBase {
   constructor( id, nodeData, position ) {
     super();
