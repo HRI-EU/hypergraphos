@@ -834,6 +834,7 @@ class HTMLExploreEditor extends EditorBase {
     this.editor = ExploreEditor.create( editorDiv, {
       width: 'auto',
       height: 'auto',
+      mode: 'inline',
       //lang: ExploreEditor_LANG['en'],
       //plugins: plugins,
       katex: katex,
@@ -843,7 +844,7 @@ class HTMLExploreEditor extends EditorBase {
         ['bold', 'underline', 'italic', 'strike', 'subscript', 'superscript', 'fontColor', 'hiliteColor'],
         ['outdent', 'indent', 'align', 'list', 'horizontalRule'],
         ['link', 'table', 'image', 'audio', 'video'],
-        '/', // Line break
+        //'/', // Line break
         ['lineHeight', 'paragraphStyle', 'textStyle'],
         ['showBlocks', 'codeView'],
         ['math'],
