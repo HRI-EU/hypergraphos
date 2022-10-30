@@ -51,6 +51,9 @@ class EditorBase extends EditorChangeManager {
     this.nodeData = null;
     this.title = '';
     this.parentGraph = null;
+    // Last modification time of the currently loaded graph 
+		// from the server (file modification time)
+		this.mtime = null;
   }
   setTitle( title ) {
     title = ( title != undefined? title: this.title );
@@ -86,6 +89,50 @@ class EditorBase extends EditorChangeManager {
     status = ( status == undefined? true: status );
     const element = document.querySelector( `#${this.id} .editorDivBSave` );
     element.style.visibility = ( status? 'visible': 'hidden' );
+  }
+  getSourceLastModificationTime() {
+		return( this.mtime );
+	}
+	setSourceLastModificationTime( mtime ) {
+		this.mtime = mtime;
+	}
+  doLoadLastUpdateTime( nodeData, onTimeUpdated ) {
+    const onFileInfo = ( fileInfo )=> {
+      // Store fileInfo last modification date if available
+      if( fileInfo.mtime ) {
+        this.setSourceLastModificationTime( fileInfo.mtime );
+      }
+      if( onTimeUpdated ) {
+        onTimeUpdated( nodeData );
+      }
+    };
+    // Get last modification time of loaded node (file) from server
+    getNodeInfoFromServer( nodeData, onFileInfo );
+  }
+  doCheckLastUpdateTime( nodeData, onTimeChecked ) {
+    const onFileInfo = ( fileInfo )=> {
+      // Parameter of callback
+      let doAbortSave = false;
+      // Get current graph last modificatio time at loading of the graph
+      const editorMTime = this.getSourceLastModificationTime();
+      // If we get info
+      if( fileInfo.mtime && editorMTime ) {
+        const editorTime = new Date( editorMTime ).getTime();
+        // Last modification time of last version of file from server
+        const fInfoTime = new Date( fileInfo.mtime ).getTime();
+        // If time from server is newer than current time ==> inform we may override
+        if( fInfoTime > editorTime ) {
+          const label = nodeData.label;
+          const isDoOverwrite = confirm( `${label} in the server is newer than current graph. Do you want to overwrite?` );
+          doAbortSave = !isDoOverwrite;
+        }
+      }
+      if( onTimeChecked ) {
+        onTimeChecked( doAbortSave );
+      }
+    };
+    // Get last modification time of loaded node (file) from server
+    getNodeInfoFromServer( nodeData, onFileInfo );
   }
 }
 class GraphEditor extends EditorBase {
@@ -261,11 +308,7 @@ class GraphEditor extends EditorBase {
     this.setPauseChange( true );
     this.isContentJustLoaded = true;
 
-    const onDone = ( fileInfo )=> {
-      // Store fileInfo last modification date if available
-      if( fileInfo.mtime ) {
-        this.editor.setSourceLastModificationTime( fileInfo.mtime );
-      }
+    const onDone = ()=> {
       // Reopen windows in case we have some for this url
       setStatus( (s)=> s.currentGraphNode = nodeData );
       m.e.reopenGraphSession( nodeData.fileURL );
@@ -303,19 +346,25 @@ class GraphEditor extends EditorBase {
         onLoaded();
       }
     };
-    const onLoadDone = ()=> {
-      // Get last modification time of loaded graph from server
-      getNodeInfoFromServer( nodeData, onDone );
-    };
     const onNewGraphLoaded = (source)=> {
       const history = getStatus( 'graphHistory' );
       if( !source && ( history.length <= 0 ) ) {
         nodeData = config.graph.rootGraphNodeData;
-        this.loadEditorContent( nodeData, onLoadDone );
+        // Once the source is set, we call the function
+        // that load from the server the last update time 
+        // of the loaded file. After that the onDone is called
+        this.loadEditorContent( nodeData, ()=> { 
+          this.doLoadLastUpdateTime( nodeData, onDone );
+        });
         // NOTE: return to abort current loading
         return;
       }
-      this.editor.setEditorSource( source, onLoadDone );
+      // Once the source is set, we call the function
+      // that load from the server the last update time 
+      // of the loaded file. After that the onDone is called
+      this.editor.setEditorSource( source, ()=> { 
+        this.doLoadLastUpdateTime( nodeData, onDone );
+      });
       this.editor.setGraphPath( nodeData.fileURL );
     };
     const onSaveCloseDone = ()=> {
@@ -372,10 +421,6 @@ class GraphEditor extends EditorBase {
       }
     };
     const onEditorSaved = ( fileInfo )=> {
-      // Store fileInfo last modification date if available
-      if( fileInfo.mtime ) {
-        this.editor.setSourceLastModificationTime( fileInfo.mtime );
-      }
       // Second, get the image of the graph
       const image = this.editor.getGraphImage();
       if( image && nodeDataTemp ) {
@@ -390,44 +435,33 @@ class GraphEditor extends EditorBase {
       }
     };
     const onGraphSaved = ()=> {
-      // First get destination file info from the server
-      // to avoid to overwrite a newer version of the graph
-      getNodeInfoFromServer( this.nodeData, onEditorSaved );
+      // Load last file update time from the server
+      this.doLoadLastUpdateTime( this.nodeData, onEditorSaved )
     };
-    const onInfo = ( fileInfo )=> {
-      // Get current graph last modificatio time at loading of the graph
-      const graphDate = this.editor.getSourceLastModificationTime();
-      // If we get info
-      if( fileInfo.mtime && graphDate ) {
-        const currGraphDate = new Date( graphDate ).getTime();
-        // Last modification time of last version of file from server
-        const fInfoDate = new Date( fileInfo.mtime ).getTime();
-        // If time from server is newer than current time ==> inform we may override
-        if( fInfoDate > currGraphDate ) {
-          const isSaveAnyway = confirm( 'Graph in the server is newer than current graph. Do you want to overwrite?' );
-          if( !isSaveAnyway ) {
-            // We clear save status
-            this.clearStatus();
-            // We call the callback anyway, but...
-            if( onSaved ) {
-              onSaved();
-            }
-            // We do not save, we stop the action
-            return;
-          }
+    const onTimeChecked = ( doAbortSave )=> {
+      // If saving may overwrite a newer version of the file
+      // we may have to abort save (if user choosed to abort
+      // from prompt dialog)
+      if( doAbortSave ) {
+        // We clear save status
+        this.clearStatus();
+        // We call the callback anyway, but...
+        if( onSaved ) {
+          onSaved();
         }
+      } else {
+        // First, save the json graph
+        nodeDataTemp = this.editor._getNodeDataCopy( this.nodeData );
+        const source = this.editor.getEditorSource();
+        nodeDataTemp.fileContent = source;
+        console.log( 'Graph call saveNodeContent()')
+        saveNodeContent( nodeDataTemp, onGraphSaved );
       }
-      // First, save the json graph
-      nodeDataTemp = this.editor._getNodeDataCopy( this.nodeData );
-      const source = this.editor.getEditorSource();
-      nodeDataTemp.fileContent = source;
-      console.log( 'Graph call saveNodeContent()')
-      saveNodeContent( nodeDataTemp, onGraphSaved );
     };
     if( this.nodeData ) {
-      // First get destination file info from the server
+      // First check destination file info from the server
       // to avoid to overwrite a newer version of the graph
-      getNodeInfoFromServer( this.nodeData, onInfo );
+      this.doCheckLastUpdateTime( this.nodeData, onTimeChecked )
     } else {
       console.log( 'Graph NOT call saveNodeContent(), nodeData is NULL' );
       onGraphSaved();

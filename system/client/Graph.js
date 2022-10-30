@@ -28,9 +28,6 @@ class Graph {
 		this.isReadOnly = false;
 		// Path of the loaded graph
 		this.graphPath = '';
-		// Last modification time of the currently loaded graph 
-		// from the server (file modification time)
-		this.mtime = null;
 
 		// Store fullPaletteId for hide/show palette
 		if( param.fullPaletteId ) {
@@ -275,12 +272,6 @@ class Graph {
 	}
 	registerEventList( callbackList ) {
 		this.em.registerList( callbackList );
-	}
-	getSourceLastModificationTime() {
-		return( this.mtime );
-	}
-	setSourceLastModificationTime( mtime ) {
-		this.mtime = mtime;
 	}
 	setDSL( dsl ) {
 		this._setNodeDSL( dsl );
