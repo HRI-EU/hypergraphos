@@ -140,6 +140,7 @@ class GraphEditor extends EditorBase {
     super();
     this.isContentJustLoaded = true;
     this.id = id;
+    this.fileType = 'text/json';
     this.listenerList = {
       'onLoad': [],
     };
@@ -300,7 +301,7 @@ class GraphEditor extends EditorBase {
     }
   }
   loadEditorContent( nodeData, onLoaded ) {
-    if( !nodeData && !nodeData.isDir || ( nodeData.fileType != 'text/json' ) ) {
+    if( !nodeData && !nodeData.isDir || ( nodeData.fileType != this.fileType ) ) {
       return;
     }
 
@@ -461,7 +462,7 @@ class GraphEditor extends EditorBase {
     if( this.nodeData ) {
       // First check destination file info from the server
       // to avoid to overwrite a newer version of the graph
-      this.doCheckLastUpdateTime( this.nodeData, onTimeChecked )
+      this.doCheckLastUpdateTime( this.nodeData, onTimeChecked );
     } else {
       console.log( 'Graph NOT call saveNodeContent(), nodeData is NULL' );
       onGraphSaved();
@@ -518,7 +519,7 @@ class TextEditor extends EditorBase {
     // Pause tracking editor changes
     this.setPauseChange( true );
 
-    this.fileType = ( nodeData.fileType? nodeData.fileType: 'text/text' );
+    this.fileType = ( nodeData.fileType? nodeData.fileType: this.fileType );
     // Update current nodeData
     this.nodeData = nodeData;
     // Set window title
@@ -531,7 +532,10 @@ class TextEditor extends EditorBase {
     // Set editor content
     loadNodeContent( nodeData, (source)=> {
       this.editor.setEditorSource( source );
-      this.setPauseChange( false );
+      this.doLoadLastUpdateTime( nodeData, ()=> {
+        // After loading update time, clear pause change
+        this.setPauseChange( false );
+      });
     });
     // Register on changes of the node if available
     if( nodeData.onNodeChanged ) {
@@ -545,12 +549,26 @@ class TextEditor extends EditorBase {
         onSaved();
       }
     };
+    const onTimeChecked = ( doAbortSave )=> {
+      if( doAbortSave ) {
+        // We clear save status
+        this.clearStatus();
+        // We call the callback anyway, but...
+        if( onSaved ) {
+          onSaved();
+        }
+      } else {
+        const source = this.editor.getEditorSource();
+        const e = m.e.getEditor( config.htmlDiv.graphDiv );
+        const nodeDataTemp = e._getNodeDataCopy( this.nodeData );
+        nodeDataTemp.fileContent = source;
+        saveNodeContent( nodeDataTemp, onEditorSaved );
+      }
+    };
     if( this.nodeData ) {
-      const source = this.editor.getEditorSource();
-      const e = m.e.getEditor( config.htmlDiv.graphDiv );
-      const nodeDataTemp = e._getNodeDataCopy( this.nodeData );
-      nodeDataTemp.fileContent = source;
-      saveNodeContent( nodeDataTemp, onEditorSaved );
+      // First check destination file info from the server
+      // to avoid to overwrite a newer version of the graph
+      this.doCheckLastUpdateTime( this.nodeData, onTimeChecked );
     } else {
       onEditorSaved();
     }
@@ -875,7 +893,8 @@ class HTMLExploreEditor extends EditorBase {
       toolbarItem: [
         ['undo', 'redo'],
         ['font', 'fontSize', 'formatBlock'],
-        ['bold', 'underline', 'italic', 'strike', 'subscript', 'superscript', 'fontColor', 'hiliteColor'],
+        ['bold', 'underline', 'italic', 'strike', 'subscript', 
+         'superscript', 'fontColor', 'hiliteColor'],
         ['outdent', 'indent', 'align', 'list', 'horizontalRule'],
         ['link', 'table', 'image', 'audio', 'video'],
         //'/', // Line break
@@ -929,7 +948,7 @@ class HTMLExploreEditor extends EditorBase {
     // Pause tracking editor changes
     this.setPauseChange( true );
 
-    this.fileType = ( nodeData.fileType? nodeData.fileType: 'application/explore' );
+    this.fileType = ( nodeData.fileType? nodeData.fileType: this.fileType );
     // Update current nodeData
     this.nodeData = nodeData;
     // Set window title
@@ -942,7 +961,10 @@ class HTMLExploreEditor extends EditorBase {
     // Set editor content
     loadNodeContent( nodeData, (source)=> {
       this.editor.setContents( source );
-      this.setPauseChange( false );
+      this.doLoadLastUpdateTime( nodeData, ()=> {
+        // After loading update time, clear pause change
+        this.setPauseChange( false );
+      });
     });
     // Register on changes of the node if available
     if( nodeData.onNodeChanged ) {
@@ -956,12 +978,26 @@ class HTMLExploreEditor extends EditorBase {
         onSaved();
       }
     };
+    const onTimeChecked = ( doAbortSave )=> {
+      if( doAbortSave ) {
+        // We clear save status
+        this.clearStatus();
+        // We call the callback anyway, but...
+        if( onSaved ) {
+          onSaved();
+        }
+      } else {
+        const source = this.editor.getContents();
+        const e = m.e.getEditor( config.htmlDiv.graphDiv );
+        const nodeDataTemp = e._getNodeDataCopy( this.nodeData );
+        nodeDataTemp.fileContent = source;
+        saveNodeContent( nodeDataTemp, onEditorSaved );
+      }
+    };
     if( this.nodeData ) {
-      const source = this.editor.getContents();
-      const e = m.e.getEditor( config.htmlDiv.graphDiv );
-      const nodeDataTemp = e._getNodeDataCopy( this.nodeData );
-      nodeDataTemp.fileContent = source;
-      saveNodeContent( nodeDataTemp, onEditorSaved );
+      // First check destination file info from the server
+      // to avoid to overwrite a newer version of the graph
+      this.doCheckLastUpdateTime( this.nodeData, onTimeChecked );
     } else {
       onEditorSaved();
     }
