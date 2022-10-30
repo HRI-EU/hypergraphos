@@ -6,6 +6,7 @@ const config = {
   "host": {
     "name": "Frank",
     "fileServerURL": "/fileServer",
+    "fileStatusURL": "/fileStatus",
     "statusURL": "/fileServer/Frank_status.json"
   },
   "remoteHost": {
@@ -34,6 +35,6 @@ const config = {
     "maxHistoryLength": 30
   },
   "server": {
-    "ip": "192.168.178.20"
+    "ip": "192.168.56.1"
   }
 };

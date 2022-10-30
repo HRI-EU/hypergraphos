@@ -19,6 +19,7 @@ class EditorManager extends EditorChangeManager {
       { name: 'WebViewer',            fileType: (ft)=> ft == 'application/html',        classRef: WebViewer },
       { name: 'HTMLBlockEditor',      fileType: (ft)=> ft == 'application/editorjs',    classRef: HTMLBlockEditor },
       { name: 'HTMLSmartBlockEditor', fileType: (ft)=> ft == 'application/smartblock',  classRef: HTMLSmartBlockEditor },
+      { name: 'HTMLExploreEditor',    fileType: (ft)=> ft == 'application/explore',     classRef: HTMLExploreEditor },
       { name: 'HTMLQuillEditor',      fileType: (ft)=> ft == 'application/quill',       classRef: HTMLQuillEditor },
       { name: 'TextEditor',           fileType: (ft)=> ft.startsWith( 'text/' ),        classRef: TextEditor },
       { name: 'ImageEditor',          fileType: (ft)=> ft.startsWith( 'image/' ),       classRef: ImageEditor },
