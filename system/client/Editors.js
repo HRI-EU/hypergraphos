@@ -86,7 +86,7 @@ class EditorBase extends EditorChangeManager {
     return( ( nodeData != undefined ) && ( nodeData.key == this.nodeData.key ) );
   }
   onClosing() {
-    console.log( 'Closing the Editor' );
+    //console.log( 'Closing the Editor' );
   }
   showSaveButton( status ) {
     status = ( status == undefined? true: status );
