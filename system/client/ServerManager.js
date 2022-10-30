@@ -11,11 +11,11 @@ Date: 10.07.2020
 */
 
 const codeFileType = {
-  "Javascript":     {color: "orange",         fileType: "text/javascript",                ext: "js"},
+  "JavaScript":     {color: "orange",         fileType: "text/javascript",                ext: "js"},
   "Text":           {color: "yellow",         fileType: "text/text",                      ext: "txt"},
   "JSON":           {color: "orange",         fileType: "text/json",                      ext: "json"},
   "HTML":           {color: "lightsalmon",    fileType: "text/html",                      ext: "html"},
-  "WebPage":        {color: "lightsalmon",    fileType: "application/html",               ext: "html"},
+  "Web Page":       {color: "lightsalmon",    fileType: "application/html",               ext: "html"},
   "CSS":            {color: "peachpuff",      fileType: "text/css",                       ext: "css"},
   "Python":         {color: "firebrick",      fileType: "text/python",                    ext: "py"},
   "C":              {color: "palegreen",      fileType: "text/c_cpp",                     ext: "c"},
@@ -24,12 +24,11 @@ const codeFileType = {
   "H++":            {color: "mediumseagreen", fileType: "text/c_cpp",                     ext: "hpp"},
   "C#":             {color: "seagreen",       fileType: "text/c_cpp",                     ext: "cs"},
   "Binary":         {color: "white",          fileType: "application/octet-stream",       ext: "bin"},
-  "Rich Text EJS":  {color: "salmon",         fileType: "application/editorjs",           ext: "json"},
-  "Rich Text SBE":  {color: "cadetblue",      fileType: "application/smartblock",         ext: "html"},
-  "Rich Text Q":    {color: "aquamarine",     fileType: "application/quill",              ext: "json"},
-  "Rich Text Ex":   {color: "aquamarine",     fileType: "application/explore",            ext: "html"},
+  "Rich Text":      {color: "aquamarine",     fileType: "application/explore",            ext: "html"},
   "JPEG":           {color: "lavender",       fileType: "image/jpeg",                     ext: "jpeg"},
   "PNG":            {color: "lavender",       fileType: "image/png",                      ext: "png"},
+  "GIF":            {color: "lavender",       fileType: "image/gif",                      ext: "gif"},
+  "SVG":            {color: "lavender",       fileType: "image/svg",                      ext: "svg"},
 };
 
 /* TODO: Use this way to get url params */

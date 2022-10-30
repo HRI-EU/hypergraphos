@@ -17,10 +17,7 @@ class EditorManager extends EditorChangeManager {
     this.registeredEditorList = [
       // NOTE: order matter here, since the first matching editor get selected
       { name: 'WebViewer',            fileType: (ft)=> ft == 'application/html',        classRef: WebViewer },
-      { name: 'HTMLBlockEditor',      fileType: (ft)=> ft == 'application/editorjs',    classRef: HTMLBlockEditor },
-      { name: 'HTMLSmartBlockEditor', fileType: (ft)=> ft == 'application/smartblock',  classRef: HTMLSmartBlockEditor },
       { name: 'HTMLExploreEditor',    fileType: (ft)=> ft == 'application/explore',     classRef: HTMLExploreEditor },
-      { name: 'HTMLQuillEditor',      fileType: (ft)=> ft == 'application/quill',       classRef: HTMLQuillEditor },
       { name: 'TextEditor',           fileType: (ft)=> ft.startsWith( 'text/' ),        classRef: TextEditor },
       { name: 'ImageEditor',          fileType: (ft)=> ft.startsWith( 'image/' ),       classRef: ImageEditor },
       { name: 'GraphEditor',          fileType: (ft)=> ft == 'text/json',               classRef: GraphEditor },
@@ -520,6 +517,9 @@ class EditorManager extends EditorChangeManager {
           }
           this.editorHasChanged();
         };
+        // Inform the editor that is going to be closed
+        ei.onClosing();
+        // Inform the editor to save its content
         this.saveEditor( id, onSaveDone );
       } else {
         if( onCloseDone ) {
