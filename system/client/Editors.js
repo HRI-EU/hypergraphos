@@ -536,17 +536,6 @@ class GraphEditor extends EditorBase {
                 script.innerHTML = nodeData.fileContent;
               }
               document.head.append( script );
-              // // Load node content
-              // loadNodeContent( nodeData, (source)=> {
-              //   // If content is not empty => include it
-              //   if( source ) {
-              //     try {
-              //       eval( source );
-              //     } catch( e ) {
-              //       console.log( 'Errors in including code from', nodeData.label );
-              //     }
-              //   }
-              // });
             }
           }
         }
