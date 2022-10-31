@@ -313,6 +313,11 @@ class GraphEditor extends EditorBase {
     this.isContentJustLoaded = true;
 
     const onDone = ()=> {
+      // Include script nodes: JavaScript code created by the user
+      // and executable once we are in the graph containing the script nodes
+      this.processNodeWithIncludeScripts( 'unload' ); // Remove previous scripts
+      this.processNodeWithIncludeScripts( 'load' ); // Load new one
+
       // Reopen windows in case we have some for this url
       setStatus( (s)=> s.currentGraphNode = nodeData );
       m.e.reopenGraphSession( nodeData.fileURL );
@@ -483,6 +488,71 @@ class GraphEditor extends EditorBase {
       }
     }
   }
+  processNodeWithIncludeScripts( action ) {
+    // Load nodes with data like:
+    //
+    // nodeData = {
+    //   ...
+    //   "isFile": true,
+    //   "fileType": "text/javascript",
+    //   "fileContent": "console.log( 'included' )",
+    //   "includeScript": true,
+    //   ...
+    // }
+    // nodeData = {
+    //   ...
+    //   "isFile": true,
+    //   "fileType": "text/javascript",
+    //   "fileURL": "/fileServer/00/05.js",
+    //   "includeScript": true,
+    //   ...
+    // }
+    //
+    // TODO: get navigation in nodes from graph through an API function
+    if( action == 'unload' ) {
+      const nodeScriptList = document.querySelectorAll( '.NodeData_IncludeScript' );
+      for( const nodeScript of nodeScriptList ) {
+        nodeScript.remove();
+      }
+    } else {
+      const it = this.editor.diagram.nodes;
+      it.reset();
+      // Loop over all nodes
+      while ( it.next() ) {
+        // Get node data
+        const nodeData = it.value.data;
+        // If we find a includeScript node
+        if( ( nodeData.fileType == 'text/javascript' ) &&
+            nodeData.isFile && nodeData.includeScript ) {
+          switch( action ) {
+            case 'load': {
+              const script = document.createElement( 'script' );
+              script.type = 'text/javascript';
+              script.className = 'NodeData_IncludeScript';
+              script.addClass
+              if( nodeData.fileURL ) {
+                script.src = nodeData.fileURL;
+              } else if( nodeData.fileContent ) {
+                script.innerHTML = nodeData.fileContent;
+              }
+              document.head.append( script );
+              // // Load node content
+              // loadNodeContent( nodeData, (source)=> {
+              //   // If content is not empty => include it
+              //   if( source ) {
+              //     try {
+              //       eval( source );
+              //     } catch( e ) {
+              //       console.log( 'Errors in including code from', nodeData.label );
+              //     }
+              //   }
+              // });
+            }
+          }
+        }
+      }
+    }
+	}
 }
 class TextEditor extends EditorBase {
   constructor( id, nodeData, position ) {
