@@ -228,7 +228,9 @@ function getNodeInfoFromServer( nodeData, onInfo ) {
   const onLoaded = ( source ) => {
     //console.log( `File status for "${nodeData.fileURL}": ${source}` );
     const fileInfo = JSON.parse( source );
-    onInfo( fileInfo );
+    if( onInfo ) {
+      onInfo( fileInfo );
+    }
   };
   // Get only info from nodes with fileURL
   if( nodeData.fileURL != undefined ) {
@@ -237,10 +239,17 @@ function getNodeInfoFromServer( nodeData, onInfo ) {
       url = url.replace( config.host.fileServerURL, config.host.fileStatusURL );
       // Load content from file system
       _openFile( url, onLoaded, true ); // noTimeStamp = true
+    } else {
+      // Empty info
+      if( onInfo ) {
+        onInfo( {} );
+      }  
     }
   } else {
     // Empty info
-    onInfo( {} );
+    if( onInfo ) {
+      onInfo( {} );
+    }
   }
 }
 function executeScript( scriptName, onExecuted ) {
