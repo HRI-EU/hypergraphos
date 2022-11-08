@@ -589,7 +589,7 @@ class TextEditor extends EditorBase {
     this.setTitle( this.title );
     // Update pin
     if( nodeData.fileURL ) {
-      m.e.showWindowPin( this.id );
+      m.e.showWindowPin( this.id, 'visible' );
     }
     // Set editor content
     loadNodeContent( nodeData, (source)=> {

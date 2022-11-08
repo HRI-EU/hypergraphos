@@ -226,10 +226,16 @@ class EditorManager extends EditorChangeManager {
     status = ( status == undefined? 'visible': status );
     const element = document.querySelector( `#${id} .editorDivBPin` );
     if( element ) {
-      if( status != 'visible' ) {
-        element.innerText='📌';
-      } else {
-        element.style.visibility = status;
+      switch( status ) {
+        case 'pinned':
+          element.innerText='📌';
+          break;
+        case 'unpinned':
+          element.innerText='📎';
+          break;
+        default:
+          element.style.visibility = status;
+          break;
       }
     } else {
       console.log( 'Cant set pin for window: '+ id );
@@ -354,7 +360,7 @@ class EditorManager extends EditorChangeManager {
     const ei = this.getEditorInfo( id );
     const nodeData = ei.nodeData;
     // If not yet pinned window
-    this.pinNodeData( nodeData )
+    this.tooglePinNodeData( nodeData )
     // If succesfully pinned
     if( this.isURLPinned( nodeData.fileURL) ) {
       // In case, remove window from openWindowList
@@ -368,17 +374,30 @@ class EditorManager extends EditorChangeManager {
           }
         }
         // Disable pin button
-        this.showWindowPin( id, 'hidden' );
+        this.showWindowPin( id, 'pinned' );
         this.editorHasChanged();
+      }
+    } else {
+      const owl = getStatus( 'openWindowList' );
+      const parentGraph = ei.getParentGraph();
+      if( parentGraph ) {
+        const url = parentGraph.fileURL;
+        if( !owl[url][nodeData.key] ) {
+          const position = this.getEditorPosition( id );
+          owl[url][nodeData.key] = position;
+          setStatus( (s)=> s.openWindowList = owl );
+          this.showWindowPin( id, 'unpinned' );
+        }
       }
     }
   }
-  pinNodeData( nodeData, isForcePin ) {
+  tooglePinNodeData( nodeData, isForcePin ) {
     isForcePin = ( isForcePin == undefined? false: isForcePin );
     const pw = getStatus( 'pinnedWindow' );
     if( !pw ) {
       pw = {};
     }
+    // Pin the window if forced or requested to pin
     if( !pw[nodeData.fileURL] || isForcePin ) {
       if( nodeData && nodeData.fileURL ) {
         pw[nodeData.fileURL] = {
@@ -393,6 +412,12 @@ class EditorManager extends EditorChangeManager {
         }
       }
       setStatus( (s)=> s.pinnedWindow = pw );
+    } else {
+      // Unpin if already pinned window
+      delete pw[nodeData.fileURL];
+      if( !this.isStatusOnUpdate ) {
+        setStatus( (s)=> s.pinnedWindow = pw );
+      }
     }
   }
   isURLPinned( url ) {
@@ -404,7 +429,7 @@ class EditorManager extends EditorChangeManager {
     const e = this.getEditor( config.htmlDiv.graphDiv );
     const paletteNodeData = e.getPaletteInfo();
     if( paletteNodeData ) {
-      this.pinNodeData( paletteNodeData, true );
+      this.tooglePinNodeData( paletteNodeData, true );
     }
   }
   reopenStartSession() {

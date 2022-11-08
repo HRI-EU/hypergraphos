@@ -868,12 +868,12 @@ class Graph {
 					case '$GraphModel$':
 						this.setJSONModel( value );
 						this._callOnNodeModelChanged();
-						this._callOnNodeGraphSeleciotnChanged();
+						this._callOnNodeGraphSelectionChanged();
 						break;
 					case '$GraphSelection$':
 						this.setJSONSelection( value );
 						this._callOnNodeModelChanged();
-						this._callOnNodeGraphSeleciotnChanged();
+						this._callOnNodeGraphSelectionChanged();
 						break;
 				}
 			} else {
@@ -1202,7 +1202,7 @@ class Graph {
 			}
 			//console.log( 'GoJS say graph is changed' );
 			this._callOnNodeModelChanged();
-			this._callOnNodeGraphSeleciotnChanged();
+			this._callOnNodeGraphSelectionChanged();
 			this.em.call.onGraphChanged();
 		}
 	}
@@ -1439,7 +1439,7 @@ class Graph {
 			if( this.diagram ) {
 				const dataList = this._getFilteredSelection();
 				this.em.call.onSelection( dataList );
-				this._callOnNodeGraphSeleciotnChanged();
+				this._callOnNodeGraphSelectionChanged();
 			}
 		});
 
@@ -1616,7 +1616,7 @@ class Graph {
 		this.onNodeGraphModelChanged = null;
 		this.onNodeGraphSelectionChanged = null;
 	}
-	_callOnNodeGraphSeleciotnChanged() {
+	_callOnNodeGraphSelectionChanged() {
 		if( this.onNodeGraphSelectionChanged ) {
 			const nodeData = this.onNodeGraphSelectionChanged.nodeData;
 			this.updateSystemNode( nodeData );
