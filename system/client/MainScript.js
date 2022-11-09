@@ -36,52 +36,6 @@ Date: 10.07.2020
 
 /*
   TODO
-  v Make a proto-DSL with the available DSL for making slides and presenting them
-  - URL params: use in ServerManager.js the URLSearchParams class to get url params
-  - We could use JSS to create CSS directly in JavaScript
-    https://cssinjs.org/repl/
-  - Use JSClipper for operation on shapes (union, intersection, difference, ...)
-    https://github.com/Delapouite/JsClipper
-    we will use this for defining user shapes for DSL visual elements
-  v Now the sever can save text or binary files (via fileInfo.sourceEncoding)
-  - Test Case: if we create a new Dir node, we enter it, the graph is loaded, then we exit 
-    without touching the graph (no node added from palette), I should not save an empty
-    file of the newly opened graph. But, it seems I do save. I should avoid to save the 
-    just entered a graph into an empty file...I guess I am wrongly triggering a save graph
-    as soon as I enter the new empty graph...I should avoid that and only save if you add 
-    component in the graph
-  v Add beside EditorJS the edito SmartBlock
-     https://codepen.io/appleple/pen/povGeQq#html-box
-  - TOP: Create a DSL with single groups that implements
-    - A mind-map tool
-    - A KanBan board tool
-    - A Gant Chart Plan tool
-    - A ToDo List tool
-    - A color palet manager
-  - Create an HTML version of the diagram popup menu (so we can fix z-order)
-  - Save view1/2/3/4 from popup menu into the graph json data (persistent info)
-  v Added RichText editor for documentation
-  - BUG: After copying a selection with CTRL+drag, selection of the copied graph
-    stay long and you have to click twice to deselect it
-  - Right click on a node and tell "Find nodes with same category, mironName, ..."
-  - Allow to find nodes that have no connection (fanIn and fanOut empty)
-  - Allow to mark "read-only" some nodes in the graph
-  - Forbid to delete a selection that is not visible (the graph has been scrolled away)
-  - When I disable .... forgot
-  - We should create some find popup menu entry for nodes/link: find same category, mironName, .... 
-  - BUG: now we can not paste a selection and make it into a group
-  - TODO: related to next task, make System Monitor cancel timer if the monitor is closed
-    this will be done when the event "window close" is triggered
-  - TODO: implement a close window notification to all Dialog/Editor so that they can
-    unsubscribe of clean internal data
-  v System monitor gets automatically updated every 30 seconds
-  v Now every time you jumt to a view bookmark, I seave the current view in bookmark "Last"
-  v Implement first version of view bookmark
-    - Create bookmark: go to a place/zoom in graph, then open popup menu, press shift+'go view X'
-    - Jump bookmarl: open popup menu, click 'go view X'
-  v Avoid that search string in find dialog fill the combobox if entry already present
-  v Fixed bug with palette always visible
-  v Add parameter in LoadScripts for choosing to use or not the cache
   - Make PagUp/PagDwn of search result stop at first or last item (no roll over results)
   v Avoid that search with user string generate exceptions (use try/catch)
   v Add in config to enable/disable double-click creation of new nodes
