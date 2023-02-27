@@ -1,0 +1,17 @@
+{
+  "dslNameList": [
+    "DefaultDSL",
+    "HierarchyDSL",
+    "TextLabelsDSL",
+    "PicturesDSL"
+  ],
+  "view": {
+    "scale": 2.9779754794419073,
+    "position": [
+      -1705.5042334165216,
+      1224.9375108895315
+    ],
+    "isGridOn": true
+  },
+  "model": "{ \"class\": \"GraphLinksModel\",\n  \"copiesArrays\": true,\n  \"copiesArrayObjects\": true,\n  \"copiesKey\": false,\n  \"linkKeyProperty\": \"key\",\n  \"linkFromPortIdProperty\": \"fromPort\",\n  \"linkToPortIdProperty\": \"toPort\",\n  \"nodeDataArray\": [ \n{\"label\":\"Code in Graph\", \"color\":\"orange\", \"size\":\"180 35\", \"category\":\"Hierarchy_CodeInGraph\", \"isFile\":true, \"fileContent\":\"\", \"fileTypeName\":\"Javascript\", \"fileType\":\"text/javascript\", \"key\":0, \"location\":\"-1480 1310\"},\n{\"label\":\"Code in File\", \"color\":\"orange\", \"size\":\"180 35\", \"category\":\"Hierarchy_CodeInFile\", \"isFile\":true, \"fileTypeName\":\"Javascript\", \"fileType\":\"text/javascript\", \"fileURL\":\"\", \"key\":2, \"location\":\"-1440 1390\"},\n{\"label\":\"Folder Image\", \"size\":\"150 100\", \"category\":\"Hierarchy_FolderImage\", \"fileType\":\"text/json\", \"isDir\":true, \"fileURL\":\"\", \"imageURL\":\"\", \"key\":4, \"location\":\"-1560 1480\"}\n ],\n  \"linkDataArray\": []}"
+}

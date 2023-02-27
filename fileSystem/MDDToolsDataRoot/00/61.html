@@ -1,0 +1,38 @@
+<!--
+=============================================================================
+Licensed Materials - Property of LorinWare Prod.
+(C) Copyright Lorinware Prod 2021, All Rights Reserved.
+France Government Users Restricted Rights - Use, duplication or disclosure
+restricted by GSA ADP Schedule Contract with Lorinware Prod.
+=============================================================================
+Module: SmartBlock Demo
+Date: Sat Nov 06 2021 15:41:11 GMT+0100 (Central European Standard Time)
+=============================================================================
+-->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      SMARTBLOCK DEMO
+    </title>
+    <meta charset=utf-8 />
+    <link rel="stylesheet" href="https://unpkg.com/smartblock@1.3.2/css/smartblock.css" />
+  </head>
+  <body>
+    <script src="https://unpkg.com/smartblock@1.3.2/dist/editor.js"></script>
+    <div id="SBEditor"></div>
+    <script>
+      SmartBlock.Editor(
+      	'#SBEditor', 
+      	{
+          html: '<p>Default text if no initial text is specified</p>',
+      
+      		onChange: function(result) {
+      			console.log(result.json, result.html);
+      		}
+      	}
+      );
+    </script>
+  </body>
+</html>

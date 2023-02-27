@@ -1,0 +1,111 @@
+/*=======================================
+Template Design By MarkUps.
+Author URI : http://www.markups.io/
+========================================*/
+
+.menu-wrap li a:hover,
+.menu-wrap li a:focus {
+  color: #c762cb;
+}
+
+.download-btn{
+  background-color: #c762cb;
+}
+
+.main-nav a:hover,
+.main-nav a:focus {
+  color: #c762cb;
+}
+
+.main-nav a:active {
+  color: #c762cb;
+}
+
+.title-area .title span{
+  color: #c762cb;
+}
+
+.title-area .title::before {
+  background-color: #c762cb;
+}
+
+.features-list li:hover .features-content h4{
+  color: #c762cb;
+}
+
+.features-list li:hover .fa{
+  background-color: #c762cb;  
+}
+
+.features-list i:hover{
+  background-color: #c762cb;
+  color: #fff;
+}
+
+.feature-price .single-plan-head{
+  background-color: #c762cb;
+}
+
+.single-plan-head p > span {
+  color: #c762cb; 
+}
+
+.single-plan-bottom .signup-btn {
+  background-color: #c762cb;
+}
+
+.screenshots-slide li a:hover{
+  border-color: #c762cb;  
+}
+
+.screenshots-slide .slick-dots li button:hover,
+.screenshots-slide .slick-dots li.slick-active button {
+  background-color: #c762cb;  
+}
+
+.single-download:hover,
+.single-download:focus{
+  background-color: #c762cb;
+}
+
+.testi-company{
+  color: #c762cb;  
+}
+
+.testi-text:before{  
+  color: #c762cb;
+}
+
+.testimonial-slider .slick-dots li.slick-active {
+  background-color: #c762cb; 
+}
+
+.subcr-form i {
+  color: #c762cb;  
+}
+
+.subcr-form .subcr-btn {
+  background-color: #c762cb;
+}
+
+.contact-form .form-control:focus {
+  border-color: #c762cb;
+}
+
+.send-btn:hover,
+.send-btn:focus{
+  background-color: #c762cb;
+}
+
+.home-btn a:hover,
+.home-btn a:focus{
+  color: #c762cb; 
+}
+
+
+
+
+/*=======================================
+Template Design By WpFreeware.
+Author URI : http://www.wpfreeware.com/
+========================================*/

@@ -1,0 +1,18 @@
+{
+  "dslNameList": [
+    "DefaultDSL",
+    "HierarchyDSL",
+    "ThinkingDSL",
+    "TextLabelsDSL",
+    "PicturesDSL"
+  ],
+  "view": {
+    "scale": 0.7960398915569302,
+    "position": [
+      -4366.080382154463,
+      -1077.2655621084853
+    ],
+    "isGridOn": false
+  },
+  "model": "{ \"class\": \"GraphLinksModel\",\n  \"copiesArrays\": true,\n  \"copiesArrayObjects\": true,\n  \"copiesKey\": false,\n  \"linkKeyProperty\": \"key\",\n  \"linkFromPortIdProperty\": \"fromPort\",\n  \"linkToPortIdProperty\": \"toPort\",\n  \"nodeDataArray\": [ \n{\"label\":\"Virtual Home ToDo\", \"color\":\"salmon\", \"size\":\"307 193\", \"category\":\"Hierarchy_CodeInGraph\", \"isFile\":true, \"fileContent\":\"{\\\"time\\\":1662102863447,\\\"blocks\\\":[{\\\"id\\\":\\\"Qo5XbRZnMh\\\",\\\"type\\\":\\\"header\\\",\\\"data\\\":{\\\"text\\\":\\\"ToDo:\\\",\\\"level\\\":2}},{\\\"id\\\":\\\"EjTmHIjB7b\\\",\\\"type\\\":\\\"paragraph\\\",\\\"data\\\":{\\\"text\\\":\\\"High Priority\\\"}},{\\\"id\\\":\\\"OQG--7zWTY\\\",\\\"type\\\":\\\"checklist\\\",\\\"data\\\":{\\\"items\\\":[{\\\"text\\\":\\\"NodeJS Interface\\\",\\\"checked\\\":false},{\\\"text\\\":\\\"Create concept of Place-Cell (2D). Place-Cell can be addressed like normal object so that can be used as parameter of any existing action\\\",\\\"checked\\\":false},{\\\"text\\\":\\\"Hide/Visualise Place-Cell (debugging)\\\",\\\"checked\\\":false},{\\\"text\\\":\\\"Create a Docker/VM of the VirtualHome simulator (to be installed in the NUC)\\\",\\\"checked\\\":false},{\\\"text\\\":\\\"Implement actors speech: 1st text based (billboard), 2nd audio based (TTS, ASR)\\\",\\\"checked\\\":false},{\\\"text\\\":\\\"Implement user-defined configuration files (setting on servers, ip, ...)\\\",\\\"checked\\\":false}]}},{\\\"id\\\":\\\"-gT_QJNlTl\\\",\\\"type\\\":\\\"paragraph\\\",\\\"data\\\":{\\\"text\\\":\\\"Medium Priority\\\"}},{\\\"id\\\":\\\"ZTxi487J6X\\\",\\\"type\\\":\\\"checklist\\\",\\\"data\\\":{\\\"items\\\":[{\\\"text\\\":\\\"Create a strip-down version of the simulator that only store the object/avatar tree and execute all commands without graphics (batch execution of sessions)\\\",\\\"checked\\\":false}]}},{\\\"id\\\":\\\"bCGjYiEvvB\\\",\\\"type\\\":\\\"paragraph\\\",\\\"data\\\":{\\\"text\\\":\\\"Low Priority\\\"}},{\\\"id\\\":\\\"ABEQlqMI0Z\\\",\\\"type\\\":\\\"checklist\\\",\\\"data\\\":{\\\"items\\\":[{\\\"text\\\":\\\"Include telephony system\\\",\\\"checked\\\":false},{\\\"text\\\":\\\"Record a text log of a session and allow to play it back&nbsp;\\\",\\\"checked\\\":false},{\\\"text\\\":\\\"Play YouTube on TV\\\",\\\"checked\\\":false}]}},{\\\"id\\\":\\\"HAqaOMe77v\\\",\\\"type\\\":\\\"header\\\",\\\"data\\\":{\\\"text\\\":\\\"Notes\\\",\\\"level\\\":2}}],\\\"version\\\":\\\"2.22.3\\\"}\", \"fileTypeName\":\"Rich Text EJS\", \"fileType\":\"text/text\", \"key\":0, \"location\":\"-2887 -357\"},\n{\"label\":\"CODE Project\", \"category\":\"TextLabels_Size5\", \"size\":\"1018 30\", \"key\":2, \"location\":\"-3080 -700\"},\n{\"label\":\"ideas\", \"size\":\"394 266\", \"fileType\":\"text/json\", \"category\":\"Hierarchy_FolderContent\", \"isDir\":true, \"fileURL\":\"/fileServer/00/68.json\", \"key\":4, \"location\":\"-2830 -80\"},\n{\"label\":\"Curiculum\", \"size\":\"150 100\", \"category\":\"Hierarchy_FolderContent\", \"fileType\":\"text/json\", \"isDir\":true, \"fileURL\":\"/fileServer/00/81.json\", \"key\":5, \"location\":\"-3730 -160\"},\n{\"label\":\"Hypothesis\", \"size\":\"150 100\", \"category\":\"Hierarchy_FolderContent\", \"fileType\":\"text/json\", \"isDir\":true, \"fileURL\":\"/fileServer/00/93.json\", \"key\":7, \"location\":\"-3510 -170\"}\n ],\n  \"linkDataArray\": []}"
+}

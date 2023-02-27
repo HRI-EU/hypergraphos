@@ -1,0 +1,110 @@
+
+/*=======================================
+Template Design By MarkUps.
+Author URI : http://www.markups.io/
+========================================*/
+
+
+.menu-wrap li a:hover,
+.menu-wrap li a:focus {
+  color: #37c6f5;
+}
+
+.download-btn{
+  background-color: #37c6f5;
+}
+
+.main-nav a:hover,
+.main-nav a:focus {
+  color: #37c6f5;
+}
+
+.main-nav a:active {
+  color: #37c6f5;
+}
+
+.title-area .title span{
+  color: #37c6f5;
+}
+
+.title-area .title::before {
+  background-color: #37c6f5;
+}
+
+.features-list li:hover .features-content h4{
+  color: #37c6f5;
+}
+
+.features-list li:hover .fa{
+  background-color: #37c6f5;  
+}
+
+.features-list i:hover{
+  background-color: #37c6f5;
+  color: #fff;
+}
+
+.feature-price .single-plan-head{
+  background-color: #37c6f5;
+}
+
+.single-plan-head p > span {
+  color: #37c6f5; 
+}
+
+.single-plan-bottom .signup-btn {
+  background-color: #37c6f5;
+}
+
+.screenshots-slide li a:hover{
+  border-color: #37c6f5;  
+}
+
+.screenshots-slide .slick-dots li button:hover,
+.screenshots-slide .slick-dots li.slick-active button {
+  background-color: #37c6f5;  
+}
+
+.single-download:hover,
+.single-download:focus{
+  background-color: #37c6f5;
+}
+
+.testi-company{
+  color: #37c6f5;  
+}
+
+.testi-text:before{  
+  color: #37c6f5;
+}
+
+.testimonial-slider .slick-dots li.slick-active {
+  background-color: #37c6f5; 
+}
+
+.subcr-form i {
+  color: #37c6f5;  
+}
+
+.subcr-form .subcr-btn {
+  background-color: #37c6f5;
+}
+
+.contact-form .form-control:focus {
+  border-color: #37c6f5;
+}
+
+.send-btn:hover,
+.send-btn:focus{
+  background-color: #37c6f5;
+}
+
+.home-btn a:hover,
+.home-btn a:focus{
+  color: #37c6f5; 
+}
+
+/*=======================================
+Template Design By MarkUps.
+Author URI : http://www.markups.io/
+========================================*/

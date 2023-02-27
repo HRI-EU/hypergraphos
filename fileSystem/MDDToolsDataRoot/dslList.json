@@ -1,0 +1,16 @@
+{
+  "DefaultDSL": "/fileServer/DefaultDSL.js",
+  "HierarchyDSL": "/fileServer/HierarchyDSL.js",
+  "ThinkingDSL": "/fileServer/ThinkingDSL.js",
+  "TextLabelsDSL": "/fileServer/TextLabelsDSL.js",
+  "PropertyDSL": "/fileServer/PropertyDSL.js",
+  "IntegratorDSL": "/fileServer/IntegratorDSL.js",
+  "DialogDSL": "/fileServer/DialogDSL.js",
+  "DataFlowDSL": "/fileServer/DataFlowDSL.js",
+  "ConnectorsDSL": "/fileServer/ConnectorsDSL.js",
+  "ButtonDSL": "/fileServer/ButtonDSL.js",
+  "PicturesDSL": "/fileServer/PicturesDSL.js",
+  "NoteDSL": "/fileServer/NoteDSL.js",
+  "TutorDSL": "/fileServer/TutorDSL.js",
+  "KanbanDSL": "/fileServer/KanbanDSL.js"
+}
