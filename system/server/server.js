@@ -231,7 +231,7 @@ espresso.addGET(  '/test',    espresso.static( config.server.testPath ), onGet )
 webServer.listen(config.server.webServerPort, function(){
   const url = `${config.server.webServerProtocol}:\\${config.server.webServerName}:${config.server.webServerPort}`;
   console.log( `WebServer running at ${url}!` );
-  console.log( ` Access with user: ${url}?name='Antonello'` );
+  console.log( ` Access with user: ${url}?name:'Antonello'` );
 });
 
 function getPathInfo( path ) {

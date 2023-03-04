@@ -1453,6 +1453,9 @@ class Graph {
 					// Tooltip info for a node data object
 					const label = ( d.label? d.label: (d.text? d.text: '' ) );
 					let info = "Node [" + d.key + "]: " + label + "\n";
+					if( d.category ) {
+						info = info+" Category: " + d.category + "\n";
+					}
 					if ( d.group )
 						info = info+"member of " + d.group;
 					else

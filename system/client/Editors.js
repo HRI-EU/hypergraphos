@@ -45,16 +45,6 @@ function setNodeDataField( g, key, field, value ) {
   }
 }
 
-function openChat() {
-  const nodeData = {
-    key: 'Chat Viewer',
-    isFile: true,
-    fileType: 'input/fields',
-  };
-  const id = m.e._getDOMUniqueId( nodeData );
-  m.e.openWindow( id, 'ChatViewer', nodeData, [100, 100, 470, 200 ] );
-}
-
 class EditorBase extends EditorChangeManager {
   constructor() {
     super( 10 ); // Saving timeout: 10 seconds
@@ -875,7 +865,8 @@ class ChatViewer extends EditorBase {
     // Update current nodeData
     this.nodeData = nodeData;
     // Update window title with:
-    this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${nodeData.fileType}]`;
+    const nodeLabel = ( nodeData.label? nodeData.label: nodeData.key );
+    this.title = nodeLabel+` [${nodeData.fileType}]`;
     this.setTitle( this.title );
     // Update pin
     if( nodeData.fileURL ) {
@@ -884,7 +875,7 @@ class ChatViewer extends EditorBase {
     // Set editor content
     //if( nodeData.fileURL ) {
     const element = document.getElementById( this.editorDivId );
-    const fileURL = './MultiChatUI2.html';
+    const fileURL = './MultiChatUI2.html?name='+nodeLabel;
     element.innerHTML = `<iframe id='${this.id}_frame' class='webViewer' src="${fileURL}"></iframe>`;
   }
   saveEditorContent( onSaved ) {
