@@ -17,6 +17,7 @@ class EditorManager extends EditorChangeManager {
     this.registeredEditorList = [
       // NOTE: order matter here, since the first matching editor get selected
       { name: 'WebViewer',            fileType: (ft)=> ft == 'application/html',        classRef: WebViewer },
+      { name: 'ChatViewer',           fileType: (ft)=> ft == 'application/html',        classRef: ChatViewer },
       { name: 'HTMLExploreEditor',    fileType: (ft)=> ft == 'application/explore',     classRef: HTMLExploreEditor },
       { name: 'TextEditor',           fileType: (ft)=> ft.startsWith( 'text/' ),        classRef: TextEditor },
       { name: 'ImageEditor',          fileType: (ft)=> ft.startsWith( 'image/' ),       classRef: ImageEditor },
