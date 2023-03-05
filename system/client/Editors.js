@@ -849,41 +849,6 @@ class WebViewer extends EditorBase {
     }
   }
 }
-class ChatViewer extends EditorBase {
-  constructor( id, nodeData, position ) {
-    super();
-    this.id = id;
-    this.editor = null;
-
-    this.editorDivId = m.e.newDOMWindow( id, this.title, 
-                                         config.htmlDiv.mainDiv,
-                                         this.storeWindowPosition.bind(this),
-                                         position );
-    this.loadEditorContent( nodeData );
-  }
-  loadEditorContent( nodeData ) {
-    // Update current nodeData
-    this.nodeData = nodeData;
-    // Update window title with:
-    const nodeLabel = ( nodeData.label? nodeData.label: nodeData.key );
-    this.title = nodeLabel+` [${nodeData.fileType}]`;
-    this.setTitle( this.title );
-    // Update pin
-    if( nodeData.fileURL ) {
-      m.e.showWindowPin( this.id );
-    }
-    // Set editor content
-    //if( nodeData.fileURL ) {
-    const element = document.getElementById( this.editorDivId );
-    const fileURL = './MultiChatUI2.html?name='+nodeLabel;
-    element.innerHTML = `<iframe id='${this.id}_frame' class='webViewer' src="${fileURL}"></iframe>`;
-  }
-  saveEditorContent( onSaved ) {
-    if( onSaved ) {
-      onSaved();
-    }
-  }
-}
 class FindViewer extends EditorBase {
   constructor( id, nodeData, position ) {
     super();
