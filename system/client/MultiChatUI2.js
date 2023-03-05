@@ -52,91 +52,21 @@ function simChat() {
   simChatMessage();
 }
 
-class EventManager {
-  constructor() {
-    // Event list callback register
-    this.eventList = {};      // Callback are fired every time event occurs
-    this.eventOnceList = {};  // Callback are fired one time when event occurs, then they are removed
-  }
-  setEventList( eventNameList ) {
-    for( const eventName of eventNameList ) {
-      this.eventList[eventName] = [];
-      this.eventOnceList[eventName] = [];
-    }
-  }
-  addEventListener( eventName, callback, isOnce ) {
-    if( this.eventList[eventName] ) {
-      if( isOnce ) {
-        this.eventOnceList[eventName].push( callback );
-      } else {
-        this.eventList[eventName].push( callback );
-      }
-    } else {
-      console.error( `Event not found: ${eventName}` );
-    }
-  }
-  clearEventListerner( eventName ) {
-    if( this.eventList[eventName] ) {
-      this.eventList[eventName] = [];
-    }
-  }
-  fireEventListener( event, eventInfo ) {
-    if( this.eventList[event] ) {
-      for( const callback of this.eventList[event] ) {
-        if( typeof( callback ) == 'function' ) {
-          callback( eventInfo );
-        }
-      }
-      if( this.eventOnceList[event].length ) {
-        for( const callback of this.eventOnceList[event] ) {
-          if( typeof( callback ) == 'function' ) {
-            callback( eventInfo );
-          }
-        }
-        this.eventOnceList[event] = [];
-      }
-    }
-  }
-}
-
 function start() {
   mcu = new MultiChatUI();
+  mcu.onOwnerReply = ( message )=> {
+    console.log( `Send from [${mcu.chatOwner}] -> ${message}` );
+  };
 
-//mcu.addContact( 'God', '../actors/God.jpg', 'online' );
-//// Implement: mcu.removeContact( name )
-//
-//// Listen to chat commands that needs to be sent to the simulator engine
-//mcu.addEventListener( 'onCommandSend',          sendCommand );
-//// Register to get messages from the simulator engine
-//window.addEventListener( 'message', (e)=> receiveCommand( e.data ) );
+  //mcu.addContact( 'Antonello', './Antonello.jpg', 'online' );
+  //// Implement: mcu.removeContact( name )
 
   simChat();  // Uncomment html include of SimChat.js
 }
-function receiveCommand( command ) {
-  if( command.startsWith( '&' ) ) {
-    eval( command.substring( 1 ) );
-  }
-}
-function sendCommand( command ) {
-  // Check if is a javascript command
-  if( command.startsWith( '&' ) ) {
-    // This is a JS command to execute
-  } else {
-    // Remove 'I' if found at start
-    if( command.startsWith( 'I' ) ) {
-      command = command.substring( 1 ).trim();
-    }
-    // Put current contact name at beginning of command
-    const name = mcu.getCurrentContactName();
-    command = `${name} ${command}`;
-  }
-  // Send command
-  window.opener.postMessage( command, '*' );
-}
 
-class MultiChatUI extends EventManager {
+class MultiChatUI { //extends EventManager {
   constructor() {
-    super();
+    // super();
 
     // Cache DOM
     this.chatHistory = document.getElementById( 'chat-history' );
@@ -158,10 +88,9 @@ class MultiChatUI extends EventManager {
     this.currentContactInfo = null;
     this.chatOwner = '';
 
-    // Initialize events
-    this.setEventList([
-      'onCommandSend',
-    ]);
+    // Event generate every tyme something is send from the 
+    // text area with Enter/Send-Button
+    this.onOwnerReply = null;
   }
   addContact( name, image, status ) {
     status = status || 'offline';
@@ -221,7 +150,11 @@ class MultiChatUI extends EventManager {
     this.chatHistory.scrollTop = scroll;
   }
   _pushMessage() {
-    this._render( this.textarea.value.trim() );
+    const message = this.textarea.value.trim();
+    this._render( message );
+    if( this.onOwnerReply ) {
+      this.onOwnerReply( message );
+    }
   }
   _pushMessageEnter( event ) {
     // enter was pressed
@@ -266,8 +199,6 @@ class MultiChatUI extends EventManager {
 
       this.chatHistoryList.insertAdjacentHTML( 'beforeend', templateResponse( contextResponse ) );
     }
-
-    this.fireEventListener( 'onCommandSend', message );
 
     this.textarea.value = '';
     this.scrollToBottom();
