@@ -6,6 +6,7 @@ const config = {
   "host": {
     "name": "Antonello",
     "fileServerURL": "/fileServer",
+    "fileServerSystemURL": "/fileServer/System",
     "fileStatusURL": "/fileStatus",
     "statusURL": "/fileServer/Users/Antonello_status.json"
   },
