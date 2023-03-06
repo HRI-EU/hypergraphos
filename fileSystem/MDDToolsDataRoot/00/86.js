@@ -1,7 +1,7 @@
 {
   "0": {
     "label": "Default Pricing",
-    "category": "Integrator_Feature",
+    "category": "CodeFlow_Feature",
     "size": "220 40",
     "color": "RebeccaPurple",
     "buttons": [

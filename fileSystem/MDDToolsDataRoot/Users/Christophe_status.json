@@ -1,0 +1,43 @@
+{
+  "graphHistory": [],
+  "currentGraphNode": {
+    "key": "Root Graph",
+    "isDir": true,
+    "fileURL": "/fileServer/graphRoot.json",
+    "fileType": "text/json"
+  },
+  "openWindowList": {},
+  "pinnedWindow": {
+    "#systemPalette#": {
+      "key": "DSL Palette",
+      "isFile": true,
+      "fileURL": "#systemPalette#",
+      "fileType": "input/fields",
+      "editorPosition": [
+        63,
+        107,
+        369,
+        1483
+      ],
+      "isVisible": true
+    },
+    "#systemMonitor#": {
+      "key": "System Monitor",
+      "isFile": true,
+      "fileURL": "#systemMonitor#",
+      "fileType": "system/status",
+      "editorPosition": [
+        533,
+        40,
+        768,
+        329
+      ]
+    }
+  },
+  "isReadOnly": false,
+  "fileServer": {
+    "maxFileIndex": 99,
+    "currPath": 0,
+    "currFile": 57
+  }
+}

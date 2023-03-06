@@ -5,7 +5,7 @@
     "ThinkingDSL",
     "TextLabelsDSL",
     "PropertyDSL",
-    "IntegratorDSL",
+    "CodeFlowDSL",
     "DialogDSL",
     "DataFlowDSL",
     "ConnectorsDSL",

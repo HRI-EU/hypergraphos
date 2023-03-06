@@ -1,40 +1,6 @@
 {
   "graphHistory": [
     {
-      "key": "Root Graph",
-      "isDir": true,
-      "fileURL": "/fileServer/graphRoot.json",
-      "fileType": "text/json"
-    },
-    {
-      "label": "Frankonello Project Space",
-      "size": "290 290",
-      "category": "Hierarchy_FolderImage",
-      "fileType": "text/json",
-      "isDir": true,
-      "fileURL": "/fileServer/00/01.json",
-      "imageURL": "/fileServer/Frankonello.png",
-      "key": 35,
-      "location": "500 740",
-      "group": 30
-    },
-    {
-      "label": "MDDTools Development",
-      "size": "600 400",
-      "category": "Hierarchy_FolderContent",
-      "fileType": "text/json",
-      "isDir": true,
-      "fileURL": "/fileServer/00/29.json",
-      "key": 55,
-      "location": "-1510 440"
-    },
-    {
-      "key": "Root Graph",
-      "isDir": true,
-      "fileURL": "/fileServer/graphRoot.json",
-      "fileType": "text/json"
-    },
-    {
       "label": "Frankonello Project Space",
       "size": "290 290",
       "category": "Hierarchy_FolderImage",
@@ -448,7 +414,14 @@
     "/fileServer/00/01.json": {},
     "/fileServer/00/42.json": {},
     "/fileServer/00/43.json": {},
-    "/fileServer/00/47.bin": {},
+    "/fileServer/00/47.bin": {
+      "318": [
+        500,
+        51,
+        305,
+        556
+      ]
+    },
     "/fileServer/00/52.json": {},
     "/fileServer/00/49.json": {
       "19": [
@@ -472,8 +445,8 @@
     },
     "/fileServer/00/62.json": {
       "12": [
-        1278,
-        364,
+        1504,
+        214,
         400,
         350
       ]
@@ -569,7 +542,14 @@
         147
       ]
     },
-    "/fileServer/00/29.json": {},
+    "/fileServer/00/29.json": {
+      "2": [
+        696,
+        278,
+        400,
+        350
+      ]
+    },
     "/fileServer/00/03.json": {
       "14": [
         100,
@@ -644,11 +624,11 @@
       ]
     },
     "/fileServer/00/85.json": {
-      "100": [
-        854,
-        484,
-        708,
-        512
+      "78": [
+        1128,
+        500,
+        968,
+        574
       ]
     },
     "/fileServer/00/00.json": {
@@ -661,7 +641,15 @@
     },
     "/fileServer/00/46.json": {},
     "/fileServer/00/91.json": {},
-    "/fileServer/00/93.json": {}
+    "/fileServer/00/93.json": {},
+    "/fileServer/00/97.json": {
+      "0": [
+        66,
+        61,
+        998,
+        332
+      ]
+    }
   },
   "pinnedWindow": {
     "#systemPalette#": {
@@ -670,10 +658,10 @@
       "fileURL": "#systemPalette#",
       "fileType": "input/fields",
       "editorPosition": [
-        23,
-        37,
-        268,
-        800
+        174,
+        123,
+        232,
+        903
       ],
       "isVisible": true
     }
@@ -682,6 +670,6 @@
   "fileServer": {
     "maxFileIndex": 99,
     "currPath": 0,
-    "currFile": 93
+    "currFile": 97
   }
 }
