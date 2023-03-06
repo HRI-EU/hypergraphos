@@ -1093,7 +1093,7 @@ class GraphTemplateViewer extends EditorBase {
       }
     }
     // Load Templates
-    let url = `${config.host.fileServerURL}/graphTemplateList.json`;
+    let url = `${config.host.fileServerSystemURL}/graphTemplateList.json`;
     _openFile( url, (source)=> {
       showTemplates( source );
     });

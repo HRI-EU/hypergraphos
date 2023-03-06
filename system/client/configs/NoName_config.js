@@ -4,14 +4,11 @@
 */
 const config = {
   "host": {
-    "name": "Frank",
+    "name": "NoName",
     "fileServerURL": "/fileServer",
-    "fileStatusURL": "/fileStatus",
-    "statusURL": "/fileServer/Frank_status.json"
+    "statusURL": "/fileServer/Users/NoName_status.json"
   },
-  "remoteHost": {
-    "NUC": "192.168.178.25:7575"
-  },
+  "remoteHost": {},
   "htmlDiv": {
     "mainDiv": "mainDiv",
     "graphDiv": "diagram",
@@ -21,8 +18,8 @@ const config = {
     "linkPaletteDiv": "linkPalette"
   },
   "graph": {
-    "isDoubleClickCreateNodeEnabled": false,
-    "allowDeleteKey": true,
+    "isDoubleClickCreateNodeEnabled": true,
+    "allowDeleteKey": false,
     "colorSkema": "light",
     "defaultDSL": "DefaultDSL",
     "rootGraphURL": "/fileServer/graphRoot.json",
@@ -35,6 +32,6 @@ const config = {
     "maxHistoryLength": 30
   },
   "server": {
-    "ip": "192.168.178.20"
+    "ip": "192.168.1.21"
   }
 };

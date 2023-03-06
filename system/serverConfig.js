@@ -19,8 +19,9 @@ const config = {
     host: {
       name: 'NoName',
       fileServerURL: '/fileServer',
+      fileServerSystemURL: '/fileServer/System',
       fileStatusURL: '/fileStatus',
-      statusURL: '/fileServer/NoName_status.json',
+      statusURL: '/fileServer/Users/NoName_status.json',
     },
     remoteHost: {},
     htmlDiv: {
@@ -94,7 +95,7 @@ if( ( config.host.hostname == 'Antonellos-Mini' ) ||
   config.server.tempRoot = '/Users/antonelloceravola/Dropbox/DevAll/MDDToolsTempRoot';
   config.client.host.name = 'Antonello';
   config.client.graph.colorSkema = 'dark';
-  config.client.host.statusURL = '/fileServer/Antonello_status.json';
+  config.client.host.statusURL = '/fileServer/Users/Antonello_status.json';
   // List of remote host
   config.client.remoteHost['NUC'] = '192.168.1.11:7575';
 
@@ -104,7 +105,7 @@ if( ( config.host.hostname == 'Antonellos-Mini' ) ||
   config.server.dataRoot = '../../../../../Dropbox/DevAll/MDDToolsDataRoot';
   config.server.tempRoot = '../../../../../Dropbox/DevAll/MDDToolsTempRoot';
   config.client.host.name = 'Frank';
-  config.client.host.statusURL = '/fileServer/Frank_status.json';
+  config.client.host.statusURL = '/fileServer/Users/Frank_status.json';
   config.client.graph.allowDeleteKey = true;
   config.client.graph.isDoubleClickCreateNodeEnabled = false;
   // List of remote host
@@ -112,22 +113,11 @@ if( ( config.host.hostname == 'Antonellos-Mini' ) ||
 } else if( ( config.host.hostname == 'QuadCore' ) && 
             ( config.host.username == 'Christophe' ) ) {
   config.client.host.name = 'Christophe';
-  config.client.host.statusURL = '/fileServer/Christophe_status.json';
+  config.client.host.statusURL = '/fileServer/Users/Christophe_status.json';
   config.client.graph.allowDeleteKey = true;
   config.client.graph.isDoubleClickCreateNodeEnabled = false;
   // List of remote host
   config.client.remoteHost['NUC'] = '192.168.0.25:7575';
-} else if( ( config.host.hostname == 'work-manjaro' ) &&
-            ( config.host.username == 'chris' ) ) {
-  config.server.dataRoot = '../../../MDDToolsData/MDDToolsDataRoot';
-  config.server.tempRoot = '../../../MDDToolsData/MDDToolsTempRoot';
-  config.client.host.name = 'Cristian';
-  config.client.host.statusURL = '/fileServer/Cristian_status.json';
-  config.client.graph.allowDeleteKey = true;
-  config.client.graph.isDoubleClickCreateNodeEnabled = false;
-  // List of remote host
-  //config.client.remoteHost['NUC'] = '192.168.0.25:7575';
 }
-
 
 module.exports = config;

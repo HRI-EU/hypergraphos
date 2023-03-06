@@ -45,7 +45,7 @@ function loadSystem() {
 
   // Define list of system scripts to be loaded
   scriptList = [
-    `./${urlParams.name}_config.js`,
+    `./configs/${urlParams.name}_config.js`,
     './EditorChangeManager.js',
     './EventManager.js',
     './Graph.js',

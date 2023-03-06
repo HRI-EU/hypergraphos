@@ -339,11 +339,11 @@ function saveAllEditorContent() {
   }
 }
 function loadFileServerInfo() {
-  let url = `${config.host.fileServerURL}/dslList.json`;
+  let url = `${config.host.fileServerSystemURL}/dslList.json`;
   _openFile( url, (source)=> {
     m.dslNameList = JSON.parse( source );
   });
-  url = `${config.host.fileServerURL}/fileIndex.json`;
+  url = `${config.host.fileServerSystemURL}/fileIndex.json`;
   _openFile( url, (source)=> {
     m.fileInfo = JSON.parse( source );
   });
