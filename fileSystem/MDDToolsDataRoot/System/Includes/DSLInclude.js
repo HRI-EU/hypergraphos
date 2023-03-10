@@ -789,14 +789,14 @@
         portId: ( param.portId? param.portId: "" ), 
         cursor: "pointer",  // the Shape is the port, not the whole Node
         // allow all kinds of links from this port
-        fromLinkable: ( param.fromLinkable !== undefined? param.fromLinkable: true ),
-        fromLinkableSelfNode: ( param.fromLinkableSelfNode !== undefined? param.fromLinkableSelfNode: false ),
-        fromLinkableDuplicates: ( param.fromLinkableDuplicates !== undefined? param.fromLinkableDuplicates: false ),
+        fromLinkable: ( param.isFromLinkable !== undefined? param.isFromLinkable: true ),
+        fromLinkableSelfNode: ( param.isFromLinkableSelfNode !== undefined? param.isFromLinkableSelfNode: false ),
+        fromLinkableDuplicates: ( param.isFromLinkableDuplicates !== undefined? param.isFromLinkableDuplicates: false ),
         fromMaxLinks: ( param.fromMaxLinks !== undefined? param.fromMaxLinks: Infinity ),
         // allow all kinds of links to this port
-        toLinkable: ( param.toLinkable !== undefined? param.toLinkable: true ),
-        toLinkableSelfNode: ( param.toLinkableSelfNode !== undefined? param.toLinkableSelfNode: false ),
-        toLinkableDuplicates: ( param.toLinkableDuplicates !== undefined? param.toLinkableDuplicates: false ),
+        toLinkable: ( param.isToLinkable !== undefined? param.isToLinkable: true ),
+        toLinkableSelfNode: ( param.isToLinkableSelfNode !== undefined? param.isToLinkableSelfNode: false ),
+        toLinkableDuplicates: ( param.isToLinkableDuplicates !== undefined? param.isToLinkableDuplicates: false ),
         toMaxLinks: ( param.toMaxLinks !== undefined? param.toMaxLinks: Infinity ),
       }
     );
@@ -875,50 +875,103 @@ console.log( 'Button Status: '+obj.data.checked );`;
 
   var dsl_Component = (param)=> {
     param = ( param? param: {} );
+    // NODE SHAPE
+    param.figure = ( param.figure? param.figure: "rectangle" );
+    param.fill = ( param.fill? param.fill: "white" );
+    param.stroke = ( param.stroke? param.stroke: "black" );
+    param.strokeWidth = ( param.strokeWidth? param.strokeWidth: 1 );
+    param.isResizable = ( param.isResizable !== undefined? param.isResizable: true );
+    param.minSize = ( param.minSize? param.minSize: new go.Size(40, 40));
+    param.maxSize = ( param.maxSize? param.maxSize: new go.Size(NaN, NaN));
+    param.portId = ( param.portId? param.portId: "" );
+    // NODE INPUT CONNECTIVITY
+    param.fromSpot = ( param.fromSpot? param.fromSpot: go.Spot.Bottom );
+    param.isFromLinkable = ( param.isFromLinkable !== undefined? param.isFromLinkable: true );
+    param.isFromLinkableSelfNode = ( param.isFromLinkableSelfNode !== undefined? param.isFromLinkableSelfNode: false );
+    param.isFromLinkableDuplicates = ( param.isFromLinkableDuplicates !== undefined? param.isFromLinkableDuplicates: false );
+    param.fromMaxLinks = ( param.fromMaxLinks !== undefined? param.fromMaxLinks: Infinity );
+    // NODE OUTPUT CONNECTIVITY
+    param.toSpot = ( param.toSpot? param.toSpot: go.Spot.Top );
+    param.isToLinkable = ( param.isToLinkable !== undefined? param.isToLinkable: true );
+    param.isToLinkableSelfNode = ( param.isToLinkableSelfNode !== undefined? param.isToLinkableSelfNode: false );
+    param.isToLinkableDuplicates = ( param.isToLinkableDuplicates !== undefined? param.isToLinkableDuplicates: false );
+    param.toMaxLinks = ( param.toMaxLinks !== undefined? param.toMaxLinks: Infinity );
+    // NODE LABEL
     param.label = ( param.label !== undefined? param.label: '' );
-
+    param.labelStroke = ( param.labelStroke? param.labelStroke: "Black" );
+    param.isLabelEditable = ( param.isLabelEditable !== undefined? param.isLabelEditable: true );
+    param.isLabelMultiline = ( param.isLabelMultiline !== undefined? param.isLabelMultiline: true );
+    param.labelTextAlign = ( param.labelTextAlign? param.labelTextAlign: "center" );
+    param.labelFont = ( param.labelFont? param.labelFont: "18px sans-serif" );
+    param.labelMargin = ( param.labelMargin? param.labelMargin: 0 );
+    // NODE TAG
     param.hasTag = ( param.hasTag !== undefined? param.hasTag: true );
     param.tag = ( param.tag !== undefined? param.tag: '' );
     param.tagFont = ( param.tagFont? param.tagFont: "italic 10px sans-serif" );
     param.tagStroke = ( param.tagStroke? param.tagStroke: "Black" );
     param.isTagEditable = ( param.isTagEditable !== undefined? param.isTagEditable: true );
     param.tagMenu = ( param.tagMenu? param.tagMenu: null );
-
+    // NODE TYPE
     param.hasType = ( param.hasType !== undefined? param.hasType: true );
     param.type = ( param.type !== undefined? param.type: '' );
     param.typeFont = ( param.typeFont? param.typeFont: "italic 10px sans-serif" );
     param.typeStroke = ( param.typeStroke? param.typeStroke: "Black" );
     param.isTypeEditable = ( param.isTypeEditable !== undefined? param.isTypeEditable: true );
     param.typeMenu = ( param.typeMenu? param.typeMenu: null );
-
+    // NODE BUTTONS
     param.hasFunctionButtons = ( param.hasFunctionButtons !== undefined? param.hasFunctionButtons: false );
     param.buttonInternalCallback = ( param.buttonInternalCallback? param.buttonInternalCallback: null );
     param.isCheckBoxes = ( param.isCheckBoxes !== undefined? param.isCheckBoxes: false );
-
+    param.buttonMinSize = ( param.buttonMinSize? param.buttonMinSize: new go.Size(NaN, 20));
+    param.buttonMaxSize = ( param.buttonMaxSize? param.buttonMaxSize: new go.Size(NaN, NaN));
+    param.buttonMargin = ( param.buttonMargin? param.buttonMargin: 2 );
+    param.buttonFill = ( param.buttonFill? param.buttonFill: "lightGray");
+    param.buttonStroke = ( param.buttonStroke? param.buttonStroke: "black");
+    param.buttonFont = ( param.buttonFont? param.buttonFont: "13px sans-serif");
+    param.buttonInternalCallback = ( param.buttonInternalCallback? param.buttonInternalCallback: runGraphFile);
+    // NODE SELECTION 
+    param.selectFill = ( param.selectFill? param.selectFill: "dodgerblue" );
+    // NODE PROPERTIES
     param.hasProperties = ( param.hasProperties !== undefined? param.hasProperties: true );
     param.canAddProperties = ( param.canAddProperties !== undefined? param.canAddProperties: true );
     param.canAddProperties = ( param.hasProperties? param.canAddProperties: false );
-
+    param.itemFill = ( param.itemFill? param.itemFill: "white" );
+    param.itemMinSize = ( param.itemMinSize? param.itemMinSize: new go.Size(150, 1) );
+    param.separatorStroke = ( param.separatorStroke? param.separatorStroke: "gray" );
+    // KEY PROPERTY
+    param.keyFont = ( param.keyFont? param.keyFont: "bold 13px sans-serif" );
+    param.keyStroke = ( param.keyStroke? param.keyStroke: "Black" );
+    param.iskeyEditable = ( param.iskeyEditable !== undefined? param.iskeyEditable: true );
+    // VALUE PROPERTY
     param.hasValue = ( param.hasValue !== undefined? ( param.hasUnit? true: param.hasValue ): true );
     param.valueFont = ( param.valueFont? param.valueFont: "13px sans-serif" );
     param.valueStroke = ( param.valueStroke? param.valueStroke: "Black" );
     param.isValueEditable = ( param.isValueEditable !== undefined? param.isValueEditable: true );
-
+    //UNIT PROPERTY
     param.hasUnit = ( param.hasUnit !== undefined? param.hasUnit: true );
     param.unitFont = ( param.unitFont? param.unitFont: "13px sans-serif" );
     param.unitStroke = ( param.unitStroke? param.unitStroke: "Black" );
     param.isUnitEditable = ( param.isUnitEditable !== undefined? param.isUnitEditable: true );
-    
-
+    // NODE INPUT PORTS
     param.hasInputs = ( param.hasInputs !== undefined? param.hasInputs: true );
     param.canAddInput = ( param.canAddInput !== undefined? param.canAddInput: true );
     param.canAddInput = ( param.hasInputs? param.canAddInput: false );
-
+    param.isInputLinkable = ( param.isInputLinkable !== undefined? param.isInputLinkable: true );
+    param.isInputEditable = ( param.isInputEditable !== undefined? param.isInputEditable: true );
+    param.inputTextAlign = ( param.inputTextAlign !== undefined? param.inputTextAlign: "right" );
+    param.inputMenu = ( param.inputMenu? param.inputMenu: null );
+    // NODE OUTPUT PORTS
     param.hasOutputs = ( param.hasOutputs !== undefined? param.hasOutputs: true );
     param.canAddOutput = ( param.canAddOutput !== undefined? param.canAddOutput: true );
     param.canAddOutput = ( param.hasOutputs? param.canAddOutput: false );
-
+    param.isOutputLinkable = ( param.isOutputLinkable !== undefined? param.isOutputLinkable: true );
+    param.isOutputEditable = ( param.isOutputEditable !== undefined? param.isOutputEditable: true );
+    param.outputTextAlign = ( param.outputTextAlign !== undefined? param.outputTextAlign: "left" );
+    param.outputMenu = ( param.outputMenu? param.outputMenu: null );
+    // PORTS
     param.isPortInside = ( param.isPortInside? param.isPortInside: false );
+    param.portFont = ( param.portFont? param.portFont: "14px sans-serif" );
+    param.portStroke = ( param.portStroke? param.portStroke: "Black" );
 
     function runGraphFile( event, obj ) {
       const executeButtonFunc = function( event, obj, nodeData ) {
@@ -945,6 +998,8 @@ console.log( 'Button Status: '+obj.data.checked );`;
       executeButtonFunc( event, obj, nodeData );
     };
 
+    // TODO: Document usage of @ in DSL documentation
+    // example: if param.label: @<dataname> then the dataname value of the node data is used as label
     let textBinding = new go.Binding("text", "label").makeTwoWay();
     if( param.label && param.label.startsWith('@') ) {
       textBinding = new go.Binding("text", param.label.substring(1)).makeTwoWay();
@@ -1018,7 +1073,6 @@ console.log( 'Button Status: '+obj.data.checked );`;
       typeText = 
       $(go.TextBlock,
         {
-     
           height: 10, 
           font: param.typeFont,
           stroke: param.typeStroke,
@@ -1046,19 +1100,19 @@ console.log( 'Button Status: '+obj.data.checked );`;
           itemTemplate:
           $(buttonType, "checked",
             { 
-              minSize: ( param.buttonMinSize? param.buttonMinSize: new go.Size(NaN, 20)), 
-              maxSize: ( param.buttonMaxSize? param.buttonMaxSize: new go.Size(NaN, NaN)), 
-              margin: ( param.buttonMargin? param.buttonMargin: 2 ),
-              "ButtonBorder.fill": ( param.buttonFill? param.buttonFill: "lightGray"), 
-              "ButtonBorder.stroke": ( param.buttonStroke? param.buttonStroke: "black"),
-              click: ( param.buttonInternalCallback? param.buttonInternalCallback: runGraphFile ),
+              minSize: param.buttonMinSize, 
+              maxSize: param.buttonMaxSize, 
+              margin: param.buttonMargin,
+              "ButtonBorder.fill": param.buttonFill, 
+              "ButtonBorder.stroke": param.buttonStroke,
+              click: param.buttonInternalCallback,
             },
             $(go.TextBlock,
               {
                 //text: "Click me!",
-                margin: ( param.buttonMargin? param.buttonMargin: 2 ),
-                font: ( param.buttonFont? param.buttonFont: "13px sans-serif" ),
-                stroke: ( param.buttonStroke? param.buttonStroke: "Black" ),
+                margin: param.buttonMargin,
+                font: param.buttonFont,
+                stroke: param.buttonStroke,
               },
               new go.Binding("text", "name")
             )
@@ -1108,7 +1162,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
           $(go.Shape,
             { 
               row:0, column: 0,
-              fill: ( param.fillItem? param.fillItem: "white" ), 
+              fill: param.itemFill, 
               stretch: go.GraphObject.Fill, 
            }
           ),
@@ -1117,9 +1171,9 @@ console.log( 'Button Status: '+obj.data.checked );`;
               row:0, column: 0,
               name: "TABLE", 
               stretch: go.GraphObject.None,
-              minSize: ( param.itemMinSize? param.itemMinSize: new go.Size(150, 1) ),
-              defaultColumnSeparatorStroke: ( param.separatorStroke? param.separatorStroke: "gray" ),
-              defaultRowSeparatorStroke: ( param.separatorStroke? param.separatorStroke: "gray" ),
+              minSize: param.itemMinSize,
+              defaultColumnSeparatorStroke: param.separatorStroke,
+              defaultRowSeparatorStroke: param.separatorStroke,
               itemTemplate: 
               $(go.Panel, "TableRow", 
                 { 
@@ -1130,7 +1184,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
                     var oldskips = item.diagram.skipsUndoManager;
                     item.diagram.skipsUndoManager = true;
                     if (item.background === "transparent") {
-                      item.background = ( param.selectFill? param.selectFill: "dodgerblue" );
+                      item.background = param.selectFill;
                     } else {
                       item.background = "transparent";
                     }
@@ -1142,11 +1196,11 @@ console.log( 'Button Status: '+obj.data.checked );`;
                     column: 0,
                     margin: new go.Margin(0, 2),
                     stretch: go.GraphObject.Horizontal,
-                    font: ( param.keyFont? param.keyFont: "bold 13px sans-serif" ),
-                    stroke: ( param.keyStroke? param.keyStroke: "Black" ),
+                    font: param.keyFont,
+                    stroke: param.keyStroke,
                     wrap: go.TextBlock.None,
                     overflow: go.TextBlock.OverflowEllipsis,
-                    editable: ( param.keyEditable !== undefined? param.keyEditable: true ),
+                    editable: param.iskeyEditable,
                     fromLinkable: false, 
                     toLinkable: false
                   },
@@ -1206,9 +1260,9 @@ console.log( 'Button Status: '+obj.data.checked );`;
               fromSpot: go.Spot.Left, 
               toSpot: go.Spot.Left,
               fromLinkable: false,
-              toLinkable: ( param.isInputLinkable !== undefined? param.isInputLinkable: true ), 
+              toLinkable: param.isInputLinkable, 
               cursor: "pointer",
-              contextMenu: ( param.inputMenu? param.inputMenu: null ),
+              contextMenu: param.inputMenu,
               background: "transparent", 
               stretch: go.GraphObject.Horizontal,
             },
@@ -1227,7 +1281,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
                   var oldskips = item.diagram.skipsUndoManager;
                   item.diagram.skipsUndoManager = true;
                   if (item.fill === "white") {
-                    item.fill = ( param.selectFill? param.selectFill: "dodgerblue" );
+                    item.fill = param.selectFill;
                   } else {
                     item.fill = "white";
                   }
@@ -1238,12 +1292,12 @@ console.log( 'Button Status: '+obj.data.checked );`;
             $(go.TextBlock,
               { 
                 stretch: go.GraphObject.Horizontal,
-                stroke: ( param.portStroke? param.portStroke: "Black" ),
-                editable: ( param.isInputEditable !== undefined? param.isInputEditable: true ),
+                stroke: param.portStroke,
+                editable: param.isInputEditable,
                 isMultiline: false,
-                textAlign: ( param.inputTextAlign !== undefined? param.inputTextAlign: "right" ),
+                textAlign: param.inputTextAlign,
                 margin: 0,
-                font: ( param.font? param.font: "14px sans-serif" ),
+                font: param.portFont,
                 overflow: go.TextBlock.OverflowEllipsis,
               },
               new go.Binding("text", "portId", function(v) { return v.trim(); }).makeTwoWay(function(t) { return t.trim(); })
@@ -1295,10 +1349,10 @@ console.log( 'Button Status: '+obj.data.checked );`;
             {
               fromSpot: go.Spot.Right, 
               toSpot: go.Spot.Right,
-              fromLinkable: ( param.isOutputLinkable !== undefined? param.isOutputLinkable: true ),  
+              fromLinkable: param.isOutputLinkable,  
               toLinkable: false, 
               cursor: "pointer",
-              contextMenu: ( param.outputMenu? param.outputMenu: null ),
+              contextMenu: param.outputMenu,
               background: "transparent", 
               stretch: go.GraphObject.Horizontal,
            },
@@ -1317,7 +1371,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
                   var oldskips = item.diagram.skipsUndoManager;
                   item.diagram.skipsUndoManager = true;
                   if (item.fill === "white") {
-                    item.fill = ( param.selectFill? param.selectFill: "dodgerblue" );
+                    item.fill = param.selectFill;
                   } else {
                     item.fill = "white";
                   }
@@ -1328,12 +1382,12 @@ console.log( 'Button Status: '+obj.data.checked );`;
             $(go.TextBlock,
               { 
                 stretch: go.GraphObject.Horizontal,
-                stroke: ( param.portStroke? param.portStroke: "Black" ),
-                editable: ( param.isOutputEditable !== undefined? param.isOutputEditable: true ),
+                stroke: param.portStroke,
+                editable: param.isOutputEditable,
                 isMultiline: false,
-                textAlign: ( param.outputTextAlign !== undefined? param.outputTextAlign: "left" ),
+                textAlign: param.outputTextAlign,
                 margin: 0,
-                font: ( param.portFont? param.portFont: "14px sans-serif" ),
+                font: param.portFont,
                 overflow: go.TextBlock.OverflowEllipsis,
               },
               new go.Binding("text", "portId", function(v) { return v.trim(); }).makeTwoWay(function(t) { return t.trim(); })
@@ -1346,7 +1400,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
     // Node Template
     return $(go.Node, "Spot",
       {
-        resizable: ( param.resizable !== undefined? param.resizable: true ),
+        resizable: param.isResizable,
         locationObjectName: "BODY",  
         resizeObjectName: 'BODY',
         locationSpot: go.Spot.Center,
@@ -1361,32 +1415,33 @@ console.log( 'Button Status: '+obj.data.checked );`;
             row: 1, column: 1, 
             name: "BODY",
             stretch: go.GraphObject.Fill,
-            minSize: ( param.minSize? param.minSize: new go.Size(NaN, 40)), 
-            maxSize: ( param.maxSize? param.maxSize: new go.Size(NaN, NaN)), 
+            minSize: param.minSize, 
+            maxSize: param.maxSize, 
           },
           new go.Binding("desiredSize", "size", go.Size.parse).makeTwoWay(go.Size.stringify),
           $(go.Shape,
             {
               name: "MAIN",
-              figure: ( param.figure? param.figure: "rectangle" ), 
-              fill: ( param.fill? param.fill: "white" ), 
-              stroke: ( param.stroke? param.stroke: "black" ),
+              figure: param.figure, 
+              fill: param.fill, 
+              stroke: param.stroke,
+              strokeWidth: param.strokeWidth,
               cursor: "pointer",  // the Shape is the port, not the whole Node
-              portId: ( param.portId? param.portId: "" ), 
+              portId: param.portId, 
               // allow all kinds of links from this port
-              fromSpot: ( param.fromSpot? param.fromSpot: go.Spot.Bottom ),
-              fromLinkable: ( param.fromLinkable !== undefined? param.fromLinkable: true ),
-              fromLinkableSelfNode: ( param.fromLinkableSelfNode !== undefined? param.fromLinkableSelfNode: false ),
-              fromLinkableDuplicates: ( param.fromLinkableDuplicates !== undefined? param.fromLinkableDuplicates: false ),
-              fromMaxLinks: ( param.fromMaxLinks !== undefined? param.fromMaxLinks: Infinity ),
+              fromSpot: param.fromSpot,
+              fromLinkable: param.isFromLinkable,
+              fromLinkableSelfNode: param.isFromLinkableSelfNode,
+              fromLinkableDuplicates: param.isFromLinkableDuplicates,
+              fromMaxLinks: param.fromMaxLinks,
               // allow all kinds of links to this port
-              toSpot: ( param.toSpot? param.toSpot: go.Spot.Top ),
-              toLinkable: ( param.toLinkable !== undefined? param.toLinkable: true ),
-              toLinkableSelfNode: ( param.toLinkableSelfNode !== undefined? param.toLinkableSelfNode: false ),
-              toLinkableDuplicates: ( param.toLinkableDuplicates !== undefined? param.toLinkableDuplicates: false ),
-              toMaxLinks: ( param.toMaxLinks !== undefined? param.toMaxLinks: Infinity ),
-              },
-              new go.Binding("fill", "color").makeTwoWay()
+              toSpot: param.toSpot,
+              toLinkable: param.isToLinkable,
+              toLinkableSelfNode: param.isToLinkableSelfNode,
+              toLinkableDuplicates: param.isToLinkableDuplicates,
+              toMaxLinks: param.toMaxLinks,
+            },
+            new go.Binding("fill", "color").makeTwoWay()
           ),
           $(go.Panel, "Table",
             {
@@ -1412,13 +1467,13 @@ console.log( 'Button Status: '+obj.data.checked );`;
                   name: "LABEL",
                   //background: "red",
                   minSize: new go.Size(NaN, 20), 
-                  text: ( param.label? param.label: "label" ),
-                  stroke: ( param.labelStroke? param.labelStroke: "Black" ),
-                  editable: ( param.editable !== undefined? param.editable: true ),
-                  isMultiline: ( param.isMultiline !== undefined? param.isMultiline: true ),
-                  textAlign: ( param.textAlign? param.textAlign: "center" ),
-                  margin: ( param.margin? param.margin: 0 ),
-                  font: ( param.font? param.font: "18px sans-serif" ),
+                  text: param.label,
+                  stroke: param.labelStroke,
+                  editable: param.isLabelEditable,
+                  isMultiline: param.isLabelMultiline,
+                  textAlign: param.labelTextAlign,
+                  margin: param.labelMargin,
+                  font: param.labelFont,
                   overflow: go.TextBlock.OverflowEllipsis,
                   verticalAlignment: go.Spot.Center,
                 },
@@ -1457,11 +1512,42 @@ console.log( 'Button Status: '+obj.data.checked );`;
   };
   var dsl_BasicNode = (param)=> {
     param = ( param? param: {} );
+    // NODE SHAPE
+    param.figure = ( param.figure? param.figure: "rectangle" );
+    param.fill = ( param.fill? param.fill: "white" );
+    param.stroke = ( param.stroke? param.stroke: "black" );
+    param.strokeWidth = ( param.strokeWidth? param.strokeWidth: 1 );
+    param.isResizable = ( param.isResizable !== undefined? param.isResizable: true );
+    param.minSize = ( param.minSize? param.minSize: new go.Size(40, 40));
+    param.maxSize = ( param.maxSize? param.maxSize: new go.Size(NaN, NaN));
+    // NODE LABEL
+    param.label = ( param.label !== undefined? param.label: 'label' );
+    param.labelStroke = ( param.labelStroke? param.labelStroke: "Black" );
+    param.isLabelEditable = ( param.isLabelEditable !== undefined? param.isLabelEditable: true );
+    param.isLabelMultiline = ( param.isLabelMultiline !== undefined? param.isLabelMultiline: true );
+    param.labelFont = ( param.labelFont? param.labelFont: "18px sans-serif" );
+    param.labelMargin = ( param.labelMargin? param.labelMargin: 10 );
+    // NODE TAG
     param.hasTag = ( param.hasTag !== undefined? param.hasTag: true );
+    param.tag = ( param.tag !== undefined? param.tag: '' );
+    param.tagFont = ( param.tagFont? param.tagFont: "italic 10px sans-serif" );
+    param.tagStroke = ( param.tagStroke? param.tagStroke: "Black" );
+    param.isTagEditable = ( param.isTagEditable !== undefined? param.isTagEditable: true );
+    param.tagMenu = ( param.tagMenu? param.tagMenu: null );
+    // NODE TYPE
     param.hasType = ( param.hasType !== undefined? param.hasType: true );
+    param.type = ( param.type !== undefined? param.type: '' );
+    param.typeFont = ( param.typeFont? param.typeFont: "italic 10px sans-serif" );
+    param.typeStroke = ( param.typeStroke? param.typeStroke: "Black" );
+    param.isTypeEditable = ( param.isTypeEditable !== undefined? param.isTypeEditable: true );
+    param.typeMenu = ( param.typeMenu? param.typeMenu: null );
+    // NODE IMAGE
     param.hasImage = ( param.hasImage !== undefined? param.hasImage: 'none' );
+    param.imageStretch = ( param.imageStretch? param.imageStretch: go.GraphObject.UniformToFill );
     param.isLinkFromPicture = ( param.isLinkFromPicture !== undefined? param.isLinkFromPicture: true );
 
+    // TODO: Document usage of @ in DSL documentation
+    // example: if param.label: @<dataname> then the dataname value of the node data is used as label
     let textBinding = new go.Binding("text", "label").makeTwoWay();
     if( param.label && param.label.startsWith('@') ) {
       textBinding = new go.Binding("text", param.label.substring(1)).makeTwoWay();
@@ -1474,6 +1560,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
     if( param.type && param.type.startsWith('@') ) {
       typeBinding = new go.Binding("text", param.type.substring(1)).makeTwoWay();
     }    
+    // TODO: Review this context menu "..."
     let menuButton = {};
     if( param.menu ) {
       menuButton = $(go.Shape,
@@ -1494,14 +1581,14 @@ console.log( 'Button Status: '+obj.data.checked );`;
         {
           stretch: go.GraphObject.Horizontal, 
           height: 10, 
-          font: "italic 10px sans-serif",
-          stroke: 'black',
+          font: param.tagFont,
+          stroke: param.tagStroke,
           alignment: new go.Spot(0.5, 1, 0, 2),
           alignmentFocus: go.Spot.Top,
           margin: 0,  // make some extra space for the shape around the text
           isMultiline: false,  // don't allow newlines in text
-          editable: ( param.isTagEditable !== undefined? param.isTagEditable: true ),  // allow in-place editing by user
-          contextMenu: ( param.tagMenu? param.tagMenu: null ),
+          editable: param.isTagEditable,  // allow in-place editing by user
+          contextMenu: param.tagMenu,
         },
         tagBinding
       );
@@ -1514,16 +1601,16 @@ console.log( 'Button Status: '+obj.data.checked );`;
         {
           stretch: go.GraphObject.Horizontal, 
           height: 10, 
-          font: "italic 10px sans-serif",
-          stroke: 'black',
+          font: param.typeFont,
+          stroke: param.typeStroke,
           //alignment: new go.Spot(0.5, 0, 0, -2),
           alignment: new go.Spot(0.5, 0),
           alignmentFocus: go.Spot.Top,
           margin: 0,  // make some extra space for the shape around the text
           isMultiline: false,  // don't allow newlines in text
-          editable: ( param.isTypeEditable !== undefined? param.isTypeEditable: true ),  // allow in-place editing by user
-          contextMenu: ( param.typeMenu? param.typeMenu: null ),
-        },
+          editable: param.isTypeEditable,  // allow in-place editing by user
+          contextMenu: param.typeMenu,
+         },
         typeBinding
       );
     } 
@@ -1576,7 +1663,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
           },
           $(go.Shape, 
             { 
-              figure: ( param.figure? param.figure: "rectangle" ),
+              figure: param.figure,
               fill: "transparent",
               stroke: "transparent",
             },
@@ -1586,7 +1673,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
             {
               name: "PICTURE",
               margin: 2,
-              imageStretch: ( param.imageStretch? param.imageStretch: go.GraphObject.UniformToFill ),
+              imageStretch: param.imageStretch,
             },
             imageSource,
             new go.Binding( "desiredSize", "size", getReducedSize )
@@ -1596,7 +1683,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
 
     return $(go.Node, layout,
       { 
-        resizable: ( param.resizable !== undefined? param.resizable: true ),
+        resizable: param.isResizable,
         locationObjectName: 'BODY',  
         resizeObjectName: 'BODY',
         //locationSpot: go.Spot.Center,
@@ -1609,15 +1696,13 @@ console.log( 'Button Status: '+obj.data.checked );`;
         },
         $(go.Shape, 
           {
-            minSize: ( param.minSize? param.minSize: new go.Size(40, 40) ),
-            maxSize: ( param.maxSize? param.maxSize: new go.Size(NaN, NaN) ),
-            //alignment: go.Spot.Center,
-            //alignmentFocus: go.Spot.Center,
-            figure: ( param.figure? param.figure: "rectangle" ), 
+            minSize: param.minSize,
+            maxSize: param.maxSize,
+            figure: param.figure, 
             name: "BODY",
-            fill: ( param.fill? param.fill: "transparent" ),
-            strokeWidth: ( param.strokeWidth? param.strokeWidth: 1 ),
-            stroke: ( param.stroke? param.stroke: "Black" ),
+            fill: param.fill,
+            strokeWidth: param.strokeWidth,
+            stroke: param.stroke,
           },
           pictureExtra,
           new go.Binding("desiredSize", "size", go.Size.parse).makeTwoWay(go.Size.stringify),
@@ -1626,16 +1711,15 @@ console.log( 'Button Status: '+obj.data.checked );`;
         contentImage,
         menuButton,
         $(go.TextBlock,
-			textAlignment( param ),
+			    textAlignment( param ),
           { 
-			name: "LABEL",
-            text: ( param.label? param.label: "label" ),
-            stroke: ( param.labelStroke? param.labelStroke: "Black" ),
-            editable: ( param.editable !== undefined? param.editable: true ),
-            isMultiline: ( param.isMultiline !== undefined? param.isMultiline: true ),
-            //textAlign: "right", //( param.textAlign? param.textAlign: "left" ),
-            margin: ( param.margin? param.margin: 10 ),
-            font: ( param.font? param.font: "18px sans-serif" ),
+			      name: "LABEL",
+            text: param.label,
+            stroke: param.labelStroke,
+            editable: param.isLabelEditable,
+            isMultiline: param.isLabelMultiline,
+            margin: param.labelMargin,
+            font: param.labelFont,
             overflow: go.TextBlock.OverflowEllipsis,
           },
           textExtra,
@@ -1646,84 +1730,100 @@ console.log( 'Button Status: '+obj.data.checked );`;
           textBinding
         ),
       ),
-
       typeText,
       tagText
     );
   };
-  var dsl_Pictures1 = (param)=> {
-    param = ( param? param: {} );
+  // var dsl_Pictures1 = (param)=> {
+  //   param = ( param? param: {} );
 
-    let textBinding = new go.Binding("text", "label").makeTwoWay();
-    if( param.label && param.label.startsWith('@') ) {
-      textBinding = new go.Binding("text", param.label.substring(1)).makeTwoWay();
-    }
+  //   let textBinding = new go.Binding("text", "label").makeTwoWay();
+  //   if( param.label && param.label.startsWith('@') ) {
+  //     textBinding = new go.Binding("text", param.label.substring(1)).makeTwoWay();
+  //   }
 
-    const link = {
-      toSpot: ( param.toSpot? param.toSpot: go.Spot.Center ),
-      fromSpot: ( param.fromSpot? param.fromSpot: go.Spot.Center ),
-      portId: ( param.portId? param.portId: "" ), 
-      cursor: "pointer",  // the Shape is the port, not the whole Node
-      // allow all kinds of links from this port
-      fromLinkable: ( param.fromLinkable !== undefined? param.fromLinkable: true ),
-      fromLinkableSelfNode: ( param.fromLinkableSelfNode !== undefined? param.fromLinkableSelfNode: false ),
-      fromLinkableDuplicates: ( param.fromLinkableDuplicates !== undefined? param.fromLinkableDuplicates: false ),
-      fromMaxLinks: ( param.fromMaxLinks !== undefined? param.fromMaxLinks: Infinity ),
-      // allow all kinds of links to this port
-      toLinkable: ( param.toLinkable !== undefined? param.toLinkable: true ),
-      toLinkableSelfNode: ( param.toLinkableSelfNode !== undefined? param.toLinkableSelfNode: false ),
-      toLinkableDuplicates: ( param.toLinkableDuplicates !== undefined? param.toLinkableDuplicates: false ),
-      toMaxLinks: ( param.toMaxLinks !== undefined? param.toMaxLinks: Infinity ),
-    };
-    let pictureExtra = {};
-    let textExtra = {};
-    if( param.isLinkFromPicture ) {
-      pictureExtra = link;
-    } else {
-      textExtra = link;
-    }
-    const computeBackground = ( text )=> {
-      return( text == ''? 'white': 'transparent' ); 
-    }
+  //   const link = {
+  //     toSpot: ( param.toSpot? param.toSpot: go.Spot.Center ),
+  //     fromSpot: ( param.fromSpot? param.fromSpot: go.Spot.Center ),
+  //     portId: ( param.portId? param.portId: "" ), 
+  //     cursor: "pointer",  // the Shape is the port, not the whole Node
+  //     // allow all kinds of links from this port
+  //     fromLinkable: ( param.isFromLinkable !== undefined? param.isFromLinkable: true ),
+  //     fromLinkableSelfNode: ( param.isFromLinkableSelfNode !== undefined? param.isFromLinkableSelfNode: false ),
+  //     fromLinkableDuplicates: ( param.isFromLinkableDuplicates !== undefined? param.isFromLinkableDuplicates: false ),
+  //     fromMaxLinks: ( param.fromMaxLinks !== undefined? param.fromMaxLinks: Infinity ),
+  //     // allow all kinds of links to this port
+  //     toLinkable: ( param.isToLinkable !== undefined? param.isToLinkable: true ),
+  //     toLinkableSelfNode: ( param.isToLinkableSelfNode !== undefined? param.isToLinkableSelfNode: false ),
+  //     toLinkableDuplicates: ( param.isToLinkableDuplicates !== undefined? param.isToLinkableDuplicates: false ),
+  //     toMaxLinks: ( param.toMaxLinks !== undefined? param.toMaxLinks: Infinity ),
+  //   };
+  //   let pictureExtra = {};
+  //   let textExtra = {};
+  //   if( param.isLinkFromPicture ) {
+  //     pictureExtra = link;
+  //   } else {
+  //     textExtra = link;
+  //   }
+  //   const computeBackground = ( text )=> {
+  //     return( text == ''? 'white': 'transparent' ); 
+  //   }
 
-    return $(go.Node, "Vertical",
-      {
-        resizable: ( param.resizable !== undefined? param.resizable: true ),
-        resizeObjectName: "PICTURE",
-      },
-      new go.Binding( "location", "location", go.Point.parse).makeTwoWay(go.Point.stringify),
-      $(go.Picture,
-        Object.assign( {
-          name: "PICTURE",
-          margin: 2,
-          background: 'white',
-          imageStretch: ( param.imageStretch? param.imageStretch: go.GraphObject.Uniform ),
-        }, pictureExtra),
-        new go.Binding( "background", "fileURL", computeBackground ),
-        new go.Binding( "source", "fileURL" ),
-        new go.Binding( "desiredSize", "size", go.Size.parse ).makeTwoWay(go.Size.stringify),
-      ),
-      $(go.TextBlock,
-        Object.assign( {
-          alignment: go.Spot.Center,
-          verticalAlignment: go.Spot.Center,
-          alignmentFocus: go.Spot.Center,
-          name: "LABEL",
-          text: ( param.label? param.label: "label" ),
-          stroke: ( param.labelStroke? param.labelStroke: "Black" ),
-          editable: ( param.editable !== undefined? param.editable: true ),
-          isMultiline: ( param.isMultiline !== undefined? param.isMultiline: true ),
-          textAlign: ( param.textAlign? param.textAlign: "Left" ),
-          margin: ( param.margin? param.margin: 10 ),
-          font: ( param.font? param.font: "18px sans-serif" ),
-          overflow: go.TextBlock.OverflowEllipsis,
-        }, textExtra),
-        textBinding
-      )
-    )
-  };
+  //   return $(go.Node, "Vertical",
+  //     {
+  //       resizable: ( param.isResizable !== undefined? param.isResizable: true ),
+  //       resizeObjectName: "PICTURE",
+  //     },
+  //     new go.Binding( "location", "location", go.Point.parse).makeTwoWay(go.Point.stringify),
+  //     $(go.Picture,
+  //       Object.assign( {
+  //         name: "PICTURE",
+  //         margin: 2,
+  //         background: 'white',
+  //         imageStretch: ( param.imageStretch? param.imageStretch: go.GraphObject.Uniform ),
+  //       }, pictureExtra),
+  //       new go.Binding( "background", "fileURL", computeBackground ),
+  //       new go.Binding( "source", "fileURL" ),
+  //       new go.Binding( "desiredSize", "size", go.Size.parse ).makeTwoWay(go.Size.stringify),
+  //     ),
+  //     $(go.TextBlock,
+  //       Object.assign( {
+  //         alignment: go.Spot.Center,
+  //         verticalAlignment: go.Spot.Center,
+  //         alignmentFocus: go.Spot.Center,
+  //         name: "LABEL",
+  //         text: ( param.label? param.label: "label" ),
+  //         stroke: ( param.labelStroke? param.labelStroke: "Black" ),
+  //         editable: ( param.isLabelEditable !== undefined? param.isLabelEditable: true ),
+  //         isMultiline: ( param.isLabelMultiline !== undefined? param.isLabelMultiline: true ),
+  //         textAlign: ( param.labelTextAlign? param.labelTextAlign: "Left" ),
+  //         margin: ( param.labelMargin? param.labelMargin: 10 ),
+  //         font: ( param.labelFont? param.labelFont: "18px sans-serif" ),
+  //         overflow: go.TextBlock.OverflowEllipsis,
+  //       }, textExtra),
+  //       textBinding
+  //     )
+  //   )
+  // };
   var dsl_Pictures = (param)=> {
     param = ( param? param: {} );
+    // NODE SHAPE
+    param.figure = ( param.figure? param.figure: "rectangle" );
+    param.fill = ( param.fill? param.fill: "transparent" );
+    param.stroke = ( param.stroke? param.stroke: "black" );
+    param.strokeWidth = ( param.strokeWidth? param.strokeWidth: 0 );
+    param.isResizable = ( param.isResizable !== undefined? param.isResizable: true );
+    param.minSize = ( param.minSize? param.minSize: new go.Size(80, 40));
+    param.maxSize = ( param.maxSize? param.maxSize: new go.Size(NaN, NaN));
+    // NODE LABEL
+    param.label = ( param.label !== undefined? param.label: 'label' );
+    param.labelStroke = ( param.labelStroke? param.labelStroke: "Black" );
+    param.isLabelEditable = ( param.isLabelEditable !== undefined? param.isLabelEditable: true );
+    param.isLabelMultiline = ( param.isLabelMultiline !== undefined? param.isLabelMultiline: true );
+    param.labelFont = ( param.labelFont? param.labelFont: "18px sans-serif" );
+    param.labelMargin = ( param.labelMargin? param.labelMargin: 10 );
+    // NODE IMAGE
+    param.imageStretch = ( param.imageStretch? param.imageStretch: go.GraphObject.UniformToFill );
     param.isLinkFromPicture = ( param.isLinkFromPicture !== undefined? param.isLinkFromPicture: false );
 
 
@@ -1742,7 +1842,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
 
     return $(go.Node, "Vertical",
       {
-        resizable: ( param.resizable !== undefined? param.resizable: true ),
+        resizable: ( param.isResizable !== undefined? param.isResizable: true ),
         locationObjectName: "LABEL",  
         resizeObjectName: 'BODY',
         locationSpot: go.Spot.Center,
@@ -1753,15 +1853,15 @@ console.log( 'Button Status: '+obj.data.checked );`;
         $(go.Shape, 
           Object.assign( 
             {
-              minSize: ( param.minSize? param.minSize: new go.Size(80, 40) ),
-              maxSize: ( param.maxSize? param.maxSize: new go.Size(NaN, NaN) ),
+              minSize: param.minSize,
+              maxSize: param.maxSize,
               alignment: go.Spot.Center,
               alignmentFocus: go.Spot.Center,
-              figure: ( param.figure? param.figure: "rectangle" ), 
+              figure: param.figure, 
               name: "BODY",
-              fill: ( param.fill? param.fill: "transparent" ),
-              strokeWidth: ( param.strokeWidth? param.strokeWidth: 0 ),
-              stroke: ( param.stroke? param.stroke: "Black" ),
+              fill: param.fill,
+              strokeWidth: param.strokeWidth,
+              stroke: param.stroke,
             },
             pictureExtra
           ),
@@ -1774,7 +1874,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
           },
           $(go.Shape, 
             { 
-              figure: ( param.figure? param.figure: "rectangle" ), 
+              figure: param.figure, 
             },
             new go.Binding( "desiredSize", "size", getReducedSize )
           ),
@@ -1782,7 +1882,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
             {
               name: "PICTURE",
               margin: 2,
-              imageStretch: ( param.imageStretch? param.imageStretch: go.GraphObject.UniformToFill ),
+              imageStretch: param.imageStretch,
             }, 
             new go.Binding( "source", "fileURL", getDefaultPicture ),
             new go.Binding( "desiredSize", "size", getReducedSize )
@@ -1796,13 +1896,12 @@ console.log( 'Button Status: '+obj.data.checked );`;
             verticalAlignment: go.Spot.Center,
             alignmentFocus: go.Spot.Center,
             name: "LABEL",
-            text: ( param.label? param.label: "label" ),
-            stroke: ( param.labelStroke? param.labelStroke: "Black" ),
-            editable: ( param.editable !== undefined? param.editable: true ),
-            isMultiline: ( param.isMultiline !== undefined? param.isMultiline: true ),
-            textAlign: ( param.textAlign? param.textAlign: "Left" ),
-            margin: ( param.margin? param.margin: 10 ),
-            font: ( param.font? param.font: "18px sans-serif" ),
+            text: param.label,
+            stroke: param.labelStroke,
+            editable: param.isLabelEditable,
+            isMultiline: param.isLabelMultiline,
+            margin: param.labelMargin,
+            font: param.labelFont,
             overflow: go.TextBlock.OverflowEllipsis,
           }, 
           textExtra
@@ -1817,6 +1916,26 @@ console.log( 'Button Status: '+obj.data.checked );`;
   //-----------------------
   
   var dsl_BasicLink = (param)=> {
+    param = ( param? param: {} );
+
+    // LINK SHAPE
+    param.stroke = ( param.stroke? param.stroke: "Black" );
+    param.strokeWidth = ( param.strokeWidth? param.strokeWidth: 2 );
+    param.strokeDashArray = ( param.strokeDashArray? param.strokeDashArray: [] );
+    param.reshapable = ( param.reshapable !== undefined? param.reshapable: true );
+    param.resegmentable = ( param.resegmentable !== undefined? param.resegmentable: true );
+    param.jump = ( param.jump? param.jump: go.Link.JumpGap );  //go.Link.JumpOver
+    // FROM END
+    param.toArrow = ( param.toArrow? param.toArrow: "" );
+    param.toScale = ( param.toScale? param.toScale: 1 );
+    param.toShortLength = ( param.toShortLength? param.toShortLength: 0 );
+    param.relinkableTo = ( param.relinkableTo !== undefined? param.relinkableTo: true );
+    // TO END
+    param.fromArrow = ( param.fromArrow? param.fromArrow: "" );
+    param.fromScale = ( param.fromScale? param.fromScale: 1 );
+    param.fromShortLength = ( param.fromShortLength? param.fromShortLength: 0 );
+    param.relinkableFrom = ( param.relinkableFrom !== undefined? param.relinkableFrom: true );
+
     let strokeBinding = new go.Binding("stroke", "color");
     let fillBinding = new go.Binding("fill", "color");
     /*if(param.stroke && param.stroke.startsWith('@fromNodeColor')) {
@@ -1826,41 +1945,41 @@ console.log( 'Button Status: '+obj.data.checked );`;
     }*/
     return $(go.Link,
       {
-        toShortLength:  ( param.toShortLength? param.toShortLength: 0 ),
-        fromShortLength:  ( param.fromShortLength? param.fromShortLength: 0 ),
-        reshapable: ( param.reshapable !== undefined? param.reshapable: true ),
-        resegmentable: ( param.resegmentable !== undefined? param.resegmentable: true ),
-        relinkableFrom: ( param.relinkableFrom !== undefined? param.relinkableFrom: true ),
-        relinkableTo: ( param.relinkableTo !== undefined? param.relinkableTo: true ),
-        curve: ( param.jump? param.jump: go.Link.JumpGap ), //go.Link.JumpOver
+        toShortLength:  param.toShortLength,
+        fromShortLength:  param.fromShortLength,
+        reshapable: param.reshapable,
+        resegmentable: param.resegmentable,
+        relinkableFrom: param.relinkableFrom,
+        relinkableTo: param.relinkableTo,
+        curve: param.jump,
       },
       new go.Binding("points", "points").makeTwoWay(),
       $(go.Shape,
        { 
-          stroke: ( param.stroke? param.stroke: "Black" ),
-          strokeWidth: ( param.strokeWidth? param.strokeWidth: 2 ),
-          strokeDashArray: ( param.strokeDashArray? param.strokeDashArray: [] ),
+          stroke: param.stroke,
+          strokeWidth: param.strokeWidth,
+          strokeDashArray: param.strokeDashArray,
         },
         new go.Binding("stroke", "color"),
       ),
       $(go.Shape,
         { 
           //fromArrow: ( param.fromArrow? param.fromArrow: "OpenTriangle" ),
-          toArrow: ( param.toArrow? param.toArrow: "" ),
-          fill: ( param.stroke? param.stroke: "Black" ),
-          stroke: ( param.stroke? param.stroke: "Black" ),
-          scale: ( param.toScale? param.toScale: 1 ),
+          toArrow: param.toArrow,
+          fill: param.stroke,
+          stroke: param.stroke,
+          scale: param.toScale,
         },
         new go.Binding("stroke", "color"),
         new go.Binding("fill", "color")
       ),
       $(go.Shape,
         { 
-          fromArrow: ( param.fromArrow? param.fromArrow: "" ),
+          fromArrow: param.fromArrow,
           //toArrow: ( param.toArrow? param.toArrow: "OpenTriangle" ),
-          fill: ( param.stroke? param.stroke: "Black" ),
-          stroke: ( param.stroke? param.stroke: "Black" ),
-          scale: ( param.fromScale? param.fromScale: 1 ),
+          fill: param.stroke,
+          stroke: param.stroke,
+          scale: param.fromScale,
         },
         new go.Binding("stroke", "color"),
         new go.Binding("fill", "color")

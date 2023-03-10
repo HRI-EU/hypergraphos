@@ -1,1 +1,8 @@
 system/node_modules/*
+fileSystem/.DS_Store
+fileSystem/MDDToolsDataRoot/.DS_Store
+fileSystem/MDDToolsDataRoot/00/.DS_Store
+fileSystem/MDDToolsDataRoot/Palette/.DS_Store
+fileSystem/MDDToolsDataRoot/pictures/.DS_Store
+fileSystem/MDDToolsDataRoot/pictures/MetaFlow/.DS_Store
+fileSystem/MDDToolsDataRoot/System/.DS_Store

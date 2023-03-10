@@ -259,26 +259,27 @@
       "fileType": "text/json"
     },
     {
-      "label": "Frankonello Home",
-      "size": "280 180",
-      "category": "Hierarchy_FolderContent",
-      "isDir": true,
+      "label": "Frankonello Project Space",
+      "size": "290 290",
+      "category": "Hierarchy_FolderImage",
       "fileType": "text/json",
+      "isDir": true,
       "fileURL": "/fileServer/00/01.json",
-      "key": 41,
-      "location": "1480 921",
+      "imageURL": "/fileServer/pictures/Frankonello.png",
+      "key": 35,
+      "location": "1470 642",
       "group": 13
     }
   ],
   "currentGraphNode": {
-    "label": "New Avatar 2.1 - Dialog 1.0 (flat)",
-    "size": "600 400",
+    "label": "New Avatar 2.1 - Dialog 1.1 (flat)",
+    "size": "600 402",
     "category": "Hierarchy_FolderContent",
     "isDir": true,
     "fileType": "text/json",
-    "fileURL": "/fileServer/00/19.json",
-    "key": 51,
-    "location": "-770 2260"
+    "fileURL": "/fileServer/00/49.json",
+    "key": 50,
+    "location": "-770 2760"
   },
   "openWindowList": {
     "/fileServer/graphRoot.json": {},
@@ -652,20 +653,7 @@
         350
       ]
     },
-    "/fileServer/00/85.json": {
-      "1": [
-        633,
-        70,
-        400,
-        350
-      ],
-      "78": [
-        1128,
-        500,
-        968,
-        574
-      ]
-    },
+    "/fileServer/00/85.json": {},
     "/fileServer/00/00.json": {
       "2": [
         100,
@@ -712,7 +700,7 @@
         453,
         968
       ],
-      "isVisible": false
+      "isVisible": true
     }
   },
   "isReadOnly": false,
