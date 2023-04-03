@@ -278,7 +278,15 @@ function _openFile( url, onLoad, noTimeStamp ) {
       onLoad( '' );
     }
   };
-  request.send( '' );
+
+  try {
+    request.send( '' );
+  } catch(e) {
+    if( onLoad ) {
+      onLoad( '' );
+    }
+  }
+
   request.onreadystatechange = function () {
     if( request.readyState === 4 ) {
       const status = request.status;
