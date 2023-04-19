@@ -118,6 +118,13 @@ if( ( config.host.hostname == 'Antonellos-Mini' ) ||
   config.client.graph.isDoubleClickCreateNodeEnabled = false;
   // List of remote host
   config.client.remoteHost['NUC'] = '192.168.0.25:7575';
+} else if( config.host.hostname == 'hyper-graph' ) {
+config.client.host.name = 'hyper-graph';
+config.client.host.statusURL = '/fileServer/Users/hyper-graph_status.json';
+config.client.graph.allowDeleteKey = true;
+config.client.graph.isDoubleClickCreateNodeEnabled = false;
+config.server.dataRoot = '../../fileSystem/MDDToolsDataRoot';
+config.server.tempRoot = '../../fileSystem/MDDToolsTempRoot';
 }
 
 module.exports = config;
