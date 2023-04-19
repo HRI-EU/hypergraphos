@@ -11,5 +11,5 @@ services:
     volumes:
       - ./:/home/node/app
     ports:
-      - 7575:7575
+      - 80:80
     command: "sh -c ./startServer.sh"
