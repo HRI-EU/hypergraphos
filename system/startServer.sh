@@ -10,5 +10,10 @@
 # =============================================================================
 #
 
-cd ./server
+
+cd server
+if [[ ! -d "../node_modules" ]]; then
+    echo "Installing node modules..."
+    npm install
+fi
 node server

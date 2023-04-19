@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  server:
+    image: node:lts-alpine3.16
+    user: node
+    working_dir: /home/node/app/system
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./:/home/node/app
+    ports:
+      - 7575:7575
+    command: "sh -c ./startServer.sh"
