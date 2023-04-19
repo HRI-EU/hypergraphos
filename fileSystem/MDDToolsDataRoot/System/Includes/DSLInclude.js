@@ -513,7 +513,7 @@
     }
 
     /*
-      Create an array of menu itme in this form:
+      Create an array of menu item in this form:
       menuItem =
         { layout: 'vertical', itemList: [
           { label: 'cut', if: ( o )=> true,
@@ -530,8 +530,87 @@
     }
     return( menu );
   }
+  function onPropertyValueEdited(tb, oldstr, newstr)  {
+    const node = tb.part;
+    const diagram = this.panel.diagram;
+    const rowIndex = this.panel.itemIndex;
+    if( node ) {
+      const data = node.data;
+      diagram.startTransaction("change value");
+      // TODO: We could actually set true or false depending if the 
+      // newstr is == or != to the dataNodeTemplate.rows[rowIndex].value
+      // the dataNodeTemplate could be taken from the diagram.model...  
+      diagram.model.setDataProperty( data.rows[rowIndex], 'valueChanged', 'true' );
+      diagram.commitTransaction("change value");
+    }
+  }
+  function getMenuItemText( o, target ) {
+    const menuItemText = o.item.label;
+    const diagram = o.d.diagram;
+    const it = diagram.selection.iterator;
+    const rowIndex = o.d.obj.panel.itemIndex; // row index to modify in the node.data.rows
+    const node = it.first();
+    if( node ) {
+      const data = node.data;
+      diagram.startTransaction("change figure");
+      // TODO: set value or type or else depending on node category
+      diagram.model.setDataProperty( data.rows[rowIndex], target, menuItemText );
+      diagram.model.setDataProperty( data.rows[rowIndex], 'valueChanged', 'true' );
+      diagram.commitTransaction("change figure");
+    }
+  }
+  function getMenuItemTextValue( o ) {
+    getMenuItemText( o, 'value' );
+  }
+  function getMenuItemTextType( o ) {
+    getMenuItemText( o, 'type' );
+  }
   var menuDSL = {
     'fileTypeMenu': createFileTypeMenu(),
+    'figureMenu':
+      { layout: 'vertical', itemList: [
+        { label: 'BendedLeft', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'BendedLeftRight', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'Diamond', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'Elipse', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'File', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'FileCircle', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'Folder', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'LeftPointOutLevelDown', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'LeftPointOutLevelUp', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'LeftPointSquare', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'Project', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'Rectangle', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'RightPointExternalArrowIn', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'RightPointExternalDiamon', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'RightPointInternalArrowIn', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'RightPointInternalDiamon', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'RightPointLeftPoint', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'RightPointOutLevelDown', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'RightPointOutLevelUp', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'RightPointSquare', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'RightPointSquarePort', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'RightPointUShape', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'RoundedRectangle', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'TriangleDown', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'TriangleLeft', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'TriangleRight', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'TriangleUp', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'SquareArrowIn', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'SquareExternalArrowOut', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'SquareInternalArrowOut', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'SquareLevelDown', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'SquareLevelMiddle', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'SquareLevelUp', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'SquareUShape', if: ( o )=> true, do: getMenuItemTextValue },
+        { label: 'UShapeInternalArrowOut', if: ( o )=> true, do: getMenuItemTextValue   },
+      ]},
+    'treeDataTypeMenu':
+      { layout: 'vertical', itemList: [
+        { label: 'Object', if: ( o )=> true, do: getMenuItemTextType },
+        { label: 'Array', if: ( o )=> true, do: getMenuItemTextType },
+        { label: 'Data', if: ( o )=> true, do: getMenuItemTextType },
+      ]},
     'basicNodeMenu': 
       { layout: 'vertical', itemList: [
 //        { fontIcon: 'menu', hint: 'Options', layout: 'vertical', subMenu: [
@@ -789,15 +868,15 @@
         portId: ( param.portId? param.portId: "" ), 
         cursor: "pointer",  // the Shape is the port, not the whole Node
         // allow all kinds of links from this port
-        fromLinkable: ( param.isFromLinkable !== undefined? param.isFromLinkable: true ),
-        fromLinkableSelfNode: ( param.isFromLinkableSelfNode !== undefined? param.isFromLinkableSelfNode: false ),
-        fromLinkableDuplicates: ( param.isFromLinkableDuplicates !== undefined? param.isFromLinkableDuplicates: false ),
-        fromMaxLinks: ( param.fromMaxLinks !== undefined? param.fromMaxLinks: Infinity ),
+        fromLinkable: param.isFromLinkable,
+        fromLinkableSelfNode: param.isFromLinkableSelfNode,
+        fromLinkableDuplicates: param.isFromLinkableDuplicates,
+        fromMaxLinks: param.fromMaxLinks,
         // allow all kinds of links to this port
-        toLinkable: ( param.isToLinkable !== undefined? param.isToLinkable: true ),
-        toLinkableSelfNode: ( param.isToLinkableSelfNode !== undefined? param.isToLinkableSelfNode: false ),
-        toLinkableDuplicates: ( param.isToLinkableDuplicates !== undefined? param.isToLinkableDuplicates: false ),
-        toMaxLinks: ( param.toMaxLinks !== undefined? param.toMaxLinks: Infinity ),
+        toLinkable: param.isToLinkable,
+        toLinkableSelfNode: param.isToLinkableSelfNode,
+        toLinkableDuplicates: param.isToLinkableDuplicates,
+        toMaxLinks: param.toMaxLinks,
       }
     );
   }
@@ -875,6 +954,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
 
   var dsl_Component = (param)=> {
     param = ( param? param: {} );
+    param.g = ( param.g !== undefined? param.g: null );
     // NODE SHAPE
     param.figure = ( param.figure? param.figure: "rectangle" );
     param.fill = ( param.fill? param.fill: "white" );
@@ -907,15 +987,15 @@ console.log( 'Button Status: '+obj.data.checked );`;
     // NODE TAG
     param.hasTag = ( param.hasTag !== undefined? param.hasTag: true );
     param.tag = ( param.tag !== undefined? param.tag: '' );
-    param.tagFont = ( param.tagFont? param.tagFont: "italic 10px sans-serif" );
     param.tagStroke = ( param.tagStroke? param.tagStroke: "Black" );
+    param.tagFont = ( param.tagFont? param.tagFont: "italic 10px sans-serif" );
     param.isTagEditable = ( param.isTagEditable !== undefined? param.isTagEditable: true );
     param.tagMenu = ( param.tagMenu? param.tagMenu: null );
     // NODE TYPE
     param.hasType = ( param.hasType !== undefined? param.hasType: true );
     param.type = ( param.type !== undefined? param.type: '' );
-    param.typeFont = ( param.typeFont? param.typeFont: "italic 10px sans-serif" );
     param.typeStroke = ( param.typeStroke? param.typeStroke: "Black" );
+    param.typeFont = ( param.typeFont? param.typeFont: "italic 10px sans-serif" );
     param.isTypeEditable = ( param.isTypeEditable !== undefined? param.isTypeEditable: true );
     param.typeMenu = ( param.typeMenu? param.typeMenu: null );
     // NODE BUTTONS
@@ -933,6 +1013,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
     param.selectFill = ( param.selectFill? param.selectFill: "dodgerblue" );
     // NODE PROPERTIES
     param.hasProperties = ( param.hasProperties !== undefined? param.hasProperties: true );
+    param.isPropertiesDynamic = ( param.isPropertiesDynamic !== undefined? param.isPropertiesDynamic: false );
     param.canAddProperties = ( param.canAddProperties !== undefined? param.canAddProperties: true );
     param.canAddProperties = ( param.hasProperties? param.canAddProperties: false );
     param.itemFill = ( param.itemFill? param.itemFill: "white" );
@@ -941,22 +1022,25 @@ console.log( 'Button Status: '+obj.data.checked );`;
     // KEY PROPERTY
     param.keyFont = ( param.keyFont? param.keyFont: "bold 13px sans-serif" );
     param.keyStroke = ( param.keyStroke? param.keyStroke: "Black" );
-    param.iskeyEditable = ( param.iskeyEditable !== undefined? param.iskeyEditable: true );
+    param.isKeyEditable = ( param.isKeyEditable !== undefined? param.isKeyEditable: true );
     // VALUE PROPERTY
     param.hasValue = ( param.hasValue !== undefined? ( param.hasUnit? true: param.hasValue ): true );
-    param.valueFont = ( param.valueFont? param.valueFont: "13px sans-serif" );
     param.valueStroke = ( param.valueStroke? param.valueStroke: "Black" );
+    param.valueFont = ( param.valueFont? param.valueFont: "13px sans-serif" );
     param.isValueEditable = ( param.isValueEditable !== undefined? param.isValueEditable: true );
     //UNIT PROPERTY
     param.hasUnit = ( param.hasUnit !== undefined? param.hasUnit: true );
-    param.unitFont = ( param.unitFont? param.unitFont: "13px sans-serif" );
     param.unitStroke = ( param.unitStroke? param.unitStroke: "Black" );
+    param.unitFont = ( param.unitFont? param.unitFont: "13px sans-serif" );
     param.isUnitEditable = ( param.isUnitEditable !== undefined? param.isUnitEditable: true );
     // NODE INPUT PORTS
     param.hasInputs = ( param.hasInputs !== undefined? param.hasInputs: true );
     param.canAddInput = ( param.canAddInput !== undefined? param.canAddInput: true );
     param.canAddInput = ( param.hasInputs? param.canAddInput: false );
     param.isInputLinkable = ( param.isInputLinkable !== undefined? param.isInputLinkable: true );
+    param.isInputLinkableSelfNode = ( param.isInputLinkableSelfNode !== undefined? param.isInputLinkableSelfNode: false );
+    param.isInputLinkableDuplicates = ( param.isInputLinkableDuplicates !== undefined? param.isInputLinkableDuplicates: false );
+    param.inputMaxLinks = ( param.inputMaxLinks !== undefined? param.inputMaxLinks: Infinity );
     param.isInputEditable = ( param.isInputEditable !== undefined? param.isInputEditable: true );
     param.inputTextAlign = ( param.inputTextAlign !== undefined? param.inputTextAlign: "right" );
     param.inputMenu = ( param.inputMenu? param.inputMenu: null );
@@ -965,13 +1049,16 @@ console.log( 'Button Status: '+obj.data.checked );`;
     param.canAddOutput = ( param.canAddOutput !== undefined? param.canAddOutput: true );
     param.canAddOutput = ( param.hasOutputs? param.canAddOutput: false );
     param.isOutputLinkable = ( param.isOutputLinkable !== undefined? param.isOutputLinkable: true );
+    param.isOutputLinkableSelfNode = ( param.isOutputLinkableSelfNode !== undefined? param.isOutputLinkableSelfNode: false );
+    param.isOutputLinkableDuplicates = ( param.isOutputLinkableDuplicates !== undefined? param.isOutputLinkableDuplicates: false );
+    param.outputMaxLinks = ( param.outputMaxLinks !== undefined? param.outputMaxLinks: Infinity );
     param.isOutputEditable = ( param.isOutputEditable !== undefined? param.isOutputEditable: true );
     param.outputTextAlign = ( param.outputTextAlign !== undefined? param.outputTextAlign: "left" );
     param.outputMenu = ( param.outputMenu? param.outputMenu: null );
     // PORTS
     param.isPortInside = ( param.isPortInside? param.isPortInside: false );
-    param.portFont = ( param.portFont? param.portFont: "14px sans-serif" );
     param.portStroke = ( param.portStroke? param.portStroke: "Black" );
+    param.portFont = ( param.portFont? param.portFont: "14px sans-serif" );
 
     function runGraphFile( event, obj ) {
       const executeButtonFunc = function( event, obj, nodeData ) {
@@ -997,6 +1084,8 @@ console.log( 'Button Status: '+obj.data.checked );`;
       //const nodeDataJSON = JSON.stringify( nodeData, null, 2 );
       executeButtonFunc( event, obj, nodeData );
     };
+
+    linkExtra = commonLinkProps(param);
 
     // TODO: Document usage of @ in DSL documentation
     // example: if param.label: @<dataname> then the dataname value of the node data is used as label
@@ -1027,8 +1116,13 @@ console.log( 'Button Status: '+obj.data.checked );`;
           stroke: param.valueStroke,
           overflow: go.TextBlock.OverflowEllipsis,
           editable: param.isValueEditable,
+          textEdited: onPropertyValueEdited,
         },
-        new go.Binding("text", "value").makeTwoWay()
+        new go.Binding("text", "value").makeTwoWay(),
+        new go.Binding("contextMenu", "valueMenu", function(m) { return param.g.contextMenu.getMenu(m); }),
+        new go.Binding("editable", "isEditable").makeTwoWay(),
+        new go.Binding("font", "font").makeTwoWay(),
+        new go.Binding("stroke", "valueChanged", function(v) { return (v? 'red': param.valueStroke )}).makeTwoWay(function(v) { return ( v == 'red' ) } )
       );
     }
     
@@ -1046,7 +1140,10 @@ console.log( 'Button Status: '+obj.data.checked );`;
           overflow: go.TextBlock.OverflowEllipsis,
           editable: param.isUnitEditable,
         },
-        new go.Binding("text", "unit").makeTwoWay()
+        new go.Binding("text", "unit").makeTwoWay(),
+        new go.Binding("contextMenu", "unitMenu", function(m) { return param.g.contextMenu.getMenu(m); }),
+        new go.Binding("editable", "isEditable").makeTwoWay(),
+        new go.Binding("font", "font").makeTwoWay()
       );
     }
     
@@ -1056,6 +1153,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
       $(go.TextBlock,
         {
           height: 10, 
+          text: param.tag,
           font: param.tagFont,
           stroke: param.tagStroke,
           alignment: new go.Spot(0, 1, 0, 0),
@@ -1074,6 +1172,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
       $(go.TextBlock,
         {
           height: 10, 
+          text: param.type,
           font: param.typeFont,
           stroke: param.typeStroke,
           alignment: new go.Spot(0, 0, 0, 0),
@@ -1150,12 +1249,17 @@ console.log( 'Button Status: '+obj.data.checked );`;
     
     let properties = {};
     if( param.hasProperties ) {
+      const propertiesExtra = ( param.isPropertiesDynamic? 
+        {
+          name: "DYNAMIC BUTTONS",
+          visible: false,
+        }: {});
       properties =
       $(go.Panel, "Auto",
-        {
+        Object.assign( {
           row: 2, column: 1,
           stretch: go.GraphObject.Horizontal, 
-        },
+        }, propertiesExtra),
         $(go.Panel, "Table",
           {
           },
@@ -1168,9 +1272,11 @@ console.log( 'Button Status: '+obj.data.checked );`;
           ),
           $(go.Panel, "Table",
             {
+              margin: new go.Margin(2, 0),
               row:0, column: 0,
               name: "TABLE", 
-              stretch: go.GraphObject.None,
+              stretch: go.GraphObject.Horizontal, 
+              //stretch: go.GraphObject.None,
               minSize: param.itemMinSize,
               defaultColumnSeparatorStroke: param.separatorStroke,
               defaultRowSeparatorStroke: param.separatorStroke,
@@ -1195,16 +1301,19 @@ console.log( 'Button Status: '+obj.data.checked );`;
                   {
                     column: 0,
                     margin: new go.Margin(0, 2),
+                    spacingBelow: 2,
+                    spacingAbove: 2,
                     stretch: go.GraphObject.Horizontal,
                     font: param.keyFont,
                     stroke: param.keyStroke,
                     wrap: go.TextBlock.None,
                     overflow: go.TextBlock.OverflowEllipsis,
-                    editable: param.iskeyEditable,
+                    editable: param.isKeyEditable,
+                    formatting: go.TextBlock.FormatNone,
                     fromLinkable: false, 
-                    toLinkable: false
+                    toLinkable: false,
                   },
-                  new go.Binding("text", "name").makeTwoWay()
+                  new go.Binding("text", "name").makeTwoWay(),
                 ),
                 valueItem,
                 unitItem
@@ -1261,6 +1370,9 @@ console.log( 'Button Status: '+obj.data.checked );`;
               toSpot: go.Spot.Left,
               fromLinkable: false,
               toLinkable: param.isInputLinkable, 
+              toLinkableSelfNode: param.isInputLinkableSelfNode,
+              toLinkableDuplicates: param.isInputLinkableDuplicates,
+              toMaxLinks: param.inputMaxLinks,
               cursor: "pointer",
               contextMenu: param.inputMenu,
               background: "transparent", 
@@ -1350,6 +1462,9 @@ console.log( 'Button Status: '+obj.data.checked );`;
               fromSpot: go.Spot.Right, 
               toSpot: go.Spot.Right,
               fromLinkable: param.isOutputLinkable,  
+              fromLinkableSelfNode: param.isOutputLinkableSelfNode,
+              fromLinkableDuplicates: param.isOutputLinkableDuplicates,
+              fromMaxLinks: param.outputMaxLinks,
               toLinkable: false, 
               cursor: "pointer",
               contextMenu: param.outputMenu,
@@ -1427,20 +1542,8 @@ console.log( 'Button Status: '+obj.data.checked );`;
               stroke: param.stroke,
               strokeWidth: param.strokeWidth,
               cursor: "pointer",  // the Shape is the port, not the whole Node
-              portId: param.portId, 
-              // allow all kinds of links from this port
-              fromSpot: param.fromSpot,
-              fromLinkable: param.isFromLinkable,
-              fromLinkableSelfNode: param.isFromLinkableSelfNode,
-              fromLinkableDuplicates: param.isFromLinkableDuplicates,
-              fromMaxLinks: param.fromMaxLinks,
-              // allow all kinds of links to this port
-              toSpot: param.toSpot,
-              toLinkable: param.isToLinkable,
-              toLinkableSelfNode: param.isToLinkableSelfNode,
-              toLinkableDuplicates: param.isToLinkableDuplicates,
-              toMaxLinks: param.toMaxLinks,
             },
+            linkExtra,
             new go.Binding("fill", "color").makeTwoWay()
           ),
           $(go.Panel, "Table",
@@ -1518,8 +1621,21 @@ console.log( 'Button Status: '+obj.data.checked );`;
     param.stroke = ( param.stroke? param.stroke: "black" );
     param.strokeWidth = ( param.strokeWidth? param.strokeWidth: 1 );
     param.isResizable = ( param.isResizable !== undefined? param.isResizable: true );
-    param.minSize = ( param.minSize? param.minSize: new go.Size(40, 40));
+    param.minSize = ( param.minSize? param.minSize: new go.Size(0, 40));
     param.maxSize = ( param.maxSize? param.maxSize: new go.Size(NaN, NaN));
+    param.portId = ( param.portId? param.portId: "" );
+    // NODE INPUT CONNECTIVITY
+    param.fromSpot = ( param.fromSpot? param.fromSpot: go.Spot.Center );
+    param.isFromLinkable = ( param.isFromLinkable !== undefined? param.isFromLinkable: true );
+    param.isFromLinkableSelfNode = ( param.isFromLinkableSelfNode !== undefined? param.isFromLinkableSelfNode: false );
+    param.isFromLinkableDuplicates = ( param.isFromLinkableDuplicates !== undefined? param.isFromLinkableDuplicates: false );
+    param.fromMaxLinks = ( param.fromMaxLinks !== undefined? param.fromMaxLinks: Infinity );
+    // NODE OUTPUT CONNECTIVITY
+    param.toSpot = ( param.toSpot? param.toSpot: go.Spot.Center );
+    param.isToLinkable = ( param.isToLinkable !== undefined? param.isToLinkable: true );
+    param.isToLinkableSelfNode = ( param.isToLinkableSelfNode !== undefined? param.isToLinkableSelfNode: false );
+    param.isToLinkableDuplicates = ( param.isToLinkableDuplicates !== undefined? param.isToLinkableDuplicates: false );
+    param.toMaxLinks = ( param.toMaxLinks !== undefined? param.toMaxLinks: Infinity );
     // NODE LABEL
     param.label = ( param.label !== undefined? param.label: 'label' );
     param.labelStroke = ( param.labelStroke? param.labelStroke: "Black" );
@@ -1530,21 +1646,21 @@ console.log( 'Button Status: '+obj.data.checked );`;
     // NODE TAG
     param.hasTag = ( param.hasTag !== undefined? param.hasTag: true );
     param.tag = ( param.tag !== undefined? param.tag: '' );
-    param.tagFont = ( param.tagFont? param.tagFont: "italic 10px sans-serif" );
     param.tagStroke = ( param.tagStroke? param.tagStroke: "Black" );
+    param.tagFont = ( param.tagFont? param.tagFont: "italic 10px sans-serif" );
     param.isTagEditable = ( param.isTagEditable !== undefined? param.isTagEditable: true );
     param.tagMenu = ( param.tagMenu? param.tagMenu: null );
     // NODE TYPE
     param.hasType = ( param.hasType !== undefined? param.hasType: true );
     param.type = ( param.type !== undefined? param.type: '' );
-    param.typeFont = ( param.typeFont? param.typeFont: "italic 10px sans-serif" );
     param.typeStroke = ( param.typeStroke? param.typeStroke: "Black" );
+    param.typeFont = ( param.typeFont? param.typeFont: "italic 10px sans-serif" );
     param.isTypeEditable = ( param.isTypeEditable !== undefined? param.isTypeEditable: true );
     param.typeMenu = ( param.typeMenu? param.typeMenu: null );
     // NODE IMAGE
     param.hasImage = ( param.hasImage !== undefined? param.hasImage: 'none' );
     param.imageStretch = ( param.imageStretch? param.imageStretch: go.GraphObject.UniformToFill );
-    param.isLinkFromPicture = ( param.isLinkFromPicture !== undefined? param.isLinkFromPicture: true );
+    param.isLinkFromImage = ( param.isLinkFromImage !== undefined? param.isLinkFromImage: true );
 
     // TODO: Document usage of @ in DSL documentation
     // example: if param.label: @<dataname> then the dataname value of the node data is used as label
@@ -1581,6 +1697,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
         {
           stretch: go.GraphObject.Horizontal, 
           height: 10, 
+          text: param.tag,
           font: param.tagFont,
           stroke: param.tagStroke,
           alignment: new go.Spot(0.5, 1, 0, 2),
@@ -1601,6 +1718,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
         {
           stretch: go.GraphObject.Horizontal, 
           height: 10, 
+          text: param.type,
           font: param.typeFont,
           stroke: param.typeStroke,
           //alignment: new go.Spot(0.5, 0, 0, -2),
@@ -1643,7 +1761,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
 
     let pictureExtra = {};
     let textExtra = {};
-    if( param.isLinkFromPicture ) {
+    if( param.isLinkFromImage ) {
       pictureExtra = commonLinkProps(param);
     } else {
       textExtra = commonLinkProps(param);
@@ -1721,6 +1839,8 @@ console.log( 'Button Status: '+obj.data.checked );`;
             margin: param.labelMargin,
             font: param.labelFont,
             overflow: go.TextBlock.OverflowEllipsis,
+            formatting: go.TextBlock.FormatNone,
+
           },
           textExtra,
           new go.Binding("alignment","alignment",go.Spot.parse).makeTwoWay(go.Spot.stringify),
@@ -1760,7 +1880,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
   //   };
   //   let pictureExtra = {};
   //   let textExtra = {};
-  //   if( param.isLinkFromPicture ) {
+  //   if( param.isLinkFromImage ) {
   //     pictureExtra = link;
   //   } else {
   //     textExtra = link;
@@ -1815,6 +1935,19 @@ console.log( 'Button Status: '+obj.data.checked );`;
     param.isResizable = ( param.isResizable !== undefined? param.isResizable: true );
     param.minSize = ( param.minSize? param.minSize: new go.Size(80, 40));
     param.maxSize = ( param.maxSize? param.maxSize: new go.Size(NaN, NaN));
+    param.portId = ( param.portId? param.portId: "" );
+    // NODE INPUT CONNECTIVITY
+    param.fromSpot = ( param.fromSpot? param.fromSpot: go.Spot.Bottom );
+    param.isFromLinkable = ( param.isFromLinkable !== undefined? param.isFromLinkable: true );
+    param.isFromLinkableSelfNode = ( param.isFromLinkableSelfNode !== undefined? param.isFromLinkableSelfNode: false );
+    param.isFromLinkableDuplicates = ( param.isFromLinkableDuplicates !== undefined? param.isFromLinkableDuplicates: false );
+    param.fromMaxLinks = ( param.fromMaxLinks !== undefined? param.fromMaxLinks: Infinity );
+    // NODE OUTPUT CONNECTIVITY
+    param.toSpot = ( param.toSpot? param.toSpot: go.Spot.Top );
+    param.isToLinkable = ( param.isToLinkable !== undefined? param.isToLinkable: true );
+    param.isToLinkableSelfNode = ( param.isToLinkableSelfNode !== undefined? param.isToLinkableSelfNode: false );
+    param.isToLinkableDuplicates = ( param.isToLinkableDuplicates !== undefined? param.isToLinkableDuplicates: false );
+    param.toMaxLinks = ( param.toMaxLinks !== undefined? param.toMaxLinks: Infinity );
     // NODE LABEL
     param.label = ( param.label !== undefined? param.label: 'label' );
     param.labelStroke = ( param.labelStroke? param.labelStroke: "Black" );
@@ -1824,7 +1957,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
     param.labelMargin = ( param.labelMargin? param.labelMargin: 10 );
     // NODE IMAGE
     param.imageStretch = ( param.imageStretch? param.imageStretch: go.GraphObject.UniformToFill );
-    param.isLinkFromPicture = ( param.isLinkFromPicture !== undefined? param.isLinkFromPicture: false );
+    param.isLinkFromImage = ( param.isLinkFromImage !== undefined? param.isLinkFromImage: false );
 
 
     let textBinding = new go.Binding("text", "label").makeTwoWay();
@@ -1834,7 +1967,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
 
     let pictureExtra = {};
     let textExtra = {};
-    if( param.isLinkFromPicture ) {
+    if( param.isLinkFromImage ) {
       pictureExtra = commonLinkProps(param);
     } else {
       textExtra = commonLinkProps(param);
@@ -1910,7 +2043,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
       )
     )
   };
- 
+  
   //-----------------------
   // Define link templates
   //-----------------------
@@ -1922,19 +2055,19 @@ console.log( 'Button Status: '+obj.data.checked );`;
     param.stroke = ( param.stroke? param.stroke: "Black" );
     param.strokeWidth = ( param.strokeWidth? param.strokeWidth: 2 );
     param.strokeDashArray = ( param.strokeDashArray? param.strokeDashArray: [] );
-    param.reshapable = ( param.reshapable !== undefined? param.reshapable: true );
-    param.resegmentable = ( param.resegmentable !== undefined? param.resegmentable: true );
+    param.isReshapable = ( param.isReshapable !== undefined? param.isReshapable: true );
+    param.isResegmentable = ( param.isResegmentable !== undefined? param.isResegmentable: true );
     param.jump = ( param.jump? param.jump: go.Link.JumpGap );  //go.Link.JumpOver
     // FROM END
-    param.toArrow = ( param.toArrow? param.toArrow: "" );
-    param.toScale = ( param.toScale? param.toScale: 1 );
-    param.toShortLength = ( param.toShortLength? param.toShortLength: 0 );
-    param.relinkableTo = ( param.relinkableTo !== undefined? param.relinkableTo: true );
-    // TO END
     param.fromArrow = ( param.fromArrow? param.fromArrow: "" );
     param.fromScale = ( param.fromScale? param.fromScale: 1 );
     param.fromShortLength = ( param.fromShortLength? param.fromShortLength: 0 );
-    param.relinkableFrom = ( param.relinkableFrom !== undefined? param.relinkableFrom: true );
+    param.isRelinkableFrom = ( param.isRelinkableFrom !== undefined? param.isRelinkableFrom: true );
+    // TO END
+    param.toArrow = ( param.toArrow? param.toArrow: "" );
+    param.toScale = ( param.toScale? param.toScale: 1 );
+    param.toShortLength = ( param.toShortLength? param.toShortLength: 0 );
+    param.isRelinkableTo = ( param.isRelinkableTo !== undefined? param.isRelinkableTo: true );
 
     let strokeBinding = new go.Binding("stroke", "color");
     let fillBinding = new go.Binding("fill", "color");
@@ -1947,10 +2080,10 @@ console.log( 'Button Status: '+obj.data.checked );`;
       {
         toShortLength:  param.toShortLength,
         fromShortLength:  param.fromShortLength,
-        reshapable: param.reshapable,
-        resegmentable: param.resegmentable,
-        relinkableFrom: param.relinkableFrom,
-        relinkableTo: param.relinkableTo,
+        reshapable: param.isReshapable,
+        resegmentable: param.isResegmentable,
+        relinkableFrom: param.isRelinkableFrom,
+        relinkableTo: param.isRelinkableTo,
         curve: param.jump,
       },
       new go.Binding("points", "points").makeTwoWay(),

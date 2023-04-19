@@ -25,7 +25,7 @@ function CodeFlowDSL_getDSL( g ) {
 
   // Connectivity rules
   if( diagram ) {
-        diagram.addDiagramListener( 'LinkDrawn',
+    diagram.addDiagramListener( 'LinkDrawn',
       function(evt) {
         const linkCategory = {
           Code: {
@@ -195,16 +195,15 @@ function CodeFlowDSL_getDSL( g ) {
       { category: 'CodeFlow_OperatorIn',      template: dsl_Component, param: { portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: true,  isTypeEditable: false, type: '@fileTypeName', hasValue: false, hasUnit: false,  figure: 'SquareUShape',    hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: true, canAddOutput: true, isPortInside: true, } },
       { category: 'CodeFlow_Code',            template: dsl_Component, param: { portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: true,  isTypeEditable: false, type: '@fileTypeName', hasValue: true,  hasUnit: false,  figure: 'Rectangle',       hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: true,      typeMenu: fileTypeContextMenu, canAddInput: true, canAddOutput: true, } },
       { category: 'CodeFlow_CodeIn',          template: dsl_Component, param: { portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: true,  isTypeEditable: false, type: '@fileTypeName', hasValue: true,  hasUnit: false,  figure: 'Rectangle',       hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: true,      typeMenu: fileTypeContextMenu, canAddInput: true, canAddOutput: true, isPortInside: true, } },
-      { category: 'CodeFlow_Merge',           template: dsl_Component, param: { portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: false, hasUnit: false,  figure: 'Rectangle',       hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: true, canAddOutput: false, isResizable: false, isLabelEditable: false, maxSize: new go.Size(10, NaN),  } },
+      { category: 'CodeFlow_Merge',           template: dsl_Component, param: { portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: false, hasUnit: false,  figure: 'Rectangle',       hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: true, canAddOutput: false, isResizable: false, isLabelEditable: false, maxSize: new go.Size(0, NaN),  } },
       { category: 'CodeFlow_Multiplexer',     template: dsl_Component, param: { portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: false, hasUnit: false,  figure: 'RightPointSquare',hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: true, canAddOutput: false, isResizable: false, isLabelEditable: false, maxSize: new go.Size(20, NaN),  } },
       { category: 'CodeFlow_Demultiplexer',   template: dsl_Component, param: { portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: false, hasUnit: false,  figure: 'LeftPointSquare', hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: false, canAddOutput: true, isResizable: false, isLabelEditable: false, maxSize: new go.Size(20, NaN),  } },
       { category: 'CodeFlow_Library',         template: dsl_Component, param: { portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: true,  isTypeEditable: false, type: '@fileTypeName', hasValue: false, hasUnit: false,  figure: 'Rectangle',       hasInputs: false, hasOutputs: false, hasFunctionButtons: false, hasProperties: false,  } },
-      { category: 'Property_GraphInfo',         template: dsl_Component, param: { portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: true,  hasUnit: false,  figure: 'File',            hasInputs: false, hasOutputs: false, hasFunctionButtons: false, hasProperties: true,  canAddProperties: false} },
+      { category: 'Property_GraphInfo',       template: dsl_Component, param: { portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: true,  hasUnit: false,  figure: 'File',            hasInputs: false, hasOutputs: false, hasFunctionButtons: false, hasProperties: true,  canAddProperties: false} },
       { category: 'CodeFlow_Param',           template: dsl_Component, param: { portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: true,  hasUnit: false,  figure: 'BendedLeftRight', hasInputs: false, hasOutputs: false, hasFunctionButtons: false, hasProperties: true,  canAddProperties: true, } },
       { category: 'CodeFlow_Button',          template: dsl_Component, param: { portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: true,  hasUnit: false,  figure: 'Rectangle',       hasInputs: false, hasOutputs: false, hasFunctionButtons: true,  hasProperties: true,  canAddProperties: false,  isFromLinkable: true,  isToLinkable: false, fromSpot: go.Spot.Center, toSpot:go.Spot.Center, buttonMinSize: new go.Size(70, 20), labelTextAlign: 'left', } },
       { category: 'CodeFlow_FeatureOnOff',    template: dsl_Component, param: { portId: 'Feature', isFromLinkable: true,  isToLinkable: true,  hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: false, hasUnit: false,  figure: 'Rectangle',       hasInputs: false, hasOutputs: false, hasFunctionButtons: true,  hasProperties: false, buttonInternalCallback: featureOnOff, isCheckBoxes: true, hasProperties: false, labelStroke: 'white',     fromSpot: go.Spot.Center, toSpot:go.Spot.Center, buttonStroke: 'white', labelTextAlign: 'left',} },
       { category: 'CodeFlow_Feature',         template: dsl_Component, param: { portId: 'Feature', isFromLinkable: true,  isToLinkable: true,  hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: false, hasUnit: false,  figure: 'Rectangle',       hasInputs: false, hasOutputs: false, hasFunctionButtons: false, hasProperties: false, labelStroke: 'white',     fromSpot: go.Spot.Right, toSpot:go.Spot.Left, buttonStroke: 'white', labelTextAlign: 'left',} },
-      { category: 'CodeFlow_File',            template: dsl_BasicNode, param: { portId: 'File',    isFromLinkable: true,  isToLinkable: true,  hasTag: false,  hasType: true,  isTypeEditable: false, type: '@fileTypeName', hasValue: false, hasUnit: false,  figure: 'File',            minSize: new go.Size(150,40), labelTextAlign: 'center',                  labelStroke: 'black', typeMenu: fileTypeContextMenu,  } },
       { category: 'CodeFlow_Bus',             template: dsl_BasicNode, param: { portId: 'Bus',     isFromLinkable: true,  isToLinkable: true,  hasTag: false,  hasType: false,  isTypeEditable: false, hasValue: false, hasUnit: false,  figure: 'ellipse',            minSize: new go.Size(40,40), labelTextAlign: 'center',                  labelStroke: 'black',  } },
     ],
     dataNodeList: [
@@ -416,16 +415,6 @@ function CodeFlowDSL_getDSL( g ) {
         'isFile': true,
         'fileTypeName': 'Javascript',
         'fileType': 'text/javascript',
-      },
-      {
-        label: 'File',
-        size: '180 35',
-        category: 'CodeFlow_File',
-        color: 'lightseagreen',
-        'isFile': true,
-        'fileTypeName': 'Javascript',
-        'fileType': 'text/javascript',
-        'fileURL': '',
       },
     ],
     templateLinkList: [
