@@ -6,7 +6,9 @@
     "fileURL": "/fileServer/graphRoot.json",
     "fileType": "text/json"
   },
-  "openWindowList": {},
+  "openWindowList": {
+    "/fileServer/graphRoot.json": {}
+  },
   "pinnedWindow": {
     "#systemPalette#": {
       "key": "DSL Palette",
@@ -20,18 +22,6 @@
         1483
       ],
       "isVisible": true
-    },
-    "#systemMonitor#": {
-      "key": "System Monitor",
-      "isFile": true,
-      "fileURL": "#systemMonitor#",
-      "fileType": "system/status",
-      "editorPosition": [
-        533,
-        40,
-        768,
-        329
-      ]
     }
   },
   "isReadOnly": false,

@@ -59,7 +59,7 @@ const config = {
     testPath:          '../test', 
     webServerProtocol: 'http',
     webServerName:     'localhost',
-    webServerPort:     7575,
+    webServerPort:     80,
     webSocketURL:      '', // Defined later...
     ssl: {
       enabled: false,
