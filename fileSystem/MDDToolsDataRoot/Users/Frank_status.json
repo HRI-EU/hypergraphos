@@ -223,63 +223,17 @@
       "key": 59,
       "location": "-2650 -570",
       "group": 64
-    },
-    {
-      "label": "CodeFlowDSL",
-      "size": "150 100",
-      "category": "Hierarchy_FolderContent",
-      "fileType": "text/json",
-      "isDir": true,
-      "fileURL": "/fileServer/00/98.json",
-      "key": 2,
-      "location": "-2790 -490"
-    },
-    {
-      "key": "Root Graph",
-      "isDir": true,
-      "fileURL": "/fileServer/graphRoot.json",
-      "fileType": "text/json"
-    },
-    {
-      "label": "Antonello Home",
-      "size": "290 200",
-      "category": "Hierarchy_FolderContent",
-      "isDir": true,
-      "fileType": "text/json",
-      "fileURL": "/fileServer/00/46.json",
-      "key": 39,
-      "location": "1160 5272",
-      "imageURL": "",
-      "group": 12
-    },
-    {
-      "key": "Root Graph",
-      "isDir": true,
-      "fileURL": "/fileServer/graphRoot.json",
-      "fileType": "text/json"
-    },
-    {
-      "label": "Frankonello Project Space",
-      "size": "290 290",
-      "category": "Hierarchy_FolderImage",
-      "fileType": "text/json",
-      "isDir": true,
-      "fileURL": "/fileServer/00/01.json",
-      "imageURL": "/fileServer/pictures/Frankonello.png",
-      "key": 35,
-      "location": "1470 642",
-      "group": 13
     }
   ],
   "currentGraphNode": {
-    "label": "New Avatar 2.1 - Dialog 1.1 (flat)",
-    "size": "600 402",
+    "label": "CodeFlowDSL",
+    "size": "150 100",
     "category": "Hierarchy_FolderContent",
-    "isDir": true,
     "fileType": "text/json",
-    "fileURL": "/fileServer/00/49.json",
-    "key": 50,
-    "location": "-770 2760"
+    "isDir": true,
+    "fileURL": "/fileServer/00/98.json",
+    "key": 2,
+    "location": "-2790 -490"
   },
   "openWindowList": {
     "/fileServer/graphRoot.json": {},
@@ -459,7 +413,14 @@
         556
       ]
     },
-    "/fileServer/00/52.json": {},
+    "/fileServer/00/52.json": {
+      "5": [
+        2215,
+        290,
+        400,
+        350
+      ]
+    },
     "/fileServer/00/49.json": {
       "19": [
         1517,
@@ -668,25 +629,53 @@
         33,
         400,
         350
-      ],
-      "117": [
-        762,
-        458,
-        568,
-        414
-      ],
-      "System Monitor": [
-        1430,
-        330,
-        540,
-        170
       ]
     },
     "/fileServer/00/91.json": {},
     "/fileServer/00/93.json": {},
-    "/fileServer/00/97.json": {},
-    "/fileServer/00/98.json": {},
-    "/fileServer/00/94.json": {}
+    "/fileServer/00/97.json": {
+      "26": [
+        2725,
+        226,
+        400,
+        350
+      ]
+    },
+    "/fileServer/00/98.json": {
+      "9": [
+        551,
+        121,
+        764,
+        1839
+      ],
+      "16": [
+        507,
+        849,
+        400,
+        350
+      ],
+      "24": [
+        2100,
+        28,
+        893,
+        1625
+      ],
+      "100": [
+        1547,
+        1260,
+        400,
+        350
+      ],
+      "System Monitor": [
+        869,
+        48,
+        1322,
+        187
+      ]
+    },
+    "/fileServer/00/94.json": {},
+    "/fileServer/00/99.json": {},
+    "/fileServer/01/02.json": {}
   },
   "pinnedWindow": {
     "#systemPalette#": {
@@ -695,8 +684,8 @@
       "fileURL": "#systemPalette#",
       "fileType": "input/fields",
       "editorPosition": [
-        174,
-        123,
+        135,
+        858,
         453,
         968
       ],

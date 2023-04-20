@@ -12,5 +12,7 @@
   "PicturesDSL": "/fileServer/DSL/PicturesDSL.js",
   "NoteDSL": "/fileServer/DSL/NoteDSL.js",
   "TutorDSL": "/fileServer/DSL/TutorDSL.js",
-  "KanbanDSL": "/fileServer/DSL/KanbanDSL.js"
+  "TreeDSL": "/fileServer/DSL/TreeDSL.js",
+  "KanbanDSL": "/fileServer/DSL/KanbanDSL.js",
+  "DSLConfigDSL": "/fileServer/DSL/DSLConfigDSL.js"
 }

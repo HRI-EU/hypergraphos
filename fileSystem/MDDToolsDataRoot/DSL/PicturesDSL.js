@@ -71,7 +71,7 @@ function PicturesDSL_getDSL( g ) {
     templateNodeList: [
       { category: 'Pictures_NodeType0', template: dsl_Pictures_NodeType0, },
       { category: 'Pictures_Basic', template: dsl_Pictures, },
-      { category: 'Pictures_Link', template: dsl_Pictures, param:{ isLinkFromPicture: true }},
+      { category: 'Pictures_Link', template: dsl_Pictures, param:{ isLinkFromImage: true }},
     ],
     dataNodeList: [
       {

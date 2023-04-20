@@ -246,16 +246,34 @@
       "isDir": true,
       "fileURL": "/fileServer/graphRoot.json",
       "fileType": "text/json"
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
     }
   ],
   "currentGraphNode": {
-    "key": "Root Graph",
+    "label": "Frankonello Home",
+    "size": "280 180",
+    "category": "Hierarchy_FolderContent",
     "isDir": true,
-    "fileURL": "/fileServer/graphRoot.json",
-    "fileType": "text/json"
+    "fileType": "text/json",
+    "fileURL": "/fileServer/00/01.json",
+    "key": 41,
+    "location": "1480 921",
+    "group": 13
   },
   "openWindowList": {
-    "/fileServer/graphRoot.json": {},
+    "/fileServer/graphRoot.json": {
+      "63": [
+        100,
+        100,
+        400,
+        350
+      ]
+    },
     "/fileServer/graphTwo.json": {
       "Alpha Node": [
         434,
@@ -332,14 +350,7 @@
         259
       ]
     },
-    "/fileServer/00/29.json": {
-      "2": [
-        458,
-        94,
-        400,
-        350
-      ]
-    },
+    "/fileServer/00/29.json": {},
     "/fileServer/00/19.json": {
       "18": [
         222,
@@ -429,21 +440,44 @@
       ]
     },
     "/fileServer/00/49.json": {
-      "35": [
-        1087,
-        184,
-        882,
-        813
+      "23": [
+        1294,
+        233,
+        764,
+        1021
       ]
     },
     "/fileServer/00/52.json": {},
     "/fileServer/00/65.json": {},
     "/fileServer/00/62.json": {},
-    "/fileServer/00/85.json": {},
+    "/fileServer/00/85.json": {
+      "100": [
+        1513,
+        670,
+        509,
+        543
+      ],
+      "102": [
+        1859,
+        621,
+        563,
+        936
+      ]
+    },
     "/fileServer/00/89.json": {},
     "/fileServer/00/77.json": {},
     "/fileServer/00/94.json": {},
-    "/fileServer/00/67.json": {}
+    "/fileServer/00/67.json": {},
+    "/fileServer/00/98.json": {},
+    "/fileServer/00/97.json": {
+      "0": [
+        1367,
+        102,
+        555,
+        651
+      ]
+    },
+    "/fileServer/00/99.json": {}
   },
   "pinnedWindow": {
     "#systemPalette#": {
@@ -452,12 +486,12 @@
       "fileURL": "#systemPalette#",
       "fileType": "input/fields",
       "editorPosition": [
-        67,
-        101,
-        232,
-        876
+        85,
+        114,
+        226,
+        862
       ],
-      "isVisible": true
+      "isVisible": false
     }
   },
   "isReadOnly": false,
