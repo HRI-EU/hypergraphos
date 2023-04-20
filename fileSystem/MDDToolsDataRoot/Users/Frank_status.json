@@ -251,35 +251,13 @@
       "location": "1160 5272",
       "imageURL": "",
       "group": 12
-    },
-    {
-      "key": "Root Graph",
-      "isDir": true,
-      "fileURL": "/fileServer/graphRoot.json",
-      "fileType": "text/json"
-    },
-    {
-      "label": "Frankonello Project Space",
-      "size": "290 290",
-      "category": "Hierarchy_FolderImage",
-      "fileType": "text/json",
-      "isDir": true,
-      "fileURL": "/fileServer/00/01.json",
-      "imageURL": "/fileServer/pictures/Frankonello.png",
-      "key": 35,
-      "location": "1470 642",
-      "group": 13
     }
   ],
   "currentGraphNode": {
-    "label": "New Avatar 2.1 - Dialog 1.1 (flat)",
-    "size": "600 402",
-    "category": "Hierarchy_FolderContent",
+    "key": "Root Graph",
     "isDir": true,
-    "fileType": "text/json",
-    "fileURL": "/fileServer/00/49.json",
-    "key": 50,
-    "location": "-770 2760"
+    "fileURL": "/fileServer/graphRoot.json",
+    "fileType": "text/json"
   },
   "openWindowList": {
     "/fileServer/graphRoot.json": {},
