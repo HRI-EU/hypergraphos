@@ -7,3 +7,4 @@ fileSystem/MDDToolsDataRoot/pictures/.DS_Store
 fileSystem/MDDToolsDataRoot/pictures/MetaFlow/.DS_Store
 fileSystem/MDDToolsDataRoot/System/.DS_Store
 .DS_Store
+.env

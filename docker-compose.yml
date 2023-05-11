@@ -24,6 +24,7 @@ services:
     labels:      
       - "traefik.http.routers.webserver.rule=Host(`www.hyper-graph.com`)"
       - "traefik.http.services.webserver.loadbalancer.server.port=80"
+      - "traefik.http.middlewares.web-auth.basicauth.users=${USERS}"
     ports:
       - 80:80
     user: node
@@ -35,6 +36,7 @@ services:
     networks:
       - traefik
     command: "sh -c ./startServer.sh"
+    restart: unless-stopped
     
 networks:
   traefik:
