@@ -40,6 +40,9 @@ services:
       - NODE_ENV=production
     volumes:
       - ./:/home/node/app
+      - type: bind
+        source: /home/hyper-graph/Projects/DevAll
+        target: /home/node/DevAll
     networks:
       - traefik
     command: "sh -c ./startServer.sh"
