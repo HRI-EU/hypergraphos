@@ -39,7 +39,9 @@ services:
     environment:
       - NODE_ENV=production
     volumes:
-      - ./:/home/node/app
+      - type: bind 
+        source: /home/hyper-graph/Projects/MDDTools
+        target: /home/node/app
       - type: bind
         source: /home/hyper-graph/Projects/DevAll
         target: /home/node/DevAll
