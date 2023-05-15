@@ -41,9 +41,14 @@ function loadSystem() {
   // Get url params values
   urlParams = {};
   eval( `urlParams = {${urlStrParams}}` );
-  // Fetch from HTTP headers the field "Authorization"
-  // base64 decode it into 'user:password'
   console.log( urlParams );
+  
+  if( !urlParams.name ) {
+    cookie = JSON.parse(document.cookie);
+    urlParams.name = cookie.name;
+  } else {
+    document.cookie = JSON.stringify({name: urlParams.name});
+  }
 
   // Define list of system scripts to be loaded
   scriptList = [
