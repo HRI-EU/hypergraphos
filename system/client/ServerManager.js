@@ -10,6 +10,8 @@ Date: 10.07.2020
 =============================================================================
 */
 
+const appData = {};
+
 const codeFileType = {
   "JavaScript":     {color: "orange",         fileType: "text/javascript",                ext: "js"},
   "Text":           {color: "yellow",         fileType: "text/text",                      ext: "txt"},
