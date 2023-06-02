@@ -774,11 +774,11 @@ class Graph {
 				let dataClean = {};
 				if( isInternalFunction ) {
 					// If it is an internal function we don't need to start from templateName
-					dataClean = this._getNodeDataCopy( d );
+					dataClean = this._getDataCopy( d );
 				} else {
 					// If external function we should define all possible field so user condition 
 					// will work all the time
-					dataClean = this._getNodeDataCopy( d, templateNode );
+					dataClean = this._getDataCopy( d, templateNode );
 				}
 				try {
 					if( conditionFn( dataClean )) {
@@ -810,7 +810,7 @@ class Graph {
 					found = ( valueStr.includes( searchValue ) );
 				}
 				if( found ) {
-					const dataClean = this._getNodeDataCopy( d );
+					const dataClean = this._getDataCopy( d );
 					result.push( dataClean );
 					if( isFirstOnly ) {
 						break;
@@ -845,12 +845,12 @@ class Graph {
 		if( data ) {
 			if( data.isSystem ) {
 				// If is system node => we give a copy of it
-				const nodeData = this._getNodeDataCopy( data );
+				const nodeData = this._getDataCopy( data );
 				result = this.updateSystemNode( nodeData );
 			} else {
 				// If isCopy => return a shallow copy of the data
 				if( isCopy ) {
-					result = this._getNodeDataCopy( data );
+					result = this._getDataCopy( data );
 				} else {
 					// If not system node => we give a pointer to it
 					result = data;
@@ -884,6 +884,31 @@ class Graph {
 				this.diagram.model.setDataProperty( data, field, value );
 				this.diagram.commitTransaction( 'Set Data Propery' );
 			}
+			this.em.call.onGraphChanged();
+		}
+	}
+	getLinkData( key, isCopy ) {
+		let result = null;
+		// Get link data for the given key
+		const data = this.diagram.model.findLinkDataForKey( key );
+		if( data ) {
+			// If isCopy => return a shallow copy of the data
+			if( isCopy ) {
+				result = this._getDataCopy( data );
+			} else {
+				// If not system node => we give a pointer to it
+				result = data;
+			}
+		}
+		return( result );
+	}
+	setLinkDataField( key, field, value ) {
+		// Get link data for the given key
+		const data = this.diagram.model.findLinkDataForKey( key );
+		if( data ) {
+			this.diagram.startTransaction( 'Set Data Propery' );
+			this.diagram.model.setDataProperty( data, field, value );
+			this.diagram.commitTransaction( 'Set Data Propery' );
 			this.em.call.onGraphChanged();
 		}
 	}
@@ -1581,13 +1606,13 @@ class Graph {
 			}
 		});
 	}
-	_getNodeDataCopy( nodeData, templateNode ) {
+	_getDataCopy( data, templateData ) {
 		// If we get a template node, we set result to a clone of it (avoid reference to template)
-		let result = ( templateNode? Object.assign( {}, templateNode ): {} );
-		const fieldList = Object.keys( nodeData );
+		let result = ( templateData? Object.assign( {}, templateData ): {} );
+		const fieldList = Object.keys( data );
 		for( const field of fieldList ) {
 			if( !field.startsWith( '_' ) ) {
-				result[field] = nodeData[field];
+				result[field] = data[field];
 			}
 		}
 		return( result );
@@ -1603,7 +1628,7 @@ class Graph {
 				// Strip out any GoJS internal data field
 				const dataNode = it.value.data;
 				const filterDataNode = this.filterObjectData( dataNode );
-				const stripData = this._getNodeDataCopy( filterDataNode );
+				const stripData = this._getDataCopy( filterDataNode );
 				// Push stripped data object
 				dataList[++keyIndex] = stripData;
 				keyList.push( dataNode.key );

@@ -460,7 +460,7 @@ class GraphEditor extends EditorBase {
         }
       } else {
         // First, save the json graph
-        nodeDataTemp = this.editor._getNodeDataCopy( this.nodeData );
+        nodeDataTemp = this.editor._getDataCopy( this.nodeData );
         const source = this.editor.getEditorSource();
         nodeDataTemp.fileContent = source;
         console.log( 'Graph call saveNodeContent()')
@@ -622,7 +622,7 @@ class TextEditor extends EditorBase {
       } else {
         const source = this.editor.getEditorSource();
         const e = m.e.getEditor( config.htmlDiv.graphDiv );
-        const nodeDataTemp = e._getNodeDataCopy( this.nodeData );
+        const nodeDataTemp = e._getDataCopy( this.nodeData );
         nodeDataTemp.fileContent = source;
         saveNodeContent( nodeDataTemp, onEditorSaved );
       }
@@ -756,7 +756,7 @@ class HTMLExploreEditor extends EditorBase {
       } else {
         const source = this.editor.getContents();
         const e = m.e.getEditor( config.htmlDiv.graphDiv );
-        const nodeDataTemp = e._getNodeDataCopy( this.nodeData );
+        const nodeDataTemp = e._getDataCopy( this.nodeData );
         nodeDataTemp.fileContent = source;
         saveNodeContent( nodeDataTemp, onEditorSaved );
       }

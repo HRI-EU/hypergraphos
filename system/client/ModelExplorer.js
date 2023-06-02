@@ -46,8 +46,8 @@ class ModelExplorer {
     }
 
     const nodeData = this.model[id].indexModel.node.key[key];
-    if( nodeData ) {
-      result = nodeData;
+    if( nodeData && nodeData.length ) {
+      result = nodeData[0];
     }
     // for( const nodeData of nodeList ) {
     //   if( nodeData.key == key ) {
