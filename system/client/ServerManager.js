@@ -10,6 +10,8 @@ Date: 10.07.2020
 =============================================================================
 */
 
+const appData = {};
+
 const codeFileType = {
   "JavaScript":     {color: "orange",         fileType: "text/javascript",                ext: "js"},
   "Text":           {color: "yellow",         fileType: "text/text",                      ext: "txt"},
@@ -42,6 +44,13 @@ function loadSystem() {
   urlParams = {};
   eval( `urlParams = {${urlStrParams}}` );
   console.log( urlParams );
+  
+  if( !urlParams.name ) {
+    cookie = JSON.parse(document.cookie);
+    urlParams.name = cookie.name;
+  } else {
+    document.cookie = JSON.stringify({name: urlParams.name});
+  }
 
   // Define list of system scripts to be loaded
   scriptList = [

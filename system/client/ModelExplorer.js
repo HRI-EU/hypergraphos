@@ -36,6 +36,27 @@ class ModelExplorer {
     }
     this._createModelIndex( id );
   }
+  getNode( id, key ) {
+    id = this._getId( id );
+    let result = null;
+    //let nodeList = this.model[id].objModel.nodeDataArray;
+
+    if( !id ) {
+      return( result );
+    }
+
+    const nodeData = this.model[id].indexModel.node.key[key];
+    if( nodeData ) {
+      result = nodeData;
+    }
+    // for( const nodeData of nodeList ) {
+    //   if( nodeData.key == key ) {
+    //     result = nodeData;
+    //     break;
+    //   }
+    // }
+    return( result );
+  }
   getNodeIf( id, condition, index ) {
     id = this._getId( id );
     let result = [];
