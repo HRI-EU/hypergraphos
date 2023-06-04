@@ -53,8 +53,12 @@ class EditorManager extends EditorChangeManager {
     const isPinnedWindow = ( nodeData.isFile && pw[nodeData.isFile] );
     return( isIdExist || isPinnedWindow );
   }
-  getEditor( id ) {
+  getEditor( idOrData ) {
     let result = null;
+    let id = idOrData;
+    if( typeof( idOrData ) == 'object' ) {
+      id = m.e._getDOMUniqueId( idOrData );
+    }
     if( this.editorList[id] ) {
       result = this.editorList[id].editor;
      }
