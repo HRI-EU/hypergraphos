@@ -12,7 +12,7 @@ Date: 10.07.2020
 
 class EditorManager extends EditorChangeManager {
   constructor() {
-    super( 0.5 ); // Saving timeout: 5 seconds
+    super( 0.5 ); // Saving timeout: 0.5 (500 milli seconds)
     this.id = 'Session';
     this.registeredEditorList = [
       // NOTE: order matter here, since the first matching editor get selected
