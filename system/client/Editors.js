@@ -78,7 +78,7 @@ class EditorBase extends EditorChangeManager {
     }
   }
   setPinOn() {
-    m.e.pinEditor( this.id );
+    m.e.pinEditor( this.id, true );
   }
   isPin() {
     const pw = getStatus( 'pinnedWindow' );

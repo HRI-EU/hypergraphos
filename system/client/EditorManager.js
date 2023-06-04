@@ -356,11 +356,11 @@ class EditorManager extends EditorChangeManager {
       this.editorHasChanged();
     }
   }
-  pinEditor( id ) {
+  pinEditor( id, isForcePin ) {
     const ei = this.getEditorInfo( id );
     const nodeData = ei.nodeData;
     // If not yet pinned window
-    this.tooglePinNodeData( nodeData )
+    this.tooglePinNodeData( nodeData, isForcePin )
     // If succesfully pinned
     if( this.isURLPinned( nodeData.fileURL) ) {
       // In case, remove window from openWindowList
