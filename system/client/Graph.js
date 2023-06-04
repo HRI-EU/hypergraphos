@@ -859,9 +859,12 @@ class Graph {
 		}
 		return( result );
 	}
-	setNodeDataField( key, field, value ) {
-		// Get node data for the given key
-		const data = this.diagram.model.findNodeDataForKey( key );
+	setNodeDataField( keyOrData, field, value ) {
+		let data = keyOrData;
+		if( typeof( keyOrData ) != 'object' ) {
+			// Get node data for the given key
+			data = this.diagram.model.findNodeDataForKey( keyOrData );
+		}
 		if( data ) {
 			if( data.isSystem && ( field == 'fileContent' ) ) {
 				switch( data.isSystem ) {
