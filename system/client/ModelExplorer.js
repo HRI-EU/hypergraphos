@@ -36,6 +36,27 @@ class ModelExplorer {
     }
     this._createModelIndex( id );
   }
+  getProperty( keyOrData, name, field ) {
+    field = field || 'value';
+    // Get node data from a node key
+    const data = keyOrData;
+    if( typeof( data ) != 'object' ) {
+      data = appData.me.getNode( modelId, keyOrData );
+    }
+    
+    // Find property
+    let propertyValue = null
+    if( data ) {
+      for( const rowEl of data.rows ) {
+        if( rowEl.name == name ) {
+          // Get property value
+          propertyValue = rowEl[field];
+        }
+      }
+    }
+    // Return property value
+    return( propertyValue );
+  }
   getNode( id, key ) {
     id = this._getId( id );
     let result = null;
