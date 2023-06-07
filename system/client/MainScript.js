@@ -61,7 +61,8 @@ function setSystemSaved() {
 }
 function setStatus( setFunction ) {
   if( setFunction ) {
-    setFunction( m.status );
+    //setFunction( m.status ); WRONG!!!!
+    setFunction( m );
     if( !m.isJustStarted ) {
       m.e.editorHasChanged( m.e.id );
     }
