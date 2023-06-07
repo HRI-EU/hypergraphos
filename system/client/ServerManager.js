@@ -130,7 +130,7 @@ function getNewFileServerURL( extension ) {
   const host = ''; document.location.origin;
   const newFilePath = `${host}${config.host.fileServerURL}${newPath}/${newFile}`;
   // Update fileIndex file
-  const url = `${config.host.fileServerURL}/fileIndex.json`;
+  const url = `${config.host.fileServerSystemURL}/fileIndex.json`;
   const source = JSON.stringify( m.fileInfo );
   _saveFile( url, source );
   return( newFilePath );
