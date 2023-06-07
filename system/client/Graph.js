@@ -1570,7 +1570,9 @@ class Graph {
 				const dataNodeFieldList = Object.keys( dataNode );
 				for( const field of dataNodeFieldList ) {
 					// If the field does not start with '_' and is not a system field
-					if( !field.startsWith('_') && ( systemFieldList.indexOf( field ) == -1 ) ) {
+					if( !field.startsWith('_') &&
+					    ( systemFieldList.indexOf( field ) == -1 ) &&
+						( field != 'label' ) ) {
 						if( templateData[field] ) {
 							const value = templateData[field];
 							this.diagram.model.setDataProperty( dataNode, field, value );
