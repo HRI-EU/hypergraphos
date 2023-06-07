@@ -349,9 +349,16 @@ function loadFileServerInfo() {
   });
 }
 function loadCurrentStatus( params ) {
+  // Load from server DataRoot user configuration file
   const url = config.host.statusURL;
+  // Load user config
   _openFile( url, (source)=> {
     m.status = JSON.parse( source );
+    // TODO: to clean the fileServer info in the status
+    // We could do that
+    // if( m.status.fileServer ) {
+    //   delete m.status.fileServer;
+    // }
 
     // Create a new Editor Manager
     m.e = new EditorManager( m.status );

@@ -95,6 +95,7 @@ function getNewFileServerURL( extension ) {
   const getPath = function( pathV ) {
     let result = '';
     for( let i = 0; i < pathV.length; i=i+2 ) {
+      // TODO: check, why am I taking i, i+2???? should not be i, i+1
       result = result+'/'+pathV.substring( i, i+2 );
     }
     return( result );
