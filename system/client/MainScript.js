@@ -364,9 +364,9 @@ function loadCurrentStatus( params ) {
     m.status = JSON.parse( source );
     // TODO: to clean the fileServer info in the status
     // We could do that
-    // if( m.status.fileServer ) {
-    //   delete m.status.fileServer;
-    // }
+    if( m.status.fileServer ) {
+      delete m.status.fileServer;
+    }
 
     // Create a new Editor Manager
     m.e = new EditorManager( m.status );
