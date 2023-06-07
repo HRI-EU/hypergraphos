@@ -59,10 +59,17 @@ function setSystemSaved() {
     m.mddStatus.className = 'saved';
   }
 }
+function setFileIndexStatus( setFunction ) {
+  if( setFunction ) {
+    setFunction( m );
+    if( !m.isJustStarted ) {
+      m.e.editorHasChanged( m.e.id );
+    }
+  }
+}
 function setStatus( setFunction ) {
   if( setFunction ) {
-    //setFunction( m.status ); WRONG!!!!
-    setFunction( m );
+    setFunction( m.status );
     if( !m.isJustStarted ) {
       m.e.editorHasChanged( m.e.id );
     }

@@ -124,7 +124,7 @@ function getNewFileServerURL( extension ) {
     pathV = pathV.substring( 0, pathVlen-1 )+'0'+pathV.substring( pathVlen-1 );
   }
   const newPath = getPath( pathV );
-  setStatus( (s)=> s.fileServer = fsInfo );
+  setFileIndexStatus( (s)=> s.fileServer = fsInfo );
   
   // Generate next file/path
   const host = ''; document.location.origin;
