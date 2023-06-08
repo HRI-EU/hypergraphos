@@ -10,6 +10,21 @@ Date: 10.07.2020
 =============================================================================
 */
 
+const fs = require( 'fs' );
+
+function ls( dir ) {
+  console.log( 'Current directory content' );
+  console.log( '-------------------------' );
+  fs.readdirSync( dir ).forEach(file => {
+    console.log(file);
+  });
+  console.log( '-------------------------' );
+}
+
+if( true ) {
+  ls( '.' );
+}
+
 const config = require( '../serverConfig.js' );
 const { exec } = require( 'child_process' );
 
@@ -182,7 +197,6 @@ class ExecuteScript {
 }
 
 // Create Client Configuration
-const fs = require( 'fs' );
 const userName = config.client.host.name;
 const ccPathFileName = config.server.clientPath+`/configs/${userName}_config.js`;
 const source = '/* \n'+

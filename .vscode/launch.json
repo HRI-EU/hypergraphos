@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Launch Server Chrome",
+            "request": "launch",
+            "type": "node",
+            "cwd": "${workspaceFolder}\\system\\server\\",
+            "program": "server.js"
+        },
+        {
             "name": "Attach by Process ID",
             "processId": "8",
             "request": "attach",

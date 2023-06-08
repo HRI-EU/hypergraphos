@@ -85,6 +85,13 @@ const os = require('os');
 config.host = os.userInfo();
 config.host['hostname'] = os.hostname();
 
+// Execute virtual Environment
+const fs = require( 'fs' );
+if( fs.existsSync( '../virtualEnv.js' ) ) {
+  virtualEnv = require( './virtualEnv.js' );
+  virtualEnv( config );
+}
+
 // Definition of dynamic values
 config.server.webSocketURL = `ws://${config.server.webServerName}`;
 
@@ -129,9 +136,16 @@ config.client.graph.isDoubleClickCreateNodeEnabled = false;
 // config.server.tempRoot = '../../fileSystem/MDDToolsTempRoot';
 config.server.dataRoot = '../../../DevAll/MDDToolsDataRoot';
 config.server.tempRoot = '../../../DevAll/MDDToolsTempRoot';
-} if( config.host.username == "RE900106" ) {
+} else if( config.host.username == "RE900106" ) {
   config.server.dataRoot = '../../../../../Dropbox/DevAll/MDDToolsDataRoot';
   config.server.tempRoot = '../../../../../Dropbox/DevAll/MDDToolsTempRoot';
+  config.client.host.name = 'Frank';
+  config.client.host.statusURL = '/fileServer/Users/Frank_status.json';
+  config.client.graph.allowDeleteKey = true;
+  config.client.graph.isDoubleClickCreateNodeEnabled = false;
+} else if( config.host.username == "HGMigration" ) {
+  config.server.dataRoot = '../../../../../DevAll//MDDToolsDataRoot';
+  config.server.tempRoot = '../../../../../DevAll//MDDToolsTempRoot';
   config.client.host.name = 'Frank';
   config.client.host.statusURL = '/fileServer/Users/Frank_status.json';
   config.client.graph.allowDeleteKey = true;
