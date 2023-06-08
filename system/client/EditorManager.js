@@ -382,7 +382,7 @@ class EditorManager extends EditorChangeManager {
       const parentGraph = ei.getParentGraph();
       if( parentGraph ) {
         const url = parentGraph.fileURL;
-        if( !owl[url][nodeData.key] ) {
+        if( owl[url] && !owl[url][nodeData.key] ) {
           const position = this.getEditorPosition( id );
           owl[url][nodeData.key] = position;
           setStatus( (s)=> s.openWindowList = owl );

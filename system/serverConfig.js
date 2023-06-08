@@ -129,5 +129,12 @@ config.client.graph.isDoubleClickCreateNodeEnabled = false;
 // config.server.tempRoot = '../../fileSystem/MDDToolsTempRoot';
 config.server.dataRoot = '../../../DevAll/MDDToolsDataRoot';
 config.server.tempRoot = '../../../DevAll/MDDToolsTempRoot';
+} if( config.host.username == "RE900106" ) {
+  config.server.dataRoot = '../../../../../Dropbox/DevAll/MDDToolsDataRoot';
+  config.server.tempRoot = '../../../../../Dropbox/DevAll/MDDToolsTempRoot';
+  config.client.host.name = 'Frank';
+  config.client.host.statusURL = '/fileServer/Users/Frank_status.json';
+  config.client.graph.allowDeleteKey = true;
+  config.client.graph.isDoubleClickCreateNodeEnabled = false;
 }
 module.exports = config;
