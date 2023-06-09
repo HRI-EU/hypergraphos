@@ -36,12 +36,12 @@ class ModelExplorer {
     }
     this._createModelIndex( id );
   }
-  getProperty( keyOrData, name, field ) {
+  getProperty( id, keyOrData, name, field ) {
     field = field || 'value';
     // Get node data from a node key
     const data = keyOrData;
     if( typeof( data ) != 'object' ) {
-      data = appData.me.getNode( modelId, keyOrData );
+      data = this.getNode( id, keyOrData );
     }
     
     // Find property
