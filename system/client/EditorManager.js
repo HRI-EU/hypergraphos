@@ -382,7 +382,7 @@ class EditorManager extends EditorChangeManager {
       const parentGraph = ei.getParentGraph();
       if( parentGraph ) {
         const url = parentGraph.fileURL;
-        if( !owr[url] || !owl[url][nodeData.key] ) {
+        if( !owl[url] || !owl[url][nodeData.key] ) {
           if( !owl[url]  ) {
             owl[url] = {};
           }
