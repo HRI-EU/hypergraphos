@@ -10,6 +10,21 @@ Date: 10.07.2020
 =============================================================================
 */
 
+const fs = require( 'fs' );
+
+function ls( dir ) {
+  console.log( 'Current directory content' );
+  console.log( '-------------------------' );
+  fs.readdirSync( dir ).forEach(file => {
+    console.log(file);
+  });
+  console.log( '-------------------------' );
+}
+
+if( true ) {
+  ls( '.' );
+}
+
 const config = require( '../serverConfig.js' );
 const { exec } = require( 'child_process' );
 
@@ -91,12 +106,17 @@ class GETFileStatus {
 class POSTServer {
   constructor( realPath ) {
     this.virtualPath = '/fileServer/';
+    this.virtualPathRel = 'fileServer/';
     this.realPath = realPath;
   }
   serve( request, response, body ) {
     try {
       const fileInfo = JSON.parse( body );
       if( fileInfo && fileInfo.url ) {
+        // If relative url => make it absolute
+        if( fileInfo.url.startsWith( this.virtualPathRel ) ) {
+          fileInfo.url = '/'+fileInfo.url;
+        }
         if( fileInfo.url.startsWith( this.virtualPath ) ) {
           // Get updated url
           const filePathName = recomputeURL( fileInfo.url, this.virtualPath, this.realPath );
@@ -139,6 +159,7 @@ class POSTServer {
 class ExecuteScript {
   constructor( realPath ) {
     this.virtualPath = '/executeScript/';
+    this.virtualPathRel = 'executeScript/';
     this.realPath = realPath;
   }
   serve( request, response ) {
@@ -182,7 +203,6 @@ class ExecuteScript {
 }
 
 // Create Client Configuration
-const fs = require( 'fs' );
 const userName = config.client.host.name;
 const ccPathFileName = config.server.clientPath+`/configs/${userName}_config.js`;
 const source = '/* \n'+
