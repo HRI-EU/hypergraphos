@@ -16,16 +16,17 @@ class EditorManager extends EditorChangeManager {
     this.id = 'Session';
     this.registeredEditorList = [
       // NOTE: order matter here, since the first matching editor get selected
-      { name: 'WebViewer',            fileType: (ft)=> ft == 'application/html',        classRef: WebViewer },
-      { name: 'HTMLExploreEditor',    fileType: (ft)=> ft == 'application/explore',     classRef: HTMLExploreEditor },
-      { name: 'TextEditor',           fileType: (ft)=> ft.startsWith( 'text/' ),        classRef: TextEditor },
-      { name: 'ImageEditor',          fileType: (ft)=> ft.startsWith( 'image/' ),       classRef: ImageEditor },
-      { name: 'GraphEditor',          fileType: (ft)=> ft == 'text/json',               classRef: GraphEditor },
-      { name: 'FindViewer',           fileType: (ft)=> ft == 'input/fields',            classRef: FindViewer },
-      { name: 'DSLViewer',            fileType: (ft)=> ft == 'input/fields',            classRef: DSLViewer },
-      { name: 'GraphTemplateViewer',  fileType: (ft)=> ft == 'input/fields',            classRef: GraphTemplateViewer },
-      { name: 'SystemMonitorViewer',  fileType: (ft)=> ft == 'system/status',           classRef: SystemMonitorViewer },
-      { name: 'AnimatorEditor',       fileType: (ft)=> ft == 'input/fields',            classRef: AnimatorEditor },
+      { name: 'WebViewer',            fileType: (ft)=> ft == 'application/html',          classRef: WebViewer },
+      { name: 'HTMLExploreEditor',    fileType: (ft)=> ft == 'application/explore',       classRef: HTMLExploreEditor },
+      { name: 'TextEditor',           fileType: (ft)=> ft.startsWith( 'text/' ),          classRef: TextEditor },
+      { name: 'TextEditor',           fileType: (ft)=> ft == 'application/x-shellscript', classRef: TextEditor },
+      { name: 'ImageEditor',          fileType: (ft)=> ft.startsWith( 'image/' ),         classRef: ImageEditor },
+      { name: 'GraphEditor',          fileType: (ft)=> ft == 'text/json',                 classRef: GraphEditor },
+      { name: 'FindViewer',           fileType: (ft)=> ft == 'input/fields',              classRef: FindViewer },
+      { name: 'DSLViewer',            fileType: (ft)=> ft == 'input/fields',              classRef: DSLViewer },
+      { name: 'GraphTemplateViewer',  fileType: (ft)=> ft == 'input/fields',              classRef: GraphTemplateViewer },
+      { name: 'SystemMonitorViewer',  fileType: (ft)=> ft == 'system/status',             classRef: SystemMonitorViewer },
+      { name: 'AnimatorEditor',       fileType: (ft)=> ft == 'input/fields',              classRef: AnimatorEditor },
       //window.open('https://www.google.com','node13',"width=200,height=100")
     ];
 
@@ -386,7 +387,7 @@ class EditorManager extends EditorChangeManager {
       const parentGraph = ei.getParentGraph();
       if( parentGraph ) {
         const url = parentGraph.fileURL;
-        if( !owr[url] || !owl[url][nodeData.key] ) {
+        if( !owl[url] || !owl[url][nodeData.key] ) {
           if( !owl[url]  ) {
             owl[url] = {};
           }
