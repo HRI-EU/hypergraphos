@@ -9,7 +9,7 @@
             "request": "launch",
             "type": "node",
             "cwd": "${workspaceFolder}\\system\\server\\",
-            "program": "server.js"
+            "program": "${workspaceFolder}\\system\\server\\server.js"
         },
         {
             "name": "Attach by Process ID",

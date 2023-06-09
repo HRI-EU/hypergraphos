@@ -106,12 +106,17 @@ class GETFileStatus {
 class POSTServer {
   constructor( realPath ) {
     this.virtualPath = '/fileServer/';
+    this.virtualPathRel = 'fileServer/';
     this.realPath = realPath;
   }
   serve( request, response, body ) {
     try {
       const fileInfo = JSON.parse( body );
       if( fileInfo && fileInfo.url ) {
+        // If relative url => make it absolute
+        if( fileInfo.url.startsWith( this.virtualPathRel ) ) {
+          fileInfo.url = '/'+fileInfo.url;
+        }
         if( fileInfo.url.startsWith( this.virtualPath ) ) {
           // Get updated url
           const filePathName = recomputeURL( fileInfo.url, this.virtualPath, this.realPath );
@@ -154,6 +159,7 @@ class POSTServer {
 class ExecuteScript {
   constructor( realPath ) {
     this.virtualPath = '/executeScript/';
+    this.virtualPathRel = 'executeScript/';
     this.realPath = realPath;
   }
   serve( request, response ) {
