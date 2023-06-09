@@ -10,9 +10,7 @@ const config = {
     "fileStatusURL": "/fileStatus",
     "statusURL": "/fileServer/Users/Antonello_status.json"
   },
-  "remoteHost": {
-    "NUC": "192.168.1.11:7575"
-  },
+  "remoteHost": {},
   "htmlDiv": {
     "mainDiv": "mainDiv",
     "graphDiv": "diagram",
@@ -22,9 +20,9 @@ const config = {
     "linkPaletteDiv": "linkPalette"
   },
   "graph": {
-    "isDoubleClickCreateNodeEnabled": true,
-    "allowDeleteKey": false,
-    "colorSkema": "dark",
+    "isDoubleClickCreateNodeEnabled": false,
+    "allowDeleteKey": true,
+    "colorSkema": "light",
     "defaultDSL": "DefaultDSL",
     "rootGraphURL": "/fileServer/graphRoot.json",
     "rootGraphNodeData": {
@@ -36,6 +34,6 @@ const config = {
     "maxHistoryLength": 30
   },
   "server": {
-    "ip": "192.168.1.11"
+    "ip": "192.168.1.205"
   }
 };
