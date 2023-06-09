@@ -276,6 +276,12 @@ function getServerIp() {
   return( valueList.length? valueList[0].address : '0.0.0.0' );
 }
 function recomputeURL( url, virtualPath, realPath ) {
+  if( !virtualPath.endsWith( '/' ) ) {
+    virtualPath = virtualPath+'/';
+  }
+  if( !url.startsWith( '/' ) ) {
+    url = '/'+url;
+  }
   if( url.startsWith( virtualPath ) ) {
     const startIdx = virtualPath.length;
     // Remove '/fileServer/' virtual path
