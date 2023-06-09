@@ -52,6 +52,7 @@ const config = {
     // Path relative to the server.js script location
     debugOnFileContentOn: true,
     dataRoot:          '../../MDDToolsDataRoot',
+    deployRoot:        '../../MDDToolsDeployRoot',
     tempRoot:          '../../MDDToolsTempRoot',
     clientPath:        '../client',
     libPath:           '../../lib',
@@ -99,6 +100,7 @@ config.server.webSocketURL = `ws://${config.server.webServerName}`;
 if( ( config.host.hostname == 'Antonellos-Mini' ) ||
     ( config.host.hostname == 'Antonellos-Mac-mini.local' ) ) {
   config.server.dataRoot = '/Users/antonelloceravola/Dropbox/DevAll/MDDToolsDataRoot';
+  config.server.deployRoot = '/Users/antonelloceravola/Dropbox/DevAll/MDDToolsDeployRoot';
   config.server.tempRoot = '/Users/antonelloceravola/Dropbox/DevAll/MDDToolsTempRoot';
   config.client.host.name = 'Antonello';
   config.client.graph.colorSkema = 'dark';
@@ -110,6 +112,7 @@ if( ( config.host.hostname == 'Antonellos-Mini' ) ||
            ( config.host.username == 'Frank Joublin' ) ) {
            // C:\Users\frank\Dropbox\DevAll\MDDToolsDataRoot
   config.server.dataRoot = '../../../../../Dropbox/DevAll/MDDToolsDataRoot';
+  config.server.deployRoot = '../../../../../Dropbox/DevAll/MDDToolsDeployRoot';
   config.server.tempRoot = '../../../../../Dropbox/DevAll/MDDToolsTempRoot';
   config.client.host.name = 'Frank';
   config.client.host.statusURL = '/fileServer/Users/Frank_status.json';
@@ -126,18 +129,20 @@ if( ( config.host.hostname == 'Antonellos-Mini' ) ||
   // List of remote host
   config.client.remoteHost['NUC'] = '192.168.0.25:7575';
 } else if( config.host.hostname == 'hyper-graph' ) {
-// config.client.host.name = 'hyper-graph';
-// config.client.host.statusURL = '/fileServer/Users/hyper-graph_status.json';
-config.client.host.name = 'Frank';
-config.client.host.statusURL = '/fileServer/Users/Frank_status.json';
-config.client.graph.allowDeleteKey = true;
-config.client.graph.isDoubleClickCreateNodeEnabled = false;
-// config.server.dataRoot = '../../fileSystem/MDDToolsDataRoot';
-// config.server.tempRoot = '../../fileSystem/MDDToolsTempRoot';
-config.server.dataRoot = '../../../DevAll/MDDToolsDataRoot';
-config.server.tempRoot = '../../../DevAll/MDDToolsTempRoot';
+  // config.client.host.name = 'hyper-graph';
+  // config.client.host.statusURL = '/fileServer/Users/hyper-graph_status.json';
+  config.client.host.name = 'Frank';
+  config.client.host.statusURL = '/fileServer/Users/Frank_status.json';
+  config.client.graph.allowDeleteKey = true;
+  config.client.graph.isDoubleClickCreateNodeEnabled = false;
+  // config.server.dataRoot = '../../fileSystem/MDDToolsDataRoot';
+  // config.server.tempRoot = '../../fileSystem/MDDToolsTempRoot';
+  config.server.dataRoot = '../../../DevAll/MDDToolsDataRoot';
+  config.server.deployRoot = '../../../DevAll/MDDToolsDeployRoot';
+  config.server.tempRoot = '../../../DevAll/MDDToolsTempRoot';
 } else if( config.host.username == "RE900106" ) {
   config.server.dataRoot = '../../../../../Dropbox/DevAll/MDDToolsDataRoot';
+  config.server.deployRoot = '../../../../../Dropbox/DevAll/MDDToolsDeployRoot';
   config.server.tempRoot = '../../../../../Dropbox/DevAll/MDDToolsTempRoot';
   config.client.host.name = 'Frank';
   config.client.host.statusURL = '/fileServer/Users/Frank_status.json';
@@ -145,6 +150,7 @@ config.server.tempRoot = '../../../DevAll/MDDToolsTempRoot';
   config.client.graph.isDoubleClickCreateNodeEnabled = false;
 } else if( config.host.username == "HGMigration" ) {
   config.server.dataRoot = '../../../../../DevAll//MDDToolsDataRoot';
+  config.server.deployRoot = '../../../../../DevAll//MDDToolsDeployRoot';
   config.server.tempRoot = '../../../../../DevAll//MDDToolsTempRoot';
   config.client.host.name = 'Frank';
   config.client.host.statusURL = '/fileServer/Users/Frank_status.json';
