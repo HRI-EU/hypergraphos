@@ -47,7 +47,7 @@ function setNodeDataField( g, key, field, value ) {
 
 class EditorBase extends EditorChangeManager {
   constructor() {
-    super( 30 ); // TODO: set to 10 // Saving timeout: 10 seconds
+    super( 10 ); // TODO: set to 10 // Saving timeout: 10 seconds
     this.nodeData = null;
     this.title = '';
     this.parentGraph = null;
