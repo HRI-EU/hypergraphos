@@ -57,7 +57,8 @@ const config = {
     clientPath:        '../client',
     libPath:           '../../lib',
     scriptPath:        '../script',
-    testPath:          '../test', 
+    testPath:          '../test',
+    scriptPlatform:    'win32',  // 'win32' | 'linux' | 'winBash'
     webServerProtocol: 'http',
     webServerName:     'localhost',
     webServerPort:     80,

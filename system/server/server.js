@@ -29,7 +29,7 @@ ls();
 // }
 
 const config = require( '../serverConfig.js' );
-const { exec } = require( 'child_process' );
+const { exec, execSync} = require( 'child_process' );
 
 // Set Server IP
 config.server.ip = getServerIp();
@@ -167,40 +167,91 @@ class ExecuteScript {
   }
   serve( request, response ) {
     const execScript = (scriptFilePathName)=> {
+      //const output = execSync( scriptFilePathName, { encoding: 'utf-8' } );
+      //response.writeHead( 200, {'Content-Type': 'text/text' } );
+      //response.end( output );
       exec( scriptFilePathName, (error, stdout, stderr)=> {
         if( stdout ) {
           response.writeHead( 200, {'Content-Type': 'text/text' } );
           response.end( stdout );	
-            } else if( error ) {
-              response.writeHead( 400, {'Content-Type': 'text/text' } );
-              response.end( 'Error: '+error.message );
-            }
+        } else if( error ) {
+          response.writeHead( 400, {'Content-Type': 'text/text' } );
+          response.end( 'Error: '+error.message );
+        }
       });
     };
     let path = recomputeURL( request.url, this.virtualPath, this.realPath );
-    path = this.realPath+path;
+    //path = this.realPath+path;
     console.log( 'Received path-------------:'+path );
     console.log( '**********config path:'+ config.server.scriptPath );
+    
+    var paramsShell = '';
     var params = '';
     const paramIdx = path.indexOf( '?' );
     if( paramIdx != -1 ) {
-      params = path.substring( paramIdx+1 );
+      const paramStr = path.substring( paramIdx+1 );
       path = path.substring( 0, paramIdx );
+      // Translate parama in a JSON string
+      const paramList = paramStr.split( '&' );
+      const paramLen = paramList.length;
+      paramsShell = '{';
+      params = '{';
+      for( let i = 0; i < paramLen; ++i ) {
+        const param = paramList[i];
+        const idx = param.indexOf( '=' );
+        if( idx > 0 ) {
+          const name = param.substring( 0, idx );
+          const value = param.substring( idx+1 );
+          paramsShell = `${paramsShell}\\"${name}\\":\\"${value}\\"${ i != paramLen-1? ',': '' }`;
+          params = `${params}"${name}":"${value}"${ i != paramLen-1? ',': '' }`;
+        }
+      }
+      paramsShell = paramsShell+'}';
+      params = params+'}';
     }
+
     const pathInfo = getPathInfo( path );
     console.log( JSON.stringify( pathInfo ));
 	  console.log( '---- path:'+path );
-    const scriptExt = ( process.platform == 'win32'? '.bat': '.sh' );
-    // In case the path do not exist -> create it
-    if( fs.existsSync( path+scriptExt ) ) {
-      const scriptFilePathName = path+scriptExt;
-      console.log( 'Execute script '+scriptFilePathName );
-      execScript( scriptFilePathName );
-    } else {
-      const output = 'Script not exist '+path+'.sh';
-      console.log( output );
-      response.writeHead( 200, {'Content-Type': 'text/text' } );
+
+    // Execute script
+    if( pathInfo.extension == 'js' ) {  // As javascript function in the server
+      console.log( 'Loading script: ' + this.realPath+path );
+      // const source = fs.readFileSync( this.realPath+path );
+      // const script = source.toString();
+      // eval( script );
+      const startScript = require( this.realPath+path );
+      let output = '';
+      let outCode = 200;
+      try {
+        output = startScript( params );
+      } catch (e) {
+        let outCode = 400;
+        output = 'Error, could not start ', this.realPath+path;
+        console.log( output );
+      }
+      response.writeHead( outCode, {'Content-Type': 'text/text' } );
       response.end( output );
+    } else {                            // As shell command
+      const scriptExt = ( config.server.scriptPlatform == 'win32'? '.bat': '.sh' );
+      // Adapt path separators
+      if( config.server.scriptPlatform == 'win32' ) {
+        path = path.replaceAll( '/', '\\' );
+      }
+      const scriptCmd = path+scriptExt;
+  
+      // In case the path do not exist -> create it
+      if( fs.existsSync( this.realPath+scriptCmd ) ) {
+        console.log( 'Execute script '+scriptCmd+paramsShell );
+        const command = `cd ${this.realPath} && .${scriptCmd} ${paramsShell}`
+        console.log( 'Command to run:\n'+command );
+        execScript( command );
+      } else {
+        const output = 'Script not exist '+path+'.sh';
+        console.log( output );
+        response.writeHead( 200, {'Content-Type': 'text/text' } );
+        response.end( output );
+      }
     }
   }
 }
