@@ -1,30 +1,36 @@
 const fs = require( 'fs' );
 
+const ls = function( dir ) {
+  if( dir ) {
+    console.log( 'Current directory content' );
+    console.log( '-------------------------' );
+    fs.readdirSync( dir ).forEach(file => {
+      console.log(file);
+    });
+    console.log( '-------------------------' );
+  }
+}
+ls();
+
 console.log( 'System Generation started' );
 
 const config = require( '../serverConfig.js' );
 const ModelExplorer = require( '../client/ModelExplorer.js' );
 const isServer = true;
 
-// const config = {
-//   client: {
-//     host: {
-//       fileServerURL: '/fileServer',
-//     }
-//   },
-//   server: {
-//     dataRoot: '../../../../../DevAll//MDDToolsDataRoot',
-//     deployRoot: '../../../../../DevAll//MDDToolsDeployRoot',
-//   }
-// };
-
-/*
- * I will receive:
- *   - model fileURL
- *   - deployment component key
- */
+// Statistic info
+let numFiles = 0;
+let numDirs = 0;
+let tNumFiles = 0;
+let tNumDirs = 0;
 
 function startScript( args ) {
+  // Reset stats
+  numFiles = 0;
+  numDirs = 0;
+  tNumFiles = 0;
+  tNumDirs = 0;
+
   params = null;
   try {
     params = JSON.parse( args );
@@ -43,9 +49,11 @@ function startScript( args ) {
   let output = 'done';
   try {
     generateSystem( modelFileURL, deployKey );
+    output = `${output}\nFilesCount: ${numFiles} of ${tNumFiles}\nDirCount: ${numDirs} of ${tNumDirs}`;
   } catch (error) {
     output = 'error';
   }
+
   return( output );
 }
 
@@ -68,7 +76,8 @@ function generateSystem( fileURL, deployKey ) {
     
     // Get deployment node
     const deployData = me.getNode( modelId, deployKey );
-    const isOverwrite = me.getProperty( modelId, deployData, 'isOverwrite', true );
+    let isOverwrite = me.getProperty( modelId, deployData, 'isOverwrite', null, true );
+    isOverwrite = ( isOverwrite == 'true' );
     
     // Get output link from name port
     const outDataKeyList = me.getNodeListFanOutByNodeKey( modelId, deployKey );
@@ -86,29 +95,66 @@ function generateDirectory( modelId, me, gData, path, isOverwrite ) {
     const dirName = gData.label;
     const currPath = path+'/'+dirName;
     console.log( `mkdir -p ${currPath}` );
-    fs.mkdirSync( currPath, { recursive: true } );
+    ++tNumDirs;
+    const isDirExist = fs.existsSync( currPath );
+    if( ( !isDirExist || ( isDirExist && isOverwrite ) ) ) {
+      fs.mkdirSync( currPath, { recursive: true } );
+      ++numDirs;
+    }
     const gDataKey = gData.key;
     const dataList = me.getNodeListIf( modelId, (d)=> d.group == gDataKey );
     
     for( const data of dataList ) {
       if( data.isGroup ) {
-        generateDirectory( modelId, me, data, currPath );
+        generateDirectory( modelId, me, data, currPath, isOverwrite );
       } else {
-        const realFilePath = recomputeURL( data.fileURL, 
-                                       config.client.host.fileServerURL, 
-                                       config.server.dataRoot );
-        const isFileExist = false; // TODO: compute it
-        if( !isFileExist || ( isFileExist && isOverwrite ) ) {
-          generateFileContent( modelId, me, data );
-          const fileName = realFilePath.substring( realFilePath.lastIndexOf( '/' )+1 );
-          console.log( `copy ${realFilePath} ${currPath}` );
-          ls( currPath );
-          ls( realFilePath.substring( 0, realFilePath.lastIndexOf( '/' ) ) );
-          fs.copyFileSync( realFilePath, currPath+'/'+fileName );
+        ++tNumFiles;
+        // Check if node is enabled
+        let isEnabled = isNodeEnabled( modelId, me, data );
+        if( isEnabled ) {
+          if( data.label.startsWith( '$$' ) ) {
+            // Copy dependency
+          } else {
+            const srcFilePath = recomputeURL( data.fileURL, 
+                                           config.client.host.fileServerURL, 
+                                           config.server.dataRoot );
+            //const fileName = srcFilePath.substring( srcFilePath.lastIndexOf( '/' )+1 );
+            const fileName = data.label;
+            const destFilePath = currPath+'/'+fileName;
+            
+            const isSrcFileExist = fs.existsSync( srcFilePath );
+            const isDestFileExist = fs.existsSync( destFilePath );
+            if( isSrcFileExist && 
+                ( !isDestFileExist || ( isDestFileExist && isOverwrite ) ) ) {
+              generateFileContent( modelId, me, data );  
+              console.log( `copy ${srcFilePath} ${currPath}` );
+              //ls( currPath );
+              //ls( realFilePath.substring( 0, realFilePath.lastIndexOf( '/' ) ) );
+              fs.copyFileSync( srcFilePath, destFilePath );
+              ++numFiles;
+            }
+          }
         }
       }
     }
   }
+}
+function isNodeEnabled( modelId, me, data ) {
+  let result = true;
+  const inNodeList = me.getNodeListFanInByNodeKey( modelId, data.key );
+  if( inNodeList && inNodeList.length ) {
+    result = false;
+    for( const inData of inNodeList ) {
+      if( inData && ( inData.group != undefined ) ) {
+        const gData = me.getNode( modelId, inData.group );
+        result = ( gData && ( gData.color == 'green' ) );
+        if( result ) {
+          break;
+        }
+      }
+    }
+  }
+  return( result );
 }
 function generateFileContent( modelId, me, data ) {
   // Set true if the file has links from output of some nodes

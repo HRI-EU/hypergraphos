@@ -67,7 +67,7 @@ function loadSystem() {
     './BlockCodeEditor.js',
     './SmartBlockEditor.js',
     './ACESourceCodeEditor.js',
-    './GraphParser.js',
+    //'./GraphParser.js',
   ];
   loadScriptList( scriptList, ()=> {
     console.log( 'Depentency loaded' );

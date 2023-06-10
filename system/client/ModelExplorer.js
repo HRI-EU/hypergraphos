@@ -36,7 +36,7 @@ class ModelExplorer {
     }
     this._createModelIndex( id );
   }
-  getProperty( id, keyOrData, name, field ) {
+  getProperty( id, keyOrData, name, field, defaultValue ) {
     field = field || 'value';
     // Get node data from a node key
     const data = keyOrData;
@@ -45,12 +45,13 @@ class ModelExplorer {
     }
     
     // Find property
-    let propertyValue = null
+    let propertyValue = defaultValue;
     if( data ) {
       for( const rowEl of data.rows ) {
         if( rowEl.name == name ) {
           // Get property value
           propertyValue = rowEl[field];
+          break;
         }
       }
     }
@@ -126,9 +127,9 @@ class ModelExplorer {
       return( result );
     }
 
+    let nodeKeyList = [];
     const subject = this.model[id].indexModel.nodeKeyFanIn;
     if( subject ) {
-      let nodeKeyList = [];
       if( toPort ) {
         const linkList = this.getLinkListFanInByNodeKey( id, key );
         for( const linkDataV of linkList ) {
@@ -141,17 +142,19 @@ class ModelExplorer {
         nodeKeyList = subject[key];
       }
       // Retrieve all nodeData from nodeKey
-      for( const nodeKey of nodeKeyList ) {
-        const subject1 = this.model[id].indexModel.node.key;
-        if( subject1 ) {
-          if( subject1[nodeKey] && ( subject1[nodeKey].length > 0 ) ) { 
-            const nodaData = subject1[nodeKey][0];
-            if( condition ) {
-              if( !condition( nodeData ) ) {
-                continue;
+      if( nodeKeyList ) { // If node has connections
+        for( const nodeKey of nodeKeyList ) {
+          const subject1 = this.model[id].indexModel.node.key;
+          if( subject1 ) {
+            if( subject1[nodeKey] && ( subject1[nodeKey].length > 0 ) ) { 
+              const nodaData = subject1[nodeKey][0];
+              if( condition ) {
+                if( !condition( nodeData ) ) {
+                  continue;
+                }
               }
+              result.push( nodaData );
             }
-            result.push( nodaData );
           }
         }
       }
@@ -479,6 +482,7 @@ class ModelExplorer {
   }
 }
 
+var module;
 if( module ) {
   module.exports = ModelExplorer;
 }
