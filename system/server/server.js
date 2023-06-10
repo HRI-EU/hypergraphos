@@ -12,18 +12,21 @@ Date: 10.07.2020
 
 const fs = require( 'fs' );
 
-function ls( dir ) {
-  console.log( 'Current directory content' );
-  console.log( '-------------------------' );
-  fs.readdirSync( dir ).forEach(file => {
-    console.log(file);
-  });
-  console.log( '-------------------------' );
+const ls = function( dir ) {
+  if( dir ) {
+    console.log( 'Current directory content' );
+    console.log( '-------------------------' );
+    fs.readdirSync( dir ).forEach(file => {
+      console.log(file);
+    });
+    console.log( '-------------------------' );
+  }
 }
+ls();
 
-if( true ) {
-  ls( '.' );
-}
+// if( true ) {
+//   ls( '.' );
+// }
 
 const config = require( '../serverConfig.js' );
 const { exec } = require( 'child_process' );

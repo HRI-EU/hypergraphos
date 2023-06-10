@@ -478,3 +478,7 @@ class ModelExplorer {
     }
   }
 }
+
+if( module ) {
+  module.exports = ModelExplorer;
+}
