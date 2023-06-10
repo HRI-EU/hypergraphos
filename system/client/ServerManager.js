@@ -265,7 +265,7 @@ function getNodeInfoFromServer( nodeData, onInfo ) {
   }
 }
 function executeScript( scriptName, onExecuted ) {
-  _openFile( '/executeScript/'+scriptName, onExecuted );
+  _openFile( '/executeScript/'+scriptName, onExecuted, true );
 }
 //------------------------
 // Private Functions

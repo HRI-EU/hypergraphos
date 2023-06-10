@@ -81,6 +81,10 @@ function getStatus( property ) {
 function getMainGraph() {
   return( m.e.getEditor( config.htmlDiv.graphDiv ) );
 }
+function getMainGraphURL() {
+  const g = getMainGraph()
+  return( g.graphPath );
+}
 function setViewFromLabel( nodeLabel, deltaX, deltaY ) {
   // Get main Graph
   const mg = getMainGraph();
