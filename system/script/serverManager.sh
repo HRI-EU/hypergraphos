@@ -5,19 +5,25 @@
 #   serverManager.sh stop
 
 scriptPath=$2
-deployRoot=`node ../getConfigValue.js config.server.dataRoot`
+deployRoot=`node ../getConfigValue.js config.server.deployRoot`
 
 if [ -z "$scriptPath" ]; then
   scriptPath=.
 else
-  scriptPath=$deployRoot/$scriptPath/
+  scriptPath=script/$deployRoot/$scriptPath/
 fi
 
+currDir=`pwd`
 cd ..
+if [ -n "$2" ]; then
+  cd $scriptPath
+fi
+
 if [[ $1 == start ]]; then
-  $scriptPath/startServer.sh
+  ./startServer.sh
 fi
 if [[ $1 == stop ]]; then
-   $scriptPath/stopServer.sh
+   ./stopServer.sh
 fi
-cd script
+#cd script
+cd $currDir
