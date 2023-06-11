@@ -1,3 +1,4 @@
+@echo off
 REM
 REM =============================================================================
 REM Licensed Materials - Property of Frank Joublin and Antonio Ceravola.
@@ -11,4 +12,7 @@ REM ============================================================================
 REM
 
 cd server
+IF NOT exist ..\node_modules\ npm install
+
 node server.js
+cd ..

@@ -29,7 +29,7 @@ ls();
 // }
 
 const config = require( '../serverConfig.js' );
-const { exec, execSync} = require( 'child_process' );
+const { exec } = require( 'child_process' );
 
 // Set Server IP
 config.server.ip = getServerIp();
@@ -189,25 +189,37 @@ class ExecuteScript {
     var params = '';
     const paramIdx = path.indexOf( '?' );
     if( paramIdx != -1 ) {
-      const paramStr = path.substring( paramIdx+1 );
+      const paramStr = decodeURI( path.substring( paramIdx+1 ) );
       path = path.substring( 0, paramIdx );
-      // Translate parama in a JSON string
-      const paramList = paramStr.split( '&' );
-      const paramLen = paramList.length;
-      paramsShell = '{';
-      params = '{';
-      for( let i = 0; i < paramLen; ++i ) {
-        const param = paramList[i];
-        const idx = param.indexOf( '=' );
-        if( idx > 0 ) {
-          const name = param.substring( 0, idx );
-          const value = param.substring( idx+1 );
-          paramsShell = `${paramsShell}\\"${name}\\":\\"${value}\\"${ i != paramLen-1? ',': '' }`;
-          params = `${params}"${name}":"${value}"${ i != paramLen-1? ',': '' }`;
+
+      if( paramStr ) { // If we have params after ?
+        // Translate parama in a JSON string
+        const paramList = paramStr.split( '&' );
+        const paramLen = paramList.length;
+        paramsShell = '';
+        params = '';
+        let isKeyValue = true;
+        // TODO: review this code so to make sure that all params are
+        // either key,value or just key,key...
+        for( let i = 0; i < paramLen; ++i ) {
+          const param = paramList[i];
+          const idx = param.indexOf( '=' );
+          if( idx > 0 ) {
+            const name = param.substring( 0, idx );
+            const value = param.substring( idx+1 );
+            paramsShell = `${paramsShell}\\"${name}\\":\\"${value}\\"${ i != paramLen-1? ',': '' }`;
+            params = `${params}"${name}":"${value}"${ i != paramLen-1? ',': '' }`;
+          } else {
+            isKeyValue = false;
+            params = `${params} ${param}`;
+            paramsShell = params;
+          }
+        }
+        if( isKeyValue ) {
+          paramsShell = `{${paramsShell}}`;
+          params = `{${params}}`;
         }
       }
-      paramsShell = paramsShell+'}';
-      params = params+'}';
     }
 
     const pathInfo = getPathInfo( path );

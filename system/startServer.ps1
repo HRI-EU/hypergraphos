@@ -5,16 +5,13 @@
 # France Government Users Restricted Rights - Use, duplication or disclosure
 # restricted by GSA ADP Schedule Contract with Frank Joublin and Antonio Ceravola.
 # =============================================================================
-# Module: MDDTools Configuration File
+# Module: MDDTools Server Startup File
 # Date: 10.07.2020
 # =============================================================================
 #
 
-
 cd server
-if [[ ! -d "../node_modules" ]]; then
-    echo "Installing node modules..."
-    npm install
-fi
-
-node server & echo kill -9 $!  > ../stopServer.sh
+$process = Start-Process -FilePath "c:\Program Files\nodejs\node.exe" -ArgumentList "server.js" -PassThru
+$procid = $process.Id
+Write-Output "Stop-Process -Id $procid" > ..\stopServer.ps1
+cd ..
