@@ -135,7 +135,7 @@ function generateDirectory( modelId, me, gData, path, isOverwrite ) {
               // Set access flags in linux
               if( data.isExecutable && ( config.host.platformType == 'linux' ) ) {
                 // Set rwxrwxrwx
-                fs.chmodSync( destFilePath, 0o777 );
+                fs.chmodSync( destFilePath, 0o765 );
               }
               ++numFiles;
             }
