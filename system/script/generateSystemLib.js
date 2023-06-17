@@ -131,6 +131,12 @@ function generateDirectory( modelId, me, gData, path, isOverwrite ) {
               //ls( currPath );
               //ls( realFilePath.substring( 0, realFilePath.lastIndexOf( '/' ) ) );
               fs.copyFileSync( srcFilePath, destFilePath );
+
+              // Set access flags in linux
+              if( data.isExecutable && ( config.host.platformType == 'linux' ) ) {
+                // Set rwxrwxrwx
+                fs.chmodSync( destFilePath, 0o777 );
+              }
               ++numFiles;
             }
           }
