@@ -149,6 +149,14 @@ if( ( config.host.hostname == 'Antonellos-Mini' ) ||
   config.client.host.statusURL = '/fileServer/Users/Frank_status.json';
   config.client.graph.allowDeleteKey = true;
   config.client.graph.isDoubleClickCreateNodeEnabled = false;
+} else if( config.host.username == "RE900104" ) {
+  config.server.dataRoot = '../../../../../Dropbox/DevAll/MDDToolsDataRoot';
+  config.server.deployRoot = '../../../../../Dropbox/DevAll/MDDToolsDeployRoot';
+  config.server.tempRoot = '../../../../../Dropbox/DevAll/MDDToolsTempRoot';
+  config.client.host.name = 'Antonello';
+  config.client.host.statusURL = '/fileServer/Users/Antonello_status.json';
+  config.client.graph.allowDeleteKey = true;
+  config.client.graph.isDoubleClickCreateNodeEnabled = false;
 } else if( config.host.username == "HGMigration" ) {
   config.server.dataRoot = '../../../../../DevAll//MDDToolsDataRoot';
   config.server.deployRoot = '../../../../../DevAll//MDDToolsDeployRoot';
