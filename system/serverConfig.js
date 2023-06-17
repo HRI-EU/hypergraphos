@@ -157,7 +157,7 @@ if( ( config.host.hostname == 'Antonellos-Mini' ) ||
   config.client.host.name = 'Antonello';
   config.client.graph.colorSkema = 'dark';
   config.client.host.statusURL = '/fileServer/Users/Antonello_status.json';
-  config.client.graph.allowDeleteKey = true;
+  config.client.graph.allowDeleteKey = false;
   config.client.graph.isDoubleClickCreateNodeEnabled = false;
 } else if( config.host.username == "HGMigration" ) {
   config.server.dataRoot = '../../../../../DevAll//MDDToolsDataRoot';
