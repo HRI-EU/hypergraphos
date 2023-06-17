@@ -4,21 +4,20 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
         {
             "name": "Launch Server Node",
             "request": "launch",
             "type": "node",
-            "cwd": "${workspaceFolder}\\system\\server\\",
-            "program": "${workspaceFolder}\\system\\server\\server.js"
+            "cwd": "${workspaceFolder}/system/server",
+            "program": "${workspaceFolder}/system/server/server.js"
         },
         {
             "name": "Launch Script GenerateSystem",
             "request": "launch",
             "type": "node",
-            "cwd": "${workspaceFolder}\\system\\script\\",
+            "cwd": "${workspaceFolder}/system/script/",
             "args": ["{\"modelFileURL\":\"path\",\"deployKey\":3}"],
-            "program": "${workspaceFolder}\\system\\script\\generateSystem.js"
+            "program": "${workspaceFolder}/system/script/generateSystem.js"
         },
         {
             "name": "Attach by Process ID",

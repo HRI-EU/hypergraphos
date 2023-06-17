@@ -253,13 +253,14 @@ class ExecuteScript {
       const scriptCmd = path+scriptExt;
   
       // In case the path do not exist -> create it
-      if( fs.existsSync( this.realPath+scriptCmd ) ) {
-        console.log( 'Execute script '+scriptCmd+paramsShell );
+      const fullScriptFilePath = this.realPath+scriptCmd;
+      if( fs.existsSync( fullScriptFilePath ) ) {
+        console.log( 'Execute script '+fullScriptFilePath+paramsShell );
         const command = `cd ${this.realPath} && .${scriptCmd} ${paramsShell}`
         console.log( 'Command to run:\n'+command );
         execScript( command );
       } else {
-        const output = 'Script not exist '+path+'.sh';
+        const output = 'Script not exist '+fullScriptFilePath;
         console.log( output );
         response.writeHead( 200, {'Content-Type': 'text/text' } );
         response.end( output );
