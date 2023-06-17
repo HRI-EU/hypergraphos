@@ -155,6 +155,7 @@ if( ( config.host.hostname == 'Antonellos-Mini' ) ||
   config.server.deployRoot = '../../../../../Dropbox/DevAll/MDDToolsDeployRoot';
   config.server.tempRoot = '../../../../../Dropbox/DevAll/MDDToolsTempRoot';
   config.client.host.name = 'Antonello';
+  config.client.graph.colorSkema = 'dark';
   config.client.host.statusURL = '/fileServer/Users/Antonello_status.json';
   config.client.graph.allowDeleteKey = true;
   config.client.graph.isDoubleClickCreateNodeEnabled = false;
