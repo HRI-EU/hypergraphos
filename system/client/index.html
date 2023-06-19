@@ -88,12 +88,46 @@ Date: 10.07.2020
   <!--End-->
 
   <script>
+    function dragOverHandler( e ) {
+      // Prevent default behavior (Prevent file from being opened)
+      e.preventDefault();
+    }
+    function dropHandler( e ) {
+      console.log("File(s) dropped");
+
+      // Prevent default behavior (Prevent file from being opened)
+      e.preventDefault();
+
+      if (e.dataTransfer.items) {
+        // Use DataTransferItemList interface to access the file(s)
+        [...e.dataTransfer.items].forEach((item, i) => {
+          // If dropped items aren't files, reject them
+          if (item.kind === "file") {
+            const file = item.getAsFile();
+            console.log(`… file[${i}].name = ${file.name}`);
+            console.log(`… file[${i}].type = ${file.type}`);
+            console.log(`… file[${i}].kind = ${file.kind}`);
+          } else if( item.kind == 'string'  && item.type.match( "^text/plain" ) ) {
+            item.getAsString( (data)=> {
+              console.log( data );
+            });
+          }
+        });
+      } else {
+        // Use DataTransfer interface to access the file(s)
+        [...e.dataTransfer.files].forEach((file, i) => {
+          console.log(`… file[${i}].name = ${file.name}`);
+          console.log(`… file[${i}].type = ${file.type}`);
+          console.log(`… file[${i}].kind = ${file.kind}`);
+        });
+      }
+    }
     loadSystem();
   </script>
 </head>
 <body onload='_init()'>
   <div id='mdd-status'></div>
-  <div id="diagram" class='diagramDiv'>
+  <div id="diagram" class='diagramDiv' ondrop="dropHandler(event)" ondragover="dragOverHandler(event)">
   </div>
   <div id="palette" class='paletteDiv'>
     <div class='resizerObj'>

@@ -496,7 +496,7 @@ class GraphEditor extends EditorBase {
     //   "isFile": true,
     //   "fileType": "text/javascript",
     //   "fileContent": "console.log( 'included' )",
-    //   "includeScript": true,
+    //   "isIncludeScript": true,
     //   ...
     // }
     // nodeData = {
@@ -504,7 +504,7 @@ class GraphEditor extends EditorBase {
     //   "isFile": true,
     //   "fileType": "text/javascript",
     //   "fileURL": "/fileServer/00/05.js",
-    //   "includeScript": true,
+    //   "isIncludeScript": true,
     //   ...
     // }
     //
@@ -521,9 +521,9 @@ class GraphEditor extends EditorBase {
       while ( it.next() ) {
         // Get node data
         const nodeData = it.value.data;
-        // If we find a includeScript node
+        // If we find a isIncludeScript node
         if( ( nodeData.fileType == 'text/javascript' ) &&
-            nodeData.isFile && nodeData.includeScript ) {
+            nodeData.isFile && nodeData.isIncludeScript ) {
           switch( action ) {
             case 'load': {
               const script = document.createElement( 'script' );
