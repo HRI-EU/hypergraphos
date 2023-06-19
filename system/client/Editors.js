@@ -558,6 +558,15 @@ class TextEditor extends EditorBase {
     this.editor = new ACESourceCodeEditor( this.editorDivId );
     const language = this.fileType.substring( 5 ); // get value after 'text/'
     this.editor.setEditorMode( 'ace/mode/'+language );
+    const tww = { name: 'toogleWrapMode', 
+                  bindKey: { win: 'Alt-Z', mac: 'Option-Z' }, 
+                  exec: function(ed) {
+                          const wrapMode = ed.getOption( 'wrap' );
+                          ed.setOption( 'wrap', ( wrapMode == 'off'? true: false ) );
+                        }
+                };
+    this.editor.aceEditor.commands.addCommand( tww ); 
+
 
     // Pause tracking editor changes
     this.setPauseChange( true );
