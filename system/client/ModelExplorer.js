@@ -39,7 +39,7 @@ class ModelExplorer {
   getProperty( id, keyOrData, name, field, defaultValue ) {
     field = field || 'value';
     // Get node data from a node key
-    const data = keyOrData;
+    let data = keyOrData;
     if( typeof( data ) != 'object' ) {
       data = this.getNode( id, keyOrData );
     }
