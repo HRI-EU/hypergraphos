@@ -66,8 +66,8 @@ class ModelExplorer {
         break;
       default:
         // Check if the value is a number
-        if( !isNaN( propertyValue ) )
-        propertyValue = parseFloat( propertyValue );
+        if( !isNaN( propertyValue ) ) {
+          propertyValue = parseFloat( propertyValue );
         }
         break;
     }
