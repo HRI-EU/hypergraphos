@@ -55,6 +55,22 @@ class ModelExplorer {
         }
       }
     }
+
+    // Convert property to a data type
+    switch( propertyValue ) {
+      case 'true':
+        propertyValue = true;
+        break;
+      case 'false':
+        propertyValue = false;
+        break;
+      default:
+        // Check if the value is a number
+        if( !isNaN( propertyValue ) )
+        propertyValue = parseFloat( propertyValue );
+        }
+        break;
+    }
     // Return property value
     return( propertyValue );
   }
