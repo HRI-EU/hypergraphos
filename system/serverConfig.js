@@ -134,7 +134,7 @@ if( ( config.host.hostname == 'Antonellos-Mini' ) ||
   config.server.tempRoot = '../../../../../Dropbox/DevAll/MDDToolsTempRoot';
   config.client.host.name = 'Frank';
   config.client.host.statusURL = '/fileServer/Users/Frank_status.json';
-  config.client.graph.allowDeleteKey = true;
+  config.client.graph.allowDeleteKey = false;
   config.client.graph.isDoubleClickCreateNodeEnabled = false;
   // List of remote host
   config.client.remoteHost['NUC'] = '192.168.178.25:7575';
