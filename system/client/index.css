@@ -50,8 +50,9 @@ html{
  }
 .diagramDiv {
   position: absolute;
+  top: -70px;   /* TODO: Remove this line */
   width: 100%;
-  height: 100%;
+  height: 120%; /* TODO: Restore to 100% */
   background: rgb(160, 160, 160);
 }
 .paletteDiv {
