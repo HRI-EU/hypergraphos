@@ -39,7 +39,7 @@ class ModelExplorer {
   getProperty( id, keyOrData, name, field, defaultValue ) {
     field = field || 'value';
     // Get node data from a node key
-    const data = keyOrData;
+    let data = keyOrData;
     if( typeof( data ) != 'object' ) {
       data = this.getNode( id, keyOrData );
     }
@@ -54,6 +54,22 @@ class ModelExplorer {
           break;
         }
       }
+    }
+
+    // Convert property to a data type
+    switch( propertyValue ) {
+      case 'true':
+        propertyValue = true;
+        break;
+      case 'false':
+        propertyValue = false;
+        break;
+      default:
+        // Check if the value is a number
+        if( !isNaN( propertyValue ) ) {
+          propertyValue = parseFloat( propertyValue );
+        }
+        break;
     }
     // Return property value
     return( propertyValue );
