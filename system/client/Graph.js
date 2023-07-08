@@ -64,6 +64,8 @@ class Graph {
 																		params: { nodeData: 'node-data of the the file to load', 
 																							x: 'last x mouse click position', 
 																							y: 'last y mouse click position' } },
+			onClone:                    { help:   'Clone the duplicated node',
+		                                params: { nodeData: 'data of the target clone' } },
 			onShowRootGraph: 						{ help: 	'Load system root graph' },
 			onSetReadOnly:   						{ help: 	'Set read-only navigation (never save changes to server)',
 																		params: { status: 'true/false' } },
@@ -210,6 +212,8 @@ class Graph {
 																	do: (o)=> { const location = o.d.cmt.mouseDownPoint;
 																							o.d.cmd.copySelection();
 																							o.d.cmd.pasteSelection( location ); } },
+					{ label: 'Clone',       if: (o)=> this.canEditClone(),
+																	do: (o)=> this.doEditClone() },
 					{ label: 'Cut',         if: (o)=> o.d.cmd.canCutSelection(),
 																	do: (o)=> o.d.cmd.cutSelection() },
 					{ label: 'Copy',        if: (o)=> o.d.cmd.canCopySelection(),
@@ -620,6 +624,14 @@ class Graph {
 		}
 		return( result );
 	}
+	getSelectionCount() {
+		let result = 0;
+		const sel = this.getSelection();
+		if( sel ) {
+			result = sel.count;
+		}
+		return( result );
+	}
 	getJSONSelection() {
 		const list = this._getFilteredSelection( 4 );
 		const jsonSelection = JSON.stringify( list, null, 2 );
@@ -674,6 +686,26 @@ class Graph {
 		if( cmd.canCopySelection() ) {
 			cmd.copySelection();
 			cmd.pasteSelection( location );
+		}
+	}
+	canEditClone() {
+		const selCount = this.getSelectionCount();
+		const data = this.getFirstSelectedNodeData();
+		return( data && 
+						(( data.isFile || data.isDir ) && data.fileURL ) &&
+						( selCount == 1 ) );
+	}
+	doEditClone() {
+		const cmd = this.diagram.commandHandler;
+		if( cmd.canCopySelection() ) {
+			cmd.copySelection();
+			cmd.pasteSelection();
+
+			// If a single node is selected => clone it
+			const data = this.getFirstSelectedNodeData();
+			if( data ) {
+				this.em.call.onClone( data );
+			}
 		}
 	}
 	doEditDelete() {

@@ -215,6 +215,25 @@ class GraphEditor extends EditorBase {
         // Open node window
         m.e.openWindowFromNodeData( newNodeData, x, y );
       },
+      onClone: ( nodeData )=> {
+        // Get a copy of the node data
+        const newNodeData = getNodeData( this.editor, nodeData.key, true );
+
+        // Once node loaded, update URL and save
+        const onNodeLoaded = ( source )=> {
+          // Clear fileURL
+          newNodeData.fileURL = '';
+          // Set a new fileURL
+          this._verifyFileURL( newNodeData );
+          // Temporarly save the content
+          newNodeData.fileContent = source;
+          // Save node content to the server
+          saveNodeContent( newNodeData );
+        };
+
+        // Load node data content
+        loadNodeContent( newNodeData, onNodeLoaded );
+      },
       onShowRootGraph: ()=> {
         const newNodeData = config.graph.rootGraphNodeData;
         this.navigateToGraph( newNodeData );
