@@ -108,8 +108,21 @@ Date: 10.07.2020
             console.log(`… file[${i}].type = ${file.type}`);
             console.log(`… file[${i}].kind = ${file.kind}`);
           } else if( item.kind == 'string'  && item.type.match( "^text/plain" ) ) {
-            item.getAsString( (data)=> {
-              console.log( data );
+            item.getAsString( (text)=> {
+              console.log( 'text:', text, 'at', 'x:', e.x, 'y:', e.y );
+              // Get main graph
+              const g = getMainGraph();
+
+              //const pos = g.diagram.lastInput.documentPoint;
+              //const pos = g.diagram.transformViewToDoc( new go.Point( e.x, e.y ) );
+              //const object = g.diagram.findObjectAt( pos );
+              //const data = ( object? object.part.data: null );
+
+              // If a single node is selected => clone it
+              const data = g.getFirstSelectedNodeData();
+              if( data && ( data.label != undefined ) ) {
+                g.setNodeDataField( data, 'label', text );
+              }
             });
           }
         });
