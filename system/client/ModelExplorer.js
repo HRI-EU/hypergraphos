@@ -39,9 +39,9 @@ class ModelExplorer {
   getProperty( id, keyOrData, name, field, defaultValue ) {
     field = field || 'value';
     // Get node data from a node key
-    let data = keyOrData;
+    let data = keyOrData; // Assume is data
     if( typeof( data ) != 'object' ) {
-      data = this.getNode( id, keyOrData );
+      data = this.getNode( id, keyOrData ); // Assume is key
     }
     
     // Find property
@@ -77,7 +77,6 @@ class ModelExplorer {
   getNode( id, key ) {
     id = this._getId( id );
     let result = null;
-    //let nodeList = this.model[id].objModel.nodeDataArray;
 
     if( !id ) {
       return( result );
@@ -87,12 +86,6 @@ class ModelExplorer {
     if( nodeData && nodeData.length ) {
       result = nodeData[0];
     }
-    // for( const nodeData of nodeList ) {
-    //   if( nodeData.key == key ) {
-    //     result = nodeData;
-    //     break;
-    //   }
-    // }
     return( result );
   }
   getNodeIf( id, condition, index ) {

@@ -856,8 +856,14 @@ class WebViewer extends EditorBase {
     if( nodeData.fileURL ) {
       m.e.showWindowPin( this.id );
     }
-    // Set editor content
-    if( nodeData.fileURL ) {
+    // Set editor content container
+    if( nodeData.isLocalDiv && ( nodeData.fileContent != undefined ) ) {
+      const element = document.getElementById( this.editorDivId );
+      const divID = `${this.id}_frame`;
+      let html = '<h2 style="color:white">Default Div Content</h2>';
+      eval( nodeData.fileContent );
+      element.innerHTML = `<div id='${divID}' class='webViewer'>${html}</div>`;
+    } else if( nodeData.fileURL ) {
       const element = document.getElementById( this.editorDivId );
       const fileURL = ( nodeData.fileURL? nodeData.fileURL: '' );
       element.innerHTML = `<iframe id='${this.id}_frame' class='webViewer' src="${fileURL}"></iframe>`;
