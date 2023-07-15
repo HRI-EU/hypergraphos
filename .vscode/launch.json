@@ -6,7 +6,7 @@
     "configurations": [
         {
             "name": "Launch Test4",
-            "program": "${workspaceFolder}/lib/CodeGenerator/3.10/examples/Test4/generate.js",
+            "program": "${workspaceFolder}/lib/Generators/3.10/examples/Test4/generate.js",
             "request": "launch",
             "skipFiles": [
                 "<node_internals>/**"
@@ -15,7 +15,16 @@
         },
         {
             "name": "Launch Test5",
-            "program": "${workspaceFolder}/lib/CodeGenerator/3.10/examples/Test5/generate.js",
+            "program": "${workspaceFolder}/lib/Generators/3.10/examples/Test5/generate.js",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
+            "name": "Launch Test6",
+            "program": "${workspaceFolder}/lib/Generators/3.10/examples/Test6/generate.js",
             "request": "launch",
             "skipFiles": [
                 "<node_internals>/**"
