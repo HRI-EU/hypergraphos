@@ -856,7 +856,7 @@ class WebViewer extends EditorBase {
     if( nodeData.fileURL ) {
       m.e.showWindowPin( this.id );
     }
-    // Set editor content
+    // Set editor content container
     if( nodeData.isLocalDiv && ( nodeData.fileContent != undefined ) ) {
       const element = document.getElementById( this.editorDivId );
       const divID = `${this.id}_frame`;
