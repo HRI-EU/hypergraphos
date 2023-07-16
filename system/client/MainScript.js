@@ -116,15 +116,13 @@ function selectNodesByKey( keyList ) {
 function getNodeDataOutPortContent( nodeData, outPort ) {
   let result = '';
   // Get output component from fan-out
-  const nodeV = me.getNodeListFanOutByNodeKey( modelId, nodeData.key, outPort );
-  if( nodeV ) {
-    const portNodeData = nodeV[0];
-
+  const portNodeData = me.getNodeListFanOutByNodeKey( modelId, nodeData.key, outPort );
+  if( portNodeData && portNodeData.length ) {
     // File location
-    const contentFileURL = portNodeData.fileURL;
+    const contentFileURL = portNodeData[0].fileURL;
 
     // Set output source
-    const editorId = m.e._getDOMUniqueId( portNodeData );
+    const editorId = m.e._getDOMUniqueId( portNodeData[0] );
     const eo = m.e.getEditor( editorId );
     result = eo.getEditorSource();
   }
@@ -190,15 +188,13 @@ function doGenerateCode( nodeData ) {
           const outputSrc = tg.getOutputStr();
 
           // Get output component from fan-out
-          const outputNodeV = me.getNodeListFanOutByNodeKey( modelId, nodeData.key, 'outputCode' );
-          if( outputNodeV ) {
-            const outputNodeData = outputNodeV[0];
-
+          const outputNodeData = me.getNodeListFanOutByNodeKey( modelId, nodeData.key, 'outputCode' );
+          if( outputNodeData && outputNodeData.length ) {
             // File location
-            const outputCodeFile = outputNodeData.fileURL;
+            const outputCodeFile = outputNodeData[0].fileURL;
 
             // Set output source
-            outputEditorId = m.e._getDOMUniqueId( outputNodeData );
+            outputEditorId = m.e._getDOMUniqueId( outputNodeData[0] );
             const eo = m.e.getEditor( outputEditorId );
             eo.setEditorSource( outputSrc );
           }
@@ -270,15 +266,13 @@ function doGenerateDataModel( nodeData ) {
           const outputSrc = JSON.stringify( outputInfo, null, 2 );
 
           // Get data output component from fan-out
-          const outputNodeV = me.getNodeListFanOutByNodeKey( modelId, nodeData.key, 'outputData' );
-          if( outputNodeV ) {
-            const outputNodeData = outputNodeV[0];
-
+          const outputNodeData = me.getNodeListFanOutByNodeKey( modelId, nodeData.key, 'outputData' );
+          if( outputNodeData && outputNodeData.length ) {
             // File location
-            const outputDataCodeFile = outputNodeData.fileURL;
+            const outputDataCodeFile = outputNodeData[0].fileURL;
 
             // Set output source
-            outputEditorId = m.e._getDOMUniqueId( outputNodeData );
+            outputEditorId = m.e._getDOMUniqueId( outputNodeData[0] );
             const eo = m.e.getEditor( outputEditorId );
             eo.setEditorSource( outputSrc );
           }
@@ -317,15 +311,13 @@ function doGenerateTemplateStructure( nodeData ) {
       const outputSrc = JSON.stringify( templateStruct, null, 2 );
 
       // Get data output component from fan-out
-      const outputNodeV = me.getNodeListFanOutByNodeKey( modelId, nodeData.key, 'outputTemplateStructure' );
-      if( outputNodeV ) {
-        const outputNodeData = outputNodeV[0];
-
+      const outputNodeData = me.getNodeListFanOutByNodeKey( modelId, nodeData.key, 'outputTemplateStructure' );
+      if( outputNodeData && outputNodeData.length ) {
         // File location
-        const outputDataCodeFile = outputNodeData.fileURL;
+        const outputDataCodeFile = outputNodeData[0].fileURL;
 
         // Set output source
-        outputEditorId = m.e._getDOMUniqueId( outputNodeData );
+        outputEditorId = m.e._getDOMUniqueId( outputNodeData[0] );
         const eo = m.e.getEditor( outputEditorId );
         eo.setEditorSource( outputSrc );
       }

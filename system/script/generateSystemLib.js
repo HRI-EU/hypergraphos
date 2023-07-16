@@ -80,12 +80,11 @@ function generateSystem( fileURL, deployKey ) {
     //isOverwrite = ( isOverwrite == 'true' );
     
     // Get output link from name port
-    const outDataKeyList = me.getNodeListFanOutByNodeKey( modelId, deployKey );
+    const outDataList = me.getNodeListFanOutByNodeKey( modelId, deployKey );
     
     const targetPath = config.server.deployRoot;
     // Loop over out components
-    for( const outDataKey of outDataKeyList ) {
-      const outData = me.getNode( modelId, outDataKey );
+    for( const outData of outDataList ) {
       generateDirectory( modelId, me, outData, targetPath, isOverwrite );
     }
   } catch( e ) {}

@@ -148,22 +148,20 @@ class ModelExplorer {
           }
         }
       } else {
-        nodeKeyList = subject[key];
+        nodeKeyList.push( subject[key] );
       }
       // Retrieve all nodeData from nodeKey
-      if( nodeKeyList ) { // If node has connections
-        for( const nodeKey of nodeKeyList ) {
-          const subject1 = this.model[id].indexModel.node.key;
-          if( subject1 ) {
-            if( subject1[nodeKey] && ( subject1[nodeKey].length > 0 ) ) { 
-              const nodaData = subject1[nodeKey][0];
-              if( condition ) {
-                if( !condition( nodeData ) ) {
-                  continue;
-                }
+      for( const nodeKey of nodeKeyList ) {
+        const subject1 = this.model[id].indexModel.node.key;
+        if( subject1 ) {
+          if( subject1[nodeKey] && ( subject1[nodeKey].length > 0 ) ) { 
+            const nodaData = subject1[nodeKey][0];
+            if( condition ) {
+              if( !condition( nodeData ) ) {
+                continue;
               }
-              result.push( nodaData );
             }
+            result.push( nodaData );
           }
         }
       }
@@ -192,14 +190,15 @@ class ModelExplorer {
           }
         }
       } else {
-        result = subject[key];
+        nodeKeyList.push( subject[key] );
       }
       // Retrieve all nodeData from nodeKey
       for( const nodeKey of nodeKeyList ) {
         const subject1 = this.model[id].indexModel.node.key;
         if( subject1 ) {
-          if( subject1[nodeKey] && ( subject1[nodeKey].length > 0 ) ) { 
-            result.push( subject1[nodeKey][0] );
+          if( subject1[nodeKey] && ( subject1[nodeKey].length > 0 ) ) {
+            const nodeData = subject1[nodeKey][0];
+            result.push( nodeData );
           }
         }
       }
