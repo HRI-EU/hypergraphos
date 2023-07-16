@@ -87,9 +87,9 @@ function getMainGraphURL() {
 }
 function getNodeData( key, isCopy ) {
   const g = getMainGraph();
-  let result = g.getNodeData( key, true );
+  let result = g.getNodeData( key, isCopy );
   if( result && ( result.isLinkTo != undefined ) ) {
-    const linkedData = g.getNodeData( result.isLinkTo, isCopy );
+    const linkedData = g.getNodeData( result.isLinkTo );
     if( linkedData.fileURL != undefined ) {
       result.fileURL = linkedData.fileURL;
     }
@@ -99,19 +99,6 @@ function getNodeData( key, isCopy ) {
   } else {
     result = g.getNodeData( key, isCopy );
   }
-  // let result = g.getNodeData( key, isCopy );
-  // if( result && result.isLink ) {
-  //   const fileURL = result.fileURL;
-  //   const [ url, refKey ] = fileURL.split( '#' );
-  //   if( url && refKey ) {
-  //     const currentGraphURL = g.getGraphPath(); // TODO: rename this function with URL
-  //     if( url == currentGraphURL ) {
-  //       result = g.getNodeData( refKey, isCopy );
-  //     } else {
-  //       // ask server
-  //     }
-  //   }
-  // }
   return( result );
 }
 function setNodeDataField( key, field, value ) {
@@ -127,22 +114,6 @@ function setNodeDataField( key, field, value ) {
   } else {
     g.setNodeDataField( key, field, value );
   }
-  // let result = g.getNodeData( key );
-  // if( result && result.isLink && ( field == 'fileContent' ) ) {
-  //   const fileURL = result.fileURL;
-  //   const [ url, refKey ] = fileURL.split( '#' );
-  //   if( url && refKey ) {
-  //     if( url == currentGraphURL ) {
-  //       g.setNodeDataField( refKey, field, value );
-  //     } else {
-  //       // ask server
-  //     }
-  //   } else {
-  //     g.setNodeDataField( key, field, value );
-  //   }
-  // } else {
-  //   g.setNodeDataField( key, field, value );
-  // }
 }
 function setViewFromLabel( nodeLabel, deltaX, deltaY ) {
   // Get main Graph
