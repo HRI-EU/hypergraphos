@@ -82,8 +82,67 @@ function getMainGraph() {
   return( m.e.getEditor( config.htmlDiv.graphDiv ) );
 }
 function getMainGraphURL() {
-  const g = getMainGraph()
+  const g = getMainGraph();
   return( g.graphPath );
+}
+function getNodeData( key, isCopy ) {
+  const g = getMainGraph();
+  let result = g.getNodeData( key, true );
+  if( result && ( result.isLinkTo != undefined ) ) {
+    const linkedData = g.getNodeData( result.isLinkTo, isCopy );
+    if( linkedData.fileURL != undefined ) {
+      result.fileURL = linkedData.fileURL;
+    }
+    if( linkedData.fileContent != undefined ) {
+      result.fileContent = linkedData.fileContent;
+    }
+  } else {
+    result = g.getNodeData( key, isCopy );
+  }
+  // let result = g.getNodeData( key, isCopy );
+  // if( result && result.isLink ) {
+  //   const fileURL = result.fileURL;
+  //   const [ url, refKey ] = fileURL.split( '#' );
+  //   if( url && refKey ) {
+  //     const currentGraphURL = g.getGraphPath(); // TODO: rename this function with URL
+  //     if( url == currentGraphURL ) {
+  //       result = g.getNodeData( refKey, isCopy );
+  //     } else {
+  //       // ask server
+  //     }
+  //   }
+  // }
+  return( result );
+}
+function setNodeDataField( key, field, value ) {
+  const g = getMainGraph();
+  const data = g.getNodeData( key, true );
+  if( data && ( data.isLinkTo != undefined ) ) {
+    const linkedData = g.getNodeData( result.isLinkTo, isCopy );
+    if( ( field == 'fileURL' ) ||
+        ( field == 'fileContent' ) ) {
+      g.setNodeDataField( key, field, value );
+      g.setNodeDataField( data.isLinkTo, field, value );
+    }
+  } else {
+    g.setNodeDataField( key, field, value );
+  }
+  // let result = g.getNodeData( key );
+  // if( result && result.isLink && ( field == 'fileContent' ) ) {
+  //   const fileURL = result.fileURL;
+  //   const [ url, refKey ] = fileURL.split( '#' );
+  //   if( url && refKey ) {
+  //     if( url == currentGraphURL ) {
+  //       g.setNodeDataField( refKey, field, value );
+  //     } else {
+  //       // ask server
+  //     }
+  //   } else {
+  //     g.setNodeDataField( key, field, value );
+  //   }
+  // } else {
+  //   g.setNodeDataField( key, field, value );
+  // }
 }
 function setViewFromLabel( nodeLabel, deltaX, deltaY ) {
   // Get main Graph
@@ -127,202 +186,6 @@ function getNodeDataOutPortContent( nodeData, outPort ) {
     result = eo.getEditorSource();
   }
   return( result );
-}
-function doGenerateCode( nodeData ) {
-  if( nodeData ) {
-    // Get main graph editor
-    const g = m.e.getEditor( config.htmlDiv.graphDiv );
-    // Get current graph model
-    const model = g.getJSONModel();
-    const modelId = 'main';
-    
-    // Instantiate Model Explorer
-    const me = new ModelExplorer();
-    me.setJSONModel( modelId, model );
-    
-    // Get template component from fan-in
-    const templateNodeV = me.getNodeListFanInByNodeKey( modelId, nodeData.key, 'templateCode' );
-    if( templateNodeV ) {
-      const templateNodeData = templateNodeV[0];
-      console.log( 'Template Node: '+templateNodeData.label );
-      
-      // Get data model component from fan-in
-      const dataNodeV = me.getNodeListFanInByNodeKey( modelId, nodeData.key, 'templateData' );
-      if( dataNodeV ) {
-        const dataNodeData = dataNodeV[0];
-        console.log( 'Data Node: '+dataNodeData.label );
-        
-        // File location
-        const templateFile = templateNodeData.fileURL;
-        const dataFile = dataNodeData.fileURL;
-        
-        // Get template source
-        templateEditorId = m.e._getDOMUniqueId( templateNodeData );
-        const et = m.e.getEditor( templateEditorId );
-        let templateSource = et.getEditorSource();
-        
-        // Get data source
-        dataEditorId = m.e._getDOMUniqueId( dataNodeData );
-        const es = m.e.getEditor( dataEditorId );
-        let dataSource = es.getEditorSource();
-        
-        // Load data source
-        let module = {};
-        eval( dataSource );
-        
-        // Get RootModel class
-        const RootModel = module.exports;
-        if( typeof( RootModel ) == 'function' ) {
-
-          // Create the template generator
-          const tg = new TemplateGenerator( templateSource );
-
-          // GraphParser instance
-          const gp = new GraphParser( g );
-          
-          // Generate template output
-          const rootNodes = g.getRootNodes();
-          tg.process( new RootModel( gp, rootNodes ) );
-        
-          // Get output
-          const outputSrc = tg.getOutputStr();
-
-          // Get output component from fan-out
-          const outputNodeData = me.getNodeListFanOutByNodeKey( modelId, nodeData.key, 'outputCode' );
-          if( outputNodeData && outputNodeData.length ) {
-            // File location
-            const outputCodeFile = outputNodeData[0].fileURL;
-
-            // Set output source
-            outputEditorId = m.e._getDOMUniqueId( outputNodeData[0] );
-            const eo = m.e.getEditor( outputEditorId );
-            eo.setEditorSource( outputSrc );
-          }
-        } else {
-          alert( 'Could not find the data model in model editor' );
-        }
-      }
-    }
-  }
-}
-function doGenerateDataModel( nodeData ) {
-  if( nodeData ) {
-    // Get main graph editor
-    const g = m.e.getEditor( config.htmlDiv.graphDiv );
-    // Get current graph model
-    const model = g.getJSONModel();
-    const modelId = 'main';
-
-    // Instantiate Model Explorer
-    const me = new ModelExplorer();
-    me.setJSONModel( modelId, model );
-
-    // Get template component from fan-in
-    const templateNodeV = me.getNodeListFanInByNodeKey( modelId, nodeData.key, 'templateCode' );
-    if( templateNodeV ) {
-      const templateNodeData = templateNodeV[0];
-      console.log( 'Template Node: '+templateNodeData.label );
-      
-      // Get data model component from fan-in
-      const dataNodeV = me.getNodeListFanInByNodeKey( modelId, nodeData.key, 'templateData' );
-      if( dataNodeV ) {
-        const dataNodeData = dataNodeV[0];
-        console.log( 'Data Node: '+dataNodeData.label );
-        
-        // File location
-        const templateFile = templateNodeData.fileURL;
-        const dataFile = dataNodeData.fileURL;
-        
-        // Get template source
-        templateEditorId = m.e._getDOMUniqueId( templateNodeData );
-        const et = m.e.getEditor( templateEditorId );
-        let templateSource = et.getEditorSource();
-        
-        // Get data source
-        dataEditorId = m.e._getDOMUniqueId( dataNodeData );
-        const es = m.e.getEditor( dataEditorId );
-        let dataSource = es.getEditorSource();
-        
-        // Load data source
-        let module = {};
-        eval( dataSource );
-        
-        // Get RootModel class
-        const RootModel = module.exports;
-        if( typeof( RootModel ) == 'function' ) {
-
-          // Create the template generator
-          const tg = new TemplateGenerator( templateSource );
-          // Get template structure
-          const templateStruct = tg.getTemplateStructure();
-
-          // GraphParser instance
-          const gp = new GraphParser( g );
-          
-          // Generate data model output
-          const rootNodes = g.getRootNodes();
-          const model = new RootModel( gp, rootNodes )
-          const outputInfo = tg.testModel( templateStruct, model );
-          const outputSrc = JSON.stringify( outputInfo, null, 2 );
-
-          // Get data output component from fan-out
-          const outputNodeData = me.getNodeListFanOutByNodeKey( modelId, nodeData.key, 'outputData' );
-          if( outputNodeData && outputNodeData.length ) {
-            // File location
-            const outputDataCodeFile = outputNodeData[0].fileURL;
-
-            // Set output source
-            outputEditorId = m.e._getDOMUniqueId( outputNodeData[0] );
-            const eo = m.e.getEditor( outputEditorId );
-            eo.setEditorSource( outputSrc );
-          }
-        }
-      }
-    }
-  }
-}
-function doGenerateTemplateStructure( nodeData ) {
-  if( nodeData ) {
-    // Get main graph editor
-    const g = m.e.getEditor( config.htmlDiv.graphDiv );
-    // Get current graph model
-    const model = g.getJSONModel();
-    const modelId = 'main';
-    
-    // Instantiate Model Explorer
-    const me = new ModelExplorer();
-    me.setJSONModel( modelId, model );
-
-    // Get template component from fan-in
-    const templateNodeV = me.getNodeListFanInByNodeKey( modelId, nodeData.key, 'templateCode' );
-    if( templateNodeV ) {
-      const templateNodeData = templateNodeV[0];
-      console.log( 'Template Node: '+templateNodeData.label );
-
-      // Get template source
-      templateEditorId = m.e._getDOMUniqueId( templateNodeData );
-      const et = m.e.getEditor( templateEditorId );
-      let templateSource = et.getEditorSource();
-
-      // Create the template generator
-      const tg = new TemplateGenerator( templateSource );
-      // Get template structure
-      const templateStruct = tg.getTemplateStructure();
-      const outputSrc = JSON.stringify( templateStruct, null, 2 );
-
-      // Get data output component from fan-out
-      const outputNodeData = me.getNodeListFanOutByNodeKey( modelId, nodeData.key, 'outputTemplateStructure' );
-      if( outputNodeData && outputNodeData.length ) {
-        // File location
-        const outputDataCodeFile = outputNodeData[0].fileURL;
-
-        // Set output source
-        outputEditorId = m.e._getDOMUniqueId( outputNodeData[0] );
-        const eo = m.e.getEditor( outputEditorId );
-        eo.setEditorSource( outputSrc );
-      }
-    }
-  }
 }
 function saveStatus( onSaved ) {
   const url = config.host.statusURL;

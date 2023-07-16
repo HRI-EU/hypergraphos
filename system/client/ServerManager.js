@@ -227,7 +227,7 @@ function saveNodeContent( nodeData, onSaved ) {
     if( e ) {
       const source = nodeData.fileContent;
       //e.setNodeDataField( nodeData.key, 'fileContent', source );
-      setNodeDataField( e, nodeData.key, 'fileContent', source );
+      setNodeDataField( nodeData.key, 'fileContent', source );
     }
     if( onSaved ) {
       onSaved();

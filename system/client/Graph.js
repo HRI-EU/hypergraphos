@@ -599,7 +599,7 @@ class Graph {
 			}
 			// Set graphData (defined in ServerManager.js)
 			graphData = {};
-			
+
 			if( onDone ) {
 				onDone();
 			}
@@ -651,7 +651,7 @@ class Graph {
 				for( const field of fieldList ) {
 					const value = dataNode[field];
 					//this.setNodeDataField( oKey, field, value );
-					setNodeDataField( this, oKey, field, value );
+					setNodeDataField( oKey, field, value );
 				}
 			}
 		}
