@@ -10,7 +10,10 @@ Date: 10.07.2020
 =============================================================================
 */
 
+// The appData stores data for the full browser session (reload cleans it)
 const appData = {};
+// The graphData stores data for the loaded graph (loading a different grap cleans it)
+let graphData = {}; // Set in Graph.js on setEditorSource()
 
 const codeFileType = {
   "JavaScript":     {color: "orange",         fileType: "text/javascript",                ext: "js"},

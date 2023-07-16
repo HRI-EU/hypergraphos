@@ -597,6 +597,9 @@ class Graph {
 					this.diagram.grid.visible = objModel.view.isGridOn;
 				}
 			}
+			// Set graphData (defined in ServerManager.js)
+			graphData = {};
+			
 			if( onDone ) {
 				onDone();
 			}
