@@ -142,13 +142,14 @@ class ModelExplorer {
       if( toPort ) {
         const linkList = this.getLinkListFanInByNodeKey( id, key );
         for( const linkDataV of linkList ) {
-          //if( linkDataV && linkDataV[0] && ( linkDataV[0].toPort == toPort ) ) {
           if( linkDataV && ( linkDataV.toPort == toPort ) ) {
             nodeKeyList.push( linkDataV.from );
           }
         }
       } else {
-        nodeKeyList.push( subject[key] );
+        if( subject[key] ) { // If node has connections
+          nodeKeyList.push( ...subject[key] );
+        }
       }
       // Retrieve all nodeData from nodeKey
       for( const nodeKey of nodeKeyList ) {
@@ -184,13 +185,14 @@ class ModelExplorer {
       if( fromPort ) {
         const linkList = this.getLinkListFanOutByNodeKey( id, key );
         for( const linkDataV of linkList ) {
-          //if( linkDataV && linkDataV[0] && ( linkDataV[0].fromPort == fromPort ) ) {
           if( linkDataV && ( linkDataV.fromPort == fromPort ) ) {
             nodeKeyList.push( linkDataV.to );
           }
         }
       } else {
-        nodeKeyList.push( subject[key] );
+        if( subject[key] ) { // If node has connections
+          nodeKeyList.push( ...subject[key] );
+        }
       }
       // Retrieve all nodeData from nodeKey
       for( const nodeKey of nodeKeyList ) {
