@@ -174,7 +174,10 @@ class EditorManager extends EditorChangeManager {
     const browserWidth = window.innerWidth;
     const browserHeight = window.innerHeight;
     if( position && position[0] ) { 
-      emDiv.style.left = Math.min( browserWidth-100, Math.max( 0, position[0] ) )+'px';
+      // NOTE: I commented the next line to keep style.left as it is so that
+      //       window are restored also in the horizontal virtual screen
+      //emDiv.style.left = Math.min( browserWidth-100, Math.max( 0, position[0] ) )+'px';
+      emDiv.style.left = position[0]+'px';
     }
     if( position && position[1] ) {
       emDiv.style.top = Math.min( browserHeight-100, Math.max( 0, position[1] ) )+'px';
@@ -602,13 +605,32 @@ class EditorManager extends EditorChangeManager {
         scrollPosition += scrollInc;
         setTimeout( doScroll, scrollStepTime );
       } else {
-        // At the end, in orede to avoid decimal drift we set a final position again
+        // At the end, in order to avoid decimal drift we set a final position again
         // In this way we have no cumulative error due to scrollInc decimals cut
         for( const div of windowDivList ) {
           if( div.id != '_systemMonitor__System_Monitor' ) {
-            div.style.left = (currWinPosition[div.id]+(direction*browserWidth))+'px';
+            const positionX = (currWinPosition[div.id]+(direction*browserWidth));
+            div.style.left = positionX+'px';
+
+            // Update window position in window status
+            const key = this._getWindowKey( div.id );
+            if( key != -1 ) {
+              const graphURL = getMainGraphURL();
+              //const winInfo = m.status.openWindowList[graphURL];
+              const owl = getStatus( 'openWindowList' );
+              if( owl ) {
+                const winInfo = owl[graphURL];
+                if( winInfo ) {
+                  const posInfo = winInfo[key];
+                  if( posInfo ) {
+                    posInfo[0] = positionX;
+                  }
+                }
+              }
+            }
           }
         }
+        this.editorHasChanged();
 
         // Unlock this function
         this.isMoveAllWindowRunning = false;
@@ -660,6 +682,7 @@ class EditorManager extends EditorChangeManager {
   // Private Functions
   //------------------------
   _getDOMUniqueId( nodeData ) {
+    // Get a new id from a node (url_key) (couterpart of _getWindowKey)
     if( nodeData ) {
       const url = ( nodeData.fileURL? nodeData.fileURL: 'emptyURL' );
       const id = url+'_'+nodeData.key;
@@ -667,6 +690,16 @@ class EditorManager extends EditorChangeManager {
     } else {
       return( 'noId' );
     }
+  }
+  _getWindowKey( uniqueId ) {
+    // Get the key of the node that opened this window id (couterpart of _getDOMUniqueId)
+    let result = -1;
+    const idx = uniqueId.lastIndexOf( '_' );
+    if( idx != -1 ) {
+      const key = uniqueId.substring( idx+1 );
+      result = parseInt( key );
+    }
+    return( result );
   }
   _closeIdListEditor( idList, onCloseDone ) {
     if( !Array.isArray( idList ) ) {
