@@ -121,7 +121,7 @@ Date: 10.07.2020
               // If a single node is selected => clone it
               const data = g.getFirstSelectedNodeData();
               if( data && ( data.label != undefined ) ) {
-                g.setNodeDataField( data, 'label', text );
+                setNodeDataField( data, 'label', text );
               }
             });
           }
