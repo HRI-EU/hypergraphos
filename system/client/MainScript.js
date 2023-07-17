@@ -105,10 +105,11 @@ function setNodeDataField( key, field, value ) {
   const g = getMainGraph();
   const data = g.getNodeData( key, true );
   if( data && ( data.isLinkTo != undefined ) ) {
-    const linkedData = g.getNodeData( result.isLinkTo, isCopy );
+    // Set field to link node
+    g.setNodeDataField( key, field, value );
+    // Set also to target-link node for these fields
     if( ( field == 'fileURL' ) ||
         ( field == 'fileContent' ) ) {
-      g.setNodeDataField( key, field, value );
       g.setNodeDataField( data.isLinkTo, field, value );
     }
   } else {
