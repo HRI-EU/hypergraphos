@@ -360,15 +360,27 @@ class EditorManager extends EditorChangeManager {
       else if( a.wz > b.wz ) return +1;
       else return 0;
     });
+
+    // WORKAROUND: re-set main diagram z-order to make sure windows are all on top
+    document.getElementById( ei.id ).style.zIndex = minZ-1;
+
     // Re-assign a z order in a fix range
+    console.log( 'winInfoList.len', winInfoList.length );
     for( let i = 0; i < winInfoList.length; ++i ) {
       const winInfo = winInfoList[i];
       winInfo.we.style.zIndex = minZ+i;
-      winInfo.we.getElementsByClassName('resizerHeader')[0].style.background = 'DimGray';
+      console.log( i, winInfo.wId, 'z-order', minZ+i, 'class', winInfo.we.className );
+      const header = winInfo.we.getElementsByClassName( 'resizerHeader' )[0];
+      if( header ) {
+        header.style.background = 'DimGray';
+      }
     }
     // Set highest z value to id window
     eWindow.style.zIndex = minZ+winInfoList.length+1;
-    eWindow.getElementsByClassName('resizerHeader')[0].style.background = 'Indigo';
+    const header = eWindow.getElementsByClassName( 'resizerHeader' )[0];
+    if( header ) {
+      header.style.background = 'Indigo';
+    }
     //this._setEditorZIndex( winId, topZ );
   }
   saveEditor( id, onSaveDone ) {

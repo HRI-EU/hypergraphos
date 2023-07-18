@@ -88,8 +88,8 @@ function getMainGraphURL() {
 function getNodeData( key, isCopy ) {
   const g = getMainGraph();
   let result = g.getNodeData( key, isCopy );
-  if( result && ( result.isLinkTo != undefined ) ) {
-    const linkedData = g.getNodeData( result.isLinkTo );
+  if( result && ( result.linkToKey != undefined ) ) {
+    const linkedData = g.getNodeData( result.linkToKey );
     if( linkedData.fileURL != undefined ) {
       result.fileURL = linkedData.fileURL;
     }
@@ -104,13 +104,13 @@ function getNodeData( key, isCopy ) {
 function setNodeDataField( key, field, value ) {
   const g = getMainGraph();
   const data = g.getNodeData( key, true );
-  if( data && ( data.isLinkTo != undefined ) ) {
+  if( data && ( data.linkToKey != undefined ) ) {
     // Set field to link node
     g.setNodeDataField( key, field, value );
     // Set also to target-link node for these fields
     if( ( field == 'fileURL' ) ||
         ( field == 'fileContent' ) ) {
-      g.setNodeDataField( data.isLinkTo, field, value );
+      g.setNodeDataField( data.linkToKey, field, value );
     }
   } else {
     g.setNodeDataField( key, field, value );
