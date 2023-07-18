@@ -362,9 +362,11 @@ class EditorManager extends EditorChangeManager {
     for( let i = 0; i < winInfoList.length; ++i ) {
       const winInfo = winInfoList[i];
       winInfo.we.style.zIndex = minZ+i;
+      winInfo.we.getElementsByClassName('resizerHeader')[0].style.background = 'DimGray';
     }
     // Set highest z value to id window
     eWindow.style.zIndex = minZ+winInfoList.length+1;
+    eWindow.getElementsByClassName('resizerHeader')[0].style.background = 'Indigo';
     //this._setEditorZIndex( winId, topZ );
   }
   saveEditor( id, onSaveDone ) {
