@@ -116,6 +116,16 @@ class EditorManager extends EditorChangeManager {
     };
     return( result );
   }
+  getWindowDiv( idOrData ) {
+    let id = idOrData;
+    if( typeof( idOrData ) == 'object' ) {
+      id = m.e._getDOMUniqueId( idOrData );
+    }
+    return( document.getElementById( id ) );
+  }
+  getAllWindowDiv() {
+    return( document.getElementById( 'mainDiv' ).children );
+  }
   openSelectionWindow() {
     const e = this.getEditor( config.htmlDiv.graphDiv );
     const nodeData = e.findNodeData( 'isSystem', '$GraphSelection$' );
@@ -126,6 +136,12 @@ class EditorManager extends EditorChangeManager {
       const newNodeData = getNodeData( nodeData.key, true );
       // Open window
       this.openWindowFromNodeData( newNodeData );
+
+      // Set selection class
+      const winDiv = this.getWindowDiv( nodeData );
+      if( winDiv ) {
+        winDiv.classList.add( nodeData.isSystem.slice( 1, -1 ) );
+      }
     }
   }
   openModelWindow() {
@@ -138,6 +154,12 @@ class EditorManager extends EditorChangeManager {
       const newNodeData = getNodeData( nodeData.key, true );
       // Open window
       this.openWindowFromNodeData( newNodeData );
+
+      // Set model class
+      const winDiv = this.getWindowDiv( nodeData );
+      if( winDiv ) {
+        winDiv.classList.add( nodeData.isSystem.slice( 1, -1 ) );
+      }
     }
   }
   openWindowFromNodeData( nodeData, x, y ) {
@@ -335,6 +357,7 @@ class EditorManager extends EditorChangeManager {
         }
       }
     }
+    
     // Get list of id of all windows pinned
     const pw = getStatus( 'pinnedWindow' );
     if( pw ) {
@@ -354,6 +377,7 @@ class EditorManager extends EditorChangeManager {
         }
       }
     }
+
     // Sort all window according to z order
     winInfoList.sort( (a,b)=> { 
       if( a.wz < b.wz ) return -1;
@@ -488,6 +512,10 @@ class EditorManager extends EditorChangeManager {
         if( nodeData.isVisible != undefined ) {
           pw[nodeData.fileURL]['isVisible'] = nodeData.isVisible;
         }
+        const winDiv = this.getWindowDiv( nodeData );
+        if( winDiv ) {
+          winDiv.classList.add( 'pinned' );
+        }
       }
       setStatus( (s)=> s.pinnedWindow = pw );
     } else {
@@ -495,6 +523,10 @@ class EditorManager extends EditorChangeManager {
       delete pw[nodeData.fileURL];
       if( !this.isStatusOnUpdate ) {
         setStatus( (s)=> s.pinnedWindow = pw );
+      }
+      const winDiv = this.getWindowDiv( nodeData );
+      if( winDiv ) {
+        winDiv.classList.remove( 'pinned' );
       }
     }
   }
@@ -554,6 +586,11 @@ class EditorManager extends EditorChangeManager {
               if( nodeData.isSystem ) {
                 const ei = m.e.getEditorInfo( id );
                 ei.showSaveButton();
+                // Set class for selection/model
+                const winDiv = this.getWindowDiv( nodeData );
+                if( winDiv ) {
+                  winDiv.classList.add( nodeData.isSystem.slice( 1, -1 ) );
+                }
               }
             }
           } else { // Node may be deleted
@@ -653,7 +690,7 @@ class EditorManager extends EditorChangeManager {
     //Start the animation
     const browserWidth = window.innerWidth;
     const horizontalShift = browserWidth*direction;
-    const windowDivList = document.getElementById('mainDiv').children;
+    const windowDivList = this.getAllWindowDiv();
     let scrollStepTime = 5;
     let scrollPosition = 0;
     const scrollInc = horizontalShift/100;
@@ -662,12 +699,17 @@ class EditorManager extends EditorChangeManager {
       // Execute animation
       if( Math.abs( scrollPosition ) < Math.abs( horizontalShift ) ) {
         for( const div of windowDivList ) {
-          if( div.id != '_systemMonitor__System_Monitor' ) {
-            if( scrollPosition == 0 ) {
-              currWinPosition[div.id] = parseInt( div.style.left );
-            }
-            div.style.left = ( parseInt( div.style.left )+scrollInc )+'px';
+          if( div.classList.contains( 'pinned' ) ||
+              div.classList.contains( 'GraphSelection' ) || // Selection
+              div.classList.contains( 'GraphModel' ) ||     // Model Editor
+              ( div.id == '_systemMonitor__System_Monitor' ) ) {
+            continue;
           }
+          
+          if( scrollPosition == 0 ) {
+            currWinPosition[div.id] = parseInt( div.style.left );
+          }
+          div.style.left = ( parseInt( div.style.left )+scrollInc )+'px';
         }
         scrollPosition += scrollInc;
         setTimeout( doScroll, scrollStepTime );
@@ -675,23 +717,28 @@ class EditorManager extends EditorChangeManager {
         // At the end, in order to avoid decimal drift we set a final position again
         // In this way we have no cumulative error due to scrollInc decimals cut
         for( const div of windowDivList ) {
-          if( div.id != '_systemMonitor__System_Monitor' ) {
-            const positionX = (currWinPosition[div.id]+(direction*browserWidth));
-            div.style.left = positionX+'px';
+          if( div.classList.contains( 'pinned' ) ||
+              div.classList.contains( 'GraphSelection' ) || // Selection
+              div.classList.contains( 'GraphModel' ) ||     // Model Editor
+              ( div.id == '_systemMonitor__System_Monitor' ) ) {
+            continue;
+          }
 
-            // Update window position in window status
-            const key = this._getWindowKey( div.id );
-            if( key != -1 ) {
-              const graphURL = getMainGraphURL();
-              //const winInfo = m.status.openWindowList[graphURL];
-              const owl = getStatus( 'openWindowList' );
-              if( owl ) {
-                const winInfo = owl[graphURL];
-                if( winInfo ) {
-                  const posInfo = winInfo[key];
-                  if( posInfo ) {
-                    posInfo[0] = positionX;
-                  }
+          const positionX = (currWinPosition[div.id]+(direction*browserWidth));
+          div.style.left = positionX+'px';
+
+          // Update window position in window status
+          const key = this._getWindowKey( div.id );
+          if( key != -1 ) {
+            const graphURL = getMainGraphURL();
+            //const winInfo = m.status.openWindowList[graphURL];
+            const owl = getStatus( 'openWindowList' );
+            if( owl ) {
+              const winInfo = owl[graphURL];
+              if( winInfo ) {
+                const posInfo = winInfo[key];
+                if( posInfo ) {
+                  posInfo[0] = positionX;
                 }
               }
             }
