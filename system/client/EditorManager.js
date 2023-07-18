@@ -203,6 +203,8 @@ class EditorManager extends EditorChangeManager {
       editorInfo = new editorInfo.classRef( id, nodeData, position );
       this.editorList[id] = editorInfo;
       editorInfo.setParentGraph( currGraphNodeData );
+      // Put window on top
+      this.putWindowOnTop( id );
       // If should be pinned => pin it
       if( isPinned ) {
         editorInfo.setPinOn();
