@@ -76,6 +76,46 @@ class EditorManager extends EditorChangeManager {
     }
     return( result );
   }
+  getEditorBasicInfo( idOrData ) {
+    let id = idOrData;
+    if( typeof( idOrData ) == 'object' ) {
+      id = m.e._getDOMUniqueId( idOrData );
+    }
+    
+    // Get title
+    const ei = m.e.getEditorInfo( id );
+    const title = ei.title;
+    // Get fileURL
+    const url = ( ei.nodeData.fileURL? ei.nodeData.fileURL: '' );
+    // Get position
+    const elem = document.getElementById( id );
+    const leftPos = parseInt( elem.style.left );
+    const browserWidth = window.innerWidth;
+    let screenDirection = 'Center';
+    let screenIndex = 0;
+    let screenFactor = 1;
+    if( leftPos < 0 ) {
+      screenIndex = Math.ceil( Math.abs( leftPos/browserWidth ) );
+      //screenDirection = `Left[${screenIndex}]`;
+      screenDirection = `Left`;
+      screenFactor = -screenIndex;
+    } else if( leftPos > browserWidth ) {
+      screenIndex = Math.floor( Math.abs( leftPos/browserWidth ) );
+      // screenDirection = `Right[${screenIndex}]`;
+      screenDirection = `Right`;
+      screenFactor = screenIndex;
+
+    }
+    const result = {
+      id,
+      title,
+      url,
+      screenDirection,
+      screenIndex,
+      screenFactor,
+    };
+    return( result );
+  }
   openSelectionWindow() {
     const e = this.getEditor( config.htmlDiv.graphDiv );
     const nodeData = e.findNodeData( 'isSystem', '$GraphSelection$' );

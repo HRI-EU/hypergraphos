@@ -1146,25 +1146,29 @@ class SystemMonitorViewer extends EditorBase {
     const oeList = m.e.getEditorIdList();
     let source = '<table style="color: aquamarine;font-size: smaller;">';
     for( const id of oeList ) {
-      // Get fileURL
-      const ei = m.e.getEditorInfo( id );
-      const url = ( ei.nodeData.fileURL? ei.nodeData.fileURL: '' );
+      // // Get fileURL
+      // const ei = m.e.getEditorInfo( id );
+      // const url = ( ei.nodeData.fileURL? ei.nodeData.fileURL: '' );
 
-      // Get position
-      const elem = document.getElementById( id );
-      const leftPos = parseInt( elem.style.left );
-      const browserWidth = window.innerWidth;
-      let screen = 'Center'
-      if( leftPos < 0 ) {
-        const s = Math.ceil( Math.abs( leftPos/browserWidth ) );
-        screen = `Left[${s}]`;
-      } else if( leftPos > browserWidth ) {
-        const s = Math.floor( Math.abs( leftPos/browserWidth ) );
-        screen = `Right[${s}]`;
+      // // Get position
+      // const elem = document.getElementById( id );
+      // const leftPos = parseInt( elem.style.left );
+      // const browserWidth = window.innerWidth;
+      // let screen = 'Center'
+      // if( leftPos < 0 ) {
+      //   const s = Math.ceil( Math.abs( leftPos/browserWidth ) );
+      //   screen = `Left[${s}]`;
+      // } else if( leftPos > browserWidth ) {
+      //   const s = Math.floor( Math.abs( leftPos/browserWidth ) );
+      //   screen = `Right[${s}]`;
+      // }
+      const bi = m.e.getEditorBasicInfo( id );
+      let screen = bi.screenDirection;
+      if( bi.screenIndex != 0 ) {
+        screen = screen+`[${Math.abs(bi.screenIndex)}]`;
       }
-
       // Add item
-      const item = `<tr><td>[${id}]<td>${ei.title}<td>URL: ${url}<td>${screen}</tr>`;
+      const item = `<tr><td>[${bi.id}]<td>${bi.title}<td>URL: ${bi.url}<td>${screen}</tr>`;
       source = source+item;
     }
     wList.innerHTML = source;
