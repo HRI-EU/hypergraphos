@@ -81,7 +81,7 @@ class EditorManager extends EditorChangeManager {
     if( typeof( idOrData ) == 'object' ) {
       id = m.e._getDOMUniqueId( idOrData );
     }
-    
+
     // Get title
     const ei = m.e.getEditorInfo( id );
     const title = ei.title;
@@ -96,16 +96,16 @@ class EditorManager extends EditorChangeManager {
     let screenFactor = 1;
     if( leftPos < 0 ) {
       screenIndex = Math.ceil( Math.abs( leftPos/browserWidth ) );
-      //screenDirection = `Left[${screenIndex}]`;
       screenDirection = `Left`;
-      screenFactor = -screenIndex;
+      screenFactor = screenIndex;
     } else if( leftPos > browserWidth ) {
       screenIndex = Math.floor( Math.abs( leftPos/browserWidth ) );
-      // screenDirection = `Right[${screenIndex}]`;
       screenDirection = `Right`;
-      screenFactor = screenIndex;
+      screenFactor = -screenIndex;
 
     }
+
+    // Create result
     const result = {
       id,
       title,
@@ -155,6 +155,13 @@ class EditorManager extends EditorChangeManager {
     isPinned = ( isPinned == undefined? false: isPinned );
     // If editor already open => put window on top
     if( this.isEditorOpen( id, nodeData ) ) {
+      // Check if window is in a virtual screeen
+      const bi =this.getEditorBasicInfo( id );
+      if( bi.screenIndex != 0 ) {
+        // Scroll to the virtual screen
+        this.moveAllWindowTo( bi.screenFactor );
+      }
+      // Put the window on top of all the others
       this.putWindowOnTop( id );
       return;
     }
