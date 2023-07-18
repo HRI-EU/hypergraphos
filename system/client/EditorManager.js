@@ -65,7 +65,11 @@ class EditorManager extends EditorChangeManager {
      }
     return( result );
   }
-  getEditorInfo( id ) {
+  getEditorInfo( idOrData ) {
+    let id = idOrData;
+    if( typeof( idOrData ) == 'object' ) {
+      id = m.e._getDOMUniqueId( idOrData );
+    }
     let result = this.editorList[id];
     if( id == this.id ) {
       result = this;
