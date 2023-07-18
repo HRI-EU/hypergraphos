@@ -289,6 +289,7 @@ function _openFile( url, onLoad, noTimeStamp ) {
   //request.setRequestHeader('Cache-Control', 'no-cache');
   request.onerror = (e)=> {
     alert( 'Server not responding' );
+    setTimeout( setSystemError, 2500 );
     if( onLoad ) {
       onLoad( '' );
     }
@@ -296,7 +297,8 @@ function _openFile( url, onLoad, noTimeStamp ) {
 
   try {
     request.send( '' );
-  } catch(e) {
+  } catch( e ) {
+    console.log( e );
     if( onLoad ) {
       onLoad( '' );
     }
@@ -331,6 +333,7 @@ function _saveFile( url, source, onSaveDone, sourceEncoding ) {
     //request.setRequestHeader('Cache-Control', 'no-cache');
     request.onerror = (e)=> {
       alert( 'Server not responding' );
+      setTimeout( setSystemError, 2500 );
       if( onSaveDone ) {
         onSaveDone();
       }
@@ -342,7 +345,16 @@ function _saveFile( url, source, onSaveDone, sourceEncoding ) {
     });
     console.log( 'Saving: '+url );
     const fileInfo = { url, source, sourceEncoding, };
-    request.send( JSON.stringify( fileInfo ) );
+    try {
+      request.send( JSON.stringify( fileInfo ) );
+    } catch( e ) {
+      console.log( e );
+      // TODO: I am not sure in this case is good to call the callback!!!
+      debugger;
+      if( onSaveDone ) {
+        onSaveDone();
+      }
+    }
   } else {
     console.log( 'Read-only mode. No save request serverd' );
     if( onSaveDone ) {
@@ -358,6 +370,7 @@ function saveRemoteFile( remoteServerURL, url, source, onSaveDone ) {
     //request.setRequestHeader('Cache-Control', 'no-cache');
     request.onerror = (e)=> {
       alert( 'Server not responding' );
+      setTimeout( setSystemError, 2500 );
       if( onSaveDone ) {
         onSaveDone();
       }
@@ -375,7 +388,14 @@ function saveRemoteFile( remoteServerURL, url, source, onSaveDone ) {
       remotePort,
       url, 
       source, };
-    request.send( JSON.stringify( fileInfo ) );
+    try {
+      request.send( JSON.stringify( fileInfo ) );
+    } catch( e ) {
+      console.log( e );
+      if( onSaveDone ) {
+        onSaveDone();
+      }
+    }
   } else {
     console.log( 'Read-only mode. No save request serverd' );
     if( onSaveDone ) {

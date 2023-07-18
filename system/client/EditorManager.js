@@ -365,11 +365,11 @@ class EditorManager extends EditorChangeManager {
     document.getElementById( ei.id ).style.zIndex = minZ-1;
 
     // Re-assign a z order in a fix range
-    console.log( 'winInfoList.len', winInfoList.length );
+    //console.log( 'winInfoList.len', winInfoList.length );
     for( let i = 0; i < winInfoList.length; ++i ) {
       const winInfo = winInfoList[i];
       winInfo.we.style.zIndex = minZ+i;
-      console.log( i, winInfo.wId, 'z-order', minZ+i, 'class', winInfo.we.className );
+      //console.log( i, winInfo.wId, 'z-order', minZ+i, 'class', winInfo.we.className );
       const header = winInfo.we.getElementsByClassName( 'resizerHeader' )[0];
       if( header ) {
         header.style.background = 'DimGray';

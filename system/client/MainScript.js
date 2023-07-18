@@ -43,9 +43,10 @@ function popFromHistory() {
 function setSystemReadOnly( status ) {
   status = ( status == undefined? true: status );
   m.status.isReadOnly = status;
-  //document.body.style["background-color"] = ( status? 'red': 'gray' );
-  //m.mddStatus.style.className = 'mdd-status saved';
   m.mddStatus.style['border-style'] = ( status? 'dashed': 'solid' );
+}
+function setSystemError( status ) {
+  m.mddStatus.className = 'error';
 }
 function setSystemNeedSave() {
   if( !m.status.isReadOnly ) {
