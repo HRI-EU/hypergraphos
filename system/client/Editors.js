@@ -832,7 +832,7 @@ class WebViewer extends EditorBase {
       const element = document.getElementById( this.editorDivId );
       const fileURL = ( nodeData.fileURL? nodeData.fileURL: '' );
       // NOTE:  name="${Date.now()}" is a workaround to avoid caching
-      element.innerHTML = `<iframe id='${this.id}_frame' name="${Date.now()}" class='webViewer' src="${fileURL}"></iframe>`;
+      element.innerHTML = `<iframe id='${this.id}_frame' class='webViewer' src="${fileURL}?_=${Date.now()}"></iframe>`;
     } else if( nodeData.fileContent != undefined ) {
       const element = document.getElementById( this.editorDivId );
       const frameId = `${this.id}_frame`;
