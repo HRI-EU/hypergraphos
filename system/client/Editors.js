@@ -831,11 +831,13 @@ class WebViewer extends EditorBase {
     } else if( nodeData.fileURL ) {
       const element = document.getElementById( this.editorDivId );
       const fileURL = ( nodeData.fileURL? nodeData.fileURL: '' );
-      element.innerHTML = `<iframe id='${this.id}_frame' class='webViewer' src="${fileURL}"></iframe>`;
+      // NOTE:  name="${Date.now()}" is a workaround to avoid caching
+      element.innerHTML = `<iframe id='${this.id}_frame' name="${Date.now()}" class='webViewer' src="${fileURL}"></iframe>`;
     } else if( nodeData.fileContent != undefined ) {
       const element = document.getElementById( this.editorDivId );
       const frameId = `${this.id}_frame`;
-      element.innerHTML = `<iframe id='${frameId}' class='webViewer' src='about:blank'></frame>`;
+      // NOTE:  name="${Date.now()}" is a workaround to avoid caching
+      element.innerHTML = `<iframe id='${frameId}' name="${Date.now()}" class='webViewer' src='about:blank'></frame>`;
       const frameElement = document.getElementById( frameId );
       frameElement.contentDocument.open();
       frameElement.contentDocument.write( nodeData.fileContent );
