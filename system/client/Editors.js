@@ -550,6 +550,12 @@ class TextEditor extends EditorBase {
                         }
                 };
     this.editor.aceEditor.commands.addCommand( tww ); 
+    if( nodeData.editorTheme ) {
+      this.editor.setEditorTheme( nodeData.editorTheme );
+    } else {
+      const editorDiv = document.getElementById( this.editorDivId );
+      editorDiv.style.background = '#1d1f21';
+    }
 
 
     // Pause tracking editor changes
@@ -772,7 +778,11 @@ class ImageEditor extends EditorBase {
     this.editorDivId = m.e.newDOMWindow( id, this.title, 
                                          config.htmlDiv.mainDiv,
                                          this.storeWindowPosition.bind(this),
-                                         position );  
+                                         position );
+    // Set background
+    const editorDiv = document.getElementById( this.editorDivId );
+    editorDiv.style.background = '#1d1f21';
+    // Load content
     this.loadEditorContent( nodeData );
   }
   loadEditorContent( nodeData ) {
@@ -863,6 +873,11 @@ class FindViewer extends EditorBase {
                                          config.htmlDiv.mainDiv,
                                          this.storeWindowPosition.bind(this),
                                          position );
+    
+    // Set background
+    const editorDiv = document.getElementById( this.editorDivId );
+    editorDiv.style.background = '#1d1f21';
+    // Load content
     this.loadEditorContent( nodeData );
   }
   loadEditorContent( nodeData ) {
@@ -991,6 +1006,11 @@ class DSLViewer extends EditorBase {
                                          config.htmlDiv.mainDiv,
                                          this.storeWindowPosition.bind(this),
                                          position );
+    
+    // Set background
+    const editorDiv = document.getElementById( this.editorDivId );
+    editorDiv.style.background = '#1d1f21';
+    // Load content
     this.loadEditorContent( nodeData );
   }
   loadEditorContent( nodeData ) {
@@ -1051,6 +1071,11 @@ class GraphTemplateViewer extends EditorBase {
                                          config.htmlDiv.mainDiv,
                                          this.storeWindowPosition.bind(this),
                                          position );
+    
+    // Set background
+    const editorDiv = document.getElementById( this.editorDivId );
+    editorDiv.style.background = '#1d1f21';
+    // Load content
     this.loadEditorContent( nodeData );
   }
   loadEditorContent( nodeData ) {
@@ -1115,6 +1140,11 @@ class SystemMonitorViewer extends EditorBase {
                                          config.htmlDiv.mainDiv,
                                          this.storeWindowPosition.bind(this),
                                          position );  
+    
+    // Set background
+    const editorDiv = document.getElementById( this.editorDivId );
+    editorDiv.style.background = '#1d1f21';
+    // Load content
     this.loadEditorContent( nodeData );
     // Refresh System Monitor every 30 seconds
     setInterval( ()=> this.loadEditorContent( this.nodeData ), 30*1000 );

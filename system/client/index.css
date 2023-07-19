@@ -149,7 +149,7 @@ html{
 .editorDiv {
   width: 100%;
   height: 100%;
-  background: #1d1f21;
+  /*background: #1d1f21;*/ /* now set in the Editor.js */
   overflow: hidden;
 }
 .webViewer {

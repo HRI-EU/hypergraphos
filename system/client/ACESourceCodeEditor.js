@@ -14,8 +14,7 @@ class ACESourceCodeEditor {
   constructor( editorDivId ) {
     // Create editor instance
     this.aceEditor = ace.edit( editorDivId );
-    // Set editor theme
-    this.aceEditor.setTheme( 'ace/theme/tomorrow_night' );
+    this.setEditorTheme( 'tomorrow_night' );
 
     // Set default mode to text
     this.aceEditor.getSession().setMode( 'ace/mode/javascript' );
@@ -29,6 +28,10 @@ class ACESourceCodeEditor {
   }
   setReadOnly( status ) {
     // Check how to set read only
+  }
+  setEditorTheme( name ) {
+    // Set editor theme
+    this.aceEditor.setTheme( 'ace/theme/'+name );
   }
   setEditorSource( source ) {
     this.aceEditor.setValue( source, -1 );
