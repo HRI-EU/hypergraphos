@@ -232,6 +232,8 @@ class Graph {
 																	do: (o)=> o.d.cmd.groupSelection() },
 					{ label: 'Ungroup',     if: (o)=> o.d.cmd.canUngroupSelection(),
 																	do: (o)=> o.d.cmd.ungroupSelection() },
+					{ label: 'Ungroup Nodes',if: (o)=> !o.d.cmd.canUngroupSelection() && this.canUngroupSelectedNodes(),
+																	do: (o)=> this.doUngroupSelectedNodes() },
 					{ separator: '-',         if: (o)=> this._canOpenFile() || this._canOpenSubGraph() },
 					{ label: 'Open File',   if: (o)=> this._canOpenFile(),
 																	do: (o)=> { const data = this.getFirstSelectedNodeData();
@@ -716,6 +718,29 @@ class Graph {
 		if( cmd.canDeleteSelection() ) {
 			cmd.deleteSelection();
 		}
+	}
+	canUngroupSelectedNodes() {
+		let result = false;
+		const selection = this.getSelection();
+		const selIter = selection.iterator;
+		while( selIter.next() ) {
+			const node = selIter.value;
+			const data = node.data;
+			if( data.group !== undefined ) {
+				result = true;
+				break;
+			}
+		}
+		return( result );
+	}
+	doUngroupSelectedNodes() {
+		const selection = this.getSelection();
+		selection.each( (node) => { 
+			const data = node.data;
+			if( data.group !== undefined ) {
+				setNodeDataField( data, 'group', null );
+			}
+		});
 	}
 	centerGraphToNodeKey( key ) {
 		const node = this.diagram.findNodeForKey( key );
