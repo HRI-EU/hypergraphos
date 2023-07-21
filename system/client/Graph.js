@@ -102,7 +102,7 @@ class Graph {
 				{	layout: 'vertical', itemList: [
 					{ label: 'Properties',					do: ( o )=> alert( this.getDiagramInfo( this.diagram.model ) )},
 					{ label: 'View',       layout: 'vertical',	subMenu: [
-						{ label: 'Center Graph',			do: this.doZoomToFit.bind(this) },
+						{ label: 'Zoom to Fit',			  do: this.doZoomToFit.bind(this) },
 						{ separator: '-' },
 						{ label: 'Show View 1',				do: (o)=> { if( o.event.shiftKey ) {
 																												this.setCurrentViewToBookmark( 1 );
@@ -190,6 +190,8 @@ class Graph {
 				]},
 			'nodeContextMenu':
 				{ layout: 'vertical', itemList: [
+					{ label: 'Zoom it',     do: this.doZoomToFitSlectedNode.bind(this,5) },
+					{ separator: '-' },
 					{ label: 'Duplicate',   if: (o)=> {	const location = o.d.cmt.mouseDownPoint;
 																							return( o.d.cmd.canCopySelection() ); },
 																	do: (o)=> { const location = o.d.cmt.mouseDownPoint;
@@ -241,7 +243,7 @@ class Graph {
 			{ key: '2', control:true, do: this.doZoomToFitSlectedNode.bind(this,2) },
 			{ key: '3', control:true, do: this.doZoomToFitSlectedNode.bind(this,3) },
 			{ key: '4', control:true, do: this.doZoomToFitSlectedNode.bind(this,4) },
-			{ key: '5', control:true, do: this.doZoomToFitSlectedNode.bind(this,4) },
+			{ key: '5', control:true, do: this.doZoomToFitSlectedNode.bind(this,5) },
 			// Zoom to Fit
 			{ key: '1', do: this.doZoomToFit.bind(this) },
 			// Zoom to Factor
