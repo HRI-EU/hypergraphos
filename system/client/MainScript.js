@@ -94,12 +94,12 @@ function getNodeData( key, isCopy ) {
     if( linkedData.fileURL != undefined ) {
       // Update both the copy and the node
       result.fileURL = linkedData.fileURL;
-      g.setNodeDataField( key, 'fileURL', linkedData.fileURL );
+      //DONT TO THAT!!!: g.setNodeDataField( key, 'fileURL', result.fileURL );
     }
     if( linkedData.fileContent != undefined ) {
       // Update both the copy and the node
       result.fileContent = linkedData.fileContent;
-      g.setNodeDataField( key, 'fileContent', linkedData.fileContent );
+      //DONT TO THAT!!!: g.setNodeDataField( key, 'fileContent', result.fileContent );
     }
   } else {
     result = g.getNodeData( key, isCopy );
