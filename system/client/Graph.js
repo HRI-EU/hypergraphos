@@ -605,9 +605,10 @@ class Graph {
 				const dataNode = objSelection[i];
 				const fieldList = Object.keys( dataNode );
 				for( const field of fieldList ) {
-					const value = dataNode[field];
-					//this.setNodeDataField( oKey, field, value );
-					setNodeDataField( oKey, field, value );
+					if( field != 'key' ) { // Key can not be changed in a selection
+						const value = dataNode[field];
+						setNodeDataField( oKey, field, value );
+					}
 				}
 			}
 		}
@@ -1457,7 +1458,7 @@ class Graph {
 		diagram.toolManager.resizingTool.isGridSnapEnabled = true;
 
 		// Set zoom speed
-		diagram.commandHandler.zoomFactor = 1.5;
+		diagram.commandHandler.zoomFactor = 1.25;
 		// Allow infinite canvas
 		diagram.scrollMode = go.Diagram.InfiniteScroll;
 
