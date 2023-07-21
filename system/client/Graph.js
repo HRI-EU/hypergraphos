@@ -1407,6 +1407,7 @@ class Graph {
 		}
 
 		diagram.clickCreatingTool = new InGroupClickCreatingTool();
+		// Avoid that the diagram comes slowly from the bottom in an animation
 		diagram.animationManager.isInitial = false;
 		// what to do when a drag-drop occurs in the Diagram's background
 		diagram.mouseDrop = (e)=> this._onFinishDrop( e, null );
