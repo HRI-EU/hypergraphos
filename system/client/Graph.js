@@ -102,48 +102,31 @@ class Graph {
 				{	layout: 'vertical', itemList: [
 					{ label: 'Properties',					do: ( o )=> alert( this.getDiagramInfo( this.diagram.model ) )},
 					{ label: 'View',       layout: 'vertical',	subMenu: [
-						{ label: 'Center Graph',			do: (o)=> { // Store last view in ViewLast
-																												this.viewBookmark[4] = this.getCurrentView();
-																												// Go to new view 
-																												this.diagram.zoomToFit(); }},
+						{ label: 'Center Graph',			do: this.doZoomToFit.bind(this) },
 						{ separator: '-' },
 						{ label: 'Show View 1',				do: (o)=> { if( o.event.shiftKey ) {
-																												this.viewBookmark[1] = this.getCurrentView();
-																											} else if( this.viewBookmark[1] != undefined ) {
-																												// Store last view in ViewLast
-																												this.viewBookmark[0] = this.getCurrentView();
-																												// Go to new view
-																												this.setCurrentView( this.viewBookmark[1] );
+																												this.setCurrentViewToBookmark( 1 );
+																											} else {
+																												this.setToBookmarkView( 1 );
 																											} }},
 						{ label: 'Show View 2',				do: (o)=> { if( o.event.shiftKey ) {
-																												this.viewBookmark[2] = this.getCurrentView();
-																											} else if( this.viewBookmark[2] != undefined ) {
-																												// Store last view in ViewLast
-																												this.viewBookmark[0] = this.getCurrentView();
-																												// Go to new view
-																												this.setCurrentView( this.viewBookmark[2] );
+																												this.setCurrentViewToBookmark( 2 );
+																											} else {
+																												this.setToBookmarkView( 2 );
 																											} }},
 						{ label: 'Show View 3',				do: (o)=> { if( o.event.shiftKey ) {
-																												this.viewBookmark[3] = this.getCurrentView();
-																											} else if( this.viewBookmark[3] != undefined ) {
-																												// Store last view in ViewLast
-																												this.viewBookmark[0] = this.getCurrentView();
-																												// Go to new view
-																												this.setCurrentView( this.viewBookmark[3] );
+																												this.setCurrentViewToBookmark( 3 );
+																											} else {
+																												this.setToBookmarkView( 3 );
 																											} }},
 						{ label: 'Show View 4',				do: (o)=> { if( o.event.shiftKey ) {
-																												this.viewBookmark[4] = this.getCurrentView();
-																											} else if( this.viewBookmark[4] != undefined ) {
-																												// Store last view in ViewLast
-																												this.viewBookmark[0] = this.getCurrentView();
-																												// Go to new view
-																												this.setCurrentView( this.viewBookmark[4] );
+																												this.this.setCurrentViewToBookmark( 4 );
+																											} else {
+																												this.setToBookmarkView( 4 );
 																											} }},
-						{ label: 'Show Prev View',		do: (o)=> { if( this.viewBookmark[0] != undefined ) {
-																												this.setCurrentView( this.viewBookmark[0] );
-																											} }},
+						{ label: 'Show Prev View',		do: this.setCurrentViewToPreviousView.bind(this) },
 					]},
-					{ separator: '-',                 if: (o)=> { // NOTE: if we define a location, paste do not showup in the popup menu
+					{ separator: '-',               if: (o)=> { // NOTE: if we define a location, paste do not showup in the popup menu
 																											//const location = o.d.cmt.mouseDownPoint;
 																											return( o.d.cmd.canPasteSelection( location ) ); }},
 					{ label: 'Paste',      					if: (o)=> { // NOTE: if we define a location, paste do not showup in the popup menu
@@ -157,7 +140,7 @@ class Graph {
 																										} },
 					{ separator: '-' },
 					{ label: 'Tools',       layout: 'vertical', subMenu: [
-						{ label: 'Toogle Visible Palette', 	if: (o)=> (this.fullPaletteId? true: false),
+						{ label: 'Toogle Visible Palette', 	if: (o)=> ( this.fullPaletteId? true: false ),
 																								do: (o)=> { const htmlObj = document.querySelector( `#${this.fullPaletteId}` );
 																														const v = htmlObj.style.visibility;
 																														htmlObj.style.visibility = ( v == 'visible'? 'hidden': 'visible' ); 
@@ -253,6 +236,22 @@ class Graph {
 																	do: (o)=> o.d.cmd.redo() },
 				]},
 		});
+		this.shortcutList = [
+			// Zoom to Node (NOTE: with control its not yet working)
+			{ key: '2', control:true, do: this.doZoomToFitSlectedNode.bind(this,2) },
+			{ key: '3', control:true, do: this.doZoomToFitSlectedNode.bind(this,3) },
+			{ key: '4', control:true, do: this.doZoomToFitSlectedNode.bind(this,4) },
+			{ key: '5', control:true, do: this.doZoomToFitSlectedNode.bind(this,4) },
+			// Zoom to Fit
+			{ key: '1', do: this.doZoomToFit.bind(this) },
+			// Zoom to Factor
+			{ key: '2', do: this.doZoomToFactor.bind(this,2) },
+			{ key: '3', do: this.doZoomToFactor.bind(this,3) },
+			{ key: '4', do: this.doZoomToFactor.bind(this,4) },
+			{ key: '5', do: this.doZoomToFactor.bind(this,4) },
+			// Center Graph
+			{ key: 'C', do: this.setViewCenteredOnSelectedNode.bind(this) },
+		];
 
 		this.diagram.contextMenu = this.contextMenu.getMenu( 'diagramContextMenu' );
 		this.nodeContextMenu = this.contextMenu.getMenu( 'nodeContextMenu' );
@@ -442,53 +441,6 @@ class Graph {
 			this.diagram.toolManager.clickCreatingTool = null
 		}
 	}
-	getCurrentView() {
-		// Get current position
-		const position = this.diagram.position;
-		// Get current zoom scale
-		const scale = this.diagram.scale;
-		// Get grid visibility
-		const isGridOn = this.diagram.grid.visible;
-		// Define view info
-		const viewInfo = {
-			position: {
-				x: position.x,
-				y: position.y,
-			},
-			scale,
-			isGridOn,
-		};
-		return( viewInfo );
-	}
-	setCurrentView( viewInfo ) {
-		if( viewInfo.scale ) {
-			// Restore first scale (must be first)
-			this.diagram.scale = viewInfo.scale;
-		}
-		if( viewInfo.position ) {
-			// Restore position
-			this.diagram.position = new go.Point( viewInfo.position.x, viewInfo.position.y );
-		}
-		if( typeof( viewInfo.isGridOn ) == 'boolean' ) {
-			// Restore grid
-			this.diagram.grid.visible = viewInfo.isGridOn;
-		}
-	}
-	setViewFromNode( node, deltaX, deltaY ) {
-		let result = false;
-		if( node ) {
-			const x = node.position.x+deltaX;
-			const y = node.position.y+deltaY;
-			// Define view info to jump to
-			const viewInfo = {
-				position: { x, y }
-			};
-			// Jump to slide
-			this.setCurrentView( viewInfo );
-			result = true;
-		}
-		return( result );
-	}
 	getGraphImage() {
 		let image = null;
 		if( this.diagram ) {
@@ -667,6 +619,107 @@ class Graph {
 			nodeList.push( this.diagram.findPartForKey( key ) );
 		}
 		this.diagram.selectCollection( nodeList );
+	}
+	getCurrentView() {
+		// Get current position
+		const position = this.diagram.position;
+		// Get current zoom scale
+		const scale = this.diagram.scale;
+		// Get grid visibility
+		const isGridOn = this.diagram.grid.visible;
+		// Define view info
+		const viewInfo = {
+			position: {
+				x: position.x,
+				y: position.y,
+			},
+			scale,
+			isGridOn,
+		};
+		return( viewInfo );
+	}
+	setCurrentView( viewInfo ) {
+		if( viewInfo.scale ) {
+			// Restore first scale (must be first)
+			this.diagram.scale = viewInfo.scale;
+		}
+		if( viewInfo.position ) {
+			// Restore position
+			this.diagram.position = new go.Point( viewInfo.position.x, viewInfo.position.y );
+		}
+		if( typeof( viewInfo.isGridOn ) == 'boolean' ) {
+			// Restore grid
+			this.diagram.grid.visible = viewInfo.isGridOn;
+		}
+	}
+	setCurrentViewToBookmark( index ) {
+		this.viewBookmark[index] = this.getCurrentView();
+	}
+	setCurrentViewToPreviousView() {
+		if( this.viewBookmark[0] != undefined ) {
+			this.setCurrentView( this.viewBookmark[0] );
+		}
+	}
+	setToBookmarkView( index ) {
+		if( this.viewBookmark[index] != undefined ) {
+			// Store last view in ViewLast
+			this.viewBookmark[0] = this.getCurrentView();
+			// Go to new view
+			this.setCurrentView( this.viewBookmark[index] );
+		}
+	}
+	setViewFromNode( node, deltaX, deltaY ) {
+		let result = false;
+		if( node ) {
+			const x = node.position.x+deltaX;
+			const y = node.position.y+deltaY;
+			// Define view info to jump to
+			const viewInfo = {
+				position: { x, y }
+			};
+			// Jump to slide
+			this.setCurrentView( viewInfo );
+			result = true;
+		}
+		return( result );
+	}
+	setViewCenteredOnSelectedNode() {
+		const selection = this.getSelection();
+		const node = selection.first();
+		const result = ( node != null );
+		if( result ) {
+			// Get the center coordinates of the node
+			const nodeCenterX = node.actualBounds.x;
+			const nodeCenterY = node.actualBounds.y;
+	
+			// Get the size of the diagram's viewport
+			const viewportWidth = this.diagram.viewportBounds.width;
+			const viewportHeight = this.diagram.viewportBounds.height;
+	
+			// Calculate the desired viewport position to center the node
+			const desiredViewportX = nodeCenterX - viewportWidth / 2;
+			const desiredViewportY = nodeCenterY - viewportHeight / 2;
+	
+			// Set the diagram's viewport to the desired position
+			this.diagram.position = new go.Point( desiredViewportX, desiredViewportY );
+		}
+		return( result );
+	}
+	doZoomToFitSlectedNode( factor ) {
+		this.doZoomToFit();
+		const isViewSet = this.setViewCenteredOnSelectedNode();
+		if( isViewSet ) {
+			this.doZoomToFactor( factor );
+		}
+	}
+	doZoomToFit() {
+		// Store last view in ViewLast
+		this.viewBookmark[4] = this.getCurrentView();
+		// Go to new view 
+		this.diagram.zoomToFit();
+	}
+	doZoomToFactor( factor ) {
+		this.diagram.scale = this.diagram.scale*factor;
 	}
 	doEditCut() {
 		const cmd = this.diagram.commandHandler;
@@ -1341,6 +1394,9 @@ class Graph {
 		return( palette );
 	}
 	newDiagram( divId ) {
+		// To be used in "function(){}" definitions
+		const graphThis = this;
+
 		let diagram = null;
 		if( divId ) {
 			diagram = $( go.Diagram, divId ); // Create visual diagram
@@ -1356,26 +1412,8 @@ class Graph {
 		diagram.toolManager.mouseWheelBehavior = go.ToolManager.WheelZoom;
 		// Disable port gravity (snap to port)
 		diagram.toolManager.linkingTool.portGravity = 0;
-
-		/*
-		// allow Ctrl-G to call groupSelection()
-		"commandHandler.archetypeGroupData": { // TODO: Put in DSL
-			label: "Group",
-			isGroup: true,
-			color: "gray"
-		},*/
 		// enable undo & redo
 		diagram.undoManager.isEnabled = true;
-
-		/*
-		// allow Ctrl-G to call groupSelection()
-		diagram.commandHandler.archetypeGroupData = { // TODO: Put in DSL
-			label: "Group",
-			isGroup: true,
-			color: "gray"
-		};
-		diagram.groupTemplate = this.newGroupTemplate();
-		*/
 
 		// Define grid
 		const mainColor = {
@@ -1462,25 +1500,53 @@ class Graph {
 		//////////////////////////////////
 
 		diagram.commandHandler.doKeyDown = function() {
+			// Get last input
 			const e = diagram.lastInput;
-			// The meta (Command) key substitutes for "control" for Mac commands
-		  const control = e.control || e.meta;
 			const key = e.key;
-
-			// Key code
-			const deleteKey = 'Del';
-			const backspaceKey = 'Backspace';
-			// Quit on any undo/redo key combination:
-			//if (control && (key === 'Z' || key === 'Y')) return;
 			
-			// Avoid to delete nodes/selection by del key
+			// Avoid to delete nodes/selection by del/backspace key
 			if( !diagram.isDeleteEnabled ) {
+				// Key code
+				const deleteKey = 'Del';
+				const backspaceKey = 'Backspace';
 				if( ( key === deleteKey ) || ( key === backspaceKey ) ) return;
 			}
-		
+
 			// call base method with no arguments (default functionality)
 			go.CommandHandler.prototype.doKeyDown.call(this);
 		};
+		diagram.commandHandler.doKeyUp = function() {
+			// Get last input
+			const e = diagram.lastInput;
+			// The meta (Command) key substitutes for "control" for Mac commands
+		  const control = e.control || e.meta;
+			const alt = e.alt;
+			const shift = e.shift;
+			const key = e.key;
+
+			// Evalue keyboard shortcut
+			for( const shortcut of graphThis.shortcutList ) {
+				if( shortcut.key == key ) { 
+					if( ( ( shortcut.control == undefined ) && control ) ||
+					    ( ( shortcut.control != undefined ) && !control ) ) {
+						continue;
+					}
+					if( ( ( shortcut.alt == undefined ) && alt ) ||
+					    ( ( shortcut.alt != undefined ) && !alt ) ) {
+						continue;
+					}
+					if( ( ( shortcut.shift == undefined ) && shift ) ||
+					    ( ( shortcut.shift != undefined ) && !shift ) ) {
+						continue;
+					}
+					shortcut.do();
+					break;
+				}
+			}
+
+			// call base method with no arguments (default functionality)
+			go.CommandHandler.prototype.doKeyUp.call(this);
+		}
 
 		// Move the pasted selection a bit on the side from copied seleciton
 		diagram.addDiagramListener( 'ClipboardPasted', (e)=> {

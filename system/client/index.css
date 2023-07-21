@@ -50,10 +50,10 @@ html{
  }
 .diagramDiv {
   position: absolute;
-  top: -70px;   /* TODO: Remove this line, remove last lines */
+  /*top: -70px;   /* TODO: This allow hiding top left corner of graph */
   width: 100%;
-  height: 120%; /* TODO: Restore to 100%
-   remove also last lines in htmlMenu.js in function _computeRootMenuMouseClickXY */
+  height: 100%; /* TODO: Set to 120%
+   re-enable also last lines in htmlMenu.js in function _computeRootMenuMouseClickXY */
   background: rgb(160, 160, 160);
 }
 .paletteDiv {
