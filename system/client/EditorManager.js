@@ -602,6 +602,20 @@ class EditorManager extends EditorChangeManager {
     }
     this.isStatusOnUpdate = false;
   }
+  cloneGraphWindow( oldURL, newURL ) {
+    this.isStatusOnUpdate = true;
+    const owl = getStatus( 'openWindowList' );
+    if( owl && owl[oldURL] ) {
+      owl[newURL] = {};
+      const keyList = Object.keys( owl[oldURL] );
+      // Load opened window for this graph
+      for( const key of keyList ) {
+        // Clone the window key with the list of coordinates
+        owl[newURL][key] = [...owl[oldURL][key]];
+      }
+    }
+    this.isStatusOnUpdate = false;
+  }
   closeEditor( isOnClick, id, onCloseDone ) {
     if( id == undefined ) {
       this.closeAllEditor( onCloseDone );

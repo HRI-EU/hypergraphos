@@ -181,23 +181,35 @@ class GraphEditor extends EditorBase {
         m.e.openWindowFromNodeData( newNodeData, x, y );
       },
       onClone: ( nodeData )=> {
-        // Get a copy of the node data
-        const newNodeData = getNodeData( nodeData.key, true );
+        if( nodeData.fileURL ) {
+          // Get a copy of the node data
+          const newNodeData = getNodeData( nodeData.key, true );
 
-        // Once node loaded, update URL and save
-        const onNodeLoaded = ( source )=> {
-          // Clear fileURL
-          newNodeData.fileURL = '';
-          // Set a new fileURL
-          this._verifyFileURL( newNodeData );
-          // Temporarly save the content
-          newNodeData.fileContent = source;
-          // Save node content to the server
-          saveNodeContent( newNodeData );
-        };
+          // Once node loaded, update URL and save
+          const onNodeLoaded = ( source )=> {
+            // Save old URL
+            const oldURL = newNodeData.fileURL;
 
-        // Load node data content
-        loadNodeContent( newNodeData, onNodeLoaded );
+            // Update the url
+            // Clear fileURL
+            newNodeData.fileURL = '';
+            // Set a new fileURL
+            this._verifyFileURL( newNodeData );
+
+
+            // Clone opened windows
+            const newURL = newNodeData.fileURL;
+            m.e.cloneGraphWindow( oldURL, newURL );
+
+            // Temporarly save the content
+            newNodeData.fileContent = source;
+            // Save node content to the server
+            saveNodeContent( newNodeData );
+          };
+
+          // Load node data content
+          loadNodeContent( newNodeData, onNodeLoaded );
+        }
       },
       onShowRootGraph: ()=> {
         const newNodeData = config.graph.rootGraphNodeData;
