@@ -61,7 +61,7 @@ const config = {
     scriptPlatform:    'win32',  // 'win32' | 'linux' ( not available 'winBash' | 'powershell'  )
     webServerProtocol: 'http',
     webServerName:     'localhost',
-    webServerPort:     80,
+    webServerPort:     830,
     webSocketURL:      '', // Defined later...
     ssl: {
       enabled: false,

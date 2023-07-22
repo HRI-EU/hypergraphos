@@ -1,0 +1,101 @@
+.context {
+    /* Display and Sizing */
+    display: inline-block;
+    position: fixed;
+    min-width: 200px;
+    padding: 3px 0;
+
+    /* Font CSS */
+    font-family: 'Fira Sans', sans-serif;
+    color: #ffffff;
+    font-size: 8pt;
+
+    /* Colouring and shadow */
+    background: #282e42;
+    box-shadow: 4px 4px 3px -1px rgba(0, 0, 0, 0.5);
+    border-radius: 0;
+
+    /* Anim */
+    -webkit-animation-name: fadeIn;
+    -webkit-animation-duration: 0.4s;
+    animation-name: fadeIn;
+    animation-duration: 0.4s;
+
+    /* Make text not selectable */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.context .contextButton {
+    padding: 4px 19px;
+    cursor: default;
+    color: inherit;
+}
+
+.context .contextButton:hover {
+    background: #1c7501;
+}
+
+.context .contextButton:hover .hotkey {
+    color: #fff;
+}
+
+.context .contextButton:hover .icon {
+    color: #fff;
+}
+
+.context .disabled {
+    color: #878B90;
+}
+
+.context .disabled:hover {
+    background: inherit;
+}
+
+.context .disabled .hotkey {
+    color: #878B90;
+}
+
+.context .disabled:hover .hotkey {
+    color: #878B90;
+}
+
+.context .disabled .icon {
+    color: #878B90;
+}
+
+.context .disabled:hover .icon {
+    color: #878B90;
+}
+
+.context .separator {
+    margin: 4px 0;
+    height: 0;
+    padding: 0;
+    border-top: 1px solid #454545;
+}
+
+.hotkey {
+    color: #239400;
+    float: right;
+}
+
+.icon {
+    float: left;
+    margin: 1px 10px 0 -10px;
+    color: #239400;
+}
+
+@-webkit-keyframes fadeIn {
+    from { opacity:0 }
+    to { opacity:1 }
+}
+
+@keyframes fadeIn {
+    from { opacity:0 }
+    to { opacity:1 }
+}

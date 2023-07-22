@@ -1,0 +1,85 @@
+.context {
+    /* Display and Sizing */
+    display: inline-block;
+    position: fixed;
+    min-width: 200px;
+    padding: 3px 0;
+
+    /* Font CSS */
+    font-family: 'Fira Sans', sans-serif;
+    color: #1d1d1d;
+    font-size: 8pt;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    
+    /* Colouring and shadow */
+    background: white;
+    box-shadow: 4px 4px 3px -1px rgba(0, 0, 0, 0.5);
+    border-radius: 0;
+
+    /* Anim */
+    -webkit-animation-name: fadeIn;
+    -webkit-animation-duration: 0.4s;
+    animation-name: fadeIn;
+    animation-duration: 0.4s;
+
+    /* Make text not selectable */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.context .contextButton {
+    padding: 4px 19px;
+    cursor: default;
+    color: inherit;
+}
+
+.context .contextButton:hover {
+    background: #b3b3b3;
+}
+
+.context .contextButton:hover .hotkey {
+    color: #fff;
+}
+
+.context .disabled {
+    color: #878B90;
+}
+
+.context .disabled:hover {
+    background: inherit;
+}
+
+.context .disabled:hover .hotkey {
+    color: #b3b3b3;
+}
+
+.context .separator {
+    margin: 4px 0;
+    height: 0;
+    padding: 0;
+    border-top: 1px solid #b3b3b3;
+}
+
+.hotkey {
+    color: #1d1d1d;
+    float: right;
+}
+
+.icon {
+    float: left;
+    margin: 1px 10px 0 -10px;
+}
+
+@-webkit-keyframes fadeIn {
+    from { opacity:0 }
+    to { opacity:1 }
+}
+
+@keyframes fadeIn {
+    from { opacity:0 }
+    to { opacity:1 }
+}

@@ -43,6 +43,28 @@ const codeFileType = {
 let urlParams = { name: 'DefaultUser' };
 
 function loadSystem() {
+  /*
+    
+    // Get params value
+    const url = new URL(
+      'http://example.com/path/index.html?message=hello&who=world'
+    );
+
+    // Get host name
+    console.log(url.hostname); // => 'example.com'
+    // Get path name
+    console.log(url.pathname); // => '/path/index.html'
+    // Get search string
+    console.log(url.search); // => '?message=hello&who=world'
+    // Get params
+    console.log(url.searchParams.get('message')); // => 'hello'
+    console.log(url.searchParams.get('missing')); // => null
+
+    // Get hash
+    const url = new URL('http://example.com/path/index.html#top');
+
+    console.log(url.hash); // => '#top'
+  */
   // Decode url parameter (remove firs char '?')
   const urlStrParams = decodeURI( document.location.search.substring( 1 ) );
   // Get url params values

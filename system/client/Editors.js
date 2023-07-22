@@ -1168,8 +1168,8 @@ class SystemMonitorViewer extends EditorBase {
                             <button id='sysMonitorRefresh' type='button' style="width=100%">Refresh</button>&nbsp;&nbsp;&nbsp;
                             <button type='button' style="width=100%" onclick='m.e.openSelectionWindow()'>Show Selection Editor</button>
                             <button type='button' style="width=100%" onclick='m.e.openModelWindow()'>Show Model Editor</button>&nbsp;&nbsp;&nbsp;
-                            <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( -1 )'>&lt;-Window</button>
-                            <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( +1 )'>Window-&gt;</button>
+                            <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( +1 )'>&lt;-Window</button>
+                            <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( -1 )'>Window-&gt;</button>
                           </div>
                           <div id='windowList'></div>`;
     const refreshButton = document.querySelector( '#sysMonitorRefresh' );
