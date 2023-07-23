@@ -1458,7 +1458,8 @@ class Graph {
 		diagram.toolManager.resizingTool.isGridSnapEnabled = true;
 
 		// Set zoom speed
-		diagram.commandHandler.zoomFactor = 1.25;
+		diagram.commandHandler.zoomFactor = ( config.graph.zoomFactor?  
+																					config.graph.zoomFactor: 1.25 );
 		// Allow infinite canvas
 		diagram.scrollMode = go.Diagram.InfiniteScroll;
 

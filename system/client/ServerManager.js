@@ -245,12 +245,12 @@ function saveNodeContent( nodeData, onSaved ) {
     const source = nodeData.fileContent;
     _saveFile( nodeData.fileURL, source, onSaved, sourceEncoding );
   } else if( nodeData.fileContent != undefined ) { // Check on fileContent must be third
-    const e = m.e.getEditor( config.htmlDiv.graphDiv );
-    if( e ) {
+    //const e = m.e.getEditor( config.htmlDiv.graphDiv );
+    //if( e ) {
       const source = nodeData.fileContent;
       //e.setNodeDataField( nodeData.key, 'fileContent', source );
       setNodeDataField( nodeData.key, 'fileContent', source );
-    }
+    //}
     if( onSaved ) {
       onSaved();
     }
