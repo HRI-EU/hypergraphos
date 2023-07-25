@@ -310,7 +310,7 @@ function _openFile( url, onLoad, noTimeStamp ) {
   request.open( 'GET', url, true );
   //request.setRequestHeader('Cache-Control', 'no-cache');
   request.onerror = (e)=> {
-    alert( 'Server not responding' );
+    winAlert( 'Server not responding' );
     setTimeout( setSystemError, 2500 );
     if( onLoad ) {
       onLoad( '' );
@@ -354,7 +354,7 @@ function _saveFile( url, source, onSaveDone, sourceEncoding ) {
     request.setRequestHeader( 'Content-Type', 'text/plain;charset=UTF-8' );
     //request.setRequestHeader('Cache-Control', 'no-cache');
     request.onerror = (e)=> {
-      alert( 'Server not responding' );
+      winAlert( 'Server not responding' );
       setTimeout( setSystemError, 2500 );
       if( onSaveDone ) {
         onSaveDone();
@@ -391,7 +391,7 @@ function saveRemoteFile( remoteServerURL, url, source, onSaveDone ) {
     request.setRequestHeader( 'Content-Type', 'text/plain;charset=UTF-8' );
     //request.setRequestHeader('Cache-Control', 'no-cache');
     request.onerror = (e)=> {
-      alert( 'Server not responding' );
+      winAlert( 'Server not responding' );
       setTimeout( setSystemError, 2500 );
       if( onSaveDone ) {
         onSaveDone();

@@ -100,7 +100,7 @@ class Graph {
 		this.contextMenu.add({
       'diagramContextMenu': 
 				{	layout: 'vertical', itemList: [
-					{ label: 'Properties',					do: ( o )=> alert( this.getDiagramInfo( this.diagram.model ) )},
+					{ label: 'Properties',					do: ( o )=> winAlert( this.getDiagramInfo( this.diagram.model ), false )},
 					{ label: 'View',       layout: 'vertical',	subMenu: [
 						{ label: 'Zoom to Fit',			  do: this.doZoomToFit.bind(this) },
 						{ separator: '-' },
@@ -1661,9 +1661,9 @@ class Graph {
 	}
 	getDiagramInfo( model ) {
 		// Tooltip info for the diagram's model
-		const info = "Model:\n" + model.nodeDataArray.length + " nodes, "+ 
-		                          model.linkDataArray.length + " links\n"+
-								 "Graph URL: "+this.graphPath;
+		const info = " Model: "+model.nodeDataArray.length + " nodes, "+ 
+		                         model.linkDataArray.length + " links \n"+
+								 " Graph URL: "+this.graphPath+" ";
 		return( info );
 	}
 	_canOpenFile() {

@@ -149,6 +149,30 @@ function selectNodesByKey( keyList ) {
   const mg = getMainGraph();
   mg.selectAllNodeByKey( keyList );
 }
+function centerNodeByKey( key ) {
+  selectNodesByKey( [key] );
+  // Get main Graph
+  const mg = getMainGraph();
+  mg.setViewCenteredOnSelectedNode();
+}
+function centerNodeOfWindow( id ) {
+  const key = m.e._getWindowKey( id );
+  centerNodeByKey( key );
+}
+function winAlert( msg, isCenter ) 
+{
+  isCenter = ( isCenter == undefined? true: isCenter );
+  new WinBox( 'Alert', {
+    modal: true,
+    autosize: true,
+    background: 'Crimson',
+    html: `<div style="margine: 0px;">`+
+            `<pre style="${isCenter? 'text-align: center;':''}">`+
+              msg+
+            `</pre>`+
+          `</div>`,
+  });
+}
 function getNodeDataOutPortContent( nodeData, outPort ) {
   let result = '';
   // Get output component from fan-out
