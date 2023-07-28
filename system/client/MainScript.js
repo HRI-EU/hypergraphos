@@ -20,6 +20,23 @@ const m = {
   status: {},       // Current status of the system
 };
 
+function winAlert( msg, isCenter ) 
+{
+  isCenter = ( isCenter == undefined? true: isCenter );
+  new WinBox( 'Alert', {
+    modal: true,
+    autosize: true,
+    background: 'Crimson',
+    html: `<div style="margine: 0px;">`+
+            `<pre style="${isCenter? 'text-align: center;':''}">`+
+              msg+
+            `</pre>`+
+          `</div>`,
+  });
+}
+// Override standard alert function
+alert = winAlert;
+
 function _init() {
   m.mddStatus = document.getElementById( 'mdd-status' );
   // Set reziable control buttons
@@ -158,20 +175,6 @@ function centerNodeByKey( key ) {
 function centerNodeOfWindow( id ) {
   const key = m.e._getWindowKey( id );
   centerNodeByKey( key );
-}
-function winAlert( msg, isCenter ) 
-{
-  isCenter = ( isCenter == undefined? true: isCenter );
-  new WinBox( 'Alert', {
-    modal: true,
-    autosize: true,
-    background: 'Crimson',
-    html: `<div style="margine: 0px;">`+
-            `<pre style="${isCenter? 'text-align: center;':''}">`+
-              msg+
-            `</pre>`+
-          `</div>`,
-  });
 }
 function getNodeDataOutPortContent( nodeData, outPort ) {
   let result = '';
