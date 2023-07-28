@@ -25,6 +25,7 @@ const config = {
     "isDoubleClickCreateNodeEnabled": true,
     "allowDeleteKey": false,
     "colorSkema": "dark",
+    "zoomFactor": 1.05,
     "defaultDSL": "DefaultDSL",
     "rootGraphURL": "/fileServer/graphRoot.json",
     "rootGraphNodeData": {
