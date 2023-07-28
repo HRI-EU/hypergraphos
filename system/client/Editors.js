@@ -1181,6 +1181,8 @@ class SystemMonitorViewer extends EditorBase {
                             <button type='button' style="width=100%" onclick='m.e.openSelectionWindow()'>Show Selection Editor</button>
                             <button type='button' style="width=100%" onclick='m.e.openModelWindow()'>Show Model Editor</button>&nbsp;&nbsp;&nbsp;
                             <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( +1 )'>&lt;-Window</button>
+                            <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( +0.5 )'>&lt;-|</button>
+                            <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( -0.5 )'>!-&gt;</button>
                             <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( -1 )'>Window-&gt;</button>
                           </div>
                           <div id='windowList'></div>`;
