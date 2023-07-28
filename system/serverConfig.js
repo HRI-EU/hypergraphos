@@ -36,6 +36,7 @@ const config = {
       isDoubleClickCreateNodeEnabled: true,
       allowDeleteKey: false,
       colorSkema: 'light',
+      zoomFactor: 1.25,
       defaultDSL: 'DefaultDSL',
       rootGraphURL: rootGraphURL,
       rootGraphNodeData: {
@@ -61,7 +62,7 @@ const config = {
     scriptPlatform:    'win32',  // 'win32' | 'linux' ( not available 'winBash' | 'powershell'  )
     webServerProtocol: 'http',
     webServerName:     'localhost',
-    webServerPort:     830,
+    webServerPort:     80,
     webSocketURL:      '', // Defined later...
     ssl: {
       enabled: false,
@@ -121,6 +122,7 @@ if( ( config.host.hostname == 'Antonellos-Mini' ) ||
   config.server.tempRoot = '../../../../../Dropbox/DevAll/MDDToolsTempRoot';
   config.client.host.name = 'Antonello';
   config.client.graph.colorSkema = 'dark';
+  config.client.graph.zoomFactor = 1.05;
   config.server.scriptPlatform = 'linux';
   config.client.host.statusURL = '/fileServer/Users/Antonello_status.json';
   // List of remote host
