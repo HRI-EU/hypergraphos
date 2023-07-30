@@ -275,7 +275,7 @@ class EditorManager extends EditorChangeManager {
                             <button class='editorDivBSave' type="button"
                                     onclick="m.e.saveEditor('${id}')">Save
                             </button>
-                            <div class='title' ondblclick="centerNodeOfWindow('${id}')">${name}</div>
+                            <div class='title' ondblclick="selectNodeOfWindow('${id}')">${name}</div>
                           </div>
                           <div class='editorDiv' id='${editorDivId}'></div>
                           <div class='resizer top-left'></div>

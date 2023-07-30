@@ -138,6 +138,15 @@ function setNodeDataField( key, field, value ) {
     g.setNodeDataField( key, field, value );
   }
 }
+function getLinkData( key, isCopy ) {
+  const g = getMainGraph();
+  const result = g.getLinkData( key, isCopy );
+  return( result );
+}
+function setLinkDataField( key, field, value ) {
+  const g = getMainGraph();
+  g.setLinkDataField( key, field, value );
+}
 function setViewFromLabel( nodeLabel, deltaX, deltaY ) {
   // Get main Graph
   const mg = getMainGraph();
@@ -175,6 +184,10 @@ function centerNodeByKey( key ) {
 function centerNodeOfWindow( id ) {
   const key = m.e._getWindowKey( id );
   centerNodeByKey( key );
+}
+function selectNodeOfWindow( id ) {
+  const key = m.e._getWindowKey( id );
+  selectNodesByKey( [key] );
 }
 function getNodeDataOutPortContent( nodeData, outPort ) {
   let result = '';
