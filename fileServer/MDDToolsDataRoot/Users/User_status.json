@@ -1,0 +1,15 @@
+{
+  "graphHistory": [],
+  "currentGraphNode": {
+    "key": "Root Graph",
+    "isDir": true,
+    "fileURL": "/fileServer/graphRoot.json",
+    "fileType": "text/json"
+  },
+  "openWindowList": {
+    "/fileServer/graphRoot.json": {}
+  },
+  "pinnedWindow": {
+  },
+  "isReadOnly": false
+}

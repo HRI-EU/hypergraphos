@@ -222,7 +222,7 @@ class RootModel {
   Define_FileName() {
     let result = [];
     const d = this.g.getDataIf( this.node, 
-                                (n,d)=> ( d.category == 'Property_GraphInfo') &&
+                                (n,d)=> ( d.category == 'Hierarchy_GraphInfo') &&
                                         ( d.label == 'Graph Info' ) );
     if( d ) {
       let path = getTableRowValue( d.rows, 'Path' );
@@ -235,7 +235,7 @@ class RootModel {
   Begin_Header_Info() {
     let result = [];
     const d = this.g.getDataIf( this.node, 
-                                (n,d)=> ( d.category == 'Property_GraphInfo') &&
+                                (n,d)=> ( d.category == 'Hierarchy_GraphInfo') &&
                                         ( d.label == 'Graph Info' ) );
     if( d ) {
       let version = getTableRowValue( d.rows, 'Version' );

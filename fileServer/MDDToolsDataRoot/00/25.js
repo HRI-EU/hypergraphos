@@ -171,9 +171,9 @@ class RootModel {
   }
   Define_FileName() {
     let result = [];
-    // me.getNodeIf( '', (d)=> d.category == 'Property_GraphInfo' && d.label == 'Graph Info' )
+    // me.getNodeIf( '', (d)=> d.category == 'Hierarchy_GraphInfo' && d.label == 'Graph Info' )
     const d = this.g.getDataIf( this.node, 
-                                (n,d)=> ( d.category == 'Property_GraphInfo') &&
+                                (n,d)=> ( d.category == 'Hierarchy_GraphInfo') &&
                                         ( d.label == 'Graph Info' ) );
     if( d ) {
       let path = getTableRowValue( d.rows, 'Path' );
@@ -197,9 +197,9 @@ class RootModel {
   }
   Begin_Header_Info() {
     let result = [];
-    // me.getNodeIf( '', (d)=> d.category == 'Property_GraphInfo' && d.label == 'Graph Info' )
+    // me.getNodeIf( '', (d)=> d.category == 'Hierarchy_GraphInfo' && d.label == 'Graph Info' )
     const d = this.g.getDataIf( this.node, 
-                                (n,d)=> ( d.category == 'Property_GraphInfo') &&
+                                (n,d)=> ( d.category == 'Hierarchy_GraphInfo') &&
                                         ( d.label == 'Graph Info' ) );
     if( d ) {
       let version = getTableRowValue( d.rows, 'Version' );

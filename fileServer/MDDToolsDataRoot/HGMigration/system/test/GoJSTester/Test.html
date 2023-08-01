@@ -1,0 +1,52 @@
+<html>
+  <link type='text/css' rel='stylesheet' href='Test.css'></link>
+  <script type='text/javascript' src='../lib/gojs/2.1/go.js'></script>
+  <body>
+    <div id="sample">
+      <a href="https://codepen.io/nikhildhere/pen/XWKmLMO">CodePen Tester</a>
+      <p>Minimal <b>GoJS</b> Sample</p>
+      <!-- The DIV for the Diagram needs an explicit size or else we won't see anything.
+          Also add a border to help see the edges. -->
+      <div id="myDiagram" style="border: solid 1px black; width:400px; height:400px"></div>
+      <p>This isn't a truly <i>minimal</i> demonstration of <b>GoJS</b>,
+        because we do specify a custom Node template, but it's pretty simple.
+        Click on the link below to see source code for this page,
+        or use your browser's "View Page Source" command.</p>
+        <button onclick="load('mySavedModel1')">Load</button> with TreeLayout
+        
+        <textarea id="mySavedModel1" style="width:100%;height:400px">
+{ 
+  "class": "go.TreeModel",
+  "nodeDataArray": [
+    { "key": "Alpha", "color": "lightblue" },
+    { "key": "Beta", "color": "orange", "parent": "Alpha" },
+    { "key": "Gamma", "color": "lightgreen", "parent": "Alpha" },
+    { "key": "Delta", "color": "pink", "parent": "Gamma" },
+    { "key": "Eta", "color": "pink", "parent": "Gamma" }
+  ]
+}
+            </textarea>
+            <button onclick="load('mySavedModel2')">Load</button> with Standard Layout
+        
+        <textarea id="mySavedModel2" style="width:100%;height:400px">
+{ 
+  "class": "GraphLinksModel",
+  "nodeDataArray": [
+    { "key": "Alpha", "color": "lightblue" },
+    { "key": "Beta", "color": "orange" },
+    { "key": "Gamma", "color": "lightgreen" },
+    { "key": "Delta", "color": "pink" }
+  ],
+  "linkDataArray": [
+    { "from": "Alpha", "to": "Beta" },
+    { "from": "Alpha", "to": "Gamma" },
+    { "from": "Beta", "to": "Beta" },
+    { "from": "Gamma", "to": "Delta" },
+    { "from": "Delta", "to": "Alpha" }
+  ]
+}
+            </textarea>
+    </div>
+  </body>
+  <script type='text/javascript' src='Test.js'></script>
+</html>

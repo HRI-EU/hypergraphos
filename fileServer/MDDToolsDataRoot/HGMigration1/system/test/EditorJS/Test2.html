@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    .editor1 {
+      position: absolute;
+      top: 50px;
+      left: 30px;
+      height: 1000px;
+      background-color: rgb(251, 233, 207);
+    }
+    #output1 {
+      position: absolute;
+      top: 10px;
+      left:800px;
+      height: 1000px;
+    }
+    .editor2 {
+      position: absolute;
+      top: 1050px;
+      left: 30px;
+      height: 800px;
+      background-color: aquamarine;
+    }
+    #output2 {
+      position: absolute;
+      top: 1050px;
+      left:800px;
+      height: 800px;
+    }
+  </style>
+</head>
+<body>
+  <div class="ce-example">
+    <button id="saveButton1" onclick="editor1.save()">Save Editor 1</button>
+    <!-- Editor 1 -->
+    <div id="EditorDiv1" class="editor1"></div>
+    <pre class="ce-example__output-content" id="output1"></pre>
+
+    <button id="saveButton2" onclick="editor2.save()">Save Editor 2</button>
+    <!-- Editor 2 -->
+    <div id="EditorDiv2" class="editor2"></div>
+    <pre class="ce-example__output-content" id="output2"></pre>
+  </div>
+
+  <!-- Load Tools -->
+  <!--
+   You can upload Tools to your project's directory and use as in example below.
+
+   Also you can load each Tool from CDN or use NPM/Yarn packages.
+
+   Read more in Tool's README file. For example:
+   https://github.com/editor-js/header#installation
+   -->
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script><!-- Header -->
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/simple-image@latest"></script><!-- Image -->
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/delimiter@latest"></script><!-- Delimiter -->
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script><!-- List -->
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/checklist@latest"></script><!-- Checklist -->
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/quote@latest"></script><!-- Quote -->
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/code@latest"></script><!-- Code -->
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/embed@latest"></script><!-- Embed -->
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/table@latest"></script><!-- Table -->
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/link@latest"></script><!-- Link -->
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/warning@latest"></script><!-- Warning -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/marker@latest"></script><!-- Marker -->
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/inline-code@latest"></script><!-- Inline Code -->
+
+  <!-- Load Editor.js's Core -->
+  <script src="https://unpkg.com/@editorjs/editorjs@2.12.3/dist/editor.js"></script>
+
+  <!-- Initialization -->
+  <script type="text/javascript" src="./Test2.js"></script>
+</body>
+</html>

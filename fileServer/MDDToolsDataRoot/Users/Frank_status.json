@@ -1,187 +1,6 @@
 {
   "graphHistory": [
     {
-      "label": "MDDTools Development",
-      "size": "600 400",
-      "category": "Hierarchy_FolderContent",
-      "fileType": "text/json",
-      "isDir": true,
-      "fileURL": "/fileServer/00/29.json",
-      "key": 55,
-      "location": "-2390 420"
-    },
-    {
-      "key": "Root Graph",
-      "isDir": true,
-      "fileURL": "/fileServer/graphRoot.json",
-      "fileType": "text/json"
-    },
-    {
-      "label": "Frankonello Project Space",
-      "size": "290 290",
-      "category": "Hierarchy_FolderImage",
-      "fileType": "text/json",
-      "isDir": true,
-      "fileURL": "/fileServer/00/01.json",
-      "imageURL": "/fileServer/Frankonello.png",
-      "key": 35,
-      "location": "1470 642",
-      "group": 13
-    },
-    {
-      "label": "New Avatar 2.1 - Dialog 1.1 (flat)",
-      "size": "600 402",
-      "category": "Hierarchy_FolderContent",
-      "isDir": true,
-      "fileType": "text/json",
-      "fileURL": "/fileServer/00/49.json",
-      "key": 50,
-      "location": "-770 2760"
-    },
-    {
-      "key": "Root Graph",
-      "isDir": true,
-      "fileURL": "/fileServer/graphRoot.json",
-      "fileType": "text/json"
-    },
-    {
-      "label": "Frankonello Project Space",
-      "size": "290 290",
-      "category": "Hierarchy_FolderImage",
-      "fileType": "text/json",
-      "isDir": true,
-      "fileURL": "/fileServer/00/01.json",
-      "imageURL": "/fileServer/Frankonello.png",
-      "key": 35,
-      "location": "1470 642",
-      "group": 13
-    },
-    {
-      "label": "MDDTools Development",
-      "size": "600 400",
-      "category": "Hierarchy_FolderContent",
-      "fileType": "text/json",
-      "isDir": true,
-      "fileURL": "/fileServer/00/29.json",
-      "key": 55,
-      "location": "-2390 420"
-    },
-    {
-      "key": "Root Graph",
-      "isDir": true,
-      "fileURL": "/fileServer/graphRoot.json",
-      "fileType": "text/json"
-    },
-    {
-      "label": "Frankonello Project Space",
-      "size": "290 290",
-      "category": "Hierarchy_FolderImage",
-      "fileType": "text/json",
-      "isDir": true,
-      "fileURL": "/fileServer/00/01.json",
-      "imageURL": "/fileServer/Frankonello.png",
-      "key": 35,
-      "location": "1470 642",
-      "group": 13
-    },
-    {
-      "label": "Collaborative Development",
-      "size": "600 390",
-      "category": "Hierarchy_FolderImage",
-      "fileType": "text/json",
-      "isDir": true,
-      "fileURL": "/fileServer/00/67.json",
-      "imageURL": "fileServer/CODE.png",
-      "key": 35,
-      "location": "1380 2580"
-    },
-    {
-      "label": "Hypothesis",
-      "size": "150 100",
-      "category": "Hierarchy_FolderContent",
-      "fileType": "text/json",
-      "isDir": true,
-      "fileURL": "/fileServer/00/93.json",
-      "key": 7,
-      "location": "-3510 -170"
-    },
-    {
-      "key": "Root Graph",
-      "isDir": true,
-      "fileURL": "/fileServer/graphRoot.json",
-      "fileType": "text/json"
-    },
-    {
-      "label": "Frank Space",
-      "size": "270 270",
-      "category": "Hierarchy_FolderImage",
-      "fileType": "text/json",
-      "isDir": true,
-      "fileURL": "/fileServer/00/42.json",
-      "imageURL": "/fileServer/Frank.jpg",
-      "key": 40,
-      "location": "-1140 850",
-      "group": 15
-    },
-    {
-      "label": "Learning Scenarios",
-      "size": "265 60",
-      "category": "Hierarchy_Project",
-      "isDir": true,
-      "fileURL": "/fileServer/00/47.bin",
-      "key": 2,
-      "location": "80 130",
-      "fileType": "text/json"
-    },
-    {
-      "key": "Root Graph",
-      "isDir": true,
-      "fileURL": "/fileServer/graphRoot.json",
-      "fileType": "text/json"
-    },
-    {
-      "label": "Frankonello Project Space",
-      "size": "290 290",
-      "category": "Hierarchy_FolderImage",
-      "fileType": "text/json",
-      "isDir": true,
-      "fileURL": "/fileServer/00/01.json",
-      "imageURL": "/fileServer/Frankonello.png",
-      "key": 35,
-      "location": "1470 642",
-      "group": 13
-    },
-    {
-      "key": "Root Graph",
-      "isDir": true,
-      "fileURL": "/fileServer/graphRoot.json",
-      "fileType": "text/json"
-    },
-    {
-      "key": "Root Graph",
-      "isDir": true,
-      "fileURL": "/fileServer/graphRoot.json",
-      "fileType": "text/json"
-    },
-    {
-      "key": "Root Graph",
-      "isDir": true,
-      "fileURL": "/fileServer/graphRoot.json",
-      "fileType": "text/json"
-    },
-    {
-      "label": "Frankonello Project Space",
-      "size": "290 290",
-      "category": "Hierarchy_FolderImage",
-      "fileType": "text/json",
-      "isDir": true,
-      "fileURL": "/fileServer/00/01.json",
-      "imageURL": "/fileServer/pictures/Frankonello.png",
-      "key": 35,
-      "location": "1470 642",
-      "group": 13
-    },
-    {
       "key": "Root Graph",
       "isDir": true,
       "fileURL": "/fileServer/graphRoot.json",
@@ -195,17 +14,133 @@
       "isDir": true,
       "fileURL": "/fileServer/00/97.json",
       "key": 59,
-      "location": "-2650 -570"
+      "location": "-2650 -570",
+      "group": 64
     },
     {
-      "label": "CodeFlowDSL",
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": "Frankonello Home",
+      "size": "280 180",
+      "category": "Hierarchy_FolderContent",
+      "isDir": true,
+      "fileType": "text/json",
+      "fileURL": "/fileServer/00/01.json",
+      "key": 41,
+      "location": "1480 921",
+      "group": 13
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": "HyperGraph DevRoot",
       "size": "150 100",
       "category": "Hierarchy_FolderContent",
       "fileType": "text/json",
       "isDir": true,
-      "fileURL": "/fileServer/00/98.json",
-      "key": 2,
-      "location": "-2790 -490"
+      "fileURL": "/fileServer/01/02.json",
+      "key": 72,
+      "location": "-2190 -330",
+      "group": 69
+    },
+    {
+      "label": "HyperGraph 2.0",
+      "size": "150 100",
+      "category": "Hierarchy_FolderContent",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/01/03.json",
+      "key": 4,
+      "location": "-1370 390"
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": "Frankonello Home",
+      "size": "280 180",
+      "category": "Hierarchy_FolderContent",
+      "isDir": true,
+      "fileType": "text/json",
+      "fileURL": "/fileServer/00/01.json",
+      "key": 41,
+      "location": "1480 921",
+      "group": 13
+    },
+    {
+      "label": "integretor test 2",
+      "size": "570 400",
+      "category": "Hierarchy_FolderContent",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/00/85.json",
+      "key": 34,
+      "location": "1330 510"
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": "HyperGraph DevRoot",
+      "size": "150 100",
+      "category": "Hierarchy_FolderContent",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/01/02.json",
+      "key": 72,
+      "location": "-2190 -330",
+      "group": 69
+    },
+    {
+      "label": "HyperGraph 2.1",
+      "size": "150 100",
+      "category": "Hierarchy_FolderContent",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/01/07.json",
+      "key": 7,
+      "location": "-1180 380"
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": "HyperGraph DevRoot",
+      "size": "150 100",
+      "category": "Hierarchy_FolderContent",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/01/02.json",
+      "key": 72,
+      "location": "-2190 -330",
+      "group": 69
+    },
+    {
+      "label": "HyperGraph 2.1",
+      "size": "150 100",
+      "category": "Hierarchy_FolderContent",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/01/07.json",
+      "key": 7,
+      "location": "-1150 390"
     },
     {
       "key": "Root Graph",
@@ -223,17 +158,115 @@
       "key": 59,
       "location": "-2650 -570",
       "group": 64
+    },
+    {
+      "label": "GWW 2023 Demo 3",
+      "size": "150 100",
+      "category": "Hierarchy_FolderContent",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/01/35.json",
+      "key": 126,
+      "location": "9100 330"
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": "Frankonello Home",
+      "size": "280 180",
+      "category": "Hierarchy_FolderContent",
+      "isDir": true,
+      "fileType": "text/json",
+      "fileURL": "/fileServer/00/01.json",
+      "key": 41,
+      "location": "1480 921",
+      "group": 13
+    },
+    {
+      "label": "Test",
+      "size": "600 430",
+      "category": "Hierarchy_FolderContent",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/00/94.json",
+      "key": 44,
+      "location": "-3290 790"
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": "DSL Creation",
+      "size": "150 100",
+      "category": "Hierarchy_FolderContent",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/00/97.json",
+      "key": 59,
+      "location": "-2650 -570",
+      "group": 64
+    },
+    {
+      "label": "GWW 2023 Demo 3",
+      "size": "150 100",
+      "category": "Hierarchy_FolderContent",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/01/35.json",
+      "key": 126,
+      "location": "9100 330"
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": "Frankonello Home",
+      "size": "280 180",
+      "category": "Hierarchy_FolderContent",
+      "isDir": true,
+      "fileType": "text/json",
+      "fileURL": "/fileServer/00/01.json",
+      "key": 41,
+      "location": "1480 921",
+      "group": 13
+    },
+    {
+      "label": "Test",
+      "size": "600 430",
+      "category": "Hierarchy_FolderContent",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/00/94.json",
+      "key": 44,
+      "location": "-3290 790"
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
     }
   ],
   "currentGraphNode": {
-    "label": "CodeFlowDSL",
+    "label": "DSL Creation",
     "size": "150 100",
     "category": "Hierarchy_FolderContent",
     "fileType": "text/json",
     "isDir": true,
-    "fileURL": "/fileServer/00/98.json",
-    "key": 2,
-    "location": "-2790 -490"
+    "fileURL": "/fileServer/00/97.json",
+    "key": 59,
+    "location": "-2650 -570",
+    "group": 64
   },
   "openWindowList": {
     "/fileServer/graphRoot.json": {},
@@ -402,43 +435,56 @@
         164
       ]
     },
-    "/fileServer/00/01.json": {},
+    "/fileServer/00/01.json": {
+      "20": [
+        2102,
+        153,
+        400,
+        350
+      ]
+    },
     "/fileServer/00/42.json": {},
     "/fileServer/00/43.json": {},
     "/fileServer/00/47.bin": {
       "318": [
-        500,
-        51,
+        2249,
+        625,
         305,
         556
       ]
     },
     "/fileServer/00/52.json": {
       "5": [
-        2215,
-        290,
+        92,
+        88,
         400,
         350
+      ],
+      "60": [
+        651,
+        21,
+        758,
+        1192
       ]
     },
     "/fileServer/00/49.json": {
       "19": [
-        1517,
-        418,
+        2325,
+        631,
         400,
         350
       ],
       "20": [
-        1520,
-        41,
+        2312,
+        239,
         400,
         350
       ],
       "23": [
-        1108,
-        39,
-        405,
-        763
+        2728,
+        242,
+        429,
+        755
       ]
     },
     "/fileServer/00/62.json": {
@@ -614,7 +660,14 @@
         350
       ]
     },
-    "/fileServer/00/85.json": {},
+    "/fileServer/00/85.json": {
+      "86": [
+        1620,
+        21,
+        666,
+        1183
+      ]
+    },
     "/fileServer/00/00.json": {
       "2": [
         100,
@@ -625,8 +678,8 @@
     },
     "/fileServer/00/46.json": {
       "53": [
-        653,
-        33,
+        458,
+        342,
         400,
         350
       ]
@@ -635,47 +688,216 @@
     "/fileServer/00/93.json": {},
     "/fileServer/00/97.json": {
       "26": [
-        2725,
-        226,
+        100,
+        100,
         400,
         350
       ]
     },
     "/fileServer/00/98.json": {
-      "9": [
-        551,
-        121,
-        764,
-        1839
+      "7": [
+        579,
+        139,
+        530,
+        1123
+      ],
+      "13": [
+        2130,
+        202,
+        627,
+        1071
       ],
       "16": [
-        507,
-        849,
+        1295,
+        316,
         400,
         350
       ],
-      "24": [
-        2100,
-        28,
-        893,
-        1625
-      ],
-      "100": [
-        1547,
-        1260,
+      "69": [
+        1263,
+        844,
         400,
         350
-      ],
-      "System Monitor": [
-        869,
-        48,
-        1322,
-        187
       ]
     },
     "/fileServer/00/94.json": {},
     "/fileServer/00/99.json": {},
-    "/fileServer/01/02.json": {}
+    "/fileServer/01/02.json": {
+      "12": [
+        26,
+        1581,
+        400,
+        350
+      ]
+    },
+    "fileServer/00/85.json": {
+      "66": [
+        1262,
+        444,
+        403,
+        675
+      ],
+      "86": [
+        2650,
+        607,
+        570,
+        1525
+      ]
+    },
+    "/fileServer/01/03.json": {
+      "4": [
+        27,
+        1121,
+        408,
+        343
+      ]
+    },
+    "/fileServer/01/07.json": {
+      "71": [
+        18,
+        1369,
+        400,
+        350
+      ]
+    },
+    "/fileServer/01/08.json": {
+      "6": [
+        74,
+        1595,
+        400,
+        350
+      ]
+    },
+    "/fileServer/01/11.json": {
+      "20": [
+        25,
+        593,
+        400,
+        350
+      ]
+    },
+    "/fileServer/01/18.json": {
+      "16": [
+        1580,
+        115,
+        400,
+        350
+      ],
+      "20": [
+        100,
+        100,
+        400,
+        350
+      ]
+    },
+    "/fileServer/01/19.json": {
+      "2": [
+        1351,
+        563,
+        400,
+        350
+      ]
+    },
+    "/fileServer/01/20.json": {
+      "9": [
+        1409,
+        616,
+        400,
+        350
+      ]
+    },
+    "/fileServer/01/21.json": {
+      "17": [
+        1440,
+        587,
+        400,
+        350
+      ]
+    },
+    "/fileServer/01/23.json": {
+      "14": [
+        982,
+        554,
+        575,
+        347
+      ],
+      "30": [
+        390,
+        669,
+        400,
+        350
+      ]
+    },
+    "/fileServer/01/24.json": {
+      "16": [
+        375,
+        62,
+        400,
+        350
+      ]
+    },
+    "/fileServer/01/10.json": {},
+    "/fileServer/01/13.json": {},
+    "/fileServer/01/16.json": {
+      "35": [
+        100,
+        100,
+        400,
+        350
+      ]
+    },
+    "/fileServer/01/26.json": {},
+    "/fileServer/01/33.json": {},
+    "/fileServer/01/34.json": {
+      "265": [
+        1323,
+        467,
+        597,
+        653
+      ]
+    },
+    "/fileServer/01/28.json": {
+      "11": [
+        1516,
+        37,
+        400,
+        350
+      ]
+    },
+    "/fileServer/01/35.json": {
+      "115": [
+        902,
+        14,
+        640,
+        1191
+      ]
+    },
+    "/fileServer/01/66.json": {
+      "294": [
+        201,
+        49,
+        450,
+        1222
+      ],
+      "326": [
+        -3399,
+        460,
+        617,
+        806
+      ],
+      "372": [
+        -2766,
+        441,
+        673,
+        822
+      ],
+      "389": [
+        2356,
+        -5,
+        1063,
+        1292
+      ]
+    }
   },
   "pinnedWindow": {
     "#systemPalette#": {
@@ -684,18 +906,25 @@
       "fileURL": "#systemPalette#",
       "fileType": "input/fields",
       "editorPosition": [
-        135,
-        858,
-        453,
-        968
+        29,
+        71,
+        272,
+        1192
       ],
-      "isVisible": true
+      "isVisible": false
+    },
+    "#systemMonitor#": {
+      "key": "System Monitor",
+      "isFile": true,
+      "fileType": "system/status",
+      "fileURL": "#systemMonitor#",
+      "editorPosition": [
+        1370,
+        3,
+        908,
+        102
+      ]
     }
   },
-  "isReadOnly": false,
-  "fileServer": {
-    "maxFileIndex": 99,
-    "currPath": 0,
-    "currFile": 98
-  }
+  "isReadOnly": false
 }

@@ -1,0 +1,125 @@
+.ce-toolbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  /*opacity: 0;*/
+  /*visibility: hidden;*/
+  transition: opacity 100ms ease;
+  will-change: opacity, transform;
+  display: none;
+
+  @media (--mobile) {
+    @apply --overlay-pane;
+    padding: 3px;
+    margin-top: 5px;
+  }
+
+  &--opened {
+    display: block;
+
+    @media (--mobile){
+      display: flex;
+    }
+  }
+
+  &__content {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    position: relative;
+
+    @media (--mobile){
+      display: flex;
+      align-content: center;
+      margin: 0;
+      max-width: calc(100% - 35px);
+    }
+  }
+
+  &__plus {
+    @apply --toolbox-button;
+
+    position: absolute;
+    left: calc(var(--toolbox-buttons-size) * -1);
+    flex-shrink: 0;
+
+    &-shortcut {
+      opacity: 0.6;
+      word-spacing: -2px;
+      margin-top: 5px;
+    }
+
+    &--hidden {
+      display: none;
+    }
+
+    @media (--mobile){
+      display: inline-flex !important;
+      position: static;
+      transform: none !important;
+    }
+  }
+
+  &__plus,
+  .ce-toolbox {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  /**
+   * Block actions Zone
+   * -------------------------
+   */
+  &__actions {
+    position: absolute;
+    right: -30px;
+    top: 5px;
+    opacity: 0;
+
+    @media (--mobile){
+      position: absolute;
+      right: -28px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+    }
+
+    &--opened {
+      opacity: 1;
+    }
+
+    &-buttons {
+      text-align: right;
+    }
+  }
+
+  &__settings-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    color: var(--grayText);
+    cursor: pointer;
+    background: var(--bg-light);
+    user-select: none;
+
+    &:hover {
+      color: var(--color-dark);
+    }
+
+    @media (--mobile){
+      background: transparent;
+    }
+  }
+}
+
+/**
+ * Styles for Narrow mode
+ */
+.codex-editor--narrow .ce-toolbar__plus {
+  @media (--not-mobile) {
+    left: 5px;
+  }
+}

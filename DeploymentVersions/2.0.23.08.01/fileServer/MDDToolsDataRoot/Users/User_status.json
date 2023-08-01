@@ -1,0 +1,28 @@
+{
+  "graphHistory": [],
+  "currentGraphNode": {
+    "key": "Root Graph",
+    "isDir": true,
+    "fileURL": "/fileServer/graphRoot.json",
+    "fileType": "text/json"
+  },
+  "openWindowList": {
+    "/fileServer/graphRoot.json": {}
+  },
+  "pinnedWindow": {
+    "#systemPalette#": {
+      "key": "DSL Palette",
+      "isFile": true,
+      "fileURL": "#systemPalette#",
+      "fileType": "input/fields",
+      "editorPosition": [
+        null,
+        null,
+        371,
+        1712
+      ],
+      "isVisible": true
+    }
+  },
+  "isReadOnly": false
+}

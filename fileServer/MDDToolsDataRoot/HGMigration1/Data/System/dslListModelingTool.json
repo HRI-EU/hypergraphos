@@ -1,0 +1,7 @@
+{
+  "HierarchyDSL": "/fileServer/DSL/HierarchyDSL.js",
+  "ConnectorsDSL.js": "/fileServer/DSL/ConnectorsDSL.js",
+  "ThinkingDSL": "/fileServer/DSL/ThinkingDSL.js",
+  "TextLabelsDSL": "/fileServer/DSL/TextLabelsDSL.js",
+  "PicturesDSL": "/fileServer/DSL/PicturesDSL.js"
+}
