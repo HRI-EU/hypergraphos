@@ -1,0 +1,154 @@
+@custom-media --mobile (width <= 650px);
+@custom-media --not-mobile (width >= 651px);
+
+:root {
+  /**
+   * Selection color
+   */
+  --selectionColor: #e1f2ff;
+  --inlineSelectionColor: #d4ecff;
+
+  /**
+   * Toolbar buttons
+   */
+  --bg-light: #eff2f5;
+
+  /**
+   * All gray texts: placeholders, settings
+   */
+  --grayText: #707684;
+
+  /**
+   * Gray icons hover
+   */
+  --color-dark: #1D202B;
+
+  /**
+   * Blue icons
+   */
+  --color-active-icon: #388AE5;
+
+  /**
+   * Gray border, loaders
+   */
+  --color-gray-border: rgba(201, 201, 204, 0.48);
+
+  /**
+   * Block content width
+   * Should be set in a constant at the modules/ui.js
+   */
+  --content-width: 650px;
+
+  /**
+   * In narrow mode, we increase right zone contained Block Actions button
+   */
+  --narrow-mode-right-padding: 50px;
+
+  /**
+   * Toolbar buttons height and width
+   */
+  --toolbar-buttons-size: 34px;
+
+  /**
+   * Toolbar Plus Button and Toolbox buttons height and width
+   */
+  --toolbox-buttons-size: 34px;
+
+  /**
+   * Confirm deletion bg
+   */
+  --color-confirm: #E24A4A;
+
+  --overlay-pane: {
+    position: absolute;
+    background-color: #FFFFFF;
+    border: 1px solid #EAEAEA;
+    box-shadow: 0 3px 15px -3px rgba(13,20,33,0.13);
+    border-radius: 4px;
+    z-index: 2;
+
+    @media (--mobile){
+      box-shadow: 0 13px 7px -5px rgba(26, 38, 49, 0.09),6px 15px 34px -6px rgba(33, 48, 73, 0.29);
+      border-bottom-color: #d5d7db;
+    }
+
+    &--left-oriented {
+      &::before {
+        left: 15px;
+        margin-left: 0;
+      }
+    }
+
+    &--right-oriented {
+      &::before {
+        left: auto;
+        right: 15px;
+        margin-left: 0;
+      }
+    }
+  };
+
+  /**
+   * Styles for Toolbox Buttons and Plus Button
+   */
+  --toolbox-button: {
+    color: var(--grayText);
+    cursor: pointer;
+    width: var(--toolbox-buttons-size);
+    height: var(--toolbox-buttons-size);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover,
+    &--active {
+      color: var(--color-active-icon);
+    }
+
+    &--active{
+      animation: bounceIn 0.75s 1;
+      animation-fill-mode: forwards;
+    }
+
+  };
+
+  /**
+   * Styles for Settings Button in Toolbar
+   */
+  --toolbar-button: {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+    padding: 0 !important;
+    text-align: center;
+    border-radius: 3px;
+    cursor: pointer;
+    border: 0;
+    outline: none;
+    background-color: transparent;
+    vertical-align: bottom;
+    color: #000;
+    margin: 0;
+
+    &:hover {
+      background-color: var(--bg-light);
+    }
+
+    &--active {
+      color: var(--color-active-icon);
+    }
+
+    &--focused {
+      box-shadow: inset 0 0 0px 1px rgba(7, 161, 227, 0.08);
+      background: rgba(34, 186, 255, 0.08) !important;
+
+      &-animated {
+        animation-name: buttonClicked;
+        animation-duration: 250ms;
+      }
+    }
+  };
+}

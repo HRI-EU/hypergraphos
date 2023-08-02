@@ -140,7 +140,7 @@ class Graph {
 																										} },
 					{ separator: '-' },
 					{ label: 'Tools',       layout: 'vertical', subMenu: [
-						{ label: 'Toogle Visible Palette', 	if: (o)=> ( this.fullPaletteId? true: false ),
+						{ label: 'Toggle Visible Palette', 	if: (o)=> ( this.fullPaletteId? true: false ),
 																								do: (o)=> { const htmlObj = document.querySelector( `#${this.fullPaletteId}` );
 																														const v = htmlObj.style.visibility;
 																														htmlObj.style.visibility = ( v == 'visible'? 'hidden': 'visible' ); 
@@ -150,7 +150,7 @@ class Graph {
 																														htmlObj.style.left = Math.min( browserWidth-100, Math.max( 0, htmlObj.offsetLeft ) );
 																														htmlObj.style.top = Math.min( browserHeight-100, Math.max( 0, htmlObj.offsetTop ) );
 																													}},
-						{ label: 'Toogle Visible Grid', do: (o)=> this.diagram.grid.visible = !this.diagram.grid.visible },
+						{ label: 'Toggle Visible Grid', do: (o)=> this.diagram.grid.visible = !this.diagram.grid.visible },
 						{ separator: '-' },
 						{ label: 'Show DSL List',			do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
 																											this.em.call.onShowDSLListDialog( mousePos.x, mousePos.y ); } },

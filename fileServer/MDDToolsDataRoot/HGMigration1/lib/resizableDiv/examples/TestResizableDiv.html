@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link type='text/css' rel='stylesheet' href='../1.1/resizableDiv.css'></link>
+		<script src='../1.1/resizableDiv.js'></script>
+		<style>
+			.editor {
+				width: 100px;
+				height: 100px;
+				position: absolute;
+				top: 250px;
+				left: 200px;
+				background: lightcyan;
+			}
+
+			.graph1 {
+				width: 100px;
+				height: 100px;
+				position: absolute;
+				top: 100px;
+				left: 150px;
+				background: yellow;
+			}
+
+			.graph2 {
+				width: 100px;
+				height: 100px;
+				position: absolute;
+				top: 100px;
+				left: 300px;
+				background: yellow;
+			}
+
+			.panel {
+				width: 100px;
+				height: 100px;
+				position: absolute;
+				top: 100px;
+				left: 450px;
+				background: gold;
+			}
+		</style>
+		<script>
+			function init() {
+				setDivAsResizable( '#resizable1' );
+				setDivAsResizable( '#resizable2' );
+				setDivAsResizable( '#resizable3' );
+				setDivAsResizable( '#resizable4' );
+			}
+		</script>
+	</head>
+	<body onload="init()">
+	  <div id='resizable1', class='graph1' style="top: 100px; width: 100px; height: 100px; position: absolute;">
+			<div class='resizerObj'>
+			  graph1
+				<div class='resizer leftAll'></div>
+				<div class='resizer rightAll'></div>
+			</div>
+		</div>
+		<div id='resizable2', class='graph2' style="top: 200px; width: 100px; height: 100px; position: absolute;">
+			<div class='resizerObj'>
+			  graph2
+				<div class='resizer topAll'></div>
+				<div class='resizer bottomAll'></div>
+			</div>
+		</div>
+	
+		<div id='resizable3', class='editor' style="width: 100px; height: 100px; position: absolute;">
+			<div class='resizerObj'>
+			  editor
+			  <div class='resizer all'></div>
+			  <div class='resizer top'></div>
+				<div class='resizer left'></div>
+				<div class='resizer right'></div>
+				<div class='resizer bottom'></div>
+			</div>
+		</div>
+		
+		<div id='resizable4', class='panel' style="width: 100px; height: 100px; position: absolute;">
+			<div class='resizerObj'>
+			  panel
+			  <div class='resizer all'></div>
+			  <div class='resizer top'></div>
+				<div class='resizer top-left'></div>
+				<div class='resizer left'></div>
+				<div class='resizer top-right'></div>
+				<div class='resizer right'></div>
+				<div class='resizer bottom-left'></div>
+				<div class='resizer bottom-right'></div>
+				<div class='resizer bottom'></div>
+			</div>
+		</div>
+	</body>
+</html>

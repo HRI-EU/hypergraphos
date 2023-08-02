@@ -1,0 +1,17 @@
+{
+  "dslNameList": [
+    "DefaultDSL",
+    "HierarchyDSL",
+    "TextLabelsDSL",
+    "PicturesDSL"
+  ],
+  "view": {
+    "scale": 5.293954174699943,
+    "position": [
+      2212.557569465744,
+      4342.114804154491
+    ],
+    "isGridOn": false
+  },
+  "model": "{ \"class\": \"GraphLinksModel\",\n  \"copiesArrays\": true,\n  \"copiesArrayObjects\": true,\n  \"copiesKey\": false,\n  \"linkKeyProperty\": \"key\",\n  \"linkFromPortIdProperty\": \"fromPort\",\n  \"linkToPortIdProperty\": \"toPort\",\n  \"nodeDataArray\": [\n{\"label\":\"Client Server Sniplett\",\"category\":\"TextLabels_Size5\",\"alignment\":\"0 0.5 0 0\",\"alignmentFocus\":\"0 0.5 0 0\",\"size\":\"1489 208\",\"key\":0,\"location\":\"2230 4180\"},\n{\"label\":\"WebSocket App\",\"size\":\"150 100\",\"category\":\"Hierarchy_FolderContent\",\"fileType\":\"text/json\",\"isDir\":true,\"fileURL\":\"/fileServer/01/11.json\",\"key\":3,\"location\":\"2270 4480\"}\n],\n  \"linkDataArray\": []}"
+}

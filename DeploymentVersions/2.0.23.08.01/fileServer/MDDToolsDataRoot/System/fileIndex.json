@@ -1,0 +1,7 @@
+{
+  "fileServer": {
+    "maxFileIndex": 99,
+    "currPath": 0,
+    "currFile": 0
+  }
+}

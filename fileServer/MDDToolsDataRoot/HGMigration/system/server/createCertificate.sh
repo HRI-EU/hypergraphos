@@ -1,0 +1,1 @@
+openssl req -nodes -new -x509 -days 70360  -keyout server.key -out server.cert
