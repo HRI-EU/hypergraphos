@@ -1000,6 +1000,10 @@ class Graph {
 					delete data.fileContent;
 				}
 				this.diagram.startTransaction( 'Set Data Propery' );
+				if( field == 'fileContent' && ( typeof( value ) != 'string' ) ) {
+					// Force value to be a string in case is not (number, boolean,...)
+					value = ''+value;
+				}
 				this.diagram.model.setDataProperty( data, field, value );
 				this.diagram.commitTransaction( 'Set Data Propery' );
 			}
