@@ -1,0 +1,132 @@
+/*
+=============================================================================
+Licensed Materials - Property of Frank Joublin and Antonio Ceravola.
+(C) Copyright Frank Joublin and Antonio Ceravola. 2021, All Rights Reserved.
+France Government Users Restricted Rights - Use, duplication or disclosure
+restricted by GSA ADP Schedule Contract with Frank Joublin and Antonio Ceravola.
+=============================================================================
+Module: HTML menu styles
+Date: 10.07.2020
+=============================================================================
+*/
+
+.mdd-menu.vertical {
+  display: inline-flex;
+  flex-direction: column;
+}
+.mdd-menu.horizontal {
+  display: inline-flex;
+  flex-direction: row;
+}
+.mdd-menu-inline.vertical {
+  display: inline-flex;
+  flex-direction: column;
+}
+.mdd-menu-inline.horizontal {
+  display: inline-flex;
+  flex-direction: row;
+}
+.mdd-menu {
+  display: none;
+  visibility: hidden;
+  position: absolute;
+  opacity: 0;
+  margin: 0;
+  padding: 8px 5px;
+  z-index: 999;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12);
+  list-style: none;
+  background-color: #ffffff;
+  border-radius: 4px;
+  width: max-content;
+}
+.mdd-menu.vertical .mdd-menu {
+  margin-top: -8px;
+  left: 100%;
+}
+.mdd-menu.horizontal .mdd-menu {
+  top: 100%;
+  margin-left: -8px;
+}
+.show-mdd-menu {
+  visibility: visible;
+  display: inline-flex;
+  opacity: 0.92;
+}
+.hide-mdd-menu {
+  visibility: hidden;
+  display: none;
+}
+.mdd-menu-fontIcon {
+  /*float: left;*/
+  padding-right: 2px;
+  font-size: 20px;
+  color: rgb(59, 59, 59);
+  cursor: pointer;
+}
+.vertical > .mdd-menu-fontIcon {
+  margin: 5px 5px;
+}
+.horizontal > .mdd-menu-fontIcon {
+  margin: 0px 5px;
+}
+.mdd-menu-fontIcon:hover {
+  background-color: rgba(0, 0, 0, 0.2)
+}
+.mdd-menu-separator {
+  margin-block-start: 0;
+  margin-block-end: 0;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.mdd-menu-label {
+  position: relative;
+  min-width: 60px;
+  margin: 0;
+  padding: 6px 16px;
+  font: bold 12px sans-serif;
+  color: rgb(59, 59, 59);
+  cursor: pointer;
+}
+.mdd-menu-label b {
+  float: right;
+}
+.mdd-menu-label:hover {
+  background-color: rgba(0, 0, 0, 0.2)
+}
+.mdd-menu-inline {
+  padding-right: 2px;
+  font-size: 20px;
+  color: rgb(59, 59, 59);
+  cursor: pointer;
+  padding-inline-start: 16px;
+}
+.mdd-menu-svgIcon:hover {
+  background-color: rgba(0, 0, 0, 0.2)
+}
+.mdd-menu-svgIcon {
+  fill: rgb(212, 68, 68);
+  width: 20px;
+  height: 20px;
+  margin: 2px;
+}
+#action-undo {
+  background-image: url(../../open-iconic-master/svg/action-undo.svg) no-repeat center;
+}
+#action-redo {
+  background-image: url(../../open-iconic-master/svg/action-redo.svg) no-repeat center;
+
+}
+/*#action-undo {
+  mask: url(../../open-iconic-master/svg/action-undo.svg) no-repeat center;
+  -webkit-mask: url(../../open-iconic-master/svg/action-undo.svg) no-repeat center;
+  mask-size: 100%;
+  -webkit-mask-size: 100%;
+}
+#action-redo {
+  mask: url(../../open-iconic-master/svg/action-redo.svg);
+  -webkit-mask: url(../../open-iconic-master/svg/action-redo.svg) no-repeat center;
+  mask-size: 100%;
+  -webkit-mask-size: 100%;
+}*/
+
