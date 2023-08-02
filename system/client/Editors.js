@@ -1181,12 +1181,12 @@ class SystemMonitorViewer extends EditorBase {
                             <button id='browserReload' type='button' style="width=100%">Browser Reload</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <button type='button' style="width=100%" onclick='m.e.openSelectionWindow()'>Show Selection Editor</button>
                             <button type='button' style="width=100%" onclick='m.e.openModelWindow()'>Show Model Editor</button>&nbsp;&nbsp;&nbsp;
-                            <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( +1 )'>&lt;-Window</button>
+                            <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( +1 )'>&lt;-Screen</button>
                             <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( +0.5 )'>&lt;-|</button>
                             <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( +0.05 )'>&lt;</button>
                             <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( -0.05 )'>&gt;</button>
                             <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( -0.5 )'>!-&gt;</button>
-                            <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( -1 )'>Window-&gt;</button>
+                            <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( -1 )'>Screen-&gt;</button>
                           </div>
                           <div id='windowList'></div>`;
     const refreshButton = document.querySelector( '#sysMonitorRefresh' );
