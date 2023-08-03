@@ -1170,7 +1170,7 @@ class SystemMonitorViewer extends EditorBase {
       } else {
         // In this case the window has been closed => cancel timer
         if( this.refreshMonitorTimer ) {
-          this.refreshMonitorTimer.clearInterval();
+          clearInterval( this.refreshMonitorTimer );
         }
       }
     };
