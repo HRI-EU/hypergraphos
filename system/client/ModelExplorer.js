@@ -46,7 +46,7 @@ class ModelExplorer {
     
     // Find property
     let propertyValue = defaultValue;
-    if( data ) {
+    if( data && data.rows ) {
       for( const rowEl of data.rows ) {
         if( rowEl.name == name ) {
           // Get property value
