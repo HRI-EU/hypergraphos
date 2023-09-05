@@ -35,7 +35,7 @@ const config = {
     graph: {
       isDoubleClickCreateNodeEnabled: true,
       allowDeleteKey: false,
-      colorSkema: 'light',
+      colorSchema: 'light',
       zoomFactor: 1.25,
       defaultDSL: 'DefaultDSL',
       rootGraphURL: rootGraphURL,
@@ -161,13 +161,14 @@ if( ( config.host.hostname == 'Antonellos-Mini' ) ||
   config.server.deployRoot = '../../../DevAll/MDDToolsDeployRoot';
   config.server.tempRoot = '../../../DevAll/MDDToolsTempRoot';
 } else if( config.host.username == "RE900106" ) {
-  //config.server.dataRoot = '../../../../../Dropbox/DevAll/MDDToolsDataRoot';
-  //config.server.deployRoot = '../../../../../Dropbox/DevAll/MDDToolsDeployRoot';
-  //config.server.tempRoot = '../../../../../Dropbox/DevAll/MDDToolsTempRoot';
-  
-  config.server.dataRoot = '../../../DevAll/MDDToolsDataRoot';
-  config.server.deployRoot = '../../../DevAll/MDDToolsDeployRoot';
-  config.server.tempRoot = '../../../DevAll/MDDToolsTempRoot';
+  config.server.dataRoot = '../../../../../Dropbox/DevAll/MDDToolsDataRoot';
+  config.server.deployRoot = '../../../../../Dropbox/DevAll/MDDToolsDeployRoot';
+  config.server.tempRoot = '../../../../../Dropbox/DevAll/MDDToolsTempRoot';
+  // path to stick
+  //config.server.dataRoot = '../../../DevAll/MDDToolsDataRoot';
+  //config.server.deployRoot = '../../../DevAll/MDDToolsDeployRoot';
+  //config.server.tempRoot = '../../../DevAll/MDDToolsTempRoot';
+
   config.client.host.name = 'Frank';
   config.client.host.statusURL = '/fileServer/Users/Frank_status.json';
   config.client.graph.allowDeleteKey = false;
