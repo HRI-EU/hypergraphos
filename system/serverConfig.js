@@ -121,7 +121,7 @@ if( ( config.host.hostname == 'Antonellos-Mini' ) ||
   config.server.deployRoot = '../../../../../Dropbox/DevAll/MDDToolsDeployRoot';
   config.server.tempRoot = '../../../../../Dropbox/DevAll/MDDToolsTempRoot';
   config.client.host.name = 'Antonello';
-  config.client.graph.colorSkema = 'dark';
+  config.client.graph.colorschema = 'dark';
   config.client.graph.zoomFactor = 1.05;
   config.server.scriptPlatform = 'linux';
   config.client.host.statusURL = '/fileServer/Users/Antonello_status.json';
@@ -178,7 +178,7 @@ if( ( config.host.hostname == 'Antonellos-Mini' ) ||
   config.server.deployRoot = '../../../../../Dropbox/DevAll/MDDToolsDeployRoot';
   config.server.tempRoot = '../../../../../Dropbox/DevAll/MDDToolsTempRoot';
   config.client.host.name = 'Antonello';
-  config.client.graph.colorSkema = 'dark';
+  config.client.graph.colorschema = 'dark';
   config.client.host.statusURL = '/fileServer/Users/Antonello_status.json';
   config.client.graph.allowDeleteKey = false;
   config.client.graph.isDoubleClickCreateNodeEnabled = false;

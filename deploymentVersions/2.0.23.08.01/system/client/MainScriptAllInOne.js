@@ -2286,7 +2286,7 @@ class Graph {
 				lineColor2: 'rgb(200, 200, 200)',
 			},
 		};
-		const schema = config.graph.colorSkema;
+		const schema = config.graph.colorschema;
 		diagram.grid = $(go.Panel, "Grid",
 			{
 			  name: "GRID",

@@ -35,7 +35,7 @@ const config = {
     graph: {
       isDoubleClickCreateNodeEnabled: true,
       allowDeleteKey: false,
-      colorSkema: 'light',
+      colorschema: 'light',
       defaultDSL: 'DefaultDSL',
       rootGraphURL: rootGraphURL,
       rootGraphNodeData: {
@@ -103,7 +103,7 @@ if( ( config.host.hostname == 'Antonellos-Mini' ) ||
   config.server.deployRoot = '/Users/antonelloceravola/Dropbox/DevAll/MDDToolsDeployRoot';
   config.server.tempRoot = '/Users/antonelloceravola/Dropbox/DevAll/MDDToolsTempRoot';
   config.client.host.name = 'Antonello';
-  config.client.graph.colorSkema = 'dark';
+  config.client.graph.colorschema = 'dark';
   config.client.host.statusURL = '/fileServer/Users/Antonello_status.json';
   // List of remote host
   config.client.remoteHost['NUC'] = '192.168.1.11:7575';
