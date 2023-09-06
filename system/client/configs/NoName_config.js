@@ -22,7 +22,7 @@ const config = {
   "graph": {
     "isDoubleClickCreateNodeEnabled": true,
     "allowDeleteKey": false,
-    "colorschema": "light",
+    "colorSchema": "light",
     "defaultDSL": "DefaultDSL",
     "rootGraphURL": "/fileServer/graphRoot.json",
     "rootGraphNodeData": {

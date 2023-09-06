@@ -1359,7 +1359,7 @@ class Graph {
                   lineColor2: "rgb(200, 200, 200)"
               }
           },
-          t = config.graph.colorschema,
+          t = config.graph.colorSchema,
           e = (r.grid = $(go.Panel, "Grid", {
               name: "GRID",
               visible: !1,
