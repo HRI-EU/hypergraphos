@@ -1613,9 +1613,10 @@ class Graph {
 		return $("ToolTip",
 			$(go.TextBlock, { margin: 4 },  // the tooltip shows the result of calling nodeInfo(data)
 				new go.Binding("text", "", ( d )=> {
-					// Tooltip info for a node data object (limit length to 30 charaters)
-					const label = ( d.label? d.label: (d.text? d.text: '' ) ).substing( 0, 30 );
-					let info = "Node [" + d.key + "]: " + label + "\n";
+					const label = ( d.label? d.label: (d.text? d.text: '' ) );
+					// Tooltip label for a node data object (limit length to 50 charaters)
+					const shortLabel = label.substring( 0, 30 )+( label.length > 30? '...': '' );
+					let info = "Node [" + d.key + "]: " + shortLabel + "\n";
 					if( d.category ) {
 						info = info+" Category: " + d.category + "\n";
 					}
