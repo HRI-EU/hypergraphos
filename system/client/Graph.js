@@ -1615,7 +1615,7 @@ class Graph {
 				new go.Binding("text", "", ( d )=> {
 					const label = ( d.label? d.label: (d.text? d.text: '' ) );
 					// Tooltip label for a node data object (limit length to 50 charaters)
-					const shortLabel = label.substring( 0, 30 )+( label.length > 30? '...': '' );
+					const shortLabel = label.substring( 0, 50 )+( label.length > 50? '...': '' );
 					let info = "Node [" + d.key + "]: " + shortLabel + "\n";
 					if( d.category ) {
 						info = info+" Category: " + d.category + "\n";
