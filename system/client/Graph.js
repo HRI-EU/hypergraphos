@@ -1436,7 +1436,7 @@ class Graph {
 				lineColor2: 'rgb(200, 200, 200)',
 			},
 		};
-		const schema = config.graph.colorSkema;
+		const schema = config.graph.colorSchema;
 		diagram.grid = $(go.Panel, "Grid",
 			{
 			  name: "GRID",
@@ -1613,9 +1613,10 @@ class Graph {
 		return $("ToolTip",
 			$(go.TextBlock, { margin: 4 },  // the tooltip shows the result of calling nodeInfo(data)
 				new go.Binding("text", "", ( d )=> {
-					// Tooltip info for a node data object
 					const label = ( d.label? d.label: (d.text? d.text: '' ) );
-					let info = "Node [" + d.key + "]: " + label + "\n";
+					// Tooltip label for a node data object (limit length to 50 charaters)
+					const shortLabel = label.substring( 0, 30 )+( label.length > 30? '...': '' );
+					let info = "Node [" + d.key + "]: " + shortLabel + "\n";
 					if( d.category ) {
 						info = info+" Category: " + d.category + "\n";
 					}

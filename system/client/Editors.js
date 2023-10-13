@@ -1159,8 +1159,21 @@ class SystemMonitorViewer extends EditorBase {
     editorDiv.style.background = '#1d1f21';
     // Load content
     this.loadEditorContent( nodeData );
+
     // Refresh System Monitor every 30 seconds
-    setInterval( ()=> this.loadEditorContent( this.nodeData ), 30*1000 );
+    this.refreshMonitorTimer = null;
+    const refreshFunction = ()=> { 
+      if( document.getElementById( this.editorDivId ) ) {
+        // If window is opern
+        this.loadEditorContent( this.nodeData );
+      } else {
+        // In this case the window has been closed => cancel timer
+        if( this.refreshMonitorTimer ) {
+          clearInterval( this.refreshMonitorTimer );
+        }
+      }
+    };
+    this.refreshMonitorTimer = setInterval( refreshFunction, 30*1000 );
   }
   loadEditorContent( nodeData ) {
     // Update current nodeData

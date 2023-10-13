@@ -35,7 +35,7 @@ const config = {
     graph: {
       isDoubleClickCreateNodeEnabled: true,
       allowDeleteKey: false,
-      colorSkema: 'light',
+      colorSchema: 'light',
       zoomFactor: 1.25,
       defaultDSL: 'DefaultDSL',
       rootGraphURL: rootGraphURL,
@@ -121,7 +121,7 @@ if( ( config.host.hostname == 'Antonellos-Mini' ) ||
   config.server.deployRoot = '../../../../../Dropbox/DevAll/MDDToolsDeployRoot';
   config.server.tempRoot = '../../../../../Dropbox/DevAll/MDDToolsTempRoot';
   config.client.host.name = 'Antonello';
-  config.client.graph.colorSkema = 'dark';
+  config.client.graph.colorSchema = 'dark';
   config.client.graph.zoomFactor = 1.05;
   config.server.scriptPlatform = 'linux';
   config.client.host.statusURL = '/fileServer/Users/Antonello_status.json';
@@ -164,6 +164,11 @@ if( ( config.host.hostname == 'Antonellos-Mini' ) ||
   config.server.dataRoot = '../../../../../Dropbox/DevAll/MDDToolsDataRoot';
   config.server.deployRoot = '../../../../../Dropbox/DevAll/MDDToolsDeployRoot';
   config.server.tempRoot = '../../../../../Dropbox/DevAll/MDDToolsTempRoot';
+  // path to stick
+  //config.server.dataRoot = '../../../DevAll/MDDToolsDataRoot';
+  //config.server.deployRoot = '../../../DevAll/MDDToolsDeployRoot';
+  //config.server.tempRoot = '../../../DevAll/MDDToolsTempRoot';
+
   config.client.host.name = 'Frank';
   config.client.host.statusURL = '/fileServer/Users/Frank_status.json';
   config.client.graph.allowDeleteKey = false;
@@ -173,7 +178,7 @@ if( ( config.host.hostname == 'Antonellos-Mini' ) ||
   config.server.deployRoot = '../../../../../Dropbox/DevAll/MDDToolsDeployRoot';
   config.server.tempRoot = '../../../../../Dropbox/DevAll/MDDToolsTempRoot';
   config.client.host.name = 'Antonello';
-  config.client.graph.colorSkema = 'dark';
+  config.client.graph.colorSchema = 'dark';
   config.client.host.statusURL = '/fileServer/Users/Antonello_status.json';
   config.client.graph.allowDeleteKey = false;
   config.client.graph.isDoubleClickCreateNodeEnabled = false;
