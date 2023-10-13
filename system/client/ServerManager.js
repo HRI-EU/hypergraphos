@@ -183,6 +183,15 @@ function loadScriptList( urlList, onLoad, isAvoidCache ) {
   }
 }
 function loadScript( url, onLoad, isAvoidCache ) {
+  const baseURL = window.location.href;
+  const urlObj = new URL( url, baseURL );
+  if( urlObj.pathname.endsWith( '.css' ) ) {
+    loadCSSScript( url, onLoad, isAvoidCache );
+  } else {
+    loadJSScript( url, onLoad, isAvoidCache );
+  }
+}
+function loadJSScript( url, onLoad, isAvoidCache ) {
   isAvoidCache = ( isAvoidCache == undefined? true: isAvoidCache );
   const prevScript = document.getElementById( url );
   if( prevScript ) {
@@ -207,6 +216,34 @@ function loadScript( url, onLoad, isAvoidCache ) {
     uniqueURL = '?_='+timestamp;
   }
   script.src = url+uniqueURL;
+  document.head.append( script )
+}
+function loadCSSScript( url, onLoad, isAvoidCache ) {
+  isAvoidCache = ( isAvoidCache == undefined? true: isAvoidCache );
+  const prevScript = document.getElementById( url );
+  if( prevScript ) {
+    document.head.removeChild( prevScript );
+  }
+  const script = document.createElement( 'link' );
+  script.id = url;
+  script.type = 'text/css';
+  script.rel = 'stylesheet';
+  script.onload = ()=> {
+    console.log( `Script ${url} loaded` );
+    if( onLoad ) {
+      onLoad();
+    }
+  };
+  script.onerror = ()=> {
+    console.log( `Error loading stylesheet ${url}` );
+  };
+  let uniqueURL = '';
+  if( isAvoidCache ) {
+    // Avoid server cache with timestamp
+    const timestamp = new Date().getTime();
+    uniqueURL = '?_='+timestamp;
+  }
+  script.href = url+uniqueURL;
   document.head.append( script )
 }
 function loadNodeContent( nodeData, onLoaded ) {

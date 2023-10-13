@@ -518,20 +518,25 @@ class GraphEditor extends EditorBase {
         // Get node data
         const nodeData = it.value.data;
         // If we find a isIncludeScript node
-        if( ( nodeData.fileType == 'text/javascript' ) &&
+        if( ( ( nodeData.fileType == 'text/javascript' ) ||
+              ( nodeData.fileType == 'text/css' ) ) &&
             nodeData.isFile && nodeData.isIncludeScript ) {
           switch( action ) {
             case 'load': {
-              const script = document.createElement( 'script' );
-              script.type = 'text/javascript';
-              script.className = 'NodeData_IncludeScript';
-              script.addClass
               if( nodeData.fileURL ) {
-                script.src = nodeData.fileURL;
-              } else if( nodeData.fileContent ) {
-                script.innerHTML = nodeData.fileContent;
+                loadScript( nodeData.fileURL );
+              } else {
+                const script = document.createElement( 'script' );
+                script.type = 'text/javascript';
+                script.className = 'NodeData_IncludeScript';
+                script.addClass
+                if( nodeData.fileURL ) {
+                  script.src = nodeData.fileURL;
+                } else if( nodeData.fileContent ) {
+                  script.innerHTML = nodeData.fileContent;
+                }
+                document.head.append( script );
               }
-              document.head.append( script );
             }
           }
         }
