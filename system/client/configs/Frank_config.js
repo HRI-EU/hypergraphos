@@ -10,7 +10,9 @@ const config = {
     "fileStatusURL": "/fileStatus",
     "statusURL": "/fileServer/Users/Frank_status.json"
   },
-  "remoteHost": {},
+  "remoteHost": {
+    "NUC": "192.168.178.25:7575"
+  },
   "htmlDiv": {
     "mainDiv": "mainDiv",
     "graphDiv": "diagram",
@@ -21,8 +23,9 @@ const config = {
   },
   "graph": {
     "isDoubleClickCreateNodeEnabled": false,
-    "allowDeleteKey": true,
+    "allowDeleteKey": false,
     "colorSkema": "light",
+    "zoomFactor": 1.25,
     "defaultDSL": "DefaultDSL",
     "rootGraphURL": "/fileServer/graphRoot.json",
     "rootGraphNodeData": {
@@ -34,6 +37,6 @@ const config = {
     "maxHistoryLength": 30
   },
   "server": {
-    "ip": "192.168.1.84"
+    "ip": "192.168.178.20"
   }
 };
