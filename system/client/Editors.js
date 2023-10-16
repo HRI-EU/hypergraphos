@@ -854,7 +854,7 @@ class WebViewer extends EditorBase {
     if( nodeData.isLocalDiv && ( nodeData.fileContent != undefined ) ) {
       const element = document.getElementById( this.editorDivId );
       const divID = `${this.id}_frame`;
-      const html = nodeData.fileContent || '<h2 style="color:white">Default Div Content</h2>';
+      const html = getNodeDataField( nodeData.key, 'fileContent', '<h2 style="color:white">Default Div Content</h2>' );
       element.innerHTML = `<div id='${divID}' class='webViewer'>${html}</div>`;
 
       // Insert all scripts in the document.head so to run all of them
