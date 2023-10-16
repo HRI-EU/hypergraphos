@@ -854,6 +854,18 @@ class WebViewer extends EditorBase {
       const divID = `${this.id}_frame`;
       const html = nodeData.fileContent || '<h2 style="color:white">Default Div Content</h2>';
       element.innerHTML = `<div id='${divID}' class='webViewer'>${html}</div>`;
+
+      // Insert all scripts in the document.head so to run all of them
+      const dp = new DOMParser();
+      const doc = dp.parseFromString( html, 'text/html' );
+      const scriptList = doc.getElementsByTagName( 'script' );
+      for( const script of scriptList ) {
+        const source = script.innerHTML;
+        const newScript = document.createElement( 'script' );
+        newScript.innerHTML = source;
+        newScript.type = 'text/javascript';
+        document.head.append( newScript );
+      }
     } else if( nodeData.fileURL ) {
       const element = document.getElementById( this.editorDivId );
       const fileURL = ( nodeData.fileURL? nodeData.fileURL: '' );
