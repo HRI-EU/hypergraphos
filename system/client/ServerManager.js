@@ -182,6 +182,22 @@ function loadScriptList( urlList, onLoad, isAvoidCache ) {
     }
   }
 }
+function loadScriptSource( source, onLoad, isLocalToGraph ) {
+  const script = document.createElement( 'script' );
+  script.type = 'text/javascript';
+  script.onload = ()=> {
+    console.log( `Script source loaded` );
+    if( onLoad ) {
+      onLoad();
+    }
+  };
+
+  if( isLocalToGraph ) {
+    script.className = 'NodeData_IncludeScript';
+  }
+  script.innerHTML = source;
+  document.head.append( script );
+}
 function loadScript( url, onLoad, isAvoidCache ) {
   const baseURL = window.location.href;
   const urlObj = new URL( url, baseURL );

@@ -525,17 +525,18 @@ class GraphEditor extends EditorBase {
             case 'load': {
               if( nodeData.fileURL ) {
                 loadScript( nodeData.fileURL );
-              } else {
-                const script = document.createElement( 'script' );
-                script.type = 'text/javascript';
-                script.className = 'NodeData_IncludeScript';
-                script.addClass
-                if( nodeData.fileURL ) {
-                  script.src = nodeData.fileURL;
-                } else if( nodeData.fileContent ) {
-                  script.innerHTML = nodeData.fileContent;
-                }
-                document.head.append( script );
+              } else if( nodeData.fileContent ) {
+                // const script = document.createElement( 'script' );
+                // script.type = 'text/javascript';
+                // script.className = 'NodeData_IncludeScript';
+                // //script.addClass
+                // if( nodeData.fileURL ) {
+                //   script.src = nodeData.fileURL;
+                // } else if( nodeData.fileContent ) {
+                //   script.innerHTML = nodeData.fileContent;
+                // }
+                // document.head.append( script );
+                loadScriptSource( nodeData.fileContent, null, true );
               }
             }
           }
@@ -861,10 +862,12 @@ class WebViewer extends EditorBase {
       const scriptList = doc.getElementsByTagName( 'script' );
       for( const script of scriptList ) {
         const source = script.innerHTML;
-        const newScript = document.createElement( 'script' );
-        newScript.innerHTML = source;
-        newScript.type = 'text/javascript';
-        document.head.append( newScript );
+        // const newScript = document.createElement( 'script' );
+        // newScript.innerHTML = source;
+        // newScript.type = 'text/javascript';
+        // newScript.className = 'NodeData_IncludeScript'; // So to be removed when loading another grap
+        // document.head.append( newScript );
+        loadScriptSource( source, null, true );
       }
     } else if( nodeData.fileURL ) {
       const element = document.getElementById( this.editorDivId );
