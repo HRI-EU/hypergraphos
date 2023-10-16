@@ -1,7 +1,6 @@
 .hchat-div {
   font-family: Arial, sans-serif;
   background: transparent;
-  /*margin: 50px;*/
   min-width: 300px;
   min-height: 200px;
   border-radius: 13px;
@@ -112,7 +111,7 @@
   display: none;
   position: absolute;
   background: #e0e7ff;
-  top: 100%;
+  bottom: 60px;
   text-align: center;
   font-size: small;
   left: 0;
@@ -120,18 +119,7 @@
   z-index: 1;
   border-radius: 10px;
 }
-.hchat-dropdown-content {
-  display: none;
-  position: absolute;
-  background: #e0e7ff;
-  top: 100%;
-  text-align: center;
-  font-size: small;
-  left: 0;
-  min-width: 50px;
-  z-index: 1;
-  border-radius: 10px;
-}
+
 
 /* Scrollbar thumb (slider) styles for a div with ID 'chat-area' */
 #hchat-area::-webkit-scrollbar-thumb {
