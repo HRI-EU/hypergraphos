@@ -182,6 +182,12 @@ function loadScriptList( urlList, onLoad, isAvoidCache ) {
     }
   }
 }
+function unloadLocalGraphScript() {
+  const scriptList = document.querySelectorAll( '.LocalGraph_IncludeScript' );
+  for( const script of scriptList ) {
+    script.remove();
+  }
+}
 function loadScriptSource( source, onLoad, isLocalToGraph ) {
   const script = document.createElement( 'script' );
   script.type = 'text/javascript';
@@ -193,7 +199,7 @@ function loadScriptSource( source, onLoad, isLocalToGraph ) {
   };
 
   if( isLocalToGraph ) {
-    script.className = 'NodeData_IncludeScript';
+    script.className = 'LocalGraph_IncludeScript';
   }
   script.innerHTML = source;
   document.head.append( script );

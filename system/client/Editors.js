@@ -506,10 +506,11 @@ class GraphEditor extends EditorBase {
     //
     // TODO: get navigation in nodes from graph through an API function
     if( action == 'unload' ) {
-      const nodeScriptList = document.querySelectorAll( '.NodeData_IncludeScript' );
-      for( const nodeScript of nodeScriptList ) {
-        nodeScript.remove();
-      }
+      // const nodeScriptList = document.querySelectorAll( '.NodeData_IncludeScript' );
+      // for( const nodeScript of nodeScriptList ) {
+      //   nodeScript.remove();
+      // }
+      unloadLocalGraphScript();
     } else {
       const it = this.editor.diagram.nodes;
       it.reset();
