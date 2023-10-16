@@ -6,6 +6,7 @@
   border-radius: 13px;
   border-color: #9090b1;
   border-style: solid;
+  box-sizing: border-box;
 }
 .hchat-container {
   padding: 10px;
