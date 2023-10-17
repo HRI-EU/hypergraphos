@@ -54,10 +54,10 @@ class Graph {
 		// Graph Evetns
 		this.em = new EventManager();
 		this.em.addList({
-			onSelection:								{ help: 	'Inofrm that the selection has changed in the graph',
+			onSelection:								{ help: 	'Inform that the selection has changed in the graph',
 																		params: { dataList: 'List of selected node-data' } },
-			onGraphChanged:							{ help: 	'Inofrm that graph has changed' },
-			onFirstLayoutCompleted:			{ help: 	'Inofrm that graph has completed the first layout after load' },
+			onGraphChanged:							{ help: 	'Inform that graph has changed' },
+			onFirstLayoutCompleted:			{ help: 	'Inform that graph has completed the first layout after load' },
 			onLoadGraph: 								{ help:   'Load a new graph in canvas', 
 			  	           								params: { nodeData: 'node-data of the the graph to load' } },
 		  onLoadFile:       					{ help:   'Open dialog with a file in a new editor',

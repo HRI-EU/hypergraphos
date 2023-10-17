@@ -1,0 +1,136 @@
+.hchat-div {
+  font-family: Arial, sans-serif;
+  background: transparent;
+  min-width: 300px;
+  min-height: 200px;
+  border-radius: 13px;
+  border-color: #9090b1;
+  border-style: solid;
+  box-sizing: border-box;
+}
+.hchat-container {
+  padding: 10px;
+}
+.hchat-message {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.hchat-message img {
+  /*width: 40px;*/
+  height: 40px;
+  border-radius: 50%;
+  margin: 0 10px;
+}
+.hchat-message .hchat-text {
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 70%;
+}
+.hchat-text {
+  color: black;
+}
+.hchat-user-img {
+  width: auto;
+}
+#hchat-area-header {
+  background: #c1d0f6;
+  position: relative;
+  box-sizing: border-box;
+  height: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+#hchat-area {
+  background: #c1d0f6;
+  overflow-y: scroll;
+  position: relative;
+  box-sizing: border-box;
+  height:calc(100% - 80px);
+}
+#hchat-area-footer {
+  background: #c1d0f6;
+  position: relative;
+  box-sizing: border-box;
+  height: 10px;
+}
+#hchat-input-area {
+  background: #aab7d7;
+  position: relative;
+  box-sizing: border-box;
+  bottom: 0px;
+  height: 60px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-right: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+#hchat-input-message {
+  flex-grow: 1;
+  min-width: 50px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin-left: 30px;
+}
+#hchat-send-button {
+  height: 37px;
+  width: auto;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-left: 5px;
+}
+.hchat-custom-dropdown {
+  position: relative;
+  width: 30px;
+  cursor: pointer;
+}
+.hchat-selected-image, .hchat-image-option {
+  box-sizing: border-box;
+  width: 30px;
+  padding: 5px;
+  text-align: center;
+  font-size: small;
+}
+.hchat-selected-image img, .hchat-image-option img {
+  width: auto;
+  height: 30px;
+}
+.hchat-arrow {
+  color: #607d8b;
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.hchat-dropdown-content {
+  display: none;
+  position: absolute;
+  background: #e0e7ff;
+  bottom: 60px;
+  text-align: center;
+  font-size: small;
+  left: 0;
+  min-width: 50px;
+  z-index: 1;
+  border-radius: 10px;
+}
+
+
+/* Scrollbar thumb (slider) styles for a div with ID 'chat-area' */
+#hchat-area::-webkit-scrollbar-thumb {
+  background-color: #888;  /* Change this to your desired color */
+}
+/* Hover state for the scrollbar thumb in the specific div */
+#hchat-area::-webkit-scrollbar-thumb:hover {
+  background-color: #555;  /* Change this to your desired hover color */
+}
+/* If you also want to set a width for the scrollbar */
+#hchat-area::-webkit-scrollbar {
+  width: 12px;  /* Adjust the width as needed */
+}

@@ -138,13 +138,24 @@ function setNodeDataField( key, field, value ) {
     g.setNodeDataField( key, field, value );
   }
 }
+function getNodeDataField( key, field, defaultValue ) {
+  let result = defaultValue;
+  const g = getMainGraph();
+  const data = g.getNodeData( key );
+  if( data.category && window[data.category+'_get'] ) {
+    result = window[data.category+'_get']( data, 'field', field );
+  } else if( data[field] !== undefined ) {
+    result = data[field];
+  }
+  return( result );
+}
 function getLinkData( key, isCopy ) {
   const g = getMainGraph();
   const result = g.getLinkData( key, isCopy );
   return( result );
 }
 function setLinkDataField( key, field, value ) {
-  const g = getMainGraph();
+  
   g.setLinkDataField( key, field, value );
 }
 function setViewFromLabel( nodeLabel, deltaX, deltaY ) {

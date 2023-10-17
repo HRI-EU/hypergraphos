@@ -506,10 +506,11 @@ class GraphEditor extends EditorBase {
     //
     // TODO: get navigation in nodes from graph through an API function
     if( action == 'unload' ) {
-      const nodeScriptList = document.querySelectorAll( '.NodeData_IncludeScript' );
-      for( const nodeScript of nodeScriptList ) {
-        nodeScript.remove();
-      }
+      // const nodeScriptList = document.querySelectorAll( '.NodeData_IncludeScript' );
+      // for( const nodeScript of nodeScriptList ) {
+      //   nodeScript.remove();
+      // }
+      unloadLocalGraphScript();
     } else {
       const it = this.editor.diagram.nodes;
       it.reset();
@@ -518,20 +519,26 @@ class GraphEditor extends EditorBase {
         // Get node data
         const nodeData = it.value.data;
         // If we find a isIncludeScript node
-        if( ( nodeData.fileType == 'text/javascript' ) &&
+        if( ( ( nodeData.fileType == 'text/javascript' ) ||
+              ( nodeData.fileType == 'text/css' ) ) &&
             nodeData.isFile && nodeData.isIncludeScript ) {
           switch( action ) {
             case 'load': {
-              const script = document.createElement( 'script' );
-              script.type = 'text/javascript';
-              script.className = 'NodeData_IncludeScript';
-              script.addClass
               if( nodeData.fileURL ) {
-                script.src = nodeData.fileURL;
+                loadScript( nodeData.fileURL );
               } else if( nodeData.fileContent ) {
-                script.innerHTML = nodeData.fileContent;
+                // const script = document.createElement( 'script' );
+                // script.type = 'text/javascript';
+                // script.className = 'NodeData_IncludeScript';
+                // //script.addClass
+                // if( nodeData.fileURL ) {
+                //   script.src = nodeData.fileURL;
+                // } else if( nodeData.fileContent ) {
+                //   script.innerHTML = nodeData.fileContent;
+                // }
+                // document.head.append( script );
+                loadScriptSource( nodeData.fileContent, null, true );
               }
-              document.head.append( script );
             }
           }
         }
@@ -847,9 +854,22 @@ class WebViewer extends EditorBase {
     if( nodeData.isLocalDiv && ( nodeData.fileContent != undefined ) ) {
       const element = document.getElementById( this.editorDivId );
       const divID = `${this.id}_frame`;
-      let html = '<h2 style="color:white">Default Div Content</h2>';
-      eval( nodeData.fileContent );
+      const html = getNodeDataField( nodeData.key, 'fileContent', '<h2 style="color:white">Default Div Content</h2>' );
       element.innerHTML = `<div id='${divID}' class='webViewer'>${html}</div>`;
+
+      // Insert all scripts in the document.head so to run all of them
+      const dp = new DOMParser();
+      const doc = dp.parseFromString( html, 'text/html' );
+      const scriptList = doc.getElementsByTagName( 'script' );
+      for( const script of scriptList ) {
+        const source = script.innerHTML;
+        // const newScript = document.createElement( 'script' );
+        // newScript.innerHTML = source;
+        // newScript.type = 'text/javascript';
+        // newScript.className = 'NodeData_IncludeScript'; // So to be removed when loading another grap
+        // document.head.append( newScript );
+        loadScriptSource( source, null, true );
+      }
     } else if( nodeData.fileURL ) {
       const element = document.getElementById( this.editorDivId );
       const fileURL = ( nodeData.fileURL? nodeData.fileURL: '' );
