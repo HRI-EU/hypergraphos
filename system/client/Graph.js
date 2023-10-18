@@ -211,7 +211,7 @@ class Graph {
 					{ label: 'Delete',      if: (o)=> o.d.cmd.canDeleteSelection(),
 																	do: (o)=> o.d.cmd.deleteSelection() },
 					{ separator: '-' },
-					{ label: 'Set From Palette',	do: (o)=> this._reSetSelectionFromPalette() },
+					{ label: 'Set From Palette',	do: (o)=> this._resetSelectionFromPalette() },
 					{ separator: '-' },
 					{ label: 'Group',       if: (o)=> o.d.cmd.canGroupSelection(),
 																	do: (o)=> o.d.cmd.groupSelection() },
@@ -1705,7 +1705,7 @@ class Graph {
 			}
 		}
 	}
-	_reSetSelectionFromPalette() {
+	_resetSelectionFromPalette() {
 		const selection = this.getSelection();
 		selection.each( (node) => {
 			let templateData = null;
@@ -1731,12 +1731,12 @@ class Graph {
 			}
 			if( templateData ) {
 				const dataNode = node.data;
-				const dataNodeFieldList = Object.keys( dataNode );
+				const dataNodeFieldList = Object.keys( templateData );
 				for( const field of dataNodeFieldList ) {
 					// If the field does not start with '_' and is not a system field
 					if( !field.startsWith('_') &&
 					    ( systemFieldList.indexOf( field ) == -1 ) &&
-						( field != 'label' ) ) {
+						( ![ 'label', 'fileURL', 'fileContent' ].includes( field ) ) ) {
 						if( templateData[field] ) {
 							const value = templateData[field];
 							this.diagram.model.setDataProperty( dataNode, field, value );
