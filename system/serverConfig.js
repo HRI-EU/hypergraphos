@@ -182,7 +182,7 @@ if( ( config.host.hostname == 'Antonellos-Mini' ) ||
   config.client.host.statusURL = '/fileServer/Users/Antonello_status.json';
   config.client.graph.allowDeleteKey = false;
   config.client.graph.isDoubleClickCreateNodeEnabled = false;
-} else if( config.host.username == "johan" ) {
+} else if( config.host.username == "johane" ) {
   config.server.dataRoot = '../../../../../Dropbox/DevAll/MDDToolsDataRoot';
   config.server.deployRoot = '../../../../../Dropbox/DevAll/MDDToolsDeployRoot';
   config.server.tempRoot = '../../../../../Dropbox/DevAll/MDDToolsTempRoot';
