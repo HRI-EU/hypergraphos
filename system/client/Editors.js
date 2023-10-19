@@ -338,6 +338,9 @@ class GraphEditor extends EditorBase {
       // NOTE: we set this with timeout because the GoJS graph keep
       // generating change event after loading
       setTimeout( ()=> this.isContentJustLoaded = false, 50 );
+      // Update readonly status
+      this.editor.doSetReadOnly( getSystemReadOnly() );
+
       // call event listeners
       const listenerCallList = this.listenerList['onLoad'];
       if( listenerCallList.length > 0 ) {
@@ -512,12 +515,25 @@ class GraphEditor extends EditorBase {
       // }
       unloadLocalGraphScript();
     } else {
+      let isGraphReadOnly = true;
+
       const it = this.editor.diagram.nodes;
       it.reset();
       // Loop over all nodes
       while ( it.next() ) {
         // Get node data
         const nodeData = it.value.data;
+        if( nodeData.category == 'Hierarchy_GraphInfo' ) {
+          if( nodeData.rows ) {
+            const authorInfo = nodeData.rows.find( (e)=> e.name == 'Authors' );
+            const authorList = jsyaml.load( authorInfo.value );
+            if( typeof( authorList ) == 'string' ) {
+              isGraphReadOnly = ( authorList != getUserName() );
+            } else {
+              isGraphReadOnly = !authorList.includes( getUserName() );
+            }
+          }
+        }
         // If we find a isIncludeScript node
         if( ( ( nodeData.fileType == 'text/javascript' ) ||
               ( nodeData.fileType == 'text/css' ) ) &&
@@ -543,6 +559,7 @@ class GraphEditor extends EditorBase {
           }
         }
       }
+      setSystemReadOnly( isGraphReadOnly );
     }
 	}
 }

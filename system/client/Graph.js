@@ -1116,7 +1116,7 @@ class Graph {
 	}
 	doSetReadOnly( status ) {
 		this.isReadOnly = status;
-		this.em.call.onSetReadOnly( false );
+		this.em.call.onSetReadOnly( status );
 	}
 	//------------------------------------------
 	// Private Functions

@@ -49,8 +49,15 @@ function _init() {
   // Load Current Status. Paramenter urlParams comes from index.html start
   loadCurrentStatus( urlParams );
 
+  // Set user
+  const userInfo = JSON.parse( document.cookie );
+  m.userInfo = userInfo;
+
   // System started
   console.log( 'System Started' );
+}
+function getUserName() {
+  return( m.userInfo.name );
 }
 function popFromHistory() {
   const history = getStatus( 'graphHistory' );
@@ -61,6 +68,9 @@ function setSystemReadOnly( status ) {
   status = ( status == undefined? true: status );
   m.status.isReadOnly = status;
   m.mddStatus.style['border-style'] = ( status? 'dashed': 'solid' );
+}
+function getSystemReadOnly() {
+  return( m.status.isReadOnly );
 }
 function setSystemError( status ) {
   m.mddStatus.className = 'error';
