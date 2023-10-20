@@ -10,6 +10,11 @@ Date: 10.07.2020
 =============================================================================
 */
 
+// This code detects the first definition of 'nodeData'
+// window.__defineSetter__('nodeData', function() {
+//   debugger;
+// });
+
 // The appData stores data for the full browser session (reload cleans it)
 const appData = {};
 // The graphData stores data for the loaded graph (loading a different grap cleans it)
