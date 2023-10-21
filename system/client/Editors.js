@@ -851,6 +851,75 @@ class WebViewer extends EditorBase {
     this.id = id;
     this.editor = null;
 
+    const winInfo = m.e.newWinBox( id, this.title, 
+                                   config.htmlDiv.mainDiv,
+                                   this.storeWindowPosition.bind(this),
+                                   position );
+    this.editorDivId = winInfo.editorDivId;
+    this.win = winInfo.win;
+
+    this.loadEditorContent( nodeData );
+  }
+  loadEditorContent( nodeData ) {
+    // Update current nodeData
+    this.nodeData = nodeData;
+    // Update window title with:
+    this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${nodeData.fileType}]`;
+    this.setTitle( this.title );
+    // Update pin
+    if( nodeData.fileURL ) {
+      m.e.showWindowPin( this.id );
+    }
+    // Set editor content container
+    if( nodeData.isLocalDiv && ( nodeData.fileContent != undefined ) ) {
+      const element = document.getElementById( this.editorDivId );
+      const divID = `${this.id}_frame`;
+      const html = getNodeDataField( nodeData.key, 'fileContent', '<h2 style="color:white">Default Div Content</h2>' );
+      element.innerHTML = `<div id='${divID}' class='webViewer'>${html}</div>`;
+
+      // Insert all scripts in the document.head so to run all of them
+      const dp = new DOMParser();
+      const doc = dp.parseFromString( html, 'text/html' );
+      const scriptList = doc.getElementsByTagName( 'script' );
+      for( const script of scriptList ) {
+        const source = script.innerHTML;
+        // const newScript = document.createElement( 'script' );
+        // newScript.innerHTML = source;
+        // newScript.type = 'text/javascript';
+        // newScript.className = 'NodeData_IncludeScript'; // So to be removed when loading another grap
+        // document.head.append( newScript );
+        loadScriptSource( source, null, true );
+      }
+    } else if( nodeData.fileURL ) {
+      const element = document.getElementById( this.editorDivId );
+      const fileURL = ( nodeData.fileURL? nodeData.fileURL: '' );
+      // NOTE:  name="${Date.now()}" is a workaround to avoid caching
+      element.innerHTML = `<iframe id='${this.id}_frame' class='webViewer' src="${fileURL}?_=${Date.now()}"></iframe>`;
+      // const url = new URL( nodeData.fileURL, window.location ).toString();
+      // this.win.setUrl( url );
+    } else if( nodeData.fileContent != undefined ) {
+      const element = document.getElementById( this.editorDivId );
+      const frameId = `${this.id}_frame`;
+      // NOTE:  name="${Date.now()}" is a workaround to avoid caching
+      element.innerHTML = `<iframe id='${frameId}' name="${Date.now()}" class='webViewer' src='about:blank'></frame>`;
+      const frameElement = document.getElementById( frameId );
+      frameElement.contentDocument.open();
+      frameElement.contentDocument.write( nodeData.fileContent );
+      frameElement.contentDocument.close();
+    }
+  }
+  saveEditorContent( onSaved ) {
+    if( onSaved ) {
+      onSaved();
+    }
+  }
+}
+class WebViewer2 extends EditorBase {
+  constructor( id, nodeData, position ) {
+    super();
+    this.id = id;
+    this.editor = null;
+
     this.editorDivId = m.e.newDOMWindow( id, this.title, 
                                          config.htmlDiv.mainDiv,
                                          this.storeWindowPosition.bind(this),

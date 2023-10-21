@@ -295,6 +295,57 @@ class EditorManager extends EditorChangeManager {
     setDivAsResizable( `#${id}`, 'px', onWindowResize );
     return( editorDivId );
   }
+  newWinBox( id, name, parentDiveId, onPositionChanged, position ) {
+    // Compute window position
+    const winPosition = [];
+    const browserWidth = window.innerWidth;
+    const browserHeight = window.innerHeight;
+    if( position && position[0] ) { 
+      winPosition[0] = position[0]+'px';
+    }
+    if( position && position[1] ) {
+      winPosition[1] = Math.min( browserHeight-100, Math.max( 0, position[1] ) )+'px';
+    }
+    if( position && position[2] ) { winPosition[2] = position[2]+'px'; }
+    if( position && position[3] ) { winPosition[3] = position[3]+'px'; }
+    // Define editor id
+    const editorDivId = id+'Editor';
+    // Define window options
+    const root = document.getElementById( parentDiveId );
+    const options = {
+      id,           // Window div
+      root,         // Parent element
+      title: name,  // Window title
+      class: 'modern',
+      x: winPosition[0],
+      y: winPosition[1],
+      width: winPosition[2],
+      height: winPosition[3],
+      // Events
+      onmove: onPositionChanged,
+      onresize: onPositionChanged,
+      onclose: function(){ m.e.closeEditor( true, id ) },
+      // Window content
+      html: ` <div class='editorDiv' id='${editorDivId}'></div>`,
+    };
+    // Create a new window
+    const win = new WinBox( options );
+    // Customize the window: add pin icon
+    win.removeControl( 'wb-max' );
+    win.addControl({
+      index: 2,
+      class: "wb-like",
+      image: "/fileServer/pictures/unpinnedw.svg",
+      click: function(event,winbox) {
+          // the winbox instance will be passed as 2nd parameter
+          // console.log(winbox.id);
+          // "this" refers to the button which was clicked:
+          this.classList.toggle( "active" );
+          m.e.pinEditor( id );
+      }
+    });
+    return( { editorDivId, win } );
+  }
   // TODO: the button for this is not well visulized
   toogleCollapseWindow( id ) {
     const editorDiv = document.querySelector( `#${id} .editorDiv` );
