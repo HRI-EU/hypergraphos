@@ -22,11 +22,14 @@ class EditorBase extends EditorChangeManager {
   }
   setTitle( title ) {
     title = ( title != undefined? title: this.title );
-    const element = document.querySelector( `#${this.id} .title` );
-    if( element ) {
-      element.innerHTML = title;
+    if( this.win ) {
+      this.win.setTitle( title );
+    } else {
+      const element = document.querySelector( `#${this.id} .title` );
+      if( element ) {
+        element.innerHTML = title;
+      }
     }
-
   }
   setParentGraph( nodeData ) {
     this.parentGraph = nodeData;
@@ -850,9 +853,6 @@ class WebViewer extends EditorBase {
     super();
     this.id = id;
     this.editor = null;
-    // Update window title with:
-    this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${nodeData.fileType}]`;
-    //this.setTitle( this.title );
 
     // Create window
     const winInfo = m.e.newWinBox( id, this.title, 
@@ -867,6 +867,9 @@ class WebViewer extends EditorBase {
   loadEditorContent( nodeData ) {
     // Update current nodeData
     this.nodeData = nodeData;
+    // Update window title with:
+    this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${nodeData.fileType}]`;
+    this.setTitle( this.title );
     // Update pin
     if( nodeData.fileURL ) {
       m.e.showWindowPin( this.id );
