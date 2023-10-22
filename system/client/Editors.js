@@ -253,7 +253,7 @@ class GraphEditor extends EditorBase {
           fileType: 'input/fields',
         };
         const id = m.e._getDOMUniqueId( nodeData );
-        m.e.openWindow( id, 'DSLViewer', nodeData, [x, y, 160, 350 ] );
+        m.e.openWindow( id, 'DSLViewer', nodeData, [x, y, 160, 450 ] );
       },
       onShowGraphTemplateDialog: ( x, y )=> {
         const nodeData = {
@@ -850,7 +850,11 @@ class WebViewer extends EditorBase {
     super();
     this.id = id;
     this.editor = null;
+    // Update window title with:
+    this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${nodeData.fileType}]`;
+    //this.setTitle( this.title );
 
+    // Create window
     const winInfo = m.e.newWinBox( id, this.title, 
                                    config.htmlDiv.mainDiv,
                                    this.storeWindowPosition.bind(this),
@@ -863,9 +867,6 @@ class WebViewer extends EditorBase {
   loadEditorContent( nodeData ) {
     // Update current nodeData
     this.nodeData = nodeData;
-    // Update window title with:
-    this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${nodeData.fileType}]`;
-    this.setTitle( this.title );
     // Update pin
     if( nodeData.fileURL ) {
       m.e.showWindowPin( this.id );
@@ -960,12 +961,12 @@ class WebViewer2 extends EditorBase {
       const element = document.getElementById( this.editorDivId );
       const fileURL = ( nodeData.fileURL? nodeData.fileURL: '' );
       // NOTE:  name="${Date.now()}" is a workaround to avoid caching
-      element.innerHTML = `<iframe id='${this.id}_frame' class='webViewer' src="${fileURL}?_=${Date.now()}"></iframe>`;
+      element.innerHTML = `<iframe is="x-frame-bypass" id='${this.id}_frame' class='webViewer' src="${fileURL}?_=${Date.now()}"></iframe>`;
     } else if( nodeData.fileContent != undefined ) {
       const element = document.getElementById( this.editorDivId );
       const frameId = `${this.id}_frame`;
       // NOTE:  name="${Date.now()}" is a workaround to avoid caching
-      element.innerHTML = `<iframe id='${frameId}' name="${Date.now()}" class='webViewer' src='about:blank'></frame>`;
+      element.innerHTML = `<iframe is="x-frame-bypass" id='${frameId}' name="${Date.now()}" class='webViewer' src='about:blank'></frame>`;
       const frameElement = document.getElementById( frameId );
       frameElement.contentDocument.open();
       frameElement.contentDocument.write( nodeData.fileContent );
