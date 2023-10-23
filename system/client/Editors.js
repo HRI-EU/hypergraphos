@@ -528,6 +528,24 @@ class GraphEditor extends EditorBase {
         const nodeData = it.value.data;
         if( nodeData.category == 'Hierarchy_GraphInfo' ) {
           if( nodeData.rows ) {
+
+            // Set name field with graph name
+            const nameInfo = nodeData.rows.find( (e)=> e.name == 'Name' );
+            if( nameInfo ) {
+              // Check if value is like 'label@32' (set label of node with key 32)
+              const nameMatch = nameInfo.value.match( /(\w+)@(\d+)/ );
+              if( nameMatch ) {
+                const field = nameMatch[1];
+                const key = nameMatch[2];
+                const nodeData = getNodeData( key );
+                if( nodeData ) {
+                  const graphName = ( this.nodeData.label? this.nodeData.label: this.nodeData.key );
+                  setNodeDataField( key, field, graphName );
+                }
+              }
+            }
+
+            // Check Author for default read access
             const authorInfo = nodeData.rows.find( (e)=> e.name == 'Authors' );
             const authorList = jsyaml.load( authorInfo.value );
             if( typeof( authorList ) == 'string' ) {
