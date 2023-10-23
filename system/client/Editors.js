@@ -855,14 +855,32 @@ class WebViewer extends EditorBase {
     this.editor = null;
 
     // Create window
-    const winInfo = m.e.newWinBox( id, this.title, 
-                                   config.htmlDiv.mainDiv,
-                                   this.storeWindowPosition.bind(this),
-                                   position );
-    this.editorDivId = winInfo.editorDivId;
-    this.win = winInfo.win;
+    if( nodeData.isPopup && nodeData.fileURL ) {
+      this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${nodeData.fileType}]`;
+      this.setTitle( this.title );
+      const browserX = window.screenX;
+      const browserY = window.screenY;
+      const options = `top=${browserY+position[1]},
+                       left=${browserX+position[0]},
+                       width=${position[2]},
+                       height=${position[3]},
+                       location=0,menubar=0`;
+      //const options = 'width=450,height=400,toolbar=0,menubar=0,location=0,top=1000,left=2000';
+      this.win = open( nodeData.fileURL, this.title, options );
+      // Define editor id
+      this.editorDivId = id+'Editor'; // <--- NOT YET USED!!!!!! in this case
+      this.win.focus();
+    } else {
+      const winInfo = m.e.newWinBox( id, this.title, 
+                                    config.htmlDiv.mainDiv,
+                                    this.storeWindowPosition.bind(this),
+                                    position );
 
-    this.loadEditorContent( nodeData );
+      this.editorDivId = winInfo.editorDivId;
+      this.win = winInfo.win;
+
+      this.loadEditorContent( nodeData );
+    }
   }
   loadEditorContent( nodeData ) {
     // Update current nodeData
