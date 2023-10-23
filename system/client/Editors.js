@@ -539,6 +539,7 @@ class GraphEditor extends EditorBase {
                 const key = nameMatch[2];
                 const nodeData = getNodeData( key );
                 if( nodeData ) {
+                  // Get the label of the node that opened this graph
                   const graphName = ( this.nodeData.label? this.nodeData.label: this.nodeData.key );
                   setNodeDataField( key, field, graphName );
                 }
