@@ -532,17 +532,21 @@ class GraphEditor extends EditorBase {
             // Set name field with graph name
             const nameInfo = nodeData.rows.find( (e)=> e.name == 'Name' );
             if( nameInfo ) {
+              // Get graph name
+              const graphName = ( this.nodeData.label? this.nodeData.label: this.nodeData.key );
               // Check if value is like 'label@32' (set label of node with key 32)
               const nameMatch = nameInfo.value.match( /(\w+)@(\d+)/ );
               if( nameMatch ) {
                 const field = nameMatch[1];
                 const key = nameMatch[2];
-                const nodeData = getNodeData( key );
-                if( nodeData ) {
+                const nodeDataTarget = getNodeData( key );
+                if( nodeDataTarget ) {
                   // Get the label of the node that opened this graph
-                  const graphName = ( this.nodeData.label? this.nodeData.label: this.nodeData.key );
                   setNodeDataField( key, field, graphName );
                 }
+              } else {
+                // Set only the value field of 'Name' property in rows
+                setNodeDataField( nameInfo, 'value', graphName );
               }
             }
 
