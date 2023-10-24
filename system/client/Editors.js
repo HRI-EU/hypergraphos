@@ -537,6 +537,15 @@ class GraphEditor extends EditorBase {
               }
             }
 
+            // Set Path field with date if value is 'date@system'
+            const pathInfo = nodeData.rows.find( (e)=> e.name == 'Path' );
+            if( pathInfo ) {
+              const pValue = parseRefValue( pathInfo.value );
+              if( pValue.isRef ) {
+                setNodeDataField( pathInfo, 'value', pValue.value );
+              }
+            }
+
             // Set Name field with 'graph name'
             const nameInfo = nodeData.rows.find( (e)=> e.name == 'Name' );
             if( nameInfo ) {

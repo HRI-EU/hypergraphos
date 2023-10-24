@@ -25,6 +25,7 @@ const m = {
     dateTime: function(){ return( new Date().toLocaleString() ) },
     date: function(){ return( new Date().toLocaleDateString() ) },
     time: function(){ return( new Date().toLocaleTimeString()	) },
+    graphPath: function(){ g = getMainGraph(); return( g.graphPath ) },
   },
 };
 
