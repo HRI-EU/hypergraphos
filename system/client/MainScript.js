@@ -18,6 +18,14 @@ const m = {
   fileInfo: {},
   dslNameList: {},  // List of registered dsl name/url
   status: {},       // Current status of the system
+
+  // System Object for field value references
+	// See: parseRefValue()
+  system: {
+    dateTime: function(){ return( new Date().toLocaleString() ) },
+    date: function(){ return( new Date().toLocaleDateString() ) },
+    time: function(){ return( new Date().toLocaleTimeString()	) },
+  },
 };
 
 function winAlert( msg, isCenter ) 
@@ -112,6 +120,43 @@ function getMainGraph() {
 function getMainGraphURL() {
   const g = getMainGraph();
   return( g.graphPath );
+}
+function parseRefValue( value ) {
+  let result = { isRef: false, value };
+  // Check if value is like:
+  // - 'label@32' => reference to field label of node with key 32
+  // - 'dateTime@system' => reference to system call timeDate()
+  // - 'getCounter@function' => reference to a function 'getCounter()'
+  const nameMatch = value.match( /(\w+)@([\d\w]+)/ );
+  if( nameMatch ) {
+    const field = nameMatch[1];
+    const obj = nameMatch[2];
+    if( obj == 'system' ) {
+      const sysValue = m.system[field];
+      if( sysValue ) {
+        result.isRef = true;
+        result['field'] = field;
+        result.value = sysValue();
+      }
+    } else if( obj == 'function' ) {
+      const func = window[field];
+      if( func ) {
+        result.isRef = true;
+        result['field'] = field;
+        result.value = func();
+      }
+    } else if( parseInt( obj ) == obj ) {  // If it is a number (key)
+      const nodeData = getNodeData( obj );
+      if( nodeData ) {
+        result.isRef = true;
+        result['key'] = obj;
+        result['field'] = field;
+        result['nodeData'] = nodeData;
+        result.value = nodeData[field];
+      }
+    }
+  }
+  return( result );
 }
 function getNodeData( key, isCopy ) {
   const g = getMainGraph();
