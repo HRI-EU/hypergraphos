@@ -554,18 +554,8 @@ class GraphEditor extends EditorBase {
               const pValue = parseRefValue( nameInfo.value );
               if( pValue.isRef && pValue.nodeData ) {
                 setNodeDataField( pValue.key, pValue.field, graphName );
-              // // Check if value is like 'label@32' (set label of node with key 32)
-              // const nameMatch = nameInfo.value.match( /(\w+)@(\d+)/ );
-              // if( nameMatch ) {
-              //   const field = nameMatch[1];
-              //   const key = nameMatch[2];
-              //   const nodeDataTarget = getNodeData( key );
-                // if( nodeDataTarget ) {
-                //   // Get the label of the node that opened this graph
-                //   setNodeDataField( key, field, graphName );
-                // }
               } else {
-                // Set only the value field of 'Name' property in rows
+                // Set only the graph name in 'Name' property in rows
                 setNodeDataField( nameInfo, 'value', graphName );
               }
             }
