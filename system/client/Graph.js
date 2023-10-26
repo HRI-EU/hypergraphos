@@ -239,6 +239,8 @@ class Graph {
 				]},
 		});
 		this.shortcutList = [
+			// Save all
+			{ key: 's', control:true, do: ()=> console.log( 'save all' ) },
 			// Zoom to Node (NOTE: with control its not yet working)
 			{ key: '2', control:true, do: this.doZoomToFitSlectedNode.bind(this,2) },
 			{ key: '3', control:true, do: this.doZoomToFitSlectedNode.bind(this,3) },
