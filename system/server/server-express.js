@@ -291,8 +291,9 @@ fs.writeFileSync( ccPathFileName, source, 'utf8' );
 //const webServer = httpolyglot.createServer( sslOptions, app );
 const webServer = express();
 
-const onGet = function( request, response ) {
+const onGet = function( request, response, next ) {
   console.log( 'Loading file: '+request.url );
+  next();
 }
 // Serve libraries files
 webServer.use(   '/library', express.static( config.server.libPath ), onGet);
@@ -301,7 +302,8 @@ webServer.use(  '/fileServer', express.static( config.server.dataRoot ), onGet )
 // Execute server script
 webServer.use( '/executeScript', (req, res) => new ExecuteScript( config.server.scriptPath ).serve(req, res), onGet );
 // Serve client files
-webServer.use(  '/', (req, res, next) => { onGet(req, res); express.static( config.server.clientPath)(req, res, next); } );
+webServer.use(onGet);
+webServer.use(  '/', express.static( config.server.clientPath) );
 // Status logger
 webServer.get( '/status', (req, res) => new GETStatus.serve(req, res) );
 // Status of files (date, size, ...)
