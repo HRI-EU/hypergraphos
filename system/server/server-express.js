@@ -301,7 +301,7 @@ webServer.use(  '/fileServer', express.static( config.server.dataRoot ), onGet )
 // Execute server script
 webServer.use( '/executeScript', (req, res) => new ExecuteScript( config.server.scriptPath ).serve(req, res), onGet );
 // Serve client files
-webServer.use(  '/', express.static( config.server.clientPath), onGet );
+webServer.use(  '/', (req, res, next) => { onGet(req, res); express.static( config.server.clientPath)(req, res, next); } );
 // Status logger
 webServer.get( '/status', (req, res) => new GETStatus.serve(req, res) );
 // Status of files (date, size, ...)
