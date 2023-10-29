@@ -838,6 +838,12 @@ class EditorManager extends EditorChangeManager {
                    parseInt( element.style.top ),
                    parseInt( element.style.width ),
                    parseInt( element.style.height ) ];
+    } else {
+      const editor = this.getEditor( id );
+      if( editor instanceof WinBox ) {
+        posiiton = [ editor.x, editor.y,
+                     editor.width, editor.height ];
+      }
     }
     return( position );
   }

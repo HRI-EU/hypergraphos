@@ -22,8 +22,10 @@ class EditorBase extends EditorChangeManager {
   }
   setTitle( title ) {
     title = ( title != undefined? title: this.title );
-    if( this.win ) {
-      this.win.setTitle( title );
+    if( this.editor instanceof WinBox ) {
+      this.editor.setTitle( title );
+    } else if( this.editor && ( this.editor.opener == window ) ) {
+      // Not possible
     } else {
       const element = document.querySelector( `#${this.id} .title` );
       if( element ) {
@@ -899,10 +901,10 @@ class WebViewer extends EditorBase {
                        height=${position[3]},
                        location=0,menubar=0`;
       //const options = 'width=450,height=400,toolbar=0,menubar=0,location=0,top=1000,left=2000';
-      this.win = open( nodeData.fileURL, this.title, options );
+      this.editor = open( nodeData.fileURL, this.title, options );
       // Define editor id
       this.editorDivId = id+'Editor'; // <--- NOT YET USED!!!!!! in this case
-      this.win.focus();
+      this.editor.focus();
     } else {
       const winInfo = m.e.newWinBox( id, this.title, 
                                     config.htmlDiv.mainDiv,
@@ -910,7 +912,7 @@ class WebViewer extends EditorBase {
                                     position );
 
       this.editorDivId = winInfo.editorDivId;
-      this.win = winInfo.win;
+      this.editor = winInfo.win;
 
       this.loadEditorContent( nodeData );
     }
