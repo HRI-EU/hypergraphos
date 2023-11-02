@@ -581,16 +581,6 @@ class GraphEditor extends EditorBase {
               if( nodeData.fileURL ) {
                 loadScript( nodeData.fileURL );
               } else if( nodeData.fileContent ) {
-                // const script = document.createElement( 'script' );
-                // script.type = 'text/javascript';
-                // script.className = 'NodeData_IncludeScript';
-                // //script.addClass
-                // if( nodeData.fileURL ) {
-                //   script.src = nodeData.fileURL;
-                // } else if( nodeData.fileContent ) {
-                //   script.innerHTML = nodeData.fileContent;
-                // }
-                // document.head.append( script );
                 loadScriptSource( nodeData.fileContent, null, true );
               }
             }
