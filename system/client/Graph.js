@@ -599,21 +599,23 @@ class Graph {
 		return( jsonSelection );
 	}
 	setJSONSelection( jsonSelection ) {
-		const objSelection = JSON.parse( jsonSelection );
-		const originalKeyList = objSelection.originalKey;
-		if( originalKeyList ) {
-			for( let i = 0; i < originalKeyList.length; ++i ) {
-				const oKey = originalKeyList[i];
-				const dataNode = objSelection[i];
-				const fieldList = Object.keys( dataNode );
-				for( const field of fieldList ) {
-					if( field != 'key' ) { // Key can not be changed in a selection
-						const value = dataNode[field];
-						setNodeDataField( oKey, field, value );
+		try {
+			const objSelection = JSON.parse( jsonSelection );
+			const originalKeyList = objSelection.originalKey;
+			if( originalKeyList ) {
+				for( let i = 0; i < originalKeyList.length; ++i ) {
+					const oKey = originalKeyList[i];
+					const dataNode = objSelection[i];
+					const fieldList = Object.keys( dataNode );
+					for( const field of fieldList ) {
+						if( field != 'key' ) { // Key can not be changed in a selection
+							const value = dataNode[field];
+							setNodeDataField( oKey, field, value );
+						}
 					}
 				}
 			}
-		}
+		} catch( e ) { /* We enter here if selection have syntax errors */}
 	}
 	selectNodeByKey( key ) {
 		this.diagram.select( this.diagram.findPartForKey( key ) );
