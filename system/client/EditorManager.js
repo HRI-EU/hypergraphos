@@ -731,7 +731,9 @@ class EditorManager extends EditorChangeManager {
           // Delete window
           delete this.editorList[id];
           const element = document.getElementById( id );
-          element.parentNode.removeChild( element );
+          if( element ) {
+            element.parentNode.removeChild( element );
+          }
           if( onCloseDone ) {
             onCloseDone();
           }
