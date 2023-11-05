@@ -491,6 +491,7 @@ class EditorManager extends EditorChangeManager {
     if( id && nodeData && !this.isStatusOnUpdate ) {
 
       // Exclude saving of Popup window (web browser)
+      // since they are not correctly handled yet
       if( nodeData.isPopup ) {
         return;
       }
