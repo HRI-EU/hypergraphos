@@ -89,7 +89,8 @@ class EditorManager extends EditorChangeManager {
     const url = ( ei.nodeData.fileURL? ei.nodeData.fileURL: '' );
     // Get position
     const elem = document.getElementById( id );
-    const leftPos = parseInt( elem.style.left );
+
+    const leftPos = ( elem? parseInt( elem.style.left ): ei._position[0] ) ;
     const browserWidth = window.innerWidth;
     let screenDirection = 'Center';
     let screenIndex = 0;
@@ -383,6 +384,13 @@ class EditorManager extends EditorChangeManager {
     const minZ = 10;
     // Get z index of window to put on top
     const eWindow = document.getElementById( id );
+
+    const windowEi = this.getEditorInfo( id );
+    if( windowEi.isPopup ) {  // Exclude isPopup window (browser tabs)
+      windowEi.openPopupWindow();
+      return;
+    }
+
     let zWindow = eWindow.style.zIndex;
     zWindow = parseInt( !zWindow? minZ: zWindow );
     // List of all open window
@@ -481,6 +489,12 @@ class EditorManager extends EditorChangeManager {
   }
   saveWindowPosition( id, nodeData, isPin ) {
     if( id && nodeData && !this.isStatusOnUpdate ) {
+
+      // Exclude saving of Popup window (web browser)
+      if( nodeData.isPopup ) {
+        return;
+      }
+
       const ei = this.getEditorInfo( config.htmlDiv.graphDiv );
       const position = this.getEditorPosition( id );
       // Set position in nodeData too
