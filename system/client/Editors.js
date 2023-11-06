@@ -581,16 +581,6 @@ class GraphEditor extends EditorBase {
               if( nodeData.fileURL ) {
                 loadScript( nodeData.fileURL );
               } else if( nodeData.fileContent ) {
-                // const script = document.createElement( 'script' );
-                // script.type = 'text/javascript';
-                // script.className = 'NodeData_IncludeScript';
-                // //script.addClass
-                // if( nodeData.fileURL ) {
-                //   script.src = nodeData.fileURL;
-                // } else if( nodeData.fileContent ) {
-                //   script.innerHTML = nodeData.fileContent;
-                // }
-                // document.head.append( script );
                 loadScriptSource( nodeData.fileContent, null, true );
               }
             }
@@ -891,20 +881,11 @@ class WebViewer extends EditorBase {
 
     // Create window
     if( nodeData.isPopup && nodeData.fileURL ) {
-      this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${nodeData.fileType}]`;
-      this.setTitle( this.title );
-      const browserX = window.screenX;
-      const browserY = window.screenY;
-      const options = `top=${browserY+position[1]},
-                       left=${browserX+position[0]},
-                       width=${position[2]},
-                       height=${position[3]},
-                       location=0,menubar=0`;
-      //const options = 'width=450,height=400,toolbar=0,menubar=0,location=0,top=1000,left=2000';
-      this.editor = open( nodeData.fileURL, this.title, options );
       // Define editor id
       this.editorDivId = id+'Editor'; // <--- NOT YET USED!!!!!! in this case
-      this.editor.focus();
+      this._position = position;
+      this.isPopup = true;
+      // We will open a new tab for this window in the loadEditorContent()
     } else {
       const winInfo = m.e.newWinBox( id, this.title, 
                                     config.htmlDiv.mainDiv,
@@ -913,9 +894,9 @@ class WebViewer extends EditorBase {
 
       this.editorDivId = winInfo.editorDivId;
       this.editor = winInfo.win;
-
-      this.loadEditorContent( nodeData );
     }
+
+    this.loadEditorContent( nodeData );
   }
   loadEditorContent( nodeData ) {
     // Update current nodeData
@@ -928,7 +909,17 @@ class WebViewer extends EditorBase {
       m.e.showWindowPin( this.id );
     }
     // Set editor content container
-    if( nodeData.isLocalDiv && ( nodeData.fileContent != undefined ) ) {
+    if( nodeData.isPopup && nodeData.fileURL ) {
+      const browserX = window.screenX;
+      const browserY = window.screenY;
+      this._options = `top=${browserY+this._position[1]},
+                       left=${browserX+this._position[0]},
+                       width=${this._position[2]},
+                       height=${this._position[3]},
+                       location=0,menubar=0`;
+
+      this.openPopupWindow();
+    } else if( nodeData.isLocalDiv && ( nodeData.fileContent != undefined ) ) {
       const element = document.getElementById( this.editorDivId );
       const divID = `${this.id}_frame`;
       const html = getNodeDataField( nodeData.key, 'fileContent', '<h2 style="color:white">Default Div Content</h2>' );
@@ -969,6 +960,12 @@ class WebViewer extends EditorBase {
     if( onSaved ) {
       onSaved();
     }
+  }
+  openPopupWindow() {
+    this.editor = open( this.nodeData.fileURL, this.title, this._options );
+      if( this.editor ) {
+        this.editor.focus();
+      }
   }
 }
 class WebViewer2 extends EditorBase {
