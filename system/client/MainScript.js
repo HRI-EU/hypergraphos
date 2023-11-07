@@ -59,7 +59,7 @@ function _init() {
   loadCurrentStatus( urlParams );
 
   // Set user
-  const cookie = document.cookie;
+  let cookie = document.cookie;
   const idx = cookie.indexOf( '{' );
   if( idx >= 0 ) {
     cookie = cookie.substring( idx );
