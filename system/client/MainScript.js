@@ -59,7 +59,12 @@ function _init() {
   loadCurrentStatus( urlParams );
 
   // Set user
-  const userInfo = JSON.parse( document.cookie );
+  const cookie = document.cookie;
+  const idx = cookie.indexOf( '{' );
+  if( idx >= 0 ) {
+    cookie = cookie.substring( idx );
+  }
+  const userInfo = JSON.parse(  cookie );
   m.userInfo = userInfo;
 
   // System started
