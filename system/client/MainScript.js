@@ -58,10 +58,12 @@ function _init() {
   // Load Current Status. Paramenter urlParams comes from index.html start
   loadCurrentStatus( urlParams );
 
-  // Set user
+  // Set user name
   let cookie = document.cookie;
   const idx = cookie.indexOf( '{' );
   if( idx >= 0 ) {
+    // NOTE: I have to do this to fix a problem where the
+    // cookie by Takeushi was containing some other stuff
     cookie = cookie.substring( idx );
   }
   const userInfo = JSON.parse(  cookie );
