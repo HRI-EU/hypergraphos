@@ -121,6 +121,11 @@ function getExtByFileType( fileType ) {
   }
   return( result );
 }
+function getNewGraphServerURL( extension ) {
+  const g = getMainGraph();
+  const url = g.getNextGraphServerURL( extension );
+  return( url );
+}
 function getNewFileServerURL( extension ) {
   extension = ( extension? extension: 'bin' );
   // Path creation function
@@ -281,8 +286,16 @@ function loadNodeContent( nodeData, onLoaded ) {
       onLoaded( source );
     }
   } else if( nodeData.fileURL != undefined ) { // Check on fileURL must be second
-    // Load content from file system
-    _openFile( nodeData.fileURL, onLoaded );
+    if( nodeData.fileURL.startsWith( 'graph://' ) ) {
+      const g = getMainGraph();
+      const source = g.openFile( nodeData.fileURL );
+      if( onLoaded ) {
+        onLoaded( source );
+      }
+    } else {
+      // Load content from file system
+      _openFile( nodeData.fileURL, onLoaded );
+    }
   } else if( nodeData.fileContent != undefined ) { // Check on fileContent must be third
     // Load content from node
     const source = nodeData.fileContent;
@@ -305,9 +318,19 @@ function saveNodeContent( nodeData, onSaved ) {
       onSaved();
     }
   } else if( nodeData.fileURL != undefined ) { // Check on fileURL must be second
-    const sourceEncoding = ( nodeData.fileEncoding? nodeData.fileEncoding: 'utf8' );
-    const source = nodeData.fileContent;
-    _saveFile( nodeData.fileURL, source, onSaved, sourceEncoding );
+    if( nodeData.fileURL.startsWith( 'graph://' ) ) {
+      const g = getMainGraph();
+      const sourceEncoding = ( nodeData.fileEncoding? nodeData.fileEncoding: 'utf8' );
+      const source = nodeData.fileContent;
+      g.saveFile( nodeData.fileURL, source, sourceEncoding );
+      if( onSaved ) {
+        onSaved();
+      }
+    } else {
+      const sourceEncoding = ( nodeData.fileEncoding? nodeData.fileEncoding: 'utf8' );
+      const source = nodeData.fileContent;
+      _saveFile( nodeData.fileURL, source, onSaved, sourceEncoding );
+    }
   } else if( nodeData.fileContent != undefined ) { // Check on fileContent must be third
     //const e = m.e.getEditor( config.htmlDiv.graphDiv );
     //if( e ) {

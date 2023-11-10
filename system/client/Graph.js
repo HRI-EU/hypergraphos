@@ -24,7 +24,11 @@ class Graph {
 		this.groupPalette = null;
 		this.linkPalette = null;
 		this.lastNodeKey = null;
+
+		// Property saved in graph source json file
 		this.dslNameList = [];
+		this.graphServer = [];
+
 		this.isReadOnly = false;
 		// Path of the loaded graph
 		this.graphPath = '';
@@ -334,6 +338,26 @@ class Graph {
 	getDSLFieldNameList() {
 		return( Array.from( this.dslNodeFieldNameList ) );
 	}
+	getNextGraphServerURL( extension ) {
+		const idx = this.graphServer.length;
+		return( `graph://graphServer/${idx}.${extension}` );
+	}
+	openFile( url ) {
+		let result = '';
+		if( nodeData.fileURL.startsWith( 'graph://' ) ) {
+			const preIdx = 'graph://graphServer/'.length;
+			const postIdx = nodeData.fileURL.indexOf( '.' );
+			const idx = nodeData.fileURL.substring( preIdx, postIdx );
+			const value = this.graphServer[idx];
+			if( value ) {
+				result = value;
+			}
+		}
+		return( result );
+	}
+	saveFile( url, source, sourceEncoding ) {
+		
+	}
 	isDataValidField( fieldName ) {
 		return( this.dslNodeFieldNameList.has( fieldName ) );
 	}
@@ -519,6 +543,7 @@ class Graph {
 				position: [diagramPosition.x, diagramPosition.y],
 				isGridOn: this.diagram.grid.visible,
 			},
+			graphServer: this.graphServer,
 			model: jsonModel,
 		};
 		const source = JSON.stringify( sourceInfo );
@@ -533,6 +558,7 @@ class Graph {
 			objModel = {
 				view: null,
 				dslNameList: null,
+				graphServer: null,
 				model: null,
 			};
 		}
@@ -554,6 +580,11 @@ class Graph {
 				if( objModel.view.isGridOn != undefined ) {
 					this.diagram.grid.visible = objModel.view.isGridOn;
 				}
+			}
+			if( objModel.graphServer ) {
+			  this.graphServer = objModel.graphServer;
+			} else {
+				this.graphServer = [];
 			}
 			// Set graphData (defined in ServerManager.js)
 			graphData = {};

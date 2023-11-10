@@ -492,6 +492,27 @@ class GraphEditor extends EditorBase {
       }
     }
   }
+  _verifyFileURL2( nodeData ) {
+    if( !nodeData.isLink && ( nodeData.isDir || nodeData.isFile ) ) {
+      if( ( nodeData.fileURL != undefined ) {
+        if( ( nodeData.fileURL == '' ) || ( nodeData.fileURL == '/fileServer' ) ) {
+          const ext = getExtByFileType( nodeData.fileType );
+          const url = getNewFileServerURL( ext );
+          nodeData.fileURL = url;
+          // NOTE: the setNodeDataField trigger the editorChange event
+          //this.editor.setNodeDataField( nodeData.key, 'fileURL', url );
+          setNodeDataField( nodeData.key, 'fileURL', url );
+        }
+      } else if( nodeData.fileURL == 'graph://graphServer' ) {
+          const ext = getExtByFileType( nodeData.fileType );
+          const url = getNewGraphServerURL( ext );
+          nodeData.fileURL = url;
+          // NOTE: the setNodeDataField trigger the editorChange event
+          //this.editor.setNodeDataField( nodeData.key, 'fileURL', url );
+          setNodeDataField( nodeData.key, 'fileURL', url );
+      }
+    }
+  }
   processNodeWithIncludeScripts( action ) {
     // Load nodes with data like:
     //
@@ -651,7 +672,7 @@ class TextEditor extends EditorBase {
     this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${this.fileType}]`;
     this.setTitle( this.title );
     // Update pin
-    if( nodeData.fileURL ) {
+    if( nodeData.fileURL && !nodeData.fileURL.startsWith( 'graph://' ) ) {
       m.e.showWindowPin( this.id, 'visible' );
     }
     // Set editor content
