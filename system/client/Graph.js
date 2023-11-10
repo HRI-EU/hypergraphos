@@ -356,7 +356,13 @@ class Graph {
 		return( result );
 	}
 	saveFile( url, source, sourceEncoding ) {
-		
+		if( url.startsWith( 'graph://' ) ) {
+			const preIdx = 'graph://graphServer/'.length;
+			const postIdx = nodeData.fileURL.indexOf( '.' );
+			const idx = nodeData.fileURL.substring( preIdx, postIdx );
+			// TODO: check for the sourceEncoding
+			this.graphServer[idx] = source;
+		}
 	}
 	isDataValidField( fieldName ) {
 		return( this.dslNodeFieldNameList.has( fieldName ) );
