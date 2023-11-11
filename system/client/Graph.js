@@ -351,11 +351,13 @@ class Graph {
 			// Get graph file index
 			const preIdx = this.graphServerURLPrefix.length;
 			const postIdx = url.indexOf( '.' );
-			const idx = url.substring( preIdx, postIdx );
-			// Get graph file content
-			const value = this.graphServer[idx];
-			if( value ) {
-				result = value;
+			if( postIdx >= 0 ) {
+				const idx = url.substring( preIdx, postIdx );
+				// Get graph file content
+				const value = this.graphServer[idx];
+				if( value ) {
+					result = value;
+				}
 			}
 		}
 		return( result );
@@ -365,9 +367,12 @@ class Graph {
 			// Get graph file index
 			const preIdx = this.graphServerURLPrefix.length;
 			const postIdx = url.indexOf( '.' );
-			const idx = url.substring( preIdx, postIdx );
-			// TODO: check for the sourceEncoding
-			this.graphServer[idx] = source;
+			if( postIdx >= 0 ) {
+				const idx = url.substring( preIdx, postIdx );
+				// TODO: check for the sourceEncoding
+				this.graphServer[idx] = source;
+				this.em.call.onGraphChanged();
+			}
 		}
 	}
 	isDataValidField( fieldName ) {
@@ -1053,6 +1058,7 @@ class Graph {
 				}
 				this.diagram.model.setDataProperty( data, field, value );
 				this.diagram.commitTransaction( 'Set Data Propery' );
+				this._callOnNodeGraphSelectionChanged();
 			}
 			this.em.call.onGraphChanged();
 		}
