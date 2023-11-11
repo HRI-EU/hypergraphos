@@ -340,11 +340,13 @@ class Graph {
 	}
 	getNextGraphServerURL( extension ) {
 		const idx = this.graphServer.length;
+		// Allocate the new graph file
+		this.graphServer[idx] = '';
 		return( `graph://graphServer/${idx}.${extension}` );
 	}
 	openFile( url ) {
 		let result = '';
-		if( nodeData.fileURL.startsWith( 'graph://' ) ) {
+		if( nodeData.fileURL.startsWith( 'graph://graphServer/' ) ) {
 			const preIdx = 'graph://graphServer/'.length;
 			const postIdx = nodeData.fileURL.indexOf( '.' );
 			const idx = nodeData.fileURL.substring( preIdx, postIdx );
@@ -356,7 +358,7 @@ class Graph {
 		return( result );
 	}
 	saveFile( url, source, sourceEncoding ) {
-		if( url.startsWith( 'graph://' ) ) {
+		if( url.startsWith( 'graph://graphServer/' ) ) {
 			const preIdx = 'graph://graphServer/'.length;
 			const postIdx = nodeData.fileURL.indexOf( '.' );
 			const idx = nodeData.fileURL.substring( preIdx, postIdx );
