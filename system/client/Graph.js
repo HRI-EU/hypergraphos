@@ -27,6 +27,7 @@ class Graph {
 
 		// Property saved in graph source json file
 		this.dslNameList = [];
+		this.graphServerURLPrefix = 'graph://graphServer/';
 		this.graphServer = [];
 
 		this.isReadOnly = false;
@@ -342,14 +343,16 @@ class Graph {
 		const idx = this.graphServer.length;
 		// Allocate the new graph file
 		this.graphServer[idx] = '';
-		return( `graph://graphServer/${idx}.${extension}` );
+		return( `${this.graphServerURLPrefix}${idx}.${extension}` );
 	}
 	openFile( url ) {
 		let result = '';
-		if( nodeData.fileURL.startsWith( 'graph://graphServer/' ) ) {
-			const preIdx = 'graph://graphServer/'.length;
-			const postIdx = nodeData.fileURL.indexOf( '.' );
-			const idx = nodeData.fileURL.substring( preIdx, postIdx );
+		if( url.startsWith( this.graphServerURLPrefix ) ) {
+			// Get graph file index
+			const preIdx = this.graphServerURLPrefix.length;
+			const postIdx = url.indexOf( '.' );
+			const idx = url.substring( preIdx, postIdx );
+			// Get graph file content
 			const value = this.graphServer[idx];
 			if( value ) {
 				result = value;
@@ -358,10 +361,11 @@ class Graph {
 		return( result );
 	}
 	saveFile( url, source, sourceEncoding ) {
-		if( url.startsWith( 'graph://graphServer/' ) ) {
-			const preIdx = 'graph://graphServer/'.length;
-			const postIdx = nodeData.fileURL.indexOf( '.' );
-			const idx = nodeData.fileURL.substring( preIdx, postIdx );
+		if( url.startsWith( this.graphServerURLPrefix ) ) {
+			// Get graph file index
+			const preIdx = this.graphServerURLPrefix.length;
+			const postIdx = url.indexOf( '.' );
+			const idx = url.substring( preIdx, postIdx );
 			// TODO: check for the sourceEncoding
 			this.graphServer[idx] = source;
 		}
