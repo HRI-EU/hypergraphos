@@ -494,7 +494,7 @@ class GraphEditor extends EditorBase {
   }
   _verifyFileURL2( nodeData ) {
     if( !nodeData.isLink && ( nodeData.isDir || nodeData.isFile ) ) {
-      if( ( nodeData.fileURL != undefined ) {
+      if( nodeData.fileURL != undefined ) {
         if( ( nodeData.fileURL == '' ) || ( nodeData.fileURL == '/fileServer' ) ) {
           const ext = getExtByFileType( nodeData.fileType );
           const url = getNewFileServerURL( ext );
