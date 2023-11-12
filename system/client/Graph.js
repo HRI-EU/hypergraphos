@@ -190,7 +190,7 @@ class Graph {
 					{ layout: 'horizontal', itemList: [
 						{ fontIcon: 'action-undo', hint: 'Undo (CTRL-Z)',     if: (o)=> o.d.cmd.canUndo(),
 																																	do: (o)=> o.d.cmd.undo() },
-						{ fontIcon: 'action-redo', hint: 'Undo (CTRL-Z)',     if: (o)=> o.d.cmd.canRedo(),
+						{ fontIcon: 'action-redo', hint: 'Redo (CTRL-SHIFT-Z)',     if: (o)=> o.d.cmd.canRedo(),
 																																	do: (o)=> o.d.cmd.redo() },
 					]},
 				]},
