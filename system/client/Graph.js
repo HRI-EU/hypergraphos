@@ -129,6 +129,7 @@ class Graph {
 																											} else {
 																												this.setToBookmarkView( 4 );
 																											} }},
+						{ separator: '-' },
 						{ label: 'Show Prev View',		do: this.setCurrentViewToPreviousView.bind(this) },
 					]},
 					{ separator: '-',               if: (o)=> { // NOTE: if we define a location, paste do not showup in the popup menu
