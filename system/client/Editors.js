@@ -503,7 +503,7 @@ class GraphEditor extends EditorBase {
           // NOTE: the setNodeDataField trigger the editorChange event
           //this.editor.setNodeDataField( nodeData.key, 'fileURL', url );
           setNodeDataField( nodeData.key, 'fileURL', url );
-        } else if( nodeData.fileURL == 'graph://graphServer/' ) {
+        } else if( nodeData.fileURL == 'graph://fileServer/' ) {
           // Initialize graphServer URL if is not complete
           const ext = getExtByFileType( nodeData.fileType );
           const url = getNewGraphServerURL( ext );

@@ -174,12 +174,12 @@ function getNodeData( key, isCopy ) {
     if( linkedData.fileURL != undefined ) {
       // Update both the copy and the node
       result.fileURL = linkedData.fileURL;
-      //DONT TO THAT!!!: g.setNodeDataField( key, 'fileURL', result.fileURL );
+      //DONT DO THAT!!!: g.setNodeDataField( key, 'fileURL', result.fileURL );
     }
     if( linkedData.fileContent != undefined ) {
       // Update both the copy and the node
       result.fileContent = linkedData.fileContent;
-      //DONT TO THAT!!!: g.setNodeDataField( key, 'fileContent', result.fileContent );
+      //DONT DO THAT!!!: g.setNodeDataField( key, 'fileContent', result.fileContent );
     }
   } else {
     result = g.getNodeData( key, isCopy );
@@ -211,6 +211,22 @@ function getNodeDataField( key, field, defaultValue ) {
     result = data[field];
   }
   return( result );
+}
+function getNodeDataFileContent( keyOrData, onFileContent ) {
+  let data = null;
+  if( typeof( keyOrData ) == 'object' ) {
+    data = keyOrData;
+  } else {
+    data = getNodeData( keyOrData );
+  }
+
+  if( data ) {
+    loadNodeContent( data, onFileContent );
+  } else {
+    if( onFileContent ) {
+      onFileContent( '' );
+    }
+  }
 }
 function getLinkData( key, isCopy ) {
   const g = getMainGraph();

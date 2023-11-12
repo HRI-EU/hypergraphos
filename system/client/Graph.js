@@ -27,7 +27,7 @@ class Graph {
 
 		// Property saved in graph source json file
 		this.dslNameList = [];
-		this.graphServerURLPrefix = 'graph://graphServer/';
+		this.graphServerURLPrefix = 'graph://fileServer/';
 		this.graphServer = [];
 
 		this.isReadOnly = false;
@@ -1463,6 +1463,9 @@ class Graph {
 		} else {
 			diagram = $( go.Diagram ); // Create batch diagram
 		}
+
+		// Store Graph pointer to retrieve this class
+		diagram['__graphThis'] = graphThis;
 
 		diagram.clickCreatingTool = new InGroupClickCreatingTool();
 		// Avoid that the diagram comes slowly from the bottom in an animation
