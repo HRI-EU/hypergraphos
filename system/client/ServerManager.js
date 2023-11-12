@@ -121,9 +121,9 @@ function getExtByFileType( fileType ) {
   }
   return( result );
 }
-function getNewGraphServerURL( extension ) {
+function getNewGraphFileServerURL( extension ) {
   const g = getMainGraph();
-  const url = g.getNextGraphServerURL( extension );
+  const url = g.getNextGraphFileServerURL( extension );
   return( url );
 }
 function getNewFileServerURL( extension ) {

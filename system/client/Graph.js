@@ -27,8 +27,8 @@ class Graph {
 
 		// Property saved in graph source json file
 		this.dslNameList = [];
-		this.graphServerURLPrefix = 'graph://fileServer/';
-		this.graphServer = [];
+		this.graphFileServerURLPrefix = 'graph://fileServer/';
+		this.graphFileServer = [];
 
 		this.isReadOnly = false;
 		// Path of the loaded graph
@@ -340,22 +340,22 @@ class Graph {
 	getDSLFieldNameList() {
 		return( Array.from( this.dslNodeFieldNameList ) );
 	}
-	getNextGraphServerURL( extension ) {
-		const idx = this.graphServer.length;
+	getNextGraphFileServerURL( extension ) {
+		const idx = this.graphFileServer.length;
 		// Allocate the new graph file
-		this.graphServer[idx] = '';
-		return( `${this.graphServerURLPrefix}${idx}.${extension}` );
+		this.graphFileServer[idx] = '';
+		return( `${this.graphFileServerURLPrefix}${idx}.${extension}` );
 	}
 	openFile( url ) {
 		let result = '';
-		if( url.startsWith( this.graphServerURLPrefix ) ) {
+		if( url.startsWith( this.graphFileServerURLPrefix ) ) {
 			// Get graph file index
-			const preIdx = this.graphServerURLPrefix.length;
+			const preIdx = this.graphFileServerURLPrefix.length;
 			const postIdx = url.indexOf( '.' );
 			if( postIdx >= 0 ) {
 				const idx = url.substring( preIdx, postIdx );
 				// Get graph file content
-				const value = this.graphServer[idx];
+				const value = this.graphFileServer[idx];
 				if( value ) {
 					result = value;
 				}
@@ -364,14 +364,14 @@ class Graph {
 		return( result );
 	}
 	saveFile( url, source, sourceEncoding ) {
-		if( url.startsWith( this.graphServerURLPrefix ) ) {
+		if( url.startsWith( this.graphFileServerURLPrefix ) ) {
 			// Get graph file index
-			const preIdx = this.graphServerURLPrefix.length;
+			const preIdx = this.graphFileServerURLPrefix.length;
 			const postIdx = url.indexOf( '.' );
 			if( postIdx >= 0 ) {
 				const idx = url.substring( preIdx, postIdx );
 				// TODO: check for the sourceEncoding
-				this.graphServer[idx] = source;
+				this.graphFileServer[idx] = source;
 				this.em.call.onGraphChanged();
 			}
 		}
@@ -561,7 +561,7 @@ class Graph {
 				position: [diagramPosition.x, diagramPosition.y],
 				isGridOn: this.diagram.grid.visible,
 			},
-			graphServer: this.graphServer,
+			graphFileServer: this.graphFileServer,
 			model: jsonModel,
 		};
 		const source = JSON.stringify( sourceInfo );
@@ -576,7 +576,7 @@ class Graph {
 			objModel = {
 				view: null,
 				dslNameList: null,
-				graphServer: null,
+				graphFileServer: null,
 				model: null,
 			};
 		}
@@ -599,10 +599,10 @@ class Graph {
 					this.diagram.grid.visible = objModel.view.isGridOn;
 				}
 			}
-			if( objModel.graphServer ) {
-			  this.graphServer = objModel.graphServer;
+			if( objModel.graphFileServer ) {
+			  this.graphFileServer = objModel.graphFileServer;
 			} else {
-				this.graphServer = [];
+				this.graphFileServer = [];
 			}
 			// Set graphData (defined in ServerManager.js)
 			graphData = {};
