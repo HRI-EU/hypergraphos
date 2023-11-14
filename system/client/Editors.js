@@ -196,8 +196,8 @@ class GraphEditor extends EditorBase {
             const oldURL = newNodeData.fileURL;
 
             // Update the url
-            // Clear fileURL
-            newNodeData.fileURL = '';
+            // Reset fileURL ==> a new URL will be created
+            newNodeData.fileURL = this.editor.resetFileURL( oldURL );
             // Set a new fileURL
             this._verifyFileURL( newNodeData );
 

@@ -340,6 +340,13 @@ class Graph {
 	getDSLFieldNameList() {
 		return( Array.from( this.dslNodeFieldNameList ) );
 	}
+	resetFileURL( url ) {
+		if( url.startsWith( this.graphFileServerURLPrefix ) ) {
+			return( this.graphFileServerURLPrefix );
+		} else {
+			return( '' );
+		}
+	}
 	getNextGraphFileServerURL( extension ) {
 		const idx = this.graphFileServer.length;
 		// Allocate the new graph file
