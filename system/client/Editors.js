@@ -198,18 +198,23 @@ class GraphEditor extends EditorBase {
             // Update the url
             // Reset fileURL ==> a new URL will be created
             newNodeData.fileURL = this.editor.resetFileURL( oldURL );
-            // Set a new fileURL
-            this._verifyFileURL( newNodeData );
 
+            if( newNodeData.fileURL.startsWith( 'graph://' ) ) {
+              const newURL = this.editor.cloneGraphFile( oldURL );
+              newNodeData.fileURL = newURL;
+            } else {
+              // Set a new fileURL
+              this._verifyFileURL( newNodeData );
 
-            // Clone opened windows
-            const newURL = newNodeData.fileURL;
-            m.e.cloneGraphWindow( oldURL, newURL );
-
-            // Temporarly save the content
-            newNodeData.fileContent = source;
-            // Save node content to the server
-            saveNodeContent( newNodeData );
+              // Clone opened windows
+              const newURL = newNodeData.fileURL;
+              m.e.cloneGraphWindow( oldURL, newURL );
+  
+              // Temporarly save the content
+              newNodeData.fileContent = source;
+              // Save node content to the server
+              saveNodeContent( newNodeData );
+            }
           };
 
           // Load node data content

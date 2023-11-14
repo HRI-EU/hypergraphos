@@ -347,40 +347,57 @@ class Graph {
 			return( '' );
 		}
 	}
+	_getGraphFileURLIndex( url ) {
+		let result = -1;
+		if( url.startsWith( this.graphFileServerURLPrefix ) ) {
+			// Get graph file index
+			const preIdx = this.graphFileServerURLPrefix.length;
+			const postIdx = url.indexOf( '.' );
+			if( postIdx >= 0 ) {
+				result = url.substring( preIdx, postIdx );
+			}
+		}
+		return( result );
+	}
 	getNextGraphFileServerURL( extension ) {
+		extension = extension || 'txt';
 		const idx = this.graphFileServer.length;
 		// Allocate the new graph file
 		this.graphFileServer[idx] = '';
 		return( `${this.graphFileServerURLPrefix}${idx}.${extension}` );
 	}
+	cloneGraphFile( url ) {
+		let newURL = '';
+		if( url.startsWith( this.graphFileServerURLPrefix ) ) {
+			const source = this.openFile( url );
+			const extIdx = url.lastIndexOf( '.' );
+			let extension = 'txt';
+			if( extIdx > 0 ) {
+				extension = url.substring( extIdx+1 );
+			}
+			newURL = this.getNextGraphFileServerURL( extension );
+			this.saveFile( newURL, source );
+		}
+		return( newURL );
+	}
 	openFile( url ) {
 		let result = '';
-		if( url.startsWith( this.graphFileServerURLPrefix ) ) {
-			// Get graph file index
-			const preIdx = this.graphFileServerURLPrefix.length;
-			const postIdx = url.indexOf( '.' );
-			if( postIdx >= 0 ) {
-				const idx = url.substring( preIdx, postIdx );
-				// Get graph file content
-				const value = this.graphFileServer[idx];
-				if( value ) {
-					result = value;
-				}
+		const idx = _getGraphFileURLIndex( url );
+		if( idx >= 0 ) {
+			// Get graph file content
+			const value = this.graphFileServer[idx];
+			if( value ) {
+				result = value;
 			}
 		}
 		return( result );
 	}
 	saveFile( url, source, sourceEncoding ) {
-		if( url.startsWith( this.graphFileServerURLPrefix ) ) {
-			// Get graph file index
-			const preIdx = this.graphFileServerURLPrefix.length;
-			const postIdx = url.indexOf( '.' );
-			if( postIdx >= 0 ) {
-				const idx = url.substring( preIdx, postIdx );
-				// TODO: check for the sourceEncoding
-				this.graphFileServer[idx] = source;
-				this.em.call.onGraphChanged();
-			}
+		const idx = _getGraphFileURLIndex( url );
+		if( idx >= 0 ) {
+			// TODO: check for the sourceEncoding
+			this.graphFileServer[idx] = source;
+			this.em.call.onGraphChanged();
 		}
 	}
 	isDataValidField( fieldName ) {
