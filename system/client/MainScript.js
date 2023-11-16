@@ -133,34 +133,52 @@ function parseRefValue( value ) {
   let result = { isRef: false, value };
   // Check if value is like:
   // - 'label@32' => reference to field label of node with key 32
+  // - 'out@32' => reference to output named 'out' of node with key 32
+  // - 'in@32' => reference to input named 'in' of node with key 32
+  // - 'prop@32' => reference to property named 'prop' of node with key 32
+  // - 'prop@self' => reference to property named 'prop' of the node itself
+  // - 'label@group' => reference to label field of the group containing the node
   // - 'dateTime@system' => reference to system call timeDate()
   // - 'getCounter@function' => reference to a function 'getCounter()'
   const nameMatch = value.match( /(\w+)@([\d\w]+)/ );
   if( nameMatch ) {
-    const field = nameMatch[1];
-    const obj = nameMatch[2];
-    if( obj == 'system' ) {
-      const sysValue = m.system[field];
+    const name = nameMatch[1];
+    const source = nameMatch[2];
+    if( source == 'system' ) {
+      const sysValue = m.system[name];
       if( sysValue ) {
         result.isRef = true;
-        result['field'] = field;
+        result.name = name;
         result.value = sysValue();
       }
-    } else if( obj == 'function' ) {
-      const func = window[field];
+    } else if( source == 'function' ) {
+      const func = window[name];
       if( func ) {
         result.isRef = true;
-        result['field'] = field;
+        result.name = name;
         result.value = func();
       }
-    } else if( parseInt( obj ) == obj ) {  // If it is a number (key)
-      const nodeData = getNodeData( obj );
+    } else if( source == 'self' ) {
+      const func = window[name];
+      if( func ) {
+        result.isRef = true;
+        result.name = name;
+        result.nodeData = source; // 'self'
+      }
+    } else if( source == 'group' ) {
+      const func = window[name];
+      if( func ) {
+        result.isRef = true;
+        result.name = name;
+        result.nodeData = source; // 'group'
+      }
+    } else if( parseInt( source ) == source ) {  // If it is a number (key)
+      const nodeData = getNodeData( source );
       if( nodeData ) {
         result.isRef = true;
-        result['key'] = obj;
-        result['field'] = field;
-        result['nodeData'] = nodeData;
-        result.value = nodeData[field];
+        result.name = name;
+        result.nodeData = nodeData;
+        result.value = nodeData[name];
       }
     }
   }
