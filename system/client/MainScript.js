@@ -129,7 +129,9 @@ function getMainGraphURL() {
   const g = getMainGraph();
   return( g.graphPath );
 }
-function parseRefValue( value ) {
+function parseRefValue( nodeData, value ) {
+  // TODO: copy this function in ModelExplorer too
+  // so that it can be used server side
   let result = { isRef: false, value };
   // Check if value is like:
   // - 'label@32' => reference to field label of node with key 32
@@ -140,45 +142,63 @@ function parseRefValue( value ) {
   // - 'label@group' => reference to label field of the group containing the node
   // - 'dateTime@system' => reference to system call timeDate()
   // - 'getCounter@function' => reference to a function 'getCounter()'
-  const nameMatch = value.match( /(\w+)@([\d\w]+)/ );
-  if( nameMatch ) {
-    const name = nameMatch[1];
-    const source = nameMatch[2];
-    if( source == 'system' ) {
-      const sysValue = m.system[name];
-      if( sysValue ) {
-        result.isRef = true;
-        result.name = name;
-        result.value = sysValue();
-      }
-    } else if( source == 'function' ) {
-      const func = window[name];
-      if( func ) {
-        result.isRef = true;
-        result.name = name;
-        result.value = func();
-      }
-    } else if( source == 'self' ) {
-      const func = window[name];
-      if( func ) {
-        result.isRef = true;
-        result.name = name;
-        result.nodeData = source; // 'self'
-      }
-    } else if( source == 'group' ) {
-      const func = window[name];
-      if( func ) {
-        result.isRef = true;
-        result.name = name;
-        result.nodeData = source; // 'group'
-      }
-    } else if( parseInt( source ) == source ) {  // If it is a number (key)
-      const nodeData = getNodeData( source );
-      if( nodeData ) {
-        result.isRef = true;
-        result.name = name;
+  if( typeof( value ) == 'string' ) {
+    const nameMatch = value.match( /(\w+)@([\d\w]+)/ );
+    if( nameMatch ) {
+      result.name = nameMatch[1];
+      result.source = nameMatch[2];
+      if( result.source == 'system' ) {
+        const sysValue = m.system[result.name];
+        if( sysValue ) {
+          result.value = sysValue();
+        } else {
+          result.isRef = true;
+        }
+      } else if( result.source == 'function' ) {
+        const func = window[result.name];
+        if( func ) {
+          result.value = func();
+        } else {
+          result.isRef = true;
+        }
+      } else if( result.source == 'self' ) {
         result.nodeData = nodeData;
-        result.value = nodeData[name];
+        const v = nodeData[result.name];
+        if( v != undefined ) {
+          result.value = v;
+        } else {
+          result.isRef = true;
+        }
+      } else if( result.source == 'group' ) {
+        const gKey = nodeData.group;
+        if( gKey != undefined ) {
+          const gNodeData = getNodeData( gKey );
+          result.nodeData = gNodeData;
+          if( gNodeData ) {
+            const v = nodeData[result.name]
+            if( v != undefined ) {
+              result.value = v;
+            } else {
+              result.isRef = true;
+            }
+          } else {
+            result.isRef = true;
+          }
+        } else {
+          result.isRef = true;
+        }
+      } else if( parseInt( result.source ) == result.source ) {  // If it is a number (key)
+        result.nodeData = getNodeData( result.source );
+        if( ['in','out','rows'].includes( result.name ) ) {
+          result.isRef = true;
+        } else {
+          const v = result.nodeData[result.name];
+          if( v != undefined ) {
+            result.value = v;
+          } else {
+            result.isRef = true;
+          }
+        }
       }
     }
   }

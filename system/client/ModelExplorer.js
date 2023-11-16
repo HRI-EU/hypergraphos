@@ -57,20 +57,7 @@ class ModelExplorer {
     }
 
     // Convert property to a data type
-    switch( propertyValue ) {
-      case 'true':
-        propertyValue = true;
-        break;
-      case 'false':
-        propertyValue = false;
-        break;
-      default:
-        // Check if the value is a number
-        if( !isNaN( propertyValue ) ) {
-          propertyValue = parseFloat( propertyValue );
-        }
-        break;
-    }
+    propertyValue = this._evalValue( propertyValue );
     // Return property value
     return( propertyValue );
   }
@@ -351,6 +338,23 @@ class ModelExplorer {
   //------------------------
   // Private Functions
   //------------------------
+  _evalValue( value ) {
+    switch( value ) {
+      case 'true':
+        value = true;
+        break;
+      case 'false':
+        value = false;
+        break;
+      default:
+        // Check if the value is a number
+        if( !isNaN( value ) ) {
+          value = parseFloat( value );
+        }
+        break;
+    }
+    return( value );
+  }
   _getId( id ) {
     let result = id;
     if( !id ) {

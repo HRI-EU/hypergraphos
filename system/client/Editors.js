@@ -562,8 +562,8 @@ class GraphEditor extends EditorBase {
             // Set Date field with date if value is 'date@system'
             const dateInfo = nodeData.rows.find( (e)=> e.name == 'Date' );
             if( dateInfo ) {
-              const pValue = parseRefValue( dateInfo.value );
-              if( pValue.isRef ) {
+              const pValue = parseRefValue( nodeData, dateInfo.value );
+              if( !pValue.isRef ) {
                 setNodeDataField( dateInfo, 'value', pValue.value );
               }
             }
@@ -571,8 +571,8 @@ class GraphEditor extends EditorBase {
             // Set Path field with date if value is 'date@system'
             const pathInfo = nodeData.rows.find( (e)=> e.name == 'Path' );
             if( pathInfo ) {
-              const pValue = parseRefValue( pathInfo.value );
-              if( pValue.isRef ) {
+              const pValue = parseRefValue( nodeData, pathInfo.value );
+              if( !pValue.isRef ) {
                 setNodeDataField( pathInfo, 'value', pValue.value );
               }
             }
@@ -582,8 +582,8 @@ class GraphEditor extends EditorBase {
             if( nameInfo ) {
               // Get graph name
               const graphName = ( this.nodeData.label? this.nodeData.label: this.nodeData.key );
-              const pValue = parseRefValue( nameInfo.value );
-              if( pValue.isRef && ( typeof( pValue.nodeData ) == 'object' ) ) {
+              const pValue = parseRefValue( nodeData, nameInfo.value );
+              if( !pValue.isRef && ( typeof( pValue.nodeData ) == 'object' ) ) {
                 setNodeDataField( pValue.nodeData.key, pValue.name, graphName );
               } else {
                 // Set only the graph name in 'Name' property in rows
