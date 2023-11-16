@@ -130,9 +130,6 @@ function getMainGraphURL() {
   return( g.graphPath );
 }
 function parseRefValue( nodeData, value ) {
-  // TODO: copy this function in ModelExplorer too
-  // so that it can be used server side
-  let result = { isRef: false, value };
   // Check if value is like:
   // - 'label@32' => reference to field label of node with key 32
   // - 'out@32' => reference to output named 'out' of node with key 32
@@ -142,62 +139,58 @@ function parseRefValue( nodeData, value ) {
   // - 'label@group' => reference to label field of the group containing the node
   // - 'dateTime@system' => reference to system call timeDate()
   // - 'getCounter@function' => reference to a function 'getCounter()'
+  
+  let result = { isRef: false, value };
+
   if( typeof( value ) == 'string' ) {
     const nameMatch = value.match( /(\w+)@([\d\w]+)/ );
     if( nameMatch ) {
       result.name = nameMatch[1];
       result.source = nameMatch[2];
-      if( result.source == 'system' ) {
-        const sysValue = m.system[result.name];
-        if( sysValue ) {
-          result.value = sysValue();
-        } else {
-          result.isRef = true;
-        }
-      } else if( result.source == 'function' ) {
-        const func = window[result.name];
-        if( func ) {
-          result.value = func();
-        } else {
-          result.isRef = true;
-        }
-      } else if( result.source == 'self' ) {
+      if( result.source == 'self' ) {
+        result.source = nodeData.key;
         result.nodeData = nodeData;
-        const v = nodeData[result.name];
-        if( v != undefined ) {
-          result.value = v;
-        } else {
-          result.isRef = true;
-        }
+        result.isRef = true;
       } else if( result.source == 'group' ) {
         const gKey = nodeData.group;
         if( gKey != undefined ) {
           const gNodeData = getNodeData( gKey );
           result.nodeData = gNodeData;
-          if( gNodeData ) {
-            const v = nodeData[result.name]
-            if( v != undefined ) {
-              result.value = v;
-            } else {
-              result.isRef = true;
-            }
-          } else {
-            result.isRef = true;
-          }
-        } else {
+          result.source = nodeData.key;
           result.isRef = true;
         }
       } else if( parseInt( result.source ) == result.source ) {  // If it is a number (key)
         result.nodeData = getNodeData( result.source );
-        if( ['in','out','rows'].includes( result.name ) ) {
-          result.isRef = true;
-        } else {
-          const v = result.nodeData[result.name];
-          if( v != undefined ) {
-            result.value = v;
-          } else {
-            result.isRef = true;
-          }
+        result.isRef = true;
+      }
+    }
+  }
+  return( result );
+}
+function getRefValue( nodeData, value ) {
+  // TODO: copy this function in ModelExplorer too
+  // so that it can be used server side
+  let result = parseRefValue( nodeData, value );
+  // Check if is a reference
+  if( result.isRef ) {
+    if( result.source == 'system' ) {
+      const sysValue = m.system[result.name];
+      if( sysValue ) {
+        result.value = sysValue();
+        result.isRef = false;
+      }
+    } else if( result.source == 'function' ) {
+      const func = window[result.name];
+      if( func ) {
+        result.value = func();
+        result.isRef = false;
+      }
+    } else if( parseInt( result.source ) == result.source ) {  // If it is a number (key)
+      if( !['in','out','rows'].includes( result.name ) ) {
+        const v = result.nodeData[result.name];
+        if( v != undefined ) {
+          result.isRef = false;
+          result.value = v;
         }
       }
     }
