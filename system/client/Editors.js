@@ -584,8 +584,7 @@ class GraphEditor extends EditorBase {
               const graphName = ( this.nodeData.label? this.nodeData.label: this.nodeData.key );
               const pValue = parseRefValue( nameInfo.value );
               if( pValue.isRef && ( typeof( pValue.nodeData ) == 'object' ) ) {
-                  setNodeDataField( pValue.nodeData.key, pValue.name, graphName );
-                }
+                setNodeDataField( pValue.nodeData.key, pValue.name, graphName );
               } else {
                 // Set only the graph name in 'Name' property in rows
                 setNodeDataField( nameInfo, 'value', graphName );
