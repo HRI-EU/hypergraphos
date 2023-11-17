@@ -129,6 +129,7 @@ function getMainGraphURL() {
   const g = getMainGraph();
   return( g.graphPath );
 }
+// TODO: parseRefValue should be implemented in ModelExplorer
 function parseRefValue( nodeData, value ) {
   // Check if value is like:
   // - 'label@32' => reference to field label of node with key 32
