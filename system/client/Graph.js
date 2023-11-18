@@ -382,7 +382,7 @@ class Graph {
 	}
 	openFile( url ) {
 		let result = '';
-		const idx = _getGraphFileURLIndex( url );
+		const idx = this._getGraphFileURLIndex( url );
 		if( idx >= 0 ) {
 			// Get graph file content
 			const value = this.graphFileServer[idx];
@@ -393,7 +393,7 @@ class Graph {
 		return( result );
 	}
 	saveFile( url, source, sourceEncoding ) {
-		const idx = _getGraphFileURLIndex( url );
+		const idx = this._getGraphFileURLIndex( url );
 		if( idx >= 0 ) {
 			// TODO: check for the sourceEncoding
 			this.graphFileServer[idx] = source;
