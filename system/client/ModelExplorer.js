@@ -18,6 +18,9 @@ Date: 10.07.2020
   me.setJSONModel( 'test', j );
 */
 
+// TODO: add here the possibility to set graph://fileServer
+// so that I can access such content from the ModelExplore
+// when I am executed server side
 class ModelExplorer {
   constructor( indexNodeFieldNameList, indedLinkFieldNameList ) {
     this.model = {};
