@@ -558,9 +558,9 @@ class GraphEditor extends EditorBase {
         // Get node data
         const nodeData = it.value.data;
         if( nodeData.category == 'Hierarchy_GraphInfo' ) {
-          if( nodeData.rows ) {
+          if( nodeData.props_ ) {
             // Set Date field with date if value is 'date@system'
-            const dateInfo = nodeData.rows.find( (e)=> e.name == 'Date' );
+            const dateInfo = nodeData.props_.find( (e)=> e.name == 'Date' );
             if( dateInfo ) {
               const pValue = getRefValue( nodeData, dateInfo.value );
               if( !pValue.isRef ) {
@@ -569,7 +569,7 @@ class GraphEditor extends EditorBase {
             }
 
             // Set Path field with date if value is 'date@system'
-            const pathInfo = nodeData.rows.find( (e)=> e.name == 'Path' );
+            const pathInfo = nodeData.props_.find( (e)=> e.name == 'Path' );
             if( pathInfo ) {
               const pValue = getRefValue( nodeData, pathInfo.value );
               if( !pValue.isRef ) {
@@ -578,7 +578,7 @@ class GraphEditor extends EditorBase {
             }
 
             // Set Name field with 'graph name'
-            const nameInfo = nodeData.rows.find( (e)=> e.name == 'Name' );
+            const nameInfo = nodeData.props_.find( (e)=> e.name == 'Name' );
             if( nameInfo ) {
               // Get graph name
               const graphName = ( this.nodeData.label? this.nodeData.label: this.nodeData.key );
@@ -586,13 +586,13 @@ class GraphEditor extends EditorBase {
               if( !pValue.isRef && ( typeof( pValue.nodeData ) == 'object' ) ) {
                 setNodeDataField( pValue.nodeData.key, pValue.name, graphName );
               } else {
-                // Set only the graph name in 'Name' property in rows
+                // Set only the graph name in 'Name' property in props_
                 setNodeDataField( nameInfo, 'value', graphName );
               }
             }
 
             // Check Author for default read access
-            const authorInfo = nodeData.rows.find( (e)=> e.name == 'Authors' );
+            const authorInfo = nodeData.props_.find( (e)=> e.name == 'Authors' );
             const authorList = jsyaml.load( authorInfo.value );
             if( typeof( authorList ) == 'string' ) {
               isGraphReadOnly = ( authorList != getUserName() );

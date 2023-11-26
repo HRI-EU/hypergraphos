@@ -185,7 +185,7 @@ function getRefValue( nodeData, value ) {
         result.isRef = false;
       }
     } else if( parseInt( result.source ) == result.source ) {  // If it is a number (key)
-      if( !['in','out','rows'].includes( result.name ) ) {
+      if( !['in_','out_','props_'].includes( result.name ) ) {
         const v = result.nodeData[result.name];
         if( v != undefined ) {
           result.isRef = false;
