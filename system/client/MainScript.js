@@ -146,23 +146,21 @@ function parseRefValue( nodeData, value ) {
   if( typeof( value ) == 'string' ) {
     const nameMatch = value.match( /(\w+)@([\d\w]+)/ );
     if( nameMatch ) {
+      result.isRef = true;
       result.name = nameMatch[1];
       result.source = nameMatch[2];
       if( result.source == 'self' ) {
         result.source = nodeData.key;
         result.nodeData = nodeData;
-        result.isRef = true;
       } else if( result.source == 'group' ) {
         const gKey = nodeData.group;
         if( gKey != undefined ) {
           const gNodeData = getNodeData( gKey );
           result.nodeData = gNodeData;
           result.source = nodeData.key;
-          result.isRef = true;
         }
       } else if( parseInt( result.source ) == result.source ) {  // If it is a number (key)
         result.nodeData = getNodeData( result.source );
-        result.isRef = true;
       }
     }
   }
