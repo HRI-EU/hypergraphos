@@ -1813,6 +1813,7 @@ class Graph {
 			if( templateData ) {
 				const dataNode = node.data;
 				const dataNodeFieldList = Object.keys( templateData );
+				this.diagram.startTransaction( 'Set From Palette' );
 				for( const field of dataNodeFieldList ) {
 					// If the field does not start with '_' and is not a system field
 					if( !field.startsWith('_') &&
@@ -1824,6 +1825,7 @@ class Graph {
 						}
 					}
 				}
+				this.diagram.commitTransaction( 'Set From Palette' );
 				this.diagram.requestUpdate();
 			}
 		});
