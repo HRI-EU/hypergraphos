@@ -525,6 +525,38 @@ class Graph {
 	getRootNodes() {
 		return( this.diagram.nodes );
 	}
+	getDependencyList() {
+		const result = {
+			files: {},
+			dsl: {},
+		};
+
+		// Update DSL info
+		this.dslNameList.forEach( (d) => result.dsl[d] = { name: d, node: 0, link: 0 } );
+
+		// Update Node info
+		const nodeList = this.diagram.model.nodeDataArray;
+		nodeList.forEach( (n)=> { 
+			const idx = n.category.indexOf( '_' );
+			const dslName = n.category.substring( 0, idx )+'DSL';
+			if( result.dsl[dslName] ) {
+				result.dsl[dslName].node++;
+			}
+			if( n.fileURL ) { 
+				result.files[n.key] = n.fileURL;
+			}
+		});
+		const linkList = this.diagram.model.linkDataArray;
+		linkList.forEach( (l)=> { 
+			const idx = l.category.indexOf( '_' );
+			const dslName = l.category.substring( 0, idx )+'DSL';
+			if( result.dsl[dslName] ) {
+				result.dsl[dslName].link++;
+			}
+		});
+
+		return( result );
+	}
 	setModel( model ) {
 		if( this.diagram ) {
 			this.clearInstance();
@@ -1746,10 +1778,25 @@ class Graph {
 		return( info );
 	}
 	getDiagramInfo( model ) {
+		const dependencyInfo = this.getDependencyList();
+		const depList = [];
+		for( const key in dependencyInfo.files ) {
+			depList.push( ` Node[${key}] ${dependencyInfo.files[key]}` );
+		}
+		const dslList = [];
+		for( const key in dependencyInfo.dsl ) {
+			const nc = dependencyInfo.dsl[key].node;
+			const lc = dependencyInfo.dsl[key].link;
+			dslList.push( ` ${key} used by ${nc} nodes, ${lc} links` );
+		}
 		// Tooltip info for the diagram's model
 		const info = " Model: "+model.nodeDataArray.length + " nodes, "+ 
 		                         model.linkDataArray.length + " links \n"+
-								 " Graph URL: "+this.graphPath+" ";
+								 " Graph URL: "+this.graphPath+" \n"+
+								 "--- Dependencies ---------------\n"+
+								 depList.join( '\n' )+
+								 "\n--- DSL ---------------\n"+
+								 dslList.join( '\n' );
 		return( info );
 	}
 	_canOpenFile() {
