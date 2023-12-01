@@ -1850,9 +1850,17 @@ class Graph {
 			} else if( node instanceof go.Link ) {
 				if( this.linkPalette ) {
 					const it = this.linkPalette.selection;
-					const link = it.first();
-					if( link ) {
-						templateData = link.data;
+					const linkLabel = it.first();
+					if( linkLabel ) {
+						// Selection is on the text label
+						// We need to take the incoming link to it
+						const linkNode = linkLabel.findLinksInto();
+						if( linkNode ) {
+							const link = linkNode.first();
+							if( link ) {
+								templateData = link.data;
+							}
+						}
 					}
 				}
 				systemFieldList = this.systemLinkDataFieldList;
@@ -1865,7 +1873,7 @@ class Graph {
 					// If the field does not start with '_' and is not a system field
 					if( !field.startsWith('_') &&
 					    ( systemFieldList.indexOf( field ) == -1 ) &&
-						( ![ 'label', 'fileURL', 'fileContent' ].includes( field ) ) ) {
+						  ( ![ 'label', 'fileURL', 'fileContent' ].includes( field ) ) ) {
 						if( templateData[field] ) {
 							const value = templateData[field];
 							this.diagram.model.setDataProperty( dataNode, field, value );
