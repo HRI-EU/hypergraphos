@@ -53,10 +53,30 @@ function _init() {
     _resizeWindow();
     m.e.updateSessionStatus();
    });
-  // Load the list of all available DSL and file/path counters
-  loadFileServerInfo();
-  // Load Current Status. Paramenter urlParams comes from index.html start
-  loadCurrentStatus( urlParams );
+
+  // If the system is loaded with file:///...(no server)
+  if( config.isLocalMode ) {
+    // Create a new Editor Manager
+    m.e = new EditorManager( m.status );
+    const nodeData = {
+      key: 'Current Graph',
+      isDir: true,
+      fileURL: 'noURL',
+      fileType: 'text/json',
+    };
+    m.status.currentGraphNode = nodeData;
+    setLocalStatus();
+    setLocalDSL();
+    // Open last opened graph
+    const id = config.htmlDiv.graphDiv;
+    m.e.openWindow( id, 'GraphEditor', nodeData );
+    // Set main graph source
+  } else {
+    // Load the list of all available DSL and file/path counters
+    loadFileServerInfo();
+    // Load Current Status. Paramenter urlParams comes from index.html start
+    loadCurrentStatus( urlParams );
+  }
 
   // Set user name
   let cookie = document.cookie;
@@ -66,8 +86,13 @@ function _init() {
     // cookie by Takeushi was containing some other stuff
     cookie = cookie.substring( idx );
   }
-  const userInfo = JSON.parse(  cookie );
-  m.userInfo = userInfo;
+
+  try {
+    const userInfo = JSON.parse(  cookie );
+    m.userInfo = userInfo;
+  } catch( e ) {
+    m.userInfo = { name: 'UserLocal' }
+  }
 
   // System started
   console.log( 'System Started' );

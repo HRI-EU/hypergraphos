@@ -627,7 +627,12 @@ class Graph {
 		// Get an object from the extended model
 		let objModel = null;
 		if( source ) {
-			objModel = JSON.parse( source );
+			if( typeof( source ) == 'string' ) {
+				objModel = JSON.parse( source );
+			} else {
+				// In this case we expect an object
+				objModel = source;
+			}
 		} else {
 			objModel = {
 				view: null,
@@ -1177,6 +1182,10 @@ class Graph {
 				data.onNodeChanged = (f)=> { 
 					this.onNodeGraphSelectionChanged = { nodeData: data, callback: f };
 				};
+				break;
+			case '$GraphSource$':
+				const source = this.getEditorSource();
+				data.fileContent = source;
 				break;
 		}
 		return( data );

@@ -78,7 +78,10 @@ function loadSystem() {
   console.log( urlParams );
   
   if( !urlParams.name ) {
-    cookie = JSON.parse(document.cookie);
+    let cookie = { name: 'UserLocal' };
+    try {
+      cookie = JSON.parse(document.cookie);
+    } catch( e ) {}
     urlParams.name = cookie.name;
   } else {
     document.cookie = JSON.stringify({name: urlParams.name});
@@ -247,8 +250,18 @@ function loadJSScript( url, onLoad, isAvoidCache ) {
     const timestamp = new Date().getTime();
     uniqueURL = '?_='+timestamp;
   }
+
+  // Handle localMode (file:///...)
+  if( url.startsWith( '/fileServer/' ) ) {
+    if( config.isLocalMode ) {
+      // Translate to local server (defined in local config)
+      url = url.replace( '/fileServer', config.host.fileServerURL );
+    }
+  }
+  // Set src url
   script.src = url+uniqueURL;
-  document.head.append( script )
+
+  document.head.append( script );
 }
 function loadCSSScript( url, onLoad, isAvoidCache ) {
   isAvoidCache = ( isAvoidCache == undefined? true: isAvoidCache );
@@ -279,6 +292,13 @@ function loadCSSScript( url, onLoad, isAvoidCache ) {
   document.head.append( script )
 }
 function loadNodeContent( nodeData, onLoaded ) {
+  // This is used in local mode (file:///...)
+  if( nodeData.fileURL == 'noURL' ) {
+    const source = getCurrentLocalGraph();
+    onLoaded( source );
+    return;
+  }
+
   if( nodeData.isModel ) {  // Check on isModel must be first
     // Load content from main graph model
     const source = nodeData.fileContent;
