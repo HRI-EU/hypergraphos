@@ -175,11 +175,11 @@ class Graph {
 						{ label: 'Go To Root Graph',		if: (o)=> !this.isRootGraph,
 																						do: (o)=> this.em.call.onShowRootGraph() },
 					]},
-					{ separator: '-' },
-					{ label: 'Set Read-only Mode',    if: (o)=> !this.isReadOnly,
+					{ separator: '-', if: (o)=> !config.isLocalMode },
+					{ label: 'Set Read-only Mode',    if: (o)=> !config.isLocalMode && !this.isReadOnly,
 																						do: (o)=> { this.isReadOnly = true;
 																												this.em.call.onSetReadOnly( true ); } },
-					{ label: 'Unset Read-only Mode',  if: (o)=> this.isReadOnly,
+					{ label: 'Unset Read-only Mode',  if: (o)=> !config.isLocalMode && this.isReadOnly,
 																						do: (o)=> { this.isReadOnly = false;
 																												this.em.call.onSetReadOnly( false ); } },
 					{ separator: '-',         if: (o)=> o.d.cmd.canUndo() || o.d.cmd.canRedo() },

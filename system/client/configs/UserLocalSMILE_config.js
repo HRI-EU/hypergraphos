@@ -5,7 +5,7 @@
 const config = {
   "isLocalMode": true,
   "host": {
-    "name": "User",
+    "name": "UserLocalSMILE",
     "fileServerURL": "../../localFileServer",
     "fileServerSystemURL": "../../localFileServer/System",
     "fileStatusURL": "/fileStatus",
