@@ -572,31 +572,6 @@ function HierarchyDSL_getDSL( g ) {
         'fileType': 'text/javascript',
       },
       {
-        label: 'Folder Content',
-        "size": "150 100",
-        category: 'Hierarchy_FolderContent',
-        'fileType': 'text/json',
-        'isDir': true,
-        'fileURL': '',
-      },
-      {
-        label: 'Folder Image',
-        "size": "150 100",
-        category: 'Hierarchy_FolderImage',
-        'fileType': 'text/json',
-        'isDir': true,
-        'fileURL': '',
-        'imageURL': '',
-      },      
-      {
-        label: 'Folder',
-        "size": "150 100",
-        category: 'Hierarchy_Folder',
-        'fileType': 'text/json',
-        'isDir': true,
-        'fileURL': '',
-      },
-      {
         label: 'Chat',
         "size": "150 100",
         color: 'yellow',
@@ -668,6 +643,36 @@ function HierarchyDSL_getDSL( g ) {
       },
     ],
   };
+
+  // Folders can not be used in local mode (file:///...)
+  if( !config.isLocalMode ) {
+    dsl.dataNodeList.push(
+    {
+      label: 'Folder Content',
+      "size": "150 100",
+      category: 'Hierarchy_FolderContent',
+      'fileType': 'text/json',
+      'isDir': true,
+      'fileURL': '',
+    },
+    {
+      label: 'Folder Image',
+      "size": "150 100",
+      category: 'Hierarchy_FolderImage',
+      'fileType': 'text/json',
+      'isDir': true,
+      'fileURL': '',
+      'imageURL': '',
+    },      
+    {
+      label: 'Folder',
+      "size": "150 100",
+      category: 'Hierarchy_Folder',
+      'fileType': 'text/json',
+      'isDir': true,
+      'fileURL': '',
+    });
+  }
 
   return( dsl );
 }
