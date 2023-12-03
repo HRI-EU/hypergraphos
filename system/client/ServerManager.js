@@ -252,12 +252,8 @@ function loadJSScript( url, onLoad, isAvoidCache ) {
   }
 
   // Handle localMode (file:///...)
-  if( url.startsWith( '/fileServer/' ) ) {
-    if( config.isLocalMode ) {
-      // Translate to local server (defined in local config)
-      url = url.replace( '/fileServer', config.host.fileServerURL );
-    }
-  }
+  url = _updataURLIfLocalMode( url );
+
   // Set src url
   script.src = url+uniqueURL;
 
@@ -288,6 +284,10 @@ function loadCSSScript( url, onLoad, isAvoidCache ) {
     const timestamp = new Date().getTime();
     uniqueURL = '?_='+timestamp;
   }
+
+  // Handle localMode (file:///...)
+  url = _updataURLIfLocalMode( url );
+
   script.href = url+uniqueURL;
   document.head.append( script )
 }
@@ -402,6 +402,21 @@ function executeScript( scriptName, onExecuted ) {
 //------------------------
 // Private Functions
 //------------------------
+function _updataURLIfLocalMode( url ) {
+  let result = url;
+  if( url.startsWith( '/fileServer/' ) ) {
+    if( config.isLocalMode ) {
+      // Translate to local server (defined in local config)
+      result = url.replace( '/fileServer', config.host.fileServerURL );
+    }
+  } else if( url.startsWith( '/library/' ) ) {
+    if( config.isLocalMode ) {
+      // Translate to local server (defined in local config)
+      result = url.replace( '/library', config.host.libraryURL );
+    }
+  }
+  return( result );
+}
 function _openFile( url, onLoad, noTimeStamp ) {
   // Decide if attach a timestamp or not (timestamp used to avoid chache)
   noTimeStamp = ( noTimeStamp != undefined? noTimeStamp: false );

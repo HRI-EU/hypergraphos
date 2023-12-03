@@ -5,11 +5,12 @@
 const config = {
   "isLocalMode": true,
   "host": {
-    "name": "User",
+    "name": "UserLocalSMILE",
     "fileServerURL": "../../localFileServer",
     "fileServerSystemURL": "../../localFileServer/System",
     "fileStatusURL": "/fileStatus",
-    "statusURL": "../../localFileServer/Users/User_status.json"
+    "statusURL": "../../localFileServer/Users/User_status.json",
+    "libraryURL": "lib/"
   },
   "remoteHost": {
     "NUC": "192.168.1.11:7575"
