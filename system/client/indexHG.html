@@ -1,0 +1,182 @@
+<!--
+=============================================================================
+Licensed Materials - Property of Frank Joublin and Antonio Ceravola.
+(C) Copyright Frank Joublin and Antonio Ceravola. 2021, All Rights Reserved.
+France Government Users Restricted Rights - Use, duplication or disclosure
+restricted by GSA ADP Schedule Contract with Frank Joublin and Antonio Ceravola.
+=============================================================================
+Module: MDDTools Main Web Frontend
+Date: 10.07.2020
+=============================================================================
+-->
+<!DOCTYPE html>
+<html>
+<head>
+  <!--Cache test setting-->
+  <!--
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  -->
+
+  <meta charset='utf-8'>
+  <title>HyperGraph 1.0</title>
+
+   <!--YAML Parser Include-->
+   <script type="text/javascript" src="lib/yaml/4.1.0/js-yaml.min.js"></script>
+   <!--End-->
+   <!--ACE Editor Includes-->
+   <script type='text/javascript' src="lib/ace/1.4.12/src-min/ace.js"></script>
+   <!--End-->
+ 
+   <!--GoJS Editor Includes-->
+   <script type='text/javascript' src='lib/gojs/2.3.3/go.js'></script>
+   <script type='text/javascript' src='lib/gojs/PolylineLinkingTool.js'></script>
+   <script type='text/javascript' src='lib/gojs/SnapLinkReshapingTool.js'></script>
+   <script type='text/javascript' src='lib/gojs/InGroupClickCreatingTool.js'></script>
+   <!--End-->
+ 
+   <!--Explore Editor Includes-->
+   <link href="lib/explore-editor/2022.10.30/explore-editor.min.css" rel="stylesheet" />
+   <script src="lib/explore-editor/2022.10.30/explore-editor.min.js"></script>
+   <link rel="stylesheet" href="lib/KaTeX/0.11.1/katex.min.css">
+   <script src="lib/KaTeX/0.11.1/katex.min.js"></script>
+ 
+   <!--WinBox Editor Includes-->
+   <style>
+     /* style property for pin icon */
+     .wb-like {
+      background-size: 20px auto;
+     }
+     .wb-like.active {
+      background-image: url(/fileServer/pictures/pinnedw.svg) !important;
+     }
+   </style>
+   <link rel="stylesheet" href="lib/winbox/0.2.73/modern.min.css">
+   <link rel="stylesheet" href="lib/winbox/0.2.73/white.min.css">
+   <script type="text/javascript" src="lib/winbox/0.2.73/winbox.bundle.min.js"></script>
+   <!--End-->
+   
+   <style>
+     .meta-powered-by {
+       display: none;
+     }
+     .meta-toolbar {
+       width: auto!important;
+     }
+     .meta-wrapper-inner {
+       overflow-y: scroll!important;
+       box-sizing: border-box!important;
+       height:100%!important;
+     }
+     .meta-toolbar-inline {
+       top: auto!important;
+       bottom: 105%!important;
+     }
+     .meta-explore-editor, .meta-wrapper {
+       height: 100%!important;
+     }
+   </style>
+   <!--End-->
+ 
+   <!--Resizable Div Editor Window includes-->
+   <script type='text/javascript' src='lib/resizableDiv/1.2/resizableDiv.js'></script>
+   <link type='text/css' rel='stylesheet' href='lib/resizableDiv/1.2/resizableDiv.css'></link>
+   <!--End-->
+ 
+   <!--Open Iconic Includes-->
+   <link type='text/css' rel='stylesheet' href='lib/open-iconic-master/font/css/open-iconic.css'></link>
+   <!--End-->
+ 
+   <!--HTMLMenu includes-->
+   <script type='text/javascript' src='lib/htmlMenu/1.2/htmlMenu.js'></script>
+   <link type='text/css' rel='stylesheet' href='lib/htmlMenu/1.2/htmlMenu.css'></link>
+   <!--End-->
+ 
+   <!--Code Generator Includes-->
+   <script type='text/javascript' src='lib/Generators/3.10/lib/ReplaceGenerator.js'></script>
+   <script type='text/javascript' src='lib/Generators/3.10/lib/ArrayPatternGenerator.js'></script>
+   <script type='text/javascript' src='lib/Generators/3.10/lib/TemplateGenerator.js'></script>
+   <!--End-->
+ 
+   <!--Main Tool Includes-->
+   <link type='text/css' rel='stylesheet' href='index.css'></link>
+ 
+   <!--script type='text/javascript' src='config.js'></script-->
+   <script type='text/javascript' src='ServerManager.js'></script>
+   <!--End-->
+
+  <script>
+    function dragOverHandler( e ) {
+      // Prevent default behavior (Prevent file from being opened)
+      e.preventDefault();
+    }
+    function dropHandler( e ) {
+      console.log("File(s) dropped");
+
+      // Prevent default behavior (Prevent file from being opened)
+      e.preventDefault();
+
+      if (e.dataTransfer.items) {
+        // Use DataTransferItemList interface to access the file(s)
+        [...e.dataTransfer.items].forEach((item, i) => {
+          // If dropped items aren't files, reject them
+          if (item.kind === "file") {
+            const file = item.getAsFile();
+            console.log(`… file[${i}].name = ${file.name}`);
+            console.log(`… file[${i}].type = ${file.type}`);
+            console.log(`… file[${i}].kind = ${file.kind}`);
+          } else if( item.kind == 'string'  && item.type.match( "^text/plain" ) ) {
+            item.getAsString( (text)=> {
+              console.log( 'text:', text, 'at', 'x:', e.x, 'y:', e.y );
+              // Get main graph
+              const g = getMainGraph();
+
+              //const pos = g.diagram.lastInput.documentPoint;
+              //const pos = g.diagram.transformViewToDoc( new go.Point( e.x, e.y ) );
+              //const object = g.diagram.findObjectAt( pos );
+              //const data = ( object? object.part.data: null );
+
+              // If a single node is selected => clone it
+              const data = g.getFirstSelectedNodeData();
+              if( data && ( data.label != undefined ) ) {
+                setNodeDataField( data, 'label', text );
+              }
+            });
+          }
+        });
+      } else {
+        // Use DataTransfer interface to access the file(s)
+        [...e.dataTransfer.files].forEach((file, i) => {
+          console.log(`… file[${i}].name = ${file.name}`);
+          console.log(`… file[${i}].type = ${file.type}`);
+          console.log(`… file[${i}].kind = ${file.kind}`);
+        });
+      }
+    }
+    loadSystem();
+  </script>
+</head>
+<body onload='_init()'>
+  <div id='mdd-status'></div>
+  <div id="diagram" class='diagramDiv' ondrop="dropHandler(event)" ondragover="dragOverHandler(event)">
+  </div>
+  <div id="palette" class='paletteDiv'>
+    <div class='resizerObj'>
+      <div id='nodePalette'>
+      </div>
+      <div id='groupPalette'>
+      </div>
+      <div id='linkPalette'>
+      </div>
+      <div class='resizer all' style="z-index:99;"></div>
+      <div class='resizer top-left'></div>
+      <div class='resizer bottom-right'></div>
+    </div>
+  </div>
+  <div id='mainDiv'>
+      <!--div id="editorjs"></div-->
+  </div>
+  <div id="contextMenuContainer" style="position: relative; z-index: 10000;"></div>
+</body>
+</html>
