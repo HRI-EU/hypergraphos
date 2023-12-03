@@ -244,6 +244,12 @@ class DataFlowEngine {
       this._fireOutputFlow(nodeData, name, value);
     }
   }
+  fireByRef( nodeData, refValue, value ) {
+    const refInfo = parseRefValue( nodeData, refValue );
+    if( refInfo.isRef && refInfo.nodeData ) {
+      graphData.dfe._fireInput( refInfo.nodeData, refInfo.name, value );
+    }
+  }
   isOutputConnected(nodeData, name) {
     // Get output link list
     const list = this.getOutputLinkDataList(nodeData, name);
@@ -504,9 +510,15 @@ class DataFlowEngine {
         // Log link message if present
         switch( outLinkData.category ) {
           case 'DataFlow_Log':
-            if( value && !value.startWith( '//' ) ) {
-              const text = outLinkData.label.replace( '{value}', value);
-              console.log( text );
+            let logMsg = outLinkData.label;
+            if( !logMsg.startsWith( '//' ) ) {
+              if( logMsg.indexOf( '{value}' ) != -1 ) {
+                let valueStr = ( typeof( value ) == 'object'?
+                                  JSON.stringify( value, null, 2 ):
+                                  value );
+                logMsg = logMsg.replace( '{value}', valueStr );
+              }
+              console.log( logMsg );
             }
             break;
           case 'DataFlow_Pause':

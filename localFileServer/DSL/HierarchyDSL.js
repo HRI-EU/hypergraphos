@@ -402,7 +402,6 @@ function HierarchyDSL_getDSL( g ) {
   const dsl = {
     templateNodeList: [
       { category: 'Hierarchy_GraphInfo',      template: dsl_Component, param: { g, hasInputs: false, hasOutputs: false, hasFunctionButtons: false, hasTag: false, hasType: false, hasValue: true,  hasUnit: false,  figure: "File", fill: "SkyBlue", canAddProperties: false, hasIcon: true, iconURL: '/fileServer/pictures/Graph_Info.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(180, 80), isFromLinkable: false, isToLinkable: false,} },
-      { category: 'Hierarchy_Engine',         template: dsl_Component, param: { g, hasInputs: false, hasOutputs: false, hasFunctionButtons: true, hasTag: false, hasType: false, hasValue: true,  hasUnit: false,  figure: "File", fill: "LightSteelBlue", canAddProperties: false, hasIcon: true, iconURL: '/fileServer/pictures/Engine.png', iconWidth: 50, iconHeight: 50, isResizable: false, minSize: new go.Size(240, 120), isFromLinkable: false, isToLinkable: false,} },
       { category: 'Hierarchy_FolderContent',  template: dsl_BasicNode, param: { g, hasTag: false,  hasType:false,   minSize: new go.Size(150,100), figure: "Folder",     fill: "white", 			isFromLinkable: true,  isToLinkable: true, labelStroke: "black", hasImage: "content", labelVerticalAlignment: "below", labelHorizontalAlignment: "right", } },
       { category: 'Hierarchy_FolderImage',    template: dsl_BasicNode, param: { g, hasTag: false,  hasType:false,   minSize: new go.Size(150,100), figure: "Folder",     fill: "white", 			isFromLinkable: true,  isToLinkable: true, labelStroke: "black", hasImage: "user", labelVerticalAlignment: "below", labelHorizontalAlignment: "right", } },
       { category: 'Hierarchy_Folder',         template: dsl_BasicNode, param: { g, hasTag: false,  hasType:false,   minSize: new go.Size(150,60),  figure: "Folder",     fill: "white", 			isFromLinkable: true,  isToLinkable: true, labelStroke: "black", labelVerticalAlignment: "below", labelHorizontalAlignment: "right", } },
@@ -427,58 +426,6 @@ function HierarchyDSL_getDSL( g ) {
           { name: 'Date', value: 'date@system' },
           { name: 'Path', value: 'graphPath@system' },
           { name: 'Authors', value: 'Frankonello' },
-        ],
-      },
-      {
-        label: 'Execution Engine',
-        category: 'Hierarchy_Engine',
-        size: '240 120',
-        'isFile': true,
-        'fileType': 'text/javascript',
-        "fileContent": "var event, obj, nodeData;\n\nEngine_executeAction( nodeData, obj.data.name );",
-        buttons_: [
-          {
-            name: 'Reset',
-            checked: false,
-          },
-          {
-            name: 'Run',
-            checked: false,
-          },
-          {
-            name: 'Step',
-            checked: false,
-          },
-          {
-            name: 'Pause',
-            checked: false,
-          }
-        ],
-        "props_": [
-          {
-            "name": "isAutostart",
-            "value": "false"
-          },
-          {
-            "name": "isStepByStep",
-            "value": "false",
-          },
-          {
-            "name": "runTimeout",
-            "value": "1",
-          },
-          {
-            "name": "isStepByStepDeepFirst",
-            "value": "true",
-          },
-          {
-            "name": "isPersistent",
-            "value": "false"
-          },
-          {
-            "name": "isNodePersistencyUsed",
-            "value": "true"
-          }
         ],
       },
       {

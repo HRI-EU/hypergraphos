@@ -1485,10 +1485,8 @@ function DataFlow_Dispatch( nodeData, name, value ) {
     if( graphData.dfe.isOutputConnected( nodeData, outName ) ) {
       graphData.dfe.fireOutput( nodeData, outName, value );
     } else {
-      const refInfo = parseRefValue( nodeData, outName );
-      if( refInfo.isRef && refInfo.nodeData ) {
-        graphData.dfe._fireInput( refInfo.nodeData, refInfo.name, value );
-      }
+      // If output is not connected, try fireByRef
+      graphData.dfe.fireByRef( nodData, outName, value );
     }
   }
 }

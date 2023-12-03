@@ -61,21 +61,9 @@ function setLocalDSL() {
   m.dslNameList = 
 ///////////////////////////
   {
-    "DefaultDSL": "/fileServer/DSL/DefaultDSL.js",
     "HierarchyDSL": "/fileServer/DSL/HierarchyDSL.js",
     "ThinkingDSL": "/fileServer/DSL/ThinkingDSL.js",
     "TextLabelsDSL": "/fileServer/DSL/TextLabelsDSL.js",
-    "PropertyDSL": "/fileServer/DSL/PropertyDSL.js",
-    "CodeFlowDSL": "/fileServer/DSL/CodeFlowDSL.js",
-    "DialogDSL": "/fileServer/DSL/DialogDSL.js",
-    "TestFlowDSL": "/fileServer/DSL/TestFlowDSL.js",
-    "ConnectorsDSL": "/fileServer/DSL/ConnectorsDSL.js",
-    "ButtonDSL": "/fileServer/DSL/ButtonDSL.js",
-    "PicturesDSL": "/fileServer/DSL/PicturesDSL.js",
-    "NoteDSL": "/fileServer/DSL/NoteDSL.js",
-    "TreeDSL": "/fileServer/DSL/TreeDSL.js",
-    "KanbanDSL": "/fileServer/DSL/KanbanDSL.js",
-    "DSLConfigDSL": "/fileServer/DSL/DSLConfigDSL.js",
     "DataFlowDSL": "/fileServer/DSL/DataFlowDSL.js"
   }
 ///////////////////////////  
