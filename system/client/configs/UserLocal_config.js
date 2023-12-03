@@ -6,10 +6,10 @@ const config = {
   "isLocalMode": true,
   "host": {
     "name": "User",
-    "fileServerURL": "./localFileServer",
-    "fileServerSystemURL": "./localFileServer/System",
+    "fileServerURL": "../../localFileServer",
+    "fileServerSystemURL": "../../localFileServer/System",
     "fileStatusURL": "/fileStatus",
-    "statusURL": "./localFileServer/Users/User_status.json"
+    "statusURL": "../../localFileServer/Users/User_status.json"
   },
   "remoteHost": {
     "NUC": "192.168.1.11:7575"
@@ -28,7 +28,7 @@ const config = {
     "colorSchema": "dark",
     "zoomFactor": 1.05,
     "defaultDSL": "DefaultDSL",
-    "rootGraphURL": "../../localFileServer/graphRoot.json",
+    "rootGraphURL": "noURL",
     "rootGraphNodeData": {
       "key": "Current Graph",
       "isDir": true,
