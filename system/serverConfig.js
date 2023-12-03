@@ -56,7 +56,7 @@ const config = {
     deployRoot:        '../../MDDToolsDeployRoot',
     tempRoot:          '../../MDDToolsTempRoot',
     clientPath:        '../client',
-    libPath:           '../../lib',
+    libPath:           '../clinet/lib',
     scriptPath:        '../script',
     testPath:          '../test',
     scriptPlatform:    'win32',  // 'win32' | 'linux' ( not available 'winBash' | 'powershell'  )

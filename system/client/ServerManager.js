@@ -89,18 +89,18 @@ function loadSystem() {
 
   // Define list of system scripts to be loaded
   scriptList = [
-    `./configs/${urlParams.name}_config.js`,
-    './EditorChangeManager.js',
-    './EventManager.js',
-    './Graph.js',
-    './Editors.js',
-    './ModelExplorer.js',
-    './MainScript.js',
-    './EditorManager.js',
-    './BlockCodeEditor.js',
-    './SmartBlockEditor.js',
-    './ACESourceCodeEditor.js',
-    //'./GraphParser.js',
+    `configs/${urlParams.name}_config.js`,
+    'EditorChangeManager.js',
+    'EventManager.js',
+    'Graph.js',
+    'Editors.js',
+    'ModelExplorer.js',
+    'MainScript.js',
+    'EditorManager.js',
+    'BlockCodeEditor.js',
+    'SmartBlockEditor.js',
+    'ACESourceCodeEditor.js',
+    //'GraphParser.js',
   ];
   loadScriptList( scriptList, ()=> {
     console.log( 'Depentency loaded' );
