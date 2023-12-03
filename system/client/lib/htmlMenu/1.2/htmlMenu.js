@@ -285,7 +285,9 @@ class HTMLMenu {
         el.classList.remove( 'mdd-menu' );
         el.classList.add( 'mdd-menu-inline' );
       } else if( menuItem.subMenu ) {
-        menuItem.if = (o)=> ( subMenuItems.length > 0 );
+        if( !menuItem.if ) { // If no if function defined ==> default one
+          menuItem.if = (o)=> ( subMenuItems.length > 0 );
+        }
         // Store menu item subMenu property
         const subMenuItems = menuItem.subMenu;
         // Overwrite item subMenu with a new container object

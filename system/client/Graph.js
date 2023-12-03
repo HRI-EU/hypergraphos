@@ -167,7 +167,7 @@ class Graph {
 						{ label: 'Show Animator',			do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
 																											this.em.call.onShowAnimatorEditor( mousePos.x, mousePos.y ); } },
 					]},
-					{ label: 'Navigate',		layout: 'vertical', subMenu: [
+					{ label: 'Navigate', layout: 'vertical', if: (o)=> !config.isLocalMode, subMenu: [
 						{ label: 'Go To Parent Graph',	if: (o)=> !this.isRootGraph,
 																						do: (o)=> { if( !this.isRootGraph) this.em.call.onShowParentGraph(); } },
 						{ label: 'Back To Previous Graph',	if: (o)=> !this.isHistoryEmpty,
