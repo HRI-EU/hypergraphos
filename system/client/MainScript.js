@@ -56,22 +56,8 @@ function _init() {
 
   // If the system is loaded with file:///...(no server)
   if( config.isLocalMode ) {
-    // Create a new Editor Manager
-    m.e = new EditorManager( m.status );
-    const nodeData = {
-      key: 'Current Graph',
-      isDir: true,
-      fileURL: 'noURL',
-      fileType: 'text/json',
-    };
-    m.status.currentGraphNode = nodeData;
-    setLocalStatus();
-    setLocalDSL();
-    // Open last opened graph
-    const id = config.htmlDiv.graphDiv;
-    m.e.openWindow( id, 'GraphEditor', nodeData );
-    // Set main graph source
-  } else {
+    loadSystemInLocalMode();
+  } else { // Load here the system with server
     // Load the list of all available DSL and file/path counters
     loadFileServerInfo();
     // Load Current Status. Paramenter urlParams comes from index.html start
@@ -424,6 +410,19 @@ function loadCurrentStatus( params ) {
     EditorChangeManager.onGlobalNeedSave( setSystemNeedSave );
     EditorChangeManager.onGlobalIsSaved( setSystemSaved );
   });
+}
+function loadSystemInLocalMode() {
+  // Create a new Editor Manager
+  m.e = new EditorManager( m.status );
+  // Get static root graph
+  const nodeData = config.graph.rootGraphNodeData;
+  m.status.currentGraphNode = nodeData;
+  // Update Status and DSL
+  setLocalStatus();
+  setLocalDSL();
+  // Open last opened graph
+  const id = config.htmlDiv.graphDiv;
+  m.e.openWindow( id, 'GraphEditor', nodeData );
 }
 function loadDSLScriptList( dslNameList, onLoad ) {
   if( !Array.isArray( dslNameList ) ) {
