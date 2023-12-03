@@ -603,7 +603,7 @@ class Graph {
 		}
 		return( jsonModel );
 	}
-	getEditorSource() {
+	getEditorSource( isIndented ) {
 		const diagramPosition = this.diagram.position;
 		const jsonModel = this.getJSONModel();
 		if( this.dslNameList.length == 0 ) {
@@ -620,7 +620,8 @@ class Graph {
 			graphFileServer: this.graphFileServer,
 			model: jsonModel,
 		};
-		const source = JSON.stringify( sourceInfo );
+		const source = ( isIndented? JSON.stringify( sourceInfo, null, 2 ):
+		 														 JSON.stringify( sourceInfo ) );
 		return( source );
 	}
 	setEditorSource( source, onDone ) {
@@ -1184,7 +1185,7 @@ class Graph {
 				};
 				break;
 			case '$GraphSource$':
-				const source = this.getEditorSource();
+				const source = this.getEditorSource( true );
 				data.fileContent = source;
 				break;
 		}
