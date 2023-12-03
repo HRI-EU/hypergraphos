@@ -4,6 +4,7 @@
 */
 const config = {
   "isLocalMode": true,
+  "appName": "SMILE MS3 Dialog",
   "host": {
     "name": "UserLocalSMILE",
     "fileServerURL": "../../localFileServer",
@@ -44,6 +45,9 @@ const config = {
 };
 
 function setLocalStatus() {
+  // Set APP Title
+  document.title = config.appName;
+  // Set status
   m.status.graphHistory = [
     {
       key: 'Current Graph',
