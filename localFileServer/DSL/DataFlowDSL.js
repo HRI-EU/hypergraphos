@@ -1486,7 +1486,7 @@ function DataFlow_Dispatch( nodeData, name, value ) {
       graphData.dfe.fireOutput( nodeData, outName, value );
     } else {
       // If output is not connected, try fireByRef
-      graphData.dfe.fireByRef( nodData, outName, value );
+      graphData.dfe.fireByRef( nodeData, outName, value );
     }
   }
 }
