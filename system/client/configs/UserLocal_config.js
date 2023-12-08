@@ -78,10 +78,8 @@ function getCurrentLocalGraph() {
 ///////////////////////////
 {
   "dslNameList": [
-    "DefaultDSL",
     "HierarchyDSL",
-    "TextLabelsDSL",
-    "PicturesDSL"
+    "TextLabelsDSL"
   ],
   "view": {
     "scale": 0.7561871931774311,
