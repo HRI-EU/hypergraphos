@@ -1523,6 +1523,7 @@ class Graph {
 	newDiagram( divId ) {
 		// To be used in "function(){}" definitions
 		const graphThis = this;
+		go.Diagram.licenseKey = "28f846ebb66458c511d35a25403c7efb0fa42d35ce804df3590717a0ed0d6012269ffa6856dbd892d2fa1df84e79c2dbddc13a7a921f0c38e333d5da41e781acb03e24b71009138fa70a21c590aa22f2f92a21a6c6b565b2dc2ddcf4ebfa939d4ef8f0d54bc811bb2a670631";
 
 		let diagram = null;
 		if( divId ) {
@@ -1530,6 +1531,7 @@ class Graph {
 		} else {
 			diagram = $( go.Diagram ); // Create batch diagram
 		}
+
 
 		// Store Graph pointer to retrieve this class
 		diagram['__graphThis'] = graphThis;
