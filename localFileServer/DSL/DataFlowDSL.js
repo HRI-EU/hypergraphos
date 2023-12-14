@@ -3,8 +3,8 @@
 */
 function DataFlowDSL_includeList() {
   return(['/fileServer/System/Includes/DSLInclude.js',
-          '/library/HChat/1.0/HChat.css',
-          '/library/HChat/1.0/HChat.js',
+          '/library/hChat/1.0/hChat.css',
+          '/library/hChat/1.0/hChat.js',
           '/library/DataFlowEngine/1.5/DataFlowEngine.js' ]);
 }
 function DataFlowDSL_setupDSL() {
