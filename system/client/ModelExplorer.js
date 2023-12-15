@@ -25,8 +25,8 @@ class ModelExplorer {
   constructor( indexNodeFieldNameList, indedLinkFieldNameList ) {
     this.model = {};
 
-    const nodeIndexList = [ 'key', 'category', 'label', 'text' ];
-    const linkIndexList = [ 'key', 'category', 'from', 'to', 'fromPort', 'toPort' ];
+    this.nodeIndexList = [ 'key', 'category', 'label', 'text' ];
+    this.linkIndexList = [ 'key', 'category', 'from', 'to', 'fromPort', 'toPort' ];
     
     this.indexNodeFieldNameList = nodeIndexList; //indexNodeFieldNameList;
     this.indedLinkFieldNameList = linkIndexList; //indedLinkFieldNameList;
@@ -73,6 +73,20 @@ class ModelExplorer {
     }
 
     const nodeData = this.model[id].indexModel.node.key[key];
+    if( nodeData && nodeData.length ) {
+      result = nodeData[0];
+    }
+    return( result );
+  }
+  getNodeBy( id, field, value ) {
+    id = this._getId( id );
+    let result = null;
+
+    if( !id ) {
+      return( result );
+    }
+
+    const nodeData = this.model[id].indexModel.node[field][value];
     if( nodeData && nodeData.length ) {
       result = nodeData[0];
     }
