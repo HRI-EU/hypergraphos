@@ -28,8 +28,8 @@ class ModelExplorer {
     this.nodeIndexList = [ 'key', 'category', 'label', 'text' ];
     this.linkIndexList = [ 'key', 'category', 'from', 'to', 'fromPort', 'toPort' ];
     
-    this.indexNodeFieldNameList = nodeIndexList; //indexNodeFieldNameList;
-    this.indedLinkFieldNameList = linkIndexList; //indedLinkFieldNameList;
+    this.indexNodeFieldNameList = this.nodeIndexList; //indexNodeFieldNameList;
+    this.indedLinkFieldNameList = this.linkIndexList; //indedLinkFieldNameList;
   }
   setJSONModel( id, jsonModel ) {
     this.model[id] = {
@@ -82,7 +82,7 @@ class ModelExplorer {
     id = this._getId( id );
     let result = null;
 
-    if( !id ) {
+    if( !id || !this.nodeIndexList.includes( field ) ) {
       return( result );
     }
 
