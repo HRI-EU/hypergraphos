@@ -78,21 +78,9 @@ class ModelExplorer {
     }
     return( result );
   }
-  getNodeBy( id, field, value ) {
-    id = this._getId( id );
-    let result = null;
-
-    if( !id || !this.nodeIndexList.includes( field ) ) {
-      return( result );
-    }
-
-    const nodeData = this.model[id].indexModel.node[field][value];
-    if( nodeData && nodeData.length ) {
-      result = nodeData[0];
-    }
-    return( result );
-  }
   getNodeIf( id, condition, index ) {
+    // TODO: maybe we should remove the index parameter
+    //       and take the first one [0]
     id = this._getId( id );
     let result = [];
     let nodeList = this.model[id].objModel.nodeDataArray;
@@ -113,6 +101,42 @@ class ModelExplorer {
     }
     if( index != undefined ) {
       result = ( result[index]? result[index]: result[0] );
+    }
+    return( result );
+  }
+  getNodeBy( id, field, value, condition ) {
+    id = this._getId( id );
+    let result = null;
+
+    if( !id || !this.nodeIndexList.includes( field ) ) {
+      return( result );
+    }
+
+    const nodeData = this.model[id].indexModel.node[field][value];
+    if( nodeData && nodeData.length ) {
+      if( condition ) {
+        result = nodeData.find( (d)=> condition( d ) );
+      } else {
+        result = nodeData[0];
+      }
+    }
+    return( result );
+  }
+  getNodeListBy( id, field, value, condition ) {
+    id = this._getId( id );
+    let result = null;
+
+    if( !id || !this.nodeIndexList.includes( field ) ) {
+      return( result );
+    }
+
+    const nodeData = this.model[id].indexModel.node[field][value];
+    if( nodeData && nodeData.length ) {
+      if( condition ) {
+        result = nodeData.filter( (d)=> condition( d ) );
+      } else {
+        result = nodeData;
+      }
     }
     return( result );
   }
