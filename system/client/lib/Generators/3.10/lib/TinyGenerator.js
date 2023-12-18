@@ -26,7 +26,14 @@ function processTemplate( template, values, isKeepUnmatchedValues ) {
   const getKeyValue = ( matchStr )=> {
     const name = matchStr.substring( 2, matchStr.length-2 );
     if ( name in values) {
-      return( values[name] );
+      const v = values[name];
+      if( typeof( v ) == 'string' ) {
+        return( v );
+      } else if( typeof( v.value ) == 'string' ) {
+        return( v.value );
+      } else {
+        return( JSON.stringify( v, null, 2 ) );
+      }
     } else {
       if( isKeepUnmatchedValues ) {
         return( `${matchStr}`);
