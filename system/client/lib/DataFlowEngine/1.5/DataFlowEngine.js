@@ -511,7 +511,9 @@ class DataFlowEngine {
         switch( outLinkData.category ) {
           case 'DataFlow_Log':
             let logMsg = outLinkData.label;
-            if( !logMsg.startsWith( '//' ) ) {
+            if( logMsg == 'debugger' ) {
+              debugger
+            } else if( !logMsg.startsWith( '//' ) ) {
               if( logMsg.indexOf( '{value}' ) != -1 ) {
                 let valueStr = ( typeof( value ) == 'object'?
                                   JSON.stringify( value, null, 2 ):
