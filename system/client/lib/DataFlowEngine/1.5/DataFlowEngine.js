@@ -713,18 +713,24 @@ class DataFlowEngine {
     return (inState);
   }
   _evalValue( value ) {
-    switch( value ) {
-      case 'true':
-        value = true;
-        break;
-      case 'false':
-        value = false;
-        break;
-      default:
-        // Check if the value is a number
-        if( !isNaN( value ) ) {
-          value = parseFloat( value );
+    switch( typeof( value ) ) {
+      case 'string':
+        switch( value ) {
+          case 'true':
+            value = true;
+            break;
+          case 'false':
+            value = false;
+            break;
+          default:
+            // Check if the value is a number
+            if( !isNaN( value ) ) {
+              value = parseFloat( value );
+            }
+            break;
         }
+        break;
+      case 'boolean':
         break;
     }
     return( value );
