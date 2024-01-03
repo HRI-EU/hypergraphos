@@ -18,15 +18,18 @@ Date: 10.07.2020
   me.setJSONModel( 'test', j );
 */
 
+// TODO: add here the possibility to set graph://fileServer
+// so that I can access such content from the ModelExplore
+// when I am executed server side
 class ModelExplorer {
   constructor( indexNodeFieldNameList, indedLinkFieldNameList ) {
     this.model = {};
 
-    const nodeIndexList = [ 'key', 'category', 'label', 'text' ];
-    const linkIndexList = [ 'key', 'category', 'from', 'to', 'fromPort', 'toPort' ];
+    this.nodeIndexList = [ 'key', 'category', 'label', 'text' ];
+    this.linkIndexList = [ 'key', 'category', 'from', 'to', 'fromPort', 'toPort' ];
     
-    this.indexNodeFieldNameList = nodeIndexList; //indexNodeFieldNameList;
-    this.indedLinkFieldNameList = linkIndexList; //indedLinkFieldNameList;
+    this.indexNodeFieldNameList = this.nodeIndexList; //indexNodeFieldNameList;
+    this.indedLinkFieldNameList = this.linkIndexList; //indedLinkFieldNameList;
   }
   setJSONModel( id, jsonModel ) {
     this.model[id] = {
@@ -36,7 +39,48 @@ class ModelExplorer {
     }
     this._createModelIndex( id );
   }
+  getProperty( id, keyOrData, name, field, defaultValue ) {
+    field = field || 'value';
+    // Get node data from a node key
+    let data = keyOrData; // Assume is data
+    if( typeof( data ) != 'object' ) {
+      data = this.getNode( id, keyOrData ); // Assume is key
+    }
+    
+    // Find property
+    let propertyValue = defaultValue;
+    if( data && data.props_ ) {
+      for( const rowEl of data.props_ ) {
+        if( rowEl.name == name ) {
+          // Get property value
+          propertyValue = rowEl[field];
+          break;
+        }
+      }
+    }
+
+    // Convert property to a data type
+    propertyValue = this._evalValue( propertyValue );
+    // Return property value
+    return( propertyValue );
+  }
+  getNode( id, key ) {
+    id = this._getId( id );
+    let result = null;
+
+    if( !id ) {
+      return( result );
+    }
+
+    const nodeData = this.model[id].indexModel.node.key[key];
+    if( nodeData && nodeData.length ) {
+      result = nodeData[0];
+    }
+    return( result );
+  }
   getNodeIf( id, condition, index ) {
+    // TODO: maybe we should remove the index parameter
+    //       and take the first one [0]
     id = this._getId( id );
     let result = [];
     let nodeList = this.model[id].objModel.nodeDataArray;
@@ -57,6 +101,42 @@ class ModelExplorer {
     }
     if( index != undefined ) {
       result = ( result[index]? result[index]: result[0] );
+    }
+    return( result );
+  }
+  getNodeBy( id, field, value, condition ) {
+    id = this._getId( id );
+    let result = null;
+
+    if( !id || !this.nodeIndexList.includes( field ) ) {
+      return( result );
+    }
+
+    const nodeData = this.model[id].indexModel.node[field][value];
+    if( nodeData && nodeData.length ) {
+      if( condition ) {
+        result = nodeData.find( (d)=> condition( d ) );
+      } else {
+        result = nodeData[0];
+      }
+    }
+    return( result );
+  }
+  getNodeListBy( id, field, value, condition ) {
+    id = this._getId( id );
+    let result = null;
+
+    if( !id || !this.nodeIndexList.includes( field ) ) {
+      return( result );
+    }
+
+    const nodeData = this.model[id].indexModel.node[field][value];
+    if( nodeData && nodeData.length ) {
+      if( condition ) {
+        result = nodeData.filter( (d)=> condition( d ) );
+      } else {
+        result = nodeData;
+      }
     }
     return( result );
   }
@@ -84,19 +164,20 @@ class ModelExplorer {
       return( result );
     }
 
+    let nodeKeyList = [];
     const subject = this.model[id].indexModel.nodeKeyFanIn;
     if( subject ) {
-      let nodeKeyList = [];
       if( toPort ) {
         const linkList = this.getLinkListFanInByNodeKey( id, key );
         for( const linkDataV of linkList ) {
-          //if( linkDataV && linkDataV[0] && ( linkDataV[0].toPort == toPort ) ) {
           if( linkDataV && ( linkDataV.toPort == toPort ) ) {
             nodeKeyList.push( linkDataV.from );
           }
         }
       } else {
-        nodeKeyList = subject[key];
+        if( subject[key] ) { // If node has connections
+          nodeKeyList.push( ...subject[key] );
+        }
       }
       // Retrieve all nodeData from nodeKey
       for( const nodeKey of nodeKeyList ) {
@@ -132,20 +213,22 @@ class ModelExplorer {
       if( fromPort ) {
         const linkList = this.getLinkListFanOutByNodeKey( id, key );
         for( const linkDataV of linkList ) {
-          //if( linkDataV && linkDataV[0] && ( linkDataV[0].fromPort == fromPort ) ) {
           if( linkDataV && ( linkDataV.fromPort == fromPort ) ) {
             nodeKeyList.push( linkDataV.to );
           }
         }
       } else {
-        result = subject[key];
+        if( subject[key] ) { // If node has connections
+          nodeKeyList.push( ...subject[key] );
+        }
       }
       // Retrieve all nodeData from nodeKey
       for( const nodeKey of nodeKeyList ) {
         const subject1 = this.model[id].indexModel.node.key;
         if( subject1 ) {
-          if( subject1[nodeKey] && ( subject1[nodeKey].length > 0 ) ) { 
-            result.push( subject1[nodeKey][0] );
+          if( subject1[nodeKey] && ( subject1[nodeKey].length > 0 ) ) {
+            const nodeData = subject1[nodeKey][0];
+            result.push( nodeData );
           }
         }
       }
@@ -296,6 +379,23 @@ class ModelExplorer {
   //------------------------
   // Private Functions
   //------------------------
+  _evalValue( value ) {
+    switch( value ) {
+      case 'true':
+        value = true;
+        break;
+      case 'false':
+        value = false;
+        break;
+      default:
+        // Check if the value is a number
+        if( !isNaN( value ) ) {
+          value = parseFloat( value );
+        }
+        break;
+    }
+    return( value );
+  }
   _getId( id ) {
     let result = id;
     if( !id ) {
@@ -435,4 +535,9 @@ class ModelExplorer {
       indexModel[fieldName][nodeData[fieldName]].push( nodeData );
     }
   }
+}
+
+var module;
+if( module ) {
+  module.exports = ModelExplorer;
 }

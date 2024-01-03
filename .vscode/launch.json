@@ -5,6 +5,48 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Launch Test4",
+            "program": "${workspaceFolder}/lib/Generators/3.10/examples/Test4/generate.js",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
+            "name": "Launch Test5",
+            "program": "${workspaceFolder}/lib/Generators/3.10/examples/Test5/generate.js",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
+            "name": "Launch Test6",
+            "program": "${workspaceFolder}/lib/Generators/3.10/examples/Test6/generate.js",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
+            "name": "Launch Server Node",
+            "request": "launch",
+            "type": "node",
+            "cwd": "${workspaceFolder}/system/server",
+            "program": "${workspaceFolder}/system/server/server.js"
+        },
+        {
+            "name": "Launch Script GenerateSystem",
+            "request": "launch",
+            "type": "node",
+            "cwd": "${workspaceFolder}/system/script/",
+            "args": ["{\"modelFileURL\":\"path\",\"deployKey\":3}"],
+            "program": "${workspaceFolder}/system/script/generateSystem.js"
+        },
+        {
             "name": "Attach by Process ID",
             "processId": "8",
             "request": "attach",

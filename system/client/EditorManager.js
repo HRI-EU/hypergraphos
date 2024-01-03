@@ -12,20 +12,21 @@ Date: 10.07.2020
 
 class EditorManager extends EditorChangeManager {
   constructor() {
-    super( 0.5 ); // Saving timeout: 5 seconds
+    super( 0.5 ); // Saving timeout: 0.5 (500 milli seconds)
     this.id = 'Session';
     this.registeredEditorList = [
       // NOTE: order matter here, since the first matching editor get selected
-      { name: 'WebViewer',            fileType: (ft)=> ft == 'application/html',        classRef: WebViewer },
-      { name: 'HTMLExploreEditor',    fileType: (ft)=> ft == 'application/explore',     classRef: HTMLExploreEditor },
-      { name: 'TextEditor',           fileType: (ft)=> ft.startsWith( 'text/' ),        classRef: TextEditor },
-      { name: 'ImageEditor',          fileType: (ft)=> ft.startsWith( 'image/' ),       classRef: ImageEditor },
-      { name: 'GraphEditor',          fileType: (ft)=> ft == 'text/json',               classRef: GraphEditor },
-      { name: 'FindViewer',           fileType: (ft)=> ft == 'input/fields',            classRef: FindViewer },
-      { name: 'DSLViewer',            fileType: (ft)=> ft == 'input/fields',            classRef: DSLViewer },
-      { name: 'GraphTemplateViewer',  fileType: (ft)=> ft == 'input/fields',            classRef: GraphTemplateViewer },
-      { name: 'SystemMonitorViewer',  fileType: (ft)=> ft == 'system/status',           classRef: SystemMonitorViewer },
-      { name: 'AnimatorEditor',       fileType: (ft)=> ft == 'input/fields',            classRef: AnimatorEditor },
+      { name: 'WebViewer',            fileType: (ft)=> ft == 'application/html',          classRef: WebViewer },
+      { name: 'HTMLExploreEditor',    fileType: (ft)=> ft == 'application/explore',       classRef: HTMLExploreEditor },
+      { name: 'TextEditor',           fileType: (ft)=> ft.startsWith( 'text/' ),          classRef: TextEditor },
+      { name: 'TextEditor',           fileType: (ft)=> ft == 'application/x-shellscript', classRef: TextEditor },
+      { name: 'ImageEditor',          fileType: (ft)=> ft.startsWith( 'image/' ),         classRef: ImageEditor },
+      { name: 'GraphEditor',          fileType: (ft)=> ft == 'text/json',                 classRef: GraphEditor },
+      { name: 'FindViewer',           fileType: (ft)=> ft == 'input/fields',              classRef: FindViewer },
+      { name: 'DSLViewer',            fileType: (ft)=> ft == 'input/fields',              classRef: DSLViewer },
+      { name: 'GraphTemplateViewer',  fileType: (ft)=> ft == 'input/fields',              classRef: GraphTemplateViewer },
+      { name: 'SystemMonitorViewer',  fileType: (ft)=> ft == 'system/status',             classRef: SystemMonitorViewer },
+      { name: 'AnimatorEditor',       fileType: (ft)=> ft == 'input/fields',              classRef: AnimatorEditor },
       //window.open('https://www.google.com','node13',"width=200,height=100")
     ];
 
@@ -53,19 +54,78 @@ class EditorManager extends EditorChangeManager {
     const isPinnedWindow = ( nodeData.isFile && pw[nodeData.isFile] );
     return( isIdExist || isPinnedWindow );
   }
-  getEditor( id ) {
+  getEditor( idOrData ) {
     let result = null;
+    let id = idOrData;
+    if( typeof( idOrData ) == 'object' ) {
+      id = m.e._getDOMUniqueId( idOrData );
+    }
     if( this.editorList[id] ) {
       result = this.editorList[id].editor;
      }
     return( result );
   }
-  getEditorInfo( id ) {
+  getEditorInfo( idOrData ) {
+    let id = idOrData;
+    if( typeof( idOrData ) == 'object' ) {
+      id = m.e._getDOMUniqueId( idOrData );
+    }
     let result = this.editorList[id];
     if( id == this.id ) {
       result = this;
     }
     return( result );
+  }
+  getEditorBasicInfo( idOrData ) {
+    let id = idOrData;
+    if( typeof( idOrData ) == 'object' ) {
+      id = m.e._getDOMUniqueId( idOrData );
+    }
+
+    // Get title
+    const ei = m.e.getEditorInfo( id );
+    const title = ei.title;
+    // Get fileURL
+    const url = ( ei.nodeData.fileURL? ei.nodeData.fileURL: '' );
+    // Get position
+    const elem = document.getElementById( id );
+
+    const leftPos = ( elem? parseInt( elem.style.left ): ei._position[0] ) ;
+    const browserWidth = window.innerWidth;
+    let screenDirection = 'Center';
+    let screenIndex = 0;
+    let screenFactor = 1;
+    if( leftPos < 0 ) {
+      screenIndex = Math.ceil( Math.abs( leftPos/browserWidth ) );
+      screenDirection = `Left`;
+      screenFactor = screenIndex;
+    } else if( leftPos > browserWidth ) {
+      screenIndex = Math.floor( Math.abs( leftPos/browserWidth ) );
+      screenDirection = `Right`;
+      screenFactor = -screenIndex;
+
+    }
+
+    // Create result
+    const result = {
+      id,
+      title,
+      url,
+      screenDirection,
+      screenIndex,
+      screenFactor,
+    };
+    return( result );
+  }
+  getWindowDiv( idOrData ) {
+    let id = idOrData;
+    if( typeof( idOrData ) == 'object' ) {
+      id = m.e._getDOMUniqueId( idOrData );
+    }
+    return( document.getElementById( id ) );
+  }
+  getAllWindowDiv() {
+    return( document.getElementById( 'mainDiv' ).children );
   }
   openSelectionWindow() {
     const e = this.getEditor( config.htmlDiv.graphDiv );
@@ -74,9 +134,15 @@ class EditorManager extends EditorChangeManager {
       e.updateSystemNode( nodeData );
       // Get a copy of the node data
       //const newNodeData = e.getNodeData( nodeData.key, true );
-      const newNodeData = getNodeData( e, nodeData.key, true );
+      const newNodeData = getNodeData( nodeData.key, true );
       // Open window
       this.openWindowFromNodeData( newNodeData );
+
+      // Set selection class
+      const winDiv = this.getWindowDiv( nodeData );
+      if( winDiv ) {
+        winDiv.classList.add( nodeData.isSystem.slice( 1, -1 ) );
+      }
     }
   }
   openModelWindow() {
@@ -86,9 +152,15 @@ class EditorManager extends EditorChangeManager {
       e.updateSystemNode( nodeData );
       // Get a copy of the node data
       //const newNodeData = e.getNodeData( nodeData.key, true );
-      const newNodeData = getNodeData( e, nodeData.key, true );
+      const newNodeData = getNodeData( nodeData.key, true );
       // Open window
       this.openWindowFromNodeData( newNodeData );
+
+      // Set model class
+      const winDiv = this.getWindowDiv( nodeData );
+      if( winDiv ) {
+        winDiv.classList.add( nodeData.isSystem.slice( 1, -1 ) );
+      }
     }
   }
   openWindowFromNodeData( nodeData, x, y ) {
@@ -106,6 +178,13 @@ class EditorManager extends EditorChangeManager {
     isPinned = ( isPinned == undefined? false: isPinned );
     // If editor already open => put window on top
     if( this.isEditorOpen( id, nodeData ) ) {
+      // Check if window is in a virtual screeen
+      const bi =this.getEditorBasicInfo( id );
+      if( bi.screenIndex != 0 ) {
+        // Scroll to the virtual screen
+        this.moveAllWindowTo( bi.screenFactor );
+      }
+      // Put the window on top of all the others
       this.putWindowOnTop( id );
       return;
     }
@@ -147,6 +226,8 @@ class EditorManager extends EditorChangeManager {
       editorInfo = new editorInfo.classRef( id, nodeData, position );
       this.editorList[id] = editorInfo;
       editorInfo.setParentGraph( currGraphNodeData );
+      // Put window on top
+      this.putWindowOnTop( id );
       // If should be pinned => pin it
       if( isPinned ) {
         editorInfo.setPinOn();
@@ -169,7 +250,10 @@ class EditorManager extends EditorChangeManager {
     const browserWidth = window.innerWidth;
     const browserHeight = window.innerHeight;
     if( position && position[0] ) { 
-      emDiv.style.left = Math.min( browserWidth-100, Math.max( 0, position[0] ) )+'px';
+      // NOTE: I commented the next line to keep style.left as it is so that
+      //       window are restored also in the horizontal virtual screen
+      //emDiv.style.left = Math.min( browserWidth-100, Math.max( 0, position[0] ) )+'px';
+      emDiv.style.left = position[0]+'px';
     }
     if( position && position[1] ) {
       emDiv.style.top = Math.min( browserHeight-100, Math.max( 0, position[1] ) )+'px';
@@ -192,7 +276,7 @@ class EditorManager extends EditorChangeManager {
                             <button class='editorDivBSave' type="button"
                                     onclick="m.e.saveEditor('${id}')">Save
                             </button>
-                            <div class='title'>${name}</div>
+                            <div class='title' ondblclick="selectNodeOfWindow('${id}')">${name}</div>
                           </div>
                           <div class='editorDiv' id='${editorDivId}'></div>
                           <div class='resizer top-left'></div>
@@ -211,6 +295,57 @@ class EditorManager extends EditorChangeManager {
     // Set reziable control buttons
     setDivAsResizable( `#${id}`, 'px', onWindowResize );
     return( editorDivId );
+  }
+  newWinBox( id, name, parentDiveId, onPositionChanged, position ) {
+    // Compute window position
+    const winPosition = [];
+    const browserWidth = window.innerWidth;
+    const browserHeight = window.innerHeight;
+    if( position && position[0] ) { 
+      winPosition[0] = position[0]+'px';
+    }
+    if( position && position[1] ) {
+      winPosition[1] = Math.min( browserHeight-100, Math.max( 0, position[1] ) )+'px';
+    }
+    if( position && position[2] ) { winPosition[2] = position[2]+'px'; }
+    if( position && position[3] ) { winPosition[3] = position[3]+'px'; }
+    // Define editor id
+    const editorDivId = id+'Editor';
+    // Define window options
+    const root = document.getElementById( parentDiveId );
+    const options = {
+      id,           // Window div
+      root,         // Parent element
+      title: name,  // Window title
+      class: 'modern',
+      x: winPosition[0],
+      y: winPosition[1],
+      width: winPosition[2],
+      height: winPosition[3],
+      // Events
+      onmove: onPositionChanged,
+      onresize: onPositionChanged,
+      onclose: function(){ m.e.closeEditor( true, id ) },
+      // Window content
+      html: ` <div class='editorDiv' id='${editorDivId}'></div>`,
+    };
+    // Create a new window
+    const win = new WinBox( options );
+    // Customize the window: add pin icon
+    win.removeControl( 'wb-max' );
+    win.addControl({
+      index: 2,
+      class: "wb-like",
+      image: "/fileServer/pictures/unpinnedw.svg",
+      click: function(event,winbox) {
+          // the winbox instance will be passed as 2nd parameter
+          // console.log(winbox.id);
+          // "this" refers to the button which was clicked:
+          this.classList.toggle( "active" );
+          m.e.pinEditor( id );
+      }
+    });
+    return( { editorDivId, win } );
   }
   // TODO: the button for this is not well visulized
   toogleCollapseWindow( id ) {
@@ -249,6 +384,13 @@ class EditorManager extends EditorChangeManager {
     const minZ = 10;
     // Get z index of window to put on top
     const eWindow = document.getElementById( id );
+
+    const windowEi = this.getEditorInfo( id );
+    if( windowEi.isPopup ) {  // Exclude isPopup window (browser tabs)
+      windowEi.openPopupWindow();
+      return;
+    }
+
     let zWindow = eWindow.style.zIndex;
     zWindow = parseInt( !zWindow? minZ: zWindow );
     // List of all open window
@@ -262,7 +404,7 @@ class EditorManager extends EditorChangeManager {
       for( const key of owlKyeList ) {
         // Ger window related info
         //const nodeData = e.getNodeData( key );
-        const nodeData = getNodeData( e, key );
+        const nodeData = getNodeData( key );
         const wId = m.e._getDOMUniqueId( nodeData );
         const we = document.getElementById( wId );
         if( we ) {
@@ -274,6 +416,7 @@ class EditorManager extends EditorChangeManager {
         }
       }
     }
+    
     // Get list of id of all windows pinned
     const pw = getStatus( 'pinnedWindow' );
     if( pw ) {
@@ -293,19 +436,34 @@ class EditorManager extends EditorChangeManager {
         }
       }
     }
+
     // Sort all window according to z order
     winInfoList.sort( (a,b)=> { 
       if( a.wz < b.wz ) return -1;
       else if( a.wz > b.wz ) return +1;
       else return 0;
     });
+
+    // WORKAROUND: re-set main diagram z-order to make sure windows are all on top
+    document.getElementById( ei.id ).style.zIndex = minZ-1;
+
     // Re-assign a z order in a fix range
+    //console.log( 'winInfoList.len', winInfoList.length );
     for( let i = 0; i < winInfoList.length; ++i ) {
       const winInfo = winInfoList[i];
       winInfo.we.style.zIndex = minZ+i;
+      //console.log( i, winInfo.wId, 'z-order', minZ+i, 'class', winInfo.we.className );
+      const header = winInfo.we.getElementsByClassName( 'resizerHeader' )[0];
+      if( header ) {
+        header.style.background = 'DimGray';
+      }
     }
     // Set highest z value to id window
     eWindow.style.zIndex = minZ+winInfoList.length+1;
+    const header = eWindow.getElementsByClassName( 'resizerHeader' )[0];
+    if( header ) {
+      header.style.background = 'Indigo';
+    }
     //this._setEditorZIndex( winId, topZ );
   }
   saveEditor( id, onSaveDone ) {
@@ -331,6 +489,13 @@ class EditorManager extends EditorChangeManager {
   }
   saveWindowPosition( id, nodeData, isPin ) {
     if( id && nodeData && !this.isStatusOnUpdate ) {
+
+      // Exclude saving of Popup window (web browser)
+      // since they are not correctly handled yet
+      if( nodeData.isPopup ) {
+        return;
+      }
+
       const ei = this.getEditorInfo( config.htmlDiv.graphDiv );
       const position = this.getEditorPosition( id );
       // Set position in nodeData too
@@ -356,11 +521,11 @@ class EditorManager extends EditorChangeManager {
       this.editorHasChanged();
     }
   }
-  pinEditor( id ) {
+  pinEditor( id, isForcePin ) {
     const ei = this.getEditorInfo( id );
     const nodeData = ei.nodeData;
     // If not yet pinned window
-    this.tooglePinNodeData( nodeData )
+    this.tooglePinNodeData( nodeData, isForcePin )
     // If succesfully pinned
     if( this.isURLPinned( nodeData.fileURL) ) {
       // In case, remove window from openWindowList
@@ -413,6 +578,10 @@ class EditorManager extends EditorChangeManager {
         if( nodeData.isVisible != undefined ) {
           pw[nodeData.fileURL]['isVisible'] = nodeData.isVisible;
         }
+        const winDiv = this.getWindowDiv( nodeData );
+        if( winDiv ) {
+          winDiv.classList.add( 'pinned' );
+        }
       }
       setStatus( (s)=> s.pinnedWindow = pw );
     } else {
@@ -420,6 +589,10 @@ class EditorManager extends EditorChangeManager {
       delete pw[nodeData.fileURL];
       if( !this.isStatusOnUpdate ) {
         setStatus( (s)=> s.pinnedWindow = pw );
+      }
+      const winDiv = this.getWindowDiv( nodeData );
+      if( winDiv ) {
+        winDiv.classList.remove( 'pinned' );
       }
     }
   }
@@ -469,7 +642,7 @@ class EditorManager extends EditorChangeManager {
         // Load opened window for this graph
         for( const key of keyList ) {
           //const nodeData = e.getNodeData( key );
-          const nodeData = getNodeData( e, key );
+          const nodeData = getNodeData( key );
           if( nodeData ) {
             const position = owl[url][key];
             if( nodeData ) {
@@ -479,6 +652,11 @@ class EditorManager extends EditorChangeManager {
               if( nodeData.isSystem ) {
                 const ei = m.e.getEditorInfo( id );
                 ei.showSaveButton();
+                // Set class for selection/model
+                const winDiv = this.getWindowDiv( nodeData );
+                if( winDiv ) {
+                  winDiv.classList.add( nodeData.isSystem.slice( 1, -1 ) );
+                }
               }
             }
           } else { // Node may be deleted
@@ -486,6 +664,20 @@ class EditorManager extends EditorChangeManager {
             this.editorHasChanged();
           }
         }
+      }
+    }
+    this.isStatusOnUpdate = false;
+  }
+  cloneGraphWindow( oldURL, newURL ) {
+    this.isStatusOnUpdate = true;
+    const owl = getStatus( 'openWindowList' );
+    if( owl && owl[oldURL] ) {
+      owl[newURL] = {};
+      const keyList = Object.keys( owl[oldURL] );
+      // Load opened window for this graph
+      for( const key of keyList ) {
+        // Clone the window key with the list of coordinates
+        owl[newURL][key] = [...owl[oldURL][key]];
       }
     }
     this.isStatusOnUpdate = false;
@@ -539,7 +731,9 @@ class EditorManager extends EditorChangeManager {
           // Delete window
           delete this.editorList[id];
           const element = document.getElementById( id );
-          element.parentNode.removeChild( element );
+          if( element ) {
+            element.parentNode.removeChild( element );
+          }
           if( onCloseDone ) {
             onCloseDone();
           }
@@ -578,7 +772,7 @@ class EditorManager extends EditorChangeManager {
     //Start the animation
     const browserWidth = window.innerWidth;
     const horizontalShift = browserWidth*direction;
-    const windowDivList = document.getElementById('mainDiv').children;
+    const windowDivList = this.getAllWindowDiv();
     let scrollStepTime = 5;
     let scrollPosition = 0;
     const scrollInc = horizontalShift/100;
@@ -587,23 +781,52 @@ class EditorManager extends EditorChangeManager {
       // Execute animation
       if( Math.abs( scrollPosition ) < Math.abs( horizontalShift ) ) {
         for( const div of windowDivList ) {
-          if( div.id != '_systemMonitor__System_Monitor' ) {
-            if( scrollPosition == 0 ) {
-              currWinPosition[div.id] = parseInt( div.style.left );
-            }
-            div.style.left = ( parseInt( div.style.left )+scrollInc )+'px';
+          if( div.classList.contains( 'pinned' ) ||
+              div.classList.contains( 'GraphSelection' ) || // Selection
+              div.classList.contains( 'GraphModel' ) ||     // Model Editor
+              ( div.id == '_systemMonitor__System_Monitor' ) ) {
+            continue;
           }
+          
+          if( scrollPosition == 0 ) {
+            currWinPosition[div.id] = parseInt( div.style.left );
+          }
+          div.style.left = ( parseInt( div.style.left )+scrollInc )+'px';
         }
         scrollPosition += scrollInc;
         setTimeout( doScroll, scrollStepTime );
       } else {
-        // At the end, in orede to avoid decimal drift we set a final position again
+        // At the end, in order to avoid decimal drift we set a final position again
         // In this way we have no cumulative error due to scrollInc decimals cut
         for( const div of windowDivList ) {
-          if( div.id != '_systemMonitor__System_Monitor' ) {
-            div.style.left = (currWinPosition[div.id]+(direction*browserWidth))+'px';
+          if( div.classList.contains( 'pinned' ) ||
+              div.classList.contains( 'GraphSelection' ) || // Selection
+              div.classList.contains( 'GraphModel' ) ||     // Model Editor
+              ( div.id == '_systemMonitor__System_Monitor' ) ) {
+            continue;
+          }
+
+          const positionX = (currWinPosition[div.id]+(direction*browserWidth));
+          div.style.left = positionX+'px';
+
+          // Update window position in window status
+          const key = this._getWindowKey( div.id );
+          if( key != -1 ) {
+            const graphURL = getMainGraphURL();
+            //const winInfo = m.status.openWindowList[graphURL];
+            const owl = getStatus( 'openWindowList' );
+            if( owl ) {
+              const winInfo = owl[graphURL];
+              if( winInfo ) {
+                const posInfo = winInfo[key];
+                if( posInfo ) {
+                  posInfo[0] = positionX;
+                }
+              }
+            }
           }
         }
+        this.editorHasChanged();
 
         // Unlock this function
         this.isMoveAllWindowRunning = false;
@@ -632,6 +855,12 @@ class EditorManager extends EditorChangeManager {
                    parseInt( element.style.top ),
                    parseInt( element.style.width ),
                    parseInt( element.style.height ) ];
+    } else {
+      const editor = this.getEditor( id );
+      if( editor instanceof WinBox ) {
+        posiiton = [ editor.x, editor.y,
+                     editor.width, editor.height ];
+      }
     }
     return( position );
   }
@@ -655,6 +884,7 @@ class EditorManager extends EditorChangeManager {
   // Private Functions
   //------------------------
   _getDOMUniqueId( nodeData ) {
+    // Get a new id from a node (url_key) (couterpart of _getWindowKey)
     if( nodeData ) {
       const url = ( nodeData.fileURL? nodeData.fileURL: 'emptyURL' );
       const id = url+'_'+nodeData.key;
@@ -662,6 +892,16 @@ class EditorManager extends EditorChangeManager {
     } else {
       return( 'noId' );
     }
+  }
+  _getWindowKey( uniqueId ) {
+    // Get the key of the node that opened this window id (couterpart of _getDOMUniqueId)
+    let result = -1;
+    const idx = uniqueId.lastIndexOf( '_' );
+    if( idx != -1 ) {
+      const key = uniqueId.substring( idx+1 );
+      result = parseInt( key );
+    }
+    return( result );
   }
   _closeIdListEditor( idList, onCloseDone ) {
     if( !Array.isArray( idList ) ) {

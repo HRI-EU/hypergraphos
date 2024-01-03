@@ -50,8 +50,10 @@ html{
  }
 .diagramDiv {
   position: absolute;
+  /*top: -70px;   /* TODO: This allow hiding top left corner of graph */
   width: 100%;
-  height: 100%;
+  height: 100%; /* TODO: Set to 120%
+   re-enable also last lines in htmlMenu.js in function _computeRootMenuMouseClickXY */
   background: rgb(160, 160, 160);
 }
 .paletteDiv {
@@ -64,7 +66,7 @@ html{
 	width: 230px;
 	height: 420px;
 	/*bottom: 102px;*/
-	z-index:9;
+	z-index: 11;
   visibility: hidden;
 }
 #nodePalette {
@@ -113,7 +115,7 @@ html{
   width: 100%;
   height: 20px;
   min-height: 20px; 
-  background:DarkSlateGray;
+  background:dimgray;
   color:Silver;
   text-align:center;
   border-bottom-style: solid;
@@ -147,12 +149,14 @@ html{
 .editorDiv {
   width: 100%;
   height: 100%;
-  background: #1d1f21;
+  /*background: #1d1f21;*/ /* now set in the Editor.js */
   overflow: hidden;
 }
 .webViewer {
   width: 100%;
   height: 100%;
+  border-width: 0px;
+  background: gainsboro;
 }
 .search {
  color: #9383c3;

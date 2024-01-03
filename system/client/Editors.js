@@ -10,44 +10,9 @@ Date: 10.07.2020
 =============================================================================
 */
 
-function getNodeData( g, key, isCopy ) {
-  let result = g.getNodeData( key, isCopy );
-  if( result && result.isLink ) {
-    const fileURL = result.fileURL;
-    const [ url, refKey ] = fileURL.split( '#' );
-    if( url && refKey ) {
-      const currentGraphURL = g.getGraphPath(); // TODO: rename this function with URL
-      if( url == currentGraphURL ) {
-        result = g.getNodeData( refKey, isCopy );
-      } else {
-        // ask server
-      }
-    }
-  }
-  return( result );
-}
-function setNodeDataField( g, key, field, value ) {
-  let result = g.getNodeData( key );
-  if( result && result.isLink && ( field == 'fileContent' ) ) {
-    const fileURL = result.fileURL;
-    const [ url, refKey ] = fileURL.split( '#' );
-    if( url && refKey ) {
-      if( url == currentGraphURL ) {
-        g.setNodeDataField( refKey, field, value );
-      } else {
-        // ask server
-      }
-    } else {
-      g.setNodeDataField( key, field, value );
-    }
-  } else {
-    g.setNodeDataField( key, field, value );
-  }
-}
-
 class EditorBase extends EditorChangeManager {
   constructor() {
-    super( 10 ); // Saving timeout: 10 seconds
+    super( 10 ); // TODO: set to 10 // Saving timeout: 10 seconds
     this.nodeData = null;
     this.title = '';
     this.parentGraph = null;
@@ -57,11 +22,16 @@ class EditorBase extends EditorChangeManager {
   }
   setTitle( title ) {
     title = ( title != undefined? title: this.title );
-    const element = document.querySelector( `#${this.id} .title` );
-    if( element ) {
-      element.innerHTML = title;
+    if( this.editor instanceof WinBox ) {
+      this.editor.setTitle( title );
+    } else if( this.editor && ( this.editor.opener == window ) ) {
+      // Not possible
+    } else {
+      const element = document.querySelector( `#${this.id} .title` );
+      if( element ) {
+        element.innerHTML = title;
+      }
     }
-
   }
   setParentGraph( nodeData ) {
     this.parentGraph = nodeData;
@@ -78,7 +48,7 @@ class EditorBase extends EditorChangeManager {
     }
   }
   setPinOn() {
-    m.e.pinEditor( this.id );
+    m.e.pinEditor( this.id, true );
   }
   isPin() {
     const pw = getStatus( 'pinnedWindow' );
@@ -200,7 +170,7 @@ class GraphEditor extends EditorBase {
       onLoadGraph: ( nodeData )=> {
         // Get a copy of the node data
         //const newNodeData = this.editor.getNodeData( nodeData.key, true );
-        const newNodeData = getNodeData( this.editor, nodeData.key, true );
+        const newNodeData = getNodeData( nodeData.key, true );
         // Give a new url in case fileURL is empty
         this._verifyFileURL( newNodeData );
         // Navigate to node
@@ -209,11 +179,47 @@ class GraphEditor extends EditorBase {
       onLoadFile: ( nodeData, x, y )=> {
         // Get a copy of the node data
         //const newNodeData = this.editor.getNodeData( nodeData.key, true );
-        const newNodeData = getNodeData( this.editor, nodeData.key, true );
+        const newNodeData = getNodeData( nodeData.key, true );
         // Give a new url in case fileURL is empty
         this._verifyFileURL( newNodeData );
         // Open node window
         m.e.openWindowFromNodeData( newNodeData, x, y );
+      },
+      onClone: ( nodeData )=> {
+        if( nodeData.fileURL ) {
+          // Get a copy of the node data
+          const newNodeData = getNodeData( nodeData.key, true );
+
+          // Once node loaded, update URL and save
+          const onNodeLoaded = ( source )=> {
+            // Save old URL
+            const oldURL = newNodeData.fileURL;
+
+            // Update the url
+            // Reset fileURL ==> a new URL will be created
+            newNodeData.fileURL = this.editor.resetFileURL( oldURL );
+
+            if( newNodeData.fileURL.startsWith( 'graph://' ) ) {
+              const newURL = this.editor.cloneGraphFile( oldURL );
+              newNodeData.fileURL = newURL;
+            } else {
+              // Set a new fileURL
+              this._verifyFileURL( newNodeData );
+
+              // Clone opened windows
+              const newURL = newNodeData.fileURL;
+              m.e.cloneGraphWindow( oldURL, newURL );
+  
+              // Temporarly save the content
+              newNodeData.fileContent = source;
+              // Save node content to the server
+              saveNodeContent( newNodeData );
+            }
+          };
+
+          // Load node data content
+          loadNodeContent( newNodeData, onNodeLoaded );
+        }
       },
       onShowRootGraph: ()=> {
         const newNodeData = config.graph.rootGraphNodeData;
@@ -257,7 +263,7 @@ class GraphEditor extends EditorBase {
           fileType: 'input/fields',
         };
         const id = m.e._getDOMUniqueId( nodeData );
-        m.e.openWindow( id, 'DSLViewer', nodeData, [x, y, 160, 350 ] );
+        m.e.openWindow( id, 'DSLViewer', nodeData, [x, y, 160, 450 ] );
       },
       onShowGraphTemplateDialog: ( x, y )=> {
         const nodeData = {
@@ -342,6 +348,9 @@ class GraphEditor extends EditorBase {
       // NOTE: we set this with timeout because the GoJS graph keep
       // generating change event after loading
       setTimeout( ()=> this.isContentJustLoaded = false, 50 );
+      // Update readonly status
+      this.editor.doSetReadOnly( getSystemReadOnly() );
+
       // call event listeners
       const listenerCallList = this.listenerList['onLoad'];
       if( listenerCallList.length > 0 ) {
@@ -460,7 +469,7 @@ class GraphEditor extends EditorBase {
         }
       } else {
         // First, save the json graph
-        nodeDataTemp = this.editor._getNodeDataCopy( this.nodeData );
+        nodeDataTemp = this.editor._getDataCopy( this.nodeData );
         const source = this.editor.getEditorSource();
         nodeDataTemp.fileContent = source;
         console.log( 'Graph call saveNodeContent()')
@@ -476,7 +485,7 @@ class GraphEditor extends EditorBase {
       onGraphSaved();
     }
   }
-  _verifyFileURL( nodeData ) {
+  _verifyFileURL_old( nodeData ) {
     if( !nodeData.isLink && ( nodeData.isDir || nodeData.isFile ) ) {
       if( ( nodeData.fileURL != undefined ) && ( nodeData.fileURL == '' ) ) {
         const ext = getExtByFileType( nodeData.fileType );
@@ -484,7 +493,31 @@ class GraphEditor extends EditorBase {
         nodeData.fileURL = url;
         // NOTE: the setNodeDataField trigger the editorChange event
         //this.editor.setNodeDataField( nodeData.key, 'fileURL', url );
-        setNodeDataField( this.editor, nodeData.key, 'fileURL', url );
+        setNodeDataField( nodeData.key, 'fileURL', url );
+      }
+    }
+  }
+  _verifyFileURL( nodeData ) {
+    if( !nodeData.isLink && ( nodeData.isDir || nodeData.isFile ) ) {
+      if( nodeData.fileURL != undefined ) {
+        if( ( nodeData.fileURL == '' ) || ( nodeData.fileURL == '/fileServer/' ) ) {
+          // Initialize fileServer URL if is not complete
+          const ext = getExtByFileType( nodeData.fileType );
+          const url = getNewFileServerURL( ext );
+          nodeData.fileURL = url;
+          // NOTE: the setNodeDataField trigger the editorChange event
+          //this.editor.setNodeDataField( nodeData.key, 'fileURL', url );
+          setNodeDataField( nodeData.key, 'fileURL', url );
+        } else if( nodeData.fileURL == 'graph://fileServer/' ) {
+          // Initialize graphServer URL if is not complete
+          const ext = getExtByFileType( nodeData.fileType );
+          const url = getNewGraphFileServerURL( ext );
+          nodeData.fileURL = url;
+          // NOTE: the setNodeDataField trigger the editorChange event
+          //this.editor.setNodeDataField( nodeData.key, 'fileURL', url );
+          setNodeDataField( nodeData.key, 'fileURL', url );
+        }
+        // Otherwise the URL should be already set and valid
       }
     }
   }
@@ -496,7 +529,7 @@ class GraphEditor extends EditorBase {
     //   "isFile": true,
     //   "fileType": "text/javascript",
     //   "fileContent": "console.log( 'included' )",
-    //   "includeScript": true,
+    //   "isIncludeScript": true,
     //   ...
     // }
     // nodeData = {
@@ -504,42 +537,86 @@ class GraphEditor extends EditorBase {
     //   "isFile": true,
     //   "fileType": "text/javascript",
     //   "fileURL": "/fileServer/00/05.js",
-    //   "includeScript": true,
+    //   "isIncludeScript": true,
     //   ...
     // }
     //
     // TODO: get navigation in nodes from graph through an API function
     if( action == 'unload' ) {
-      const nodeScriptList = document.querySelectorAll( '.NodeData_IncludeScript' );
-      for( const nodeScript of nodeScriptList ) {
-        nodeScript.remove();
-      }
+      // const nodeScriptList = document.querySelectorAll( '.NodeData_IncludeScript' );
+      // for( const nodeScript of nodeScriptList ) {
+      //   nodeScript.remove();
+      // }
+      unloadLocalGraphScript();
     } else {
+      let isGraphReadOnly = true;
+
       const it = this.editor.diagram.nodes;
       it.reset();
       // Loop over all nodes
       while ( it.next() ) {
         // Get node data
         const nodeData = it.value.data;
-        // If we find a includeScript node
-        if( ( nodeData.fileType == 'text/javascript' ) &&
-            nodeData.isFile && nodeData.includeScript ) {
+        if( nodeData.category == 'Hierarchy_GraphInfo' ) {
+          if( nodeData.props_ ) {
+            // Set Date field with date if value is 'date@system'
+            const dateInfo = nodeData.props_.find( (e)=> e.name == 'Date' );
+            if( dateInfo ) {
+              const pValue = getRefValue( nodeData, dateInfo.value );
+              if( !pValue.isRef ) {
+                setNodeDataField( dateInfo, 'value', pValue.value );
+              }
+            }
+
+            // Set Path field with date if value is 'date@system'
+            const pathInfo = nodeData.props_.find( (e)=> e.name == 'Path' );
+            if( pathInfo ) {
+              const pValue = getRefValue( nodeData, pathInfo.value );
+              if( !pValue.isRef ) {
+                setNodeDataField( pathInfo, 'value', pValue.value );
+              }
+            }
+
+            // Set Name field with 'graph name'
+            const nameInfo = nodeData.props_.find( (e)=> e.name == 'Name' );
+            if( nameInfo ) {
+              // Get graph name
+              const graphName = ( this.nodeData.label? this.nodeData.label: this.nodeData.key );
+              const pValue = getRefValue( nodeData, nameInfo.value );
+              if( !pValue.isRef && ( typeof( pValue.nodeData ) == 'object' ) ) {
+                setNodeDataField( pValue.nodeData.key, pValue.name, graphName );
+              } else {
+                // Set only the graph name in 'Name' property in props_
+                setNodeDataField( nameInfo, 'value', graphName );
+              }
+            }
+
+            // Check Author for default read access
+            const authorInfo = nodeData.props_.find( (e)=> e.name == 'Authors' );
+            const authorList = jsyaml.load( authorInfo.value );
+            if( typeof( authorList ) == 'string' ) {
+              isGraphReadOnly = ( authorList != getUserName() );
+            } else {
+              isGraphReadOnly = !authorList.includes( getUserName() );
+            }
+          }
+        }
+        // If we find a isIncludeScript node
+        if( ( ( nodeData.fileType == 'text/javascript' ) ||
+              ( nodeData.fileType == 'text/css' ) ) &&
+            nodeData.isFile && nodeData.isIncludeScript ) {
           switch( action ) {
             case 'load': {
-              const script = document.createElement( 'script' );
-              script.type = 'text/javascript';
-              script.className = 'NodeData_IncludeScript';
-              script.addClass
               if( nodeData.fileURL ) {
-                script.src = nodeData.fileURL;
+                loadScript( nodeData.fileURL );
               } else if( nodeData.fileContent ) {
-                script.innerHTML = nodeData.fileContent;
+                loadScriptSource( nodeData.fileContent, null, true );
               }
-              document.head.append( script );
             }
           }
         }
       }
+      setSystemReadOnly( isGraphReadOnly );
     }
 	}
 }
@@ -558,6 +635,21 @@ class TextEditor extends EditorBase {
     this.editor = new ACESourceCodeEditor( this.editorDivId );
     const language = this.fileType.substring( 5 ); // get value after 'text/'
     this.editor.setEditorMode( 'ace/mode/'+language );
+    const tww = { name: 'toogleWrapMode', 
+                  bindKey: { win: 'Alt-Z', mac: 'Option-Z' }, 
+                  exec: function(ed) {
+                          const wrapMode = ed.getOption( 'wrap' );
+                          ed.setOption( 'wrap', ( wrapMode == 'off'? true: false ) );
+                        }
+                };
+    this.editor.aceEditor.commands.addCommand( tww ); 
+    if( nodeData.editorTheme ) {
+      this.editor.setEditorTheme( nodeData.editorTheme );
+    } else {
+      const editorDiv = document.getElementById( this.editorDivId );
+      editorDiv.style.background = '#1d1f21';
+    }
+
 
     // Pause tracking editor changes
     this.setPauseChange( true );
@@ -588,7 +680,7 @@ class TextEditor extends EditorBase {
     this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${this.fileType}]`;
     this.setTitle( this.title );
     // Update pin
-    if( nodeData.fileURL ) {
+    if( nodeData.fileURL && !nodeData.fileURL.startsWith( 'graph://' ) ) {
       m.e.showWindowPin( this.id, 'visible' );
     }
     // Set editor content
@@ -622,7 +714,7 @@ class TextEditor extends EditorBase {
       } else {
         const source = this.editor.getEditorSource();
         const e = m.e.getEditor( config.htmlDiv.graphDiv );
-        const nodeDataTemp = e._getNodeDataCopy( this.nodeData );
+        const nodeDataTemp = e._getDataCopy( this.nodeData );
         nodeDataTemp.fileContent = source;
         saveNodeContent( nodeDataTemp, onEditorSaved );
       }
@@ -756,7 +848,7 @@ class HTMLExploreEditor extends EditorBase {
       } else {
         const source = this.editor.getContents();
         const e = m.e.getEditor( config.htmlDiv.graphDiv );
-        const nodeDataTemp = e._getNodeDataCopy( this.nodeData );
+        const nodeDataTemp = e._getDataCopy( this.nodeData );
         nodeDataTemp.fileContent = source;
         saveNodeContent( nodeDataTemp, onEditorSaved );
       }
@@ -779,7 +871,11 @@ class ImageEditor extends EditorBase {
     this.editorDivId = m.e.newDOMWindow( id, this.title, 
                                          config.htmlDiv.mainDiv,
                                          this.storeWindowPosition.bind(this),
-                                         position );  
+                                         position );
+    // Set background
+    const editorDiv = document.getElementById( this.editorDivId );
+    editorDiv.style.background = '#1d1f21';
+    // Load content
     this.loadEditorContent( nodeData );
   }
   loadEditorContent( nodeData ) {
@@ -812,6 +908,101 @@ class WebViewer extends EditorBase {
     this.id = id;
     this.editor = null;
 
+    // Create window
+    if( nodeData.isPopup && nodeData.fileURL ) {
+      // Define editor id
+      this.editorDivId = id+'Editor'; // <--- NOT YET USED!!!!!! in this case
+      this._position = position;
+      this.isPopup = true;
+      // We will open a new tab for this window in the loadEditorContent()
+    } else {
+      const winInfo = m.e.newWinBox( id, this.title, 
+                                    config.htmlDiv.mainDiv,
+                                    this.storeWindowPosition.bind(this),
+                                    position );
+
+      this.editorDivId = winInfo.editorDivId;
+      this.editor = winInfo.win;
+    }
+
+    this.loadEditorContent( nodeData );
+  }
+  loadEditorContent( nodeData ) {
+    // Update current nodeData
+    this.nodeData = nodeData;
+    // Update window title with:
+    this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${nodeData.fileType}]`;
+    this.setTitle( this.title );
+    // Update pin
+    if( nodeData.fileURL ) {
+      m.e.showWindowPin( this.id );
+    }
+    // Set editor content container
+    if( nodeData.isPopup && nodeData.fileURL ) {
+      const browserX = window.screenX;
+      const browserY = window.screenY;
+      this._options = `top=${browserY+this._position[1]},
+                       left=${browserX+this._position[0]},
+                       width=${this._position[2]},
+                       height=${this._position[3]},
+                       location=0,menubar=0`;
+
+      this.openPopupWindow();
+    } else if( nodeData.isLocalDiv && ( nodeData.fileContent != undefined ) ) {
+      const element = document.getElementById( this.editorDivId );
+      const divID = `${this.id}_frame`;
+      const html = getNodeDataField( nodeData.key, 'fileContent', '<h2 style="color:white">Default Div Content</h2>' );
+      element.innerHTML = `<div id='${divID}' class='webViewer'>${html}</div>`;
+
+      // Insert all scripts in the document.head so to run all of them
+      const dp = new DOMParser();
+      const doc = dp.parseFromString( html, 'text/html' );
+      const scriptList = doc.getElementsByTagName( 'script' );
+      for( const script of scriptList ) {
+        const source = script.innerHTML;
+        // const newScript = document.createElement( 'script' );
+        // newScript.innerHTML = source;
+        // newScript.type = 'text/javascript';
+        // newScript.className = 'NodeData_IncludeScript'; // So to be removed when loading another grap
+        // document.head.append( newScript );
+        loadScriptSource( source, null, true );
+      }
+    } else if( nodeData.fileURL ) {
+      const element = document.getElementById( this.editorDivId );
+      const fileURL = ( nodeData.fileURL? nodeData.fileURL: '' );
+      // NOTE:  name="${Date.now()}" is a workaround to avoid caching
+      element.innerHTML = `<iframe id='${this.id}_frame' class='webViewer' src="${fileURL}?_=${Date.now()}"></iframe>`;
+      // const url = new URL( nodeData.fileURL, window.location ).toString();
+      // this.win.setUrl( url );
+    } else if( nodeData.fileContent != undefined ) {
+      const element = document.getElementById( this.editorDivId );
+      const frameId = `${this.id}_frame`;
+      // NOTE:  name="${Date.now()}" is a workaround to avoid caching
+      element.innerHTML = `<iframe id='${frameId}' name="${Date.now()}" class='webViewer' src='about:blank'></frame>`;
+      const frameElement = document.getElementById( frameId );
+      frameElement.contentDocument.open();
+      frameElement.contentDocument.write( nodeData.fileContent );
+      frameElement.contentDocument.close();
+    }
+  }
+  saveEditorContent( onSaved ) {
+    if( onSaved ) {
+      onSaved();
+    }
+  }
+  openPopupWindow() {
+    this.editor = open( this.nodeData.fileURL, this.title, this._options );
+      if( this.editor ) {
+        this.editor.focus();
+      }
+  }
+}
+class WebViewer2 extends EditorBase {
+  constructor( id, nodeData, position ) {
+    super();
+    this.id = id;
+    this.editor = null;
+
     this.editorDivId = m.e.newDOMWindow( id, this.title, 
                                          config.htmlDiv.mainDiv,
                                          this.storeWindowPosition.bind(this),
@@ -828,15 +1019,36 @@ class WebViewer extends EditorBase {
     if( nodeData.fileURL ) {
       m.e.showWindowPin( this.id );
     }
-    // Set editor content
-    if( nodeData.fileURL ) {
+    // Set editor content container
+    if( nodeData.isLocalDiv && ( nodeData.fileContent != undefined ) ) {
+      const element = document.getElementById( this.editorDivId );
+      const divID = `${this.id}_frame`;
+      const html = getNodeDataField( nodeData.key, 'fileContent', '<h2 style="color:white">Default Div Content</h2>' );
+      element.innerHTML = `<div id='${divID}' class='webViewer'>${html}</div>`;
+
+      // Insert all scripts in the document.head so to run all of them
+      const dp = new DOMParser();
+      const doc = dp.parseFromString( html, 'text/html' );
+      const scriptList = doc.getElementsByTagName( 'script' );
+      for( const script of scriptList ) {
+        const source = script.innerHTML;
+        // const newScript = document.createElement( 'script' );
+        // newScript.innerHTML = source;
+        // newScript.type = 'text/javascript';
+        // newScript.className = 'NodeData_IncludeScript'; // So to be removed when loading another grap
+        // document.head.append( newScript );
+        loadScriptSource( source, null, true );
+      }
+    } else if( nodeData.fileURL ) {
       const element = document.getElementById( this.editorDivId );
       const fileURL = ( nodeData.fileURL? nodeData.fileURL: '' );
-      element.innerHTML = `<iframe id='${this.id}_frame' class='webViewer' src="${fileURL}"></iframe>`;
+      // NOTE:  name="${Date.now()}" is a workaround to avoid caching
+      element.innerHTML = `<iframe is="x-frame-bypass" id='${this.id}_frame' class='webViewer' src="${fileURL}?_=${Date.now()}"></iframe>`;
     } else if( nodeData.fileContent != undefined ) {
       const element = document.getElementById( this.editorDivId );
       const frameId = `${this.id}_frame`;
-      element.innerHTML = `<iframe id='${frameId}' class='webViewer' src='about:blank'></frame>`;
+      // NOTE:  name="${Date.now()}" is a workaround to avoid caching
+      element.innerHTML = `<iframe is="x-frame-bypass" id='${frameId}' name="${Date.now()}" class='webViewer' src='about:blank'></frame>`;
       const frameElement = document.getElementById( frameId );
       frameElement.contentDocument.open();
       frameElement.contentDocument.write( nodeData.fileContent );
@@ -864,6 +1076,11 @@ class FindViewer extends EditorBase {
                                          config.htmlDiv.mainDiv,
                                          this.storeWindowPosition.bind(this),
                                          position );
+    
+    // Set background
+    const editorDiv = document.getElementById( this.editorDivId );
+    editorDiv.style.background = '#1d1f21';
+    // Load content
     this.loadEditorContent( nodeData );
   }
   loadEditorContent( nodeData ) {
@@ -992,6 +1209,11 @@ class DSLViewer extends EditorBase {
                                          config.htmlDiv.mainDiv,
                                          this.storeWindowPosition.bind(this),
                                          position );
+    
+    // Set background
+    const editorDiv = document.getElementById( this.editorDivId );
+    editorDiv.style.background = '#1d1f21';
+    // Load content
     this.loadEditorContent( nodeData );
   }
   loadEditorContent( nodeData ) {
@@ -1052,6 +1274,11 @@ class GraphTemplateViewer extends EditorBase {
                                          config.htmlDiv.mainDiv,
                                          this.storeWindowPosition.bind(this),
                                          position );
+    
+    // Set background
+    const editorDiv = document.getElementById( this.editorDivId );
+    editorDiv.style.background = '#1d1f21';
+    // Load content
     this.loadEditorContent( nodeData );
   }
   loadEditorContent( nodeData ) {
@@ -1116,9 +1343,40 @@ class SystemMonitorViewer extends EditorBase {
                                          config.htmlDiv.mainDiv,
                                          this.storeWindowPosition.bind(this),
                                          position );  
+    
+    // Set background
+    const editorDiv = document.getElementById( this.editorDivId );
+    editorDiv.style.background = '#1d1f21';
+    // Load content
     this.loadEditorContent( nodeData );
+
     // Refresh System Monitor every 30 seconds
-    setInterval( ()=> this.loadEditorContent( this.nodeData ), 30*1000 );
+    this.refreshMonitorTimer = null;
+    const refreshFunction = ()=> { 
+      if( document.getElementById( this.editorDivId ) ) {
+        // If window is opern
+        this.loadEditorContent( this.nodeData );
+      } else {
+        // In this case the window has been closed => cancel timer
+        if( this.refreshMonitorTimer ) {
+          clearInterval( this.refreshMonitorTimer );
+        }
+      }
+    };
+    this.refreshMonitorTimer = setInterval( refreshFunction, 30*1000 );
+
+    // Capture CTRL+S and call save all!
+    window.addEventListener( 'keydown', function(event) {
+      if( event.ctrlKey || event.metaKey ) {
+        const key = String.fromCharCode(event.which).toLowerCase();
+        switch ( key ) {
+          case 's':
+            event.preventDefault();
+            saveAllEditorContent();
+            break;
+          }
+        }
+    });
   }
   loadEditorContent( nodeData ) {
     // Update current nodeData
@@ -1134,38 +1392,33 @@ class SystemMonitorViewer extends EditorBase {
     const element = document.getElementById( this.editorDivId );
     element.innerHTML = `<div style="width=100%;height = 100%">
                             <button type='button' style="width=100%" onclick='saveAllEditorContent()'>Save All</button>
-                            <button id='sysMonitorRefresh' type='button' style="width=100%">Refresh</button>
+                            <button id='sysMonitorRefresh' type='button' style="width=100%">Update</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button id='browserReload' type='button' style="width=100%">Browser Reload</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <button type='button' style="width=100%" onclick='m.e.openSelectionWindow()'>Show Selection Editor</button>
-                            <button type='button' style="width=100%" onclick='m.e.openModelWindow()'>Show Model Editor</button>
-                            <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( -1 )'>Slide Window to Left</button>
-                            <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( +1 )'>Slide Window to Right</button>
+                            <button type='button' style="width=100%" onclick='m.e.openModelWindow()'>Show Model Editor</button>&nbsp;&nbsp;&nbsp;
+                            <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( +1 )'>&lt;-Screen</button>
+                            <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( +0.5 )'>&lt;-|</button>
+                            <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( +0.05 )'>&lt;</button>
+                            <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( -0.05 )'>&gt;</button>
+                            <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( -0.5 )'>!-&gt;</button>
+                            <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( -1 )'>Screen-&gt;</button>
                           </div>
                           <div id='windowList'></div>`;
     const refreshButton = document.querySelector( '#sysMonitorRefresh' );
     refreshButton.onclick = ()=> this.loadEditorContent( nodeData );
+    const browserReloadButton = document.querySelector( '#browserReload' );
+    browserReloadButton.onclick = ()=> window.location.reload( true );
     const wList = document.querySelector( '#windowList' );
     const oeList = m.e.getEditorIdList();
     let source = '<table style="color: aquamarine;font-size: smaller;">';
     for( const id of oeList ) {
-      // Get fileURL
-      const ei = m.e.getEditorInfo( id );
-      const url = ( ei.nodeData.fileURL? ei.nodeData.fileURL: '' );
-
-      // Get position
-      const elem = document.getElementById( id );
-      const leftPos = parseInt( elem.style.left );
-      const browserWidth = window.innerWidth;
-      let screen = 'Center'
-      if( leftPos < 0 ) {
-        const s = Math.ceil( Math.abs( leftPos/browserWidth ) );
-        screen = `Left[${s}]`;
-      } else if( leftPos > browserWidth ) {
-        const s = Math.floor( Math.abs( leftPos/browserWidth ) );
-        screen = `Right[${s}]`;
+      const bi = m.e.getEditorBasicInfo( id );
+      let screen = bi.screenDirection;
+      if( bi.screenIndex != 0 ) {
+        screen = screen+`[${Math.abs(bi.screenIndex)}]`;
       }
-
       // Add item
-      const item = `<tr><td>[${id}]<td>${ei.title}<td>URL: ${url}<td>${screen}</tr>`;
+      const item = `<tr><td>[${bi.id}]<td>${bi.title}<td>URL: ${bi.url}<td>${screen}</tr>`;
       source = source+item;
     }
     wList.innerHTML = source;

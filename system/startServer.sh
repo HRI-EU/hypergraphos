@@ -16,4 +16,5 @@ if [[ ! -d "../node_modules" ]]; then
     echo "Installing node modules..."
     npm install
 fi
-node server
+
+node server & echo kill -9 $!  > ../stopServer.sh

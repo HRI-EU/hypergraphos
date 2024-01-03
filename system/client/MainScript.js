@@ -18,7 +18,33 @@ const m = {
   fileInfo: {},
   dslNameList: {},  // List of registered dsl name/url
   status: {},       // Current status of the system
+
+  // System Object for field value references
+	// See: parseRefValue()
+  system: {
+    dateTime: function(){ return( new Date().toLocaleString() ) },
+    date: function(){ return( new Date().toLocaleDateString() ) },
+    time: function(){ return( new Date().toLocaleTimeString()	) },
+    graphPath: function(){ g = getMainGraph(); return( g.graphPath ) },
+  },
 };
+
+function winAlert( msg, isCenter ) 
+{
+  isCenter = ( isCenter == undefined? true: isCenter );
+  new WinBox( 'Alert', {
+    modal: true,
+    autosize: true,
+    background: 'Crimson',
+    html: `<div style="margine: 0px;">`+
+            `<pre style="${isCenter? 'text-align: center;':''}">`+
+              msg+
+            `</pre>`+
+          `</div>`,
+  });
+}
+// Override standard alert function
+alert = winAlert;
 
 function _init() {
   m.mddStatus = document.getElementById( 'mdd-status' );
@@ -27,13 +53,38 @@ function _init() {
     _resizeWindow();
     m.e.updateSessionStatus();
    });
-  // Load the list of all available DSL and file/path counters
-  loadFileServerInfo();
-  // Load Current Status. Paramenter urlParams comes from index.html start
-  loadCurrentStatus( urlParams );
+
+  // If the system is loaded with file:///...(no server)
+  if( config.isLocalMode ) {
+    loadSystemInLocalMode();
+  } else { // Load here the system with server
+    // Load the list of all available DSL and file/path counters
+    loadFileServerInfo();
+    // Load Current Status. Paramenter urlParams comes from index.html start
+    loadCurrentStatus( urlParams );
+  }
+
+  // Set user name
+  let cookie = document.cookie;
+  const idx = cookie.indexOf( '{' );
+  if( idx >= 0 ) {
+    // NOTE: I have to do this to fix a problem where the
+    // cookie by Takeushi was containing some other stuff
+    cookie = cookie.substring( idx );
+  }
+
+  try {
+    const userInfo = JSON.parse(  cookie );
+    m.userInfo = userInfo;
+  } catch( e ) {
+    m.userInfo = { name: 'UserLocal' }
+  }
 
   // System started
   console.log( 'System Started' );
+}
+function getUserName() {
+  return( m.userInfo.name );
 }
 function popFromHistory() {
   const history = getStatus( 'graphHistory' );
@@ -43,9 +94,13 @@ function popFromHistory() {
 function setSystemReadOnly( status ) {
   status = ( status == undefined? true: status );
   m.status.isReadOnly = status;
-  //document.body.style["background-color"] = ( status? 'red': 'gray' );
-  //m.mddStatus.style.className = 'mdd-status saved';
   m.mddStatus.style['border-style'] = ( status? 'dashed': 'solid' );
+}
+function getSystemReadOnly() {
+  return( m.status.isReadOnly );
+}
+function setSystemError( status ) {
+  m.mddStatus.className = 'error';
 }
 function setSystemNeedSave() {
   if( !m.status.isReadOnly ) {
@@ -57,6 +112,14 @@ function setSystemSaved() {
   if( !m.status.isReadOnly ) {
     //document.body.style["background-color"] = 'gray';
     m.mddStatus.className = 'saved';
+  }
+}
+function setFileIndexStatus( setFunction ) {
+  if( setFunction ) {
+    setFunction( m );
+    if( !m.isJustStarted ) {
+      m.e.editorHasChanged( m.e.id );
+    }
   }
 }
 function setStatus( setFunction ) {
@@ -72,6 +135,148 @@ function getStatus( property ) {
 }
 function getMainGraph() {
   return( m.e.getEditor( config.htmlDiv.graphDiv ) );
+}
+function getMainGraphURL() {
+  const g = getMainGraph();
+  return( g.graphPath );
+}
+// TODO: parseRefValue should be implemented in ModelExplorer
+function parseRefValue( nodeData, value ) {
+  // Check if value is like:
+  // - 'label@32' => reference to field label of node with key 32
+  // - 'out@32' => reference to output named 'out' of node with key 32
+  // - 'in@32' => reference to input named 'in' of node with key 32
+  // - 'prop@32' => reference to property named 'prop' of node with key 32
+  // - 'prop@self' => reference to property named 'prop' of the node itself
+  // - 'label@group' => reference to label field of the group containing the node
+  // - 'dateTime@system' => reference to system call timeDate()
+  // - 'getCounter@function' => reference to a function 'getCounter()'
+  
+  let result = { isRef: false, value };
+
+  if( typeof( value ) == 'string' ) {
+    const nameMatch = value.match( /(\w+)@([\d\w]+)/ );
+    if( nameMatch ) {
+      result.isRef = true;
+      result.name = nameMatch[1];
+      result.source = nameMatch[2];
+      if( result.source == 'self' ) {
+        result.source = nodeData.key;
+        result.nodeData = nodeData;
+      } else if( result.source == 'group' ) {
+        const gKey = nodeData.group;
+        if( gKey != undefined ) {
+          const gNodeData = getNodeData( gKey );
+          result.nodeData = gNodeData;
+          result.source = nodeData.key;
+        }
+      } else if( parseInt( result.source ) == result.source ) {  // If it is a number (key)
+        result.nodeData = getNodeData( result.source );
+      }
+    }
+  }
+  return( result );
+}
+function getRefValue( nodeData, value ) {
+  // TODO: copy this function in ModelExplorer too
+  // so that it can be used server side
+  let result = parseRefValue( nodeData, value );
+  // Check if is a reference
+  if( result.isRef ) {
+    if( result.source == 'system' ) {
+      const sysValue = m.system[result.name];
+      if( sysValue ) {
+        result.value = sysValue();
+        result.isRef = false;
+      }
+    } else if( result.source == 'function' ) {
+      const func = window[result.name];
+      if( func ) {
+        result.value = func();
+        result.isRef = false;
+      }
+    } else if( parseInt( result.source ) == result.source ) {  // If it is a number (key)
+      if( !['in_','out_','props_'].includes( result.name ) ) {
+        const v = result.nodeData[result.name];
+        if( v != undefined ) {
+          result.isRef = false;
+          result.value = v;
+        }
+      }
+    }
+  }
+  return( result );
+}
+function getNodeData( key, isCopy ) {
+  const g = getMainGraph();
+  let result = g.getNodeData( key, isCopy );
+  if( result && ( result.linkToKey != undefined ) ) {
+    const linkedData = g.getNodeData( result.linkToKey );
+    if( linkedData.fileURL != undefined ) {
+      // Update both the copy and the node
+      result.fileURL = linkedData.fileURL;
+      //DONT DO THAT!!!: g.setNodeDataField( key, 'fileURL', result.fileURL );
+    }
+    if( linkedData.fileContent != undefined ) {
+      // Update both the copy and the node
+      result.fileContent = linkedData.fileContent;
+      //DONT DO THAT!!!: g.setNodeDataField( key, 'fileContent', result.fileContent );
+    }
+  } else {
+    result = g.getNodeData( key, isCopy );
+  }
+  return( result );
+}
+function setNodeDataField( key, field, value ) {
+  const g = getMainGraph();
+  const data = g.getNodeData( key, true );
+  if( data && ( data.linkToKey != undefined ) ) {
+    // Set field to link node
+    g.setNodeDataField( key, field, value );
+    // Set also to target-link node for these fields
+    if( ( field == 'fileURL' ) ||
+        ( field == 'fileContent' ) ) {
+      g.setNodeDataField( data.linkToKey, field, value );
+    }
+  } else {
+    g.setNodeDataField( key, field, value );
+  }
+}
+function getNodeDataField( key, field, defaultValue ) {
+  let result = defaultValue;
+  const g = getMainGraph();
+  const data = g.getNodeData( key );
+  if( data.category && window[data.category+'_get'] ) {
+    result = window[data.category+'_get']( data, 'field', field );
+  } else if( data[field] !== undefined ) {
+    result = data[field];
+  }
+  return( result );
+}
+function getNodeDataFileContent( keyOrData, onFileContent ) {
+  let data = null;
+  if( typeof( keyOrData ) == 'object' ) {
+    data = keyOrData;
+  } else {
+    data = getNodeData( keyOrData );
+  }
+
+  if( data ) {
+    loadNodeContent( data, onFileContent );
+  } else {
+    if( onFileContent ) {
+      onFileContent( '' );
+    }
+  }
+}
+function getLinkData( key, isCopy ) {
+  const g = getMainGraph();
+  const result = g.getLinkData( key, isCopy );
+  return( result );
+}
+function setLinkDataField( key, field, value ) {
+  
+  g.setLinkDataField( key, field, value );
 }
 function setViewFromLabel( nodeLabel, deltaX, deltaY ) {
   // Get main Graph
@@ -101,224 +306,34 @@ function selectNodesByKey( keyList ) {
   const mg = getMainGraph();
   mg.selectAllNodeByKey( keyList );
 }
+function centerNodeByKey( key ) {
+  selectNodesByKey( [key] );
+  // Get main Graph
+  const mg = getMainGraph();
+  mg.setViewCenteredOnSelectedNode();
+}
+function centerNodeOfWindow( id ) {
+  const key = m.e._getWindowKey( id );
+  centerNodeByKey( key );
+}
+function selectNodeOfWindow( id ) {
+  const key = m.e._getWindowKey( id );
+  selectNodesByKey( [key] );
+}
 function getNodeDataOutPortContent( nodeData, outPort ) {
   let result = '';
   // Get output component from fan-out
-  const nodeV = me.getNodeListFanOutByNodeKey( modelId, nodeData.key, outPort );
-  if( nodeV ) {
-    const portNodeData = nodeV[0];
-
+  const portNodeData = me.getNodeListFanOutByNodeKey( modelId, nodeData.key, outPort );
+  if( portNodeData && portNodeData.length ) {
     // File location
-    const contentFileURL = portNodeData.fileURL;
+    const contentFileURL = portNodeData[0].fileURL;
 
     // Set output source
-    const editorId = m.e._getDOMUniqueId( portNodeData );
+    const editorId = m.e._getDOMUniqueId( portNodeData[0] );
     const eo = m.e.getEditor( editorId );
     result = eo.getEditorSource();
   }
   return( result );
-}
-function doGenerateCode( nodeData ) {
-  if( nodeData ) {
-    // Get main graph editor
-    const g = m.e.getEditor( config.htmlDiv.graphDiv );
-    // Get current graph model
-    const model = g.getJSONModel();
-    const modelId = 'main';
-    
-    // Instantiate Model Explorer
-    const me = new ModelExplorer();
-    me.setJSONModel( modelId, model );
-    
-    // Get template component from fan-in
-    const templateNodeV = me.getNodeListFanInByNodeKey( modelId, nodeData.key, 'templateCode' );
-    if( templateNodeV ) {
-      const templateNodeData = templateNodeV[0];
-      console.log( 'Template Node: '+templateNodeData.label );
-      
-      // Get data model component from fan-in
-      const dataNodeV = me.getNodeListFanInByNodeKey( modelId, nodeData.key, 'templateData' );
-      if( dataNodeV ) {
-        const dataNodeData = dataNodeV[0];
-        console.log( 'Data Node: '+dataNodeData.label );
-        
-        // File location
-        const templateFile = templateNodeData.fileURL;
-        const dataFile = dataNodeData.fileURL;
-        
-        // Get template source
-        templateEditorId = m.e._getDOMUniqueId( templateNodeData );
-        const et = m.e.getEditor( templateEditorId );
-        let templateSource = et.getEditorSource();
-        
-        // Get data source
-        dataEditorId = m.e._getDOMUniqueId( dataNodeData );
-        const es = m.e.getEditor( dataEditorId );
-        let dataSource = es.getEditorSource();
-        
-        // Load data source
-        let module = {};
-        eval( dataSource );
-        
-        // Get RootModel class
-        const RootModel = module.exports;
-        if( typeof( RootModel ) == 'function' ) {
-
-          // Create the template generator
-          const tg = new TemplateGenerator( templateSource );
-
-          // GraphParser instance
-          const gp = new GraphParser( g );
-          
-          // Generate template output
-          const rootNodes = g.getRootNodes();
-          tg.process( new RootModel( gp, rootNodes ) );
-        
-          // Get output
-          const outputSrc = tg.getOutputStr();
-
-          // Get output component from fan-out
-          const outputNodeV = me.getNodeListFanOutByNodeKey( modelId, nodeData.key, 'outputCode' );
-          if( outputNodeV ) {
-            const outputNodeData = outputNodeV[0];
-
-            // File location
-            const outputCodeFile = outputNodeData.fileURL;
-
-            // Set output source
-            outputEditorId = m.e._getDOMUniqueId( outputNodeData );
-            const eo = m.e.getEditor( outputEditorId );
-            eo.setEditorSource( outputSrc );
-          }
-        } else {
-          alert( 'Could not find the data model in model editor' );
-        }
-      }
-    }
-  }
-}
-function doGenerateDataModel( nodeData ) {
-  if( nodeData ) {
-    // Get main graph editor
-    const g = m.e.getEditor( config.htmlDiv.graphDiv );
-    // Get current graph model
-    const model = g.getJSONModel();
-    const modelId = 'main';
-
-    // Instantiate Model Explorer
-    const me = new ModelExplorer();
-    me.setJSONModel( modelId, model );
-
-    // Get template component from fan-in
-    const templateNodeV = me.getNodeListFanInByNodeKey( modelId, nodeData.key, 'templateCode' );
-    if( templateNodeV ) {
-      const templateNodeData = templateNodeV[0];
-      console.log( 'Template Node: '+templateNodeData.label );
-      
-      // Get data model component from fan-in
-      const dataNodeV = me.getNodeListFanInByNodeKey( modelId, nodeData.key, 'templateData' );
-      if( dataNodeV ) {
-        const dataNodeData = dataNodeV[0];
-        console.log( 'Data Node: '+dataNodeData.label );
-        
-        // File location
-        const templateFile = templateNodeData.fileURL;
-        const dataFile = dataNodeData.fileURL;
-        
-        // Get template source
-        templateEditorId = m.e._getDOMUniqueId( templateNodeData );
-        const et = m.e.getEditor( templateEditorId );
-        let templateSource = et.getEditorSource();
-        
-        // Get data source
-        dataEditorId = m.e._getDOMUniqueId( dataNodeData );
-        const es = m.e.getEditor( dataEditorId );
-        let dataSource = es.getEditorSource();
-        
-        // Load data source
-        let module = {};
-        eval( dataSource );
-        
-        // Get RootModel class
-        const RootModel = module.exports;
-        if( typeof( RootModel ) == 'function' ) {
-
-          // Create the template generator
-          const tg = new TemplateGenerator( templateSource );
-          // Get template structure
-          const templateStruct = tg.getTemplateStructure();
-
-          // GraphParser instance
-          const gp = new GraphParser( g );
-          
-          // Generate data model output
-          const rootNodes = g.getRootNodes();
-          const model = new RootModel( gp, rootNodes )
-          const outputInfo = tg.testModel( templateStruct, model );
-          const outputSrc = JSON.stringify( outputInfo, null, 2 );
-
-          // Get data output component from fan-out
-          const outputNodeV = me.getNodeListFanOutByNodeKey( modelId, nodeData.key, 'outputData' );
-          if( outputNodeV ) {
-            const outputNodeData = outputNodeV[0];
-
-            // File location
-            const outputDataCodeFile = outputNodeData.fileURL;
-
-            // Set output source
-            outputEditorId = m.e._getDOMUniqueId( outputNodeData );
-            const eo = m.e.getEditor( outputEditorId );
-            eo.setEditorSource( outputSrc );
-          }
-        }
-      }
-    }
-  }
-}
-function doGenerateTemplateStructure( nodeData ) {
-  if( nodeData ) {
-    // Get main graph editor
-    const g = m.e.getEditor( config.htmlDiv.graphDiv );
-    // Get current graph model
-    const model = g.getJSONModel();
-    const modelId = 'main';
-    
-    // Instantiate Model Explorer
-    const me = new ModelExplorer();
-    me.setJSONModel( modelId, model );
-
-    // Get template component from fan-in
-    const templateNodeV = me.getNodeListFanInByNodeKey( modelId, nodeData.key, 'templateCode' );
-    if( templateNodeV ) {
-      const templateNodeData = templateNodeV[0];
-      console.log( 'Template Node: '+templateNodeData.label );
-
-      // Get template source
-      templateEditorId = m.e._getDOMUniqueId( templateNodeData );
-      const et = m.e.getEditor( templateEditorId );
-      let templateSource = et.getEditorSource();
-
-      // Create the template generator
-      const tg = new TemplateGenerator( templateSource );
-      // Get template structure
-      const templateStruct = tg.getTemplateStructure();
-      const outputSrc = JSON.stringify( templateStruct, null, 2 );
-
-      // Get data output component from fan-out
-      const outputNodeV = me.getNodeListFanOutByNodeKey( modelId, nodeData.key, 'outputTemplateStructure' );
-      if( outputNodeV ) {
-        const outputNodeData = outputNodeV[0];
-
-        // File location
-        const outputDataCodeFile = outputNodeData.fileURL;
-
-        // Set output source
-        outputEditorId = m.e._getDOMUniqueId( outputNodeData );
-        const eo = m.e.getEditor( outputEditorId );
-        eo.setEditorSource( outputSrc );
-      }
-    }
-  }
 }
 function saveStatus( onSaved ) {
   const url = config.host.statusURL;
@@ -349,9 +364,16 @@ function loadFileServerInfo() {
   });
 }
 function loadCurrentStatus( params ) {
+  // Load from server DataRoot user configuration file
   const url = config.host.statusURL;
+  // Load user config
   _openFile( url, (source)=> {
     m.status = JSON.parse( source );
+    // TODO: to clean the fileServer info in the status
+    // We could do that
+    if( m.status.fileServer ) {
+      delete m.status.fileServer;
+    }
 
     // Create a new Editor Manager
     m.e = new EditorManager( m.status );
@@ -388,6 +410,19 @@ function loadCurrentStatus( params ) {
     EditorChangeManager.onGlobalNeedSave( setSystemNeedSave );
     EditorChangeManager.onGlobalIsSaved( setSystemSaved );
   });
+}
+function loadSystemInLocalMode() {
+  // Create a new Editor Manager
+  m.e = new EditorManager( m.status );
+  // Get static root graph
+  const nodeData = config.graph.rootGraphNodeData;
+  m.status.currentGraphNode = nodeData;
+  // Update Status and DSL
+  setLocalStatus();
+  setLocalDSL();
+  // Open last opened graph
+  const id = config.htmlDiv.graphDiv;
+  m.e.openWindow( id, 'GraphEditor', nodeData );
 }
 function loadDSLScriptList( dslNameList, onLoad ) {
   if( !Array.isArray( dslNameList ) ) {

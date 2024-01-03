@@ -20,9 +20,10 @@ const config = {
     "linkPaletteDiv": "linkPalette"
   },
   "graph": {
-    "isDoubleClickCreateNodeEnabled": false,
-    "allowDeleteKey": true,
-    "colorSkema": "light",
+    "isDoubleClickCreateNodeEnabled": true,
+    "allowDeleteKey": false,
+    "colorSchema": "dark",
+    "zoomFactor": 1.05,
     "defaultDSL": "DefaultDSL",
     "rootGraphURL": "/fileServer/graphRoot.json",
     "rootGraphNodeData": {

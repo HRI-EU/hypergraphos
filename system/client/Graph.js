@@ -24,7 +24,12 @@ class Graph {
 		this.groupPalette = null;
 		this.linkPalette = null;
 		this.lastNodeKey = null;
+
+		// Property saved in graph source json file
 		this.dslNameList = [];
+		this.graphFileServerURLPrefix = 'graph://fileServer/';
+		this.graphFileServer = [];
+
 		this.isReadOnly = false;
 		// Path of the loaded graph
 		this.graphPath = '';
@@ -54,16 +59,18 @@ class Graph {
 		// Graph Evetns
 		this.em = new EventManager();
 		this.em.addList({
-			onSelection:								{ help: 	'Inofrm that the selection has changed in the graph',
+			onSelection:								{ help: 	'Inform that the selection has changed in the graph',
 																		params: { dataList: 'List of selected node-data' } },
-			onGraphChanged:							{ help: 	'Inofrm that graph has changed' },
-			onFirstLayoutCompleted:			{ help: 	'Inofrm that graph has completed the first layout after load' },
+			onGraphChanged:							{ help: 	'Inform that graph has changed' },
+			onFirstLayoutCompleted:			{ help: 	'Inform that graph has completed the first layout after load' },
 			onLoadGraph: 								{ help:   'Load a new graph in canvas', 
 			  	           								params: { nodeData: 'node-data of the the graph to load' } },
 		  onLoadFile:       					{ help:   'Open dialog with a file in a new editor',
 																		params: { nodeData: 'node-data of the the file to load', 
 																							x: 'last x mouse click position', 
 																							y: 'last y mouse click position' } },
+			onClone:                    { help:   'Clone the duplicated node',
+		                                params: { nodeData: 'data of the target clone' } },
 			onShowRootGraph: 						{ help: 	'Load system root graph' },
 			onSetReadOnly:   						{ help: 	'Set read-only navigation (never save changes to server)',
 																		params: { status: 'true/false' } },
@@ -98,50 +105,34 @@ class Graph {
 		this.contextMenu.add({
       'diagramContextMenu': 
 				{	layout: 'vertical', itemList: [
-					{ label: 'Properties',					do: ( o )=> alert( this.getDiagramInfo( this.diagram.model ) )},
+					{ label: 'Properties',					do: ( o )=> winAlert( this.getDiagramInfo( this.diagram.model ), false )},
 					{ label: 'View',       layout: 'vertical',	subMenu: [
-						{ label: 'Center Graph',			do: (o)=> { // Store last view in ViewLast
-																												this.viewBookmark[4] = this.getCurrentView();
-																												// Go to new view 
-																												this.diagram.zoomToFit(); }},
+						{ label: 'Zoom to Fit',			  do: this.doZoomToFit.bind(this) },
 						{ separator: '-' },
 						{ label: 'Show View 1',				do: (o)=> { if( o.event.shiftKey ) {
-																												this.viewBookmark[1] = this.getCurrentView();
-																											} else if( this.viewBookmark[1] != undefined ) {
-																												// Store last view in ViewLast
-																												this.viewBookmark[0] = this.getCurrentView();
-																												// Go to new view
-																												this.setCurrentView( this.viewBookmark[1] );
+																												this.setCurrentViewToBookmark( 1 );
+																											} else {
+																												this.setToBookmarkView( 1 );
 																											} }},
 						{ label: 'Show View 2',				do: (o)=> { if( o.event.shiftKey ) {
-																												this.viewBookmark[2] = this.getCurrentView();
-																											} else if( this.viewBookmark[2] != undefined ) {
-																												// Store last view in ViewLast
-																												this.viewBookmark[0] = this.getCurrentView();
-																												// Go to new view
-																												this.setCurrentView( this.viewBookmark[2] );
+																												this.setCurrentViewToBookmark( 2 );
+																											} else {
+																												this.setToBookmarkView( 2 );
 																											} }},
 						{ label: 'Show View 3',				do: (o)=> { if( o.event.shiftKey ) {
-																												this.viewBookmark[3] = this.getCurrentView();
-																											} else if( this.viewBookmark[3] != undefined ) {
-																												// Store last view in ViewLast
-																												this.viewBookmark[0] = this.getCurrentView();
-																												// Go to new view
-																												this.setCurrentView( this.viewBookmark[3] );
+																												this.setCurrentViewToBookmark( 3 );
+																											} else {
+																												this.setToBookmarkView( 3 );
 																											} }},
 						{ label: 'Show View 4',				do: (o)=> { if( o.event.shiftKey ) {
-																												this.viewBookmark[4] = this.getCurrentView();
-																											} else if( this.viewBookmark[4] != undefined ) {
-																												// Store last view in ViewLast
-																												this.viewBookmark[0] = this.getCurrentView();
-																												// Go to new view
-																												this.setCurrentView( this.viewBookmark[4] );
+																												this.this.setCurrentViewToBookmark( 4 );
+																											} else {
+																												this.setToBookmarkView( 4 );
 																											} }},
-						{ label: 'Show Prev View',		do: (o)=> { if( this.viewBookmark[0] != undefined ) {
-																												this.setCurrentView( this.viewBookmark[0] );
-																											} }},
+						{ separator: '-' },
+						{ label: 'Show Prev View',		do: this.setCurrentViewToPreviousView.bind(this) },
 					]},
-					{ separator: '-',                 if: (o)=> { // NOTE: if we define a location, paste do not showup in the popup menu
+					{ separator: '-',               if: (o)=> { // NOTE: if we define a location, paste do not showup in the popup menu
 																											//const location = o.d.cmt.mouseDownPoint;
 																											return( o.d.cmd.canPasteSelection( location ) ); }},
 					{ label: 'Paste',      					if: (o)=> { // NOTE: if we define a location, paste do not showup in the popup menu
@@ -155,7 +146,7 @@ class Graph {
 																										} },
 					{ separator: '-' },
 					{ label: 'Tools',       layout: 'vertical', subMenu: [
-						{ label: 'Toogle Visible Palette', 	if: (o)=> (this.fullPaletteId? true: false),
+						{ label: 'Toggle Visible Palette', 	if: (o)=> ( this.fullPaletteId? true: false ),
 																								do: (o)=> { const htmlObj = document.querySelector( `#${this.fullPaletteId}` );
 																														const v = htmlObj.style.visibility;
 																														htmlObj.style.visibility = ( v == 'visible'? 'hidden': 'visible' ); 
@@ -165,7 +156,7 @@ class Graph {
 																														htmlObj.style.left = Math.min( browserWidth-100, Math.max( 0, htmlObj.offsetLeft ) );
 																														htmlObj.style.top = Math.min( browserHeight-100, Math.max( 0, htmlObj.offsetTop ) );
 																													}},
-						{ label: 'Toogle Visible Grid', do: (o)=> this.diagram.grid.visible = !this.diagram.grid.visible },
+						{ label: 'Toggle Visible Grid', do: (o)=> this.diagram.grid.visible = !this.diagram.grid.visible },
 						{ separator: '-' },
 						{ label: 'Show DSL List',			do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
 																											this.em.call.onShowDSLListDialog( mousePos.x, mousePos.y ); } },
@@ -176,7 +167,7 @@ class Graph {
 						{ label: 'Show Animator',			do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
 																											this.em.call.onShowAnimatorEditor( mousePos.x, mousePos.y ); } },
 					]},
-					{ label: 'Navigate',		layout: 'vertical', subMenu: [
+					{ label: 'Navigate', layout: 'vertical', if: (o)=> !config.isLocalMode, subMenu: [
 						{ label: 'Go To Parent Graph',	if: (o)=> !this.isRootGraph,
 																						do: (o)=> { if( !this.isRootGraph) this.em.call.onShowParentGraph(); } },
 						{ label: 'Back To Previous Graph',	if: (o)=> !this.isHistoryEmpty,
@@ -184,11 +175,11 @@ class Graph {
 						{ label: 'Go To Root Graph',		if: (o)=> !this.isRootGraph,
 																						do: (o)=> this.em.call.onShowRootGraph() },
 					]},
-					{ separator: '-' },
-					{ label: 'Set Read-only Mode',    if: (o)=> !this.isReadOnly,
+					{ separator: '-', if: (o)=> !config.isLocalMode },
+					{ label: 'Set Read-only Mode',    if: (o)=> !config.isLocalMode && !this.isReadOnly,
 																						do: (o)=> { this.isReadOnly = true;
 																												this.em.call.onSetReadOnly( true ); } },
-					{ label: 'Unset Read-only Mode',  if: (o)=> this.isReadOnly,
+					{ label: 'Unset Read-only Mode',  if: (o)=> !config.isLocalMode && this.isReadOnly,
 																						do: (o)=> { this.isReadOnly = false;
 																												this.em.call.onSetReadOnly( false ); } },
 					{ separator: '-',         if: (o)=> o.d.cmd.canUndo() || o.d.cmd.canRedo() },
@@ -199,17 +190,21 @@ class Graph {
 					{ layout: 'horizontal', itemList: [
 						{ fontIcon: 'action-undo', hint: 'Undo (CTRL-Z)',     if: (o)=> o.d.cmd.canUndo(),
 																																	do: (o)=> o.d.cmd.undo() },
-						{ fontIcon: 'action-redo', hint: 'Undo (CTRL-Z)',     if: (o)=> o.d.cmd.canRedo(),
+						{ fontIcon: 'action-redo', hint: 'Redo (CTRL-SHIFT-Z)',     if: (o)=> o.d.cmd.canRedo(),
 																																	do: (o)=> o.d.cmd.redo() },
 					]},
 				]},
 			'nodeContextMenu':
 				{ layout: 'vertical', itemList: [
+					{ label: 'Zoom it',     do: this.doZoomToFitSlectedNode.bind(this,5) },
+					{ separator: '-' },
 					{ label: 'Duplicate',   if: (o)=> {	const location = o.d.cmt.mouseDownPoint;
 																							return( o.d.cmd.canCopySelection() ); },
 																	do: (o)=> { const location = o.d.cmt.mouseDownPoint;
 																							o.d.cmd.copySelection();
 																							o.d.cmd.pasteSelection( location ); } },
+					{ label: 'Clone',       if: (o)=> this.canEditClone(),
+																	do: (o)=> this.doEditClone() },
 					{ label: 'Cut',         if: (o)=> o.d.cmd.canCutSelection(),
 																	do: (o)=> o.d.cmd.cutSelection() },
 					{ label: 'Copy',        if: (o)=> o.d.cmd.canCopySelection(),
@@ -222,12 +217,14 @@ class Graph {
 					{ label: 'Delete',      if: (o)=> o.d.cmd.canDeleteSelection(),
 																	do: (o)=> o.d.cmd.deleteSelection() },
 					{ separator: '-' },
-					{ label: 'Set From Palette',	do: (o)=> this._reSetSelectionFromPalette() },
+					{ label: 'Set From Palette',	do: (o)=> this._resetSelectionFromPalette() },
 					{ separator: '-' },
 					{ label: 'Group',       if: (o)=> o.d.cmd.canGroupSelection(),
 																	do: (o)=> o.d.cmd.groupSelection() },
 					{ label: 'Ungroup',     if: (o)=> o.d.cmd.canUngroupSelection(),
 																	do: (o)=> o.d.cmd.ungroupSelection() },
+					{ label: 'Ungroup Nodes',if: (o)=> !o.d.cmd.canUngroupSelection() && this.canUngroupSelectedNodes(),
+																	do: (o)=> this.doUngroupSelectedNodes() },
 					{ separator: '-',         if: (o)=> this._canOpenFile() || this._canOpenSubGraph() },
 					{ label: 'Open File',   if: (o)=> this._canOpenFile(),
 																	do: (o)=> { const data = this.getFirstSelectedNodeData();
@@ -247,6 +244,24 @@ class Graph {
 																	do: (o)=> o.d.cmd.redo() },
 				]},
 		});
+		this.shortcutList = [
+			// Save all
+			{ key: 's', control:true, do: ()=> console.log( 'save all' ) },
+			// Zoom to Node (NOTE: with control its not yet working)
+			{ key: '2', control:true, do: this.doZoomToFitSlectedNode.bind(this,2) },
+			{ key: '3', control:true, do: this.doZoomToFitSlectedNode.bind(this,3) },
+			{ key: '4', control:true, do: this.doZoomToFitSlectedNode.bind(this,4) },
+			{ key: '5', control:true, do: this.doZoomToFitSlectedNode.bind(this,5) },
+			// Zoom to Fit
+			{ key: '1', do: this.doZoomToFit.bind(this) },
+			// Zoom to Factor
+			{ key: '2', do: this.doZoomToFactor.bind(this,2) },
+			{ key: '3', do: this.doZoomToFactor.bind(this,3) },
+			{ key: '4', do: this.doZoomToFactor.bind(this,4) },
+			{ key: '5', do: this.doZoomToFactor.bind(this,4) },
+			// Center Graph
+			{ key: 'C', do: this.setViewCenteredOnSelectedNode.bind(this) },
+		];
 
 		this.diagram.contextMenu = this.contextMenu.getMenu( 'diagramContextMenu' );
 		this.nodeContextMenu = this.contextMenu.getMenu( 'nodeContextMenu' );
@@ -324,6 +339,66 @@ class Graph {
 	}
 	getDSLFieldNameList() {
 		return( Array.from( this.dslNodeFieldNameList ) );
+	}
+	resetFileURL( url ) {
+		if( url.startsWith( this.graphFileServerURLPrefix ) ) {
+			return( this.graphFileServerURLPrefix );
+		} else {
+			return( '' );
+		}
+	}
+	_getGraphFileURLIndex( url ) {
+		let result = -1;
+		if( url.startsWith( this.graphFileServerURLPrefix ) ) {
+			// Get graph file index
+			const preIdx = this.graphFileServerURLPrefix.length;
+			const postIdx = url.indexOf( '.' );
+			if( postIdx >= 0 ) {
+				result = url.substring( preIdx, postIdx );
+			}
+		}
+		return( result );
+	}
+	getNextGraphFileServerURL( extension ) {
+		extension = extension || 'txt';
+		const idx = this.graphFileServer.length;
+		// Allocate the new graph file
+		this.graphFileServer[idx] = '';
+		return( `${this.graphFileServerURLPrefix}${idx}.${extension}` );
+	}
+	cloneGraphFile( url ) {
+		let newURL = '';
+		if( url.startsWith( this.graphFileServerURLPrefix ) ) {
+			const source = this.openFile( url );
+			const extIdx = url.lastIndexOf( '.' );
+			let extension = 'txt';
+			if( extIdx > 0 ) {
+				extension = url.substring( extIdx+1 );
+			}
+			newURL = this.getNextGraphFileServerURL( extension );
+			this.saveFile( newURL, source );
+		}
+		return( newURL );
+	}
+	openFile( url ) {
+		let result = '';
+		const idx = this._getGraphFileURLIndex( url );
+		if( idx >= 0 ) {
+			// Get graph file content
+			const value = this.graphFileServer[idx];
+			if( value ) {
+				result = value;
+			}
+		}
+		return( result );
+	}
+	saveFile( url, source, sourceEncoding ) {
+		const idx = this._getGraphFileURLIndex( url );
+		if( idx >= 0 ) {
+			// TODO: check for the sourceEncoding
+			this.graphFileServer[idx] = source;
+			this.em.call.onGraphChanged();
+		}
 	}
 	isDataValidField( fieldName ) {
 		return( this.dslNodeFieldNameList.has( fieldName ) );
@@ -436,53 +511,6 @@ class Graph {
 			this.diagram.toolManager.clickCreatingTool = null
 		}
 	}
-	getCurrentView() {
-		// Get current position
-		const position = this.diagram.position;
-		// Get current zoom scale
-		const scale = this.diagram.scale;
-		// Get grid visibility
-		const isGridOn = this.diagram.grid.visible;
-		// Define view info
-		const viewInfo = {
-			position: {
-				x: position.x,
-				y: position.y,
-			},
-			scale,
-			isGridOn,
-		};
-		return( viewInfo );
-	}
-	setCurrentView( viewInfo ) {
-		if( viewInfo.scale ) {
-			// Restore first scale (must be first)
-			this.diagram.scale = viewInfo.scale;
-		}
-		if( viewInfo.position ) {
-			// Restore position
-			this.diagram.position = new go.Point( viewInfo.position.x, viewInfo.position.y );
-		}
-		if( typeof( viewInfo.isGridOn ) == 'boolean' ) {
-			// Restore grid
-			this.diagram.grid.visible = viewInfo.isGridOn;
-		}
-	}
-	setViewFromNode( node, deltaX, deltaY ) {
-		let result = false;
-		if( node ) {
-			const x = node.position.x+deltaX;
-			const y = node.position.y+deltaY;
-			// Define view info to jump to
-			const viewInfo = {
-				position: { x, y }
-			};
-			// Jump to slide
-			this.setCurrentView( viewInfo );
-			result = true;
-		}
-		return( result );
-	}
 	getGraphImage() {
 		let image = null;
 		if( this.diagram ) {
@@ -496,6 +524,38 @@ class Graph {
 	}
 	getRootNodes() {
 		return( this.diagram.nodes );
+	}
+	getDependencyList() {
+		const result = {
+			files: {},
+			dsl: {},
+		};
+
+		// Update DSL info
+		this.dslNameList.forEach( (d) => result.dsl[d] = { name: d, node: 0, link: 0 } );
+
+		// Update Node info
+		const nodeList = this.diagram.model.nodeDataArray;
+		nodeList.forEach( (n)=> { 
+			const idx = n.category.indexOf( '_' );
+			const dslName = n.category.substring( 0, idx )+'DSL';
+			if( result.dsl[dslName] ) {
+				result.dsl[dslName].node++;
+			}
+			if( n.fileURL ) { 
+				result.files[n.key] = n.fileURL;
+			}
+		});
+		const linkList = this.diagram.model.linkDataArray;
+		linkList.forEach( (l)=> { 
+			const idx = l.category.indexOf( '_' );
+			const dslName = l.category.substring( 0, idx )+'DSL';
+			if( result.dsl[dslName] ) {
+				result.dsl[dslName].link++;
+			}
+		});
+
+		return( result );
 	}
 	setModel( model ) {
 		if( this.diagram ) {
@@ -543,7 +603,7 @@ class Graph {
 		}
 		return( jsonModel );
 	}
-	getEditorSource() {
+	getEditorSource( isIndented ) {
 		const diagramPosition = this.diagram.position;
 		const jsonModel = this.getJSONModel();
 		if( this.dslNameList.length == 0 ) {
@@ -557,20 +617,28 @@ class Graph {
 				position: [diagramPosition.x, diagramPosition.y],
 				isGridOn: this.diagram.grid.visible,
 			},
+			graphFileServer: this.graphFileServer,
 			model: jsonModel,
 		};
-		const source = JSON.stringify( sourceInfo );
+		const source = ( isIndented? JSON.stringify( sourceInfo, null, 2 ):
+		 														 JSON.stringify( sourceInfo ) );
 		return( source );
 	}
 	setEditorSource( source, onDone ) {
 		// Get an object from the extended model
 		let objModel = null;
 		if( source ) {
-			objModel = JSON.parse( source );
+			if( typeof( source ) == 'string' ) {
+				objModel = JSON.parse( source );
+			} else {
+				// In this case we expect an object
+				objModel = source;
+			}
 		} else {
 			objModel = {
 				view: null,
 				dslNameList: null,
+				graphFileServer: null,
 				model: null,
 			};
 		}
@@ -593,6 +661,14 @@ class Graph {
 					this.diagram.grid.visible = objModel.view.isGridOn;
 				}
 			}
+			if( objModel.graphFileServer ) {
+			  this.graphFileServer = objModel.graphFileServer;
+			} else {
+				this.graphFileServer = [];
+			}
+			// Set graphData (defined in ServerManager.js)
+			graphData = {};
+
 			if( onDone ) {
 				onDone();
 			}
@@ -620,26 +696,37 @@ class Graph {
 		}
 		return( result );
 	}
+	getSelectionCount() {
+		let result = 0;
+		const sel = this.getSelection();
+		if( sel ) {
+			result = sel.count;
+		}
+		return( result );
+	}
 	getJSONSelection() {
 		const list = this._getFilteredSelection( 4 );
 		const jsonSelection = JSON.stringify( list, null, 2 );
 		return( jsonSelection );
 	}
 	setJSONSelection( jsonSelection ) {
-		const objSelection = JSON.parse( jsonSelection );
-		const originalKeyList = objSelection.originalKey;
-		if( originalKeyList ) {
-			for( let i = 0; i < originalKeyList.length; ++i ) {
-				const oKey = originalKeyList[i];
-				const dataNode = objSelection[i];
-				const fieldList = Object.keys( dataNode );
-				for( const field of fieldList ) {
-					const value = dataNode[field];
-					//this.setNodeDataField( oKey, field, value );
-					setNodeDataField( this, oKey, field, value );
+		try {
+			const objSelection = JSON.parse( jsonSelection );
+			const originalKeyList = objSelection.originalKey;
+			if( originalKeyList ) {
+				for( let i = 0; i < originalKeyList.length; ++i ) {
+					const oKey = originalKeyList[i];
+					const dataNode = objSelection[i];
+					const fieldList = Object.keys( dataNode );
+					for( const field of fieldList ) {
+						if( field != 'key' ) { // Key can not be changed in a selection
+							const value = dataNode[field];
+							setNodeDataField( oKey, field, value );
+						}
+					}
 				}
 			}
-		}
+		} catch( e ) { /* We enter here if selection have syntax errors */}
 	}
 	selectNodeByKey( key ) {
 		this.diagram.select( this.diagram.findPartForKey( key ) );
@@ -650,6 +737,107 @@ class Graph {
 			nodeList.push( this.diagram.findPartForKey( key ) );
 		}
 		this.diagram.selectCollection( nodeList );
+	}
+	getCurrentView() {
+		// Get current position
+		const position = this.diagram.position;
+		// Get current zoom scale
+		const scale = this.diagram.scale;
+		// Get grid visibility
+		const isGridOn = this.diagram.grid.visible;
+		// Define view info
+		const viewInfo = {
+			position: {
+				x: position.x,
+				y: position.y,
+			},
+			scale,
+			isGridOn,
+		};
+		return( viewInfo );
+	}
+	setCurrentView( viewInfo ) {
+		if( viewInfo.scale ) {
+			// Restore first scale (must be first)
+			this.diagram.scale = viewInfo.scale;
+		}
+		if( viewInfo.position ) {
+			// Restore position
+			this.diagram.position = new go.Point( viewInfo.position.x, viewInfo.position.y );
+		}
+		if( typeof( viewInfo.isGridOn ) == 'boolean' ) {
+			// Restore grid
+			this.diagram.grid.visible = viewInfo.isGridOn;
+		}
+	}
+	setCurrentViewToBookmark( index ) {
+		this.viewBookmark[index] = this.getCurrentView();
+	}
+	setCurrentViewToPreviousView() {
+		if( this.viewBookmark[0] != undefined ) {
+			this.setCurrentView( this.viewBookmark[0] );
+		}
+	}
+	setToBookmarkView( index ) {
+		if( this.viewBookmark[index] != undefined ) {
+			// Store last view in ViewLast
+			this.viewBookmark[0] = this.getCurrentView();
+			// Go to new view
+			this.setCurrentView( this.viewBookmark[index] );
+		}
+	}
+	setViewFromNode( node, deltaX, deltaY ) {
+		let result = false;
+		if( node ) {
+			const x = node.position.x+deltaX;
+			const y = node.position.y+deltaY;
+			// Define view info to jump to
+			const viewInfo = {
+				position: { x, y }
+			};
+			// Jump to slide
+			this.setCurrentView( viewInfo );
+			result = true;
+		}
+		return( result );
+	}
+	setViewCenteredOnSelectedNode() {
+		const selection = this.getSelection();
+		const node = selection.first();
+		const result = ( node != null );
+		if( result ) {
+			// Get the center coordinates of the node
+			const nodeCenterX = node.actualBounds.x;
+			const nodeCenterY = node.actualBounds.y;
+	
+			// Get the size of the diagram's viewport
+			const viewportWidth = this.diagram.viewportBounds.width;
+			const viewportHeight = this.diagram.viewportBounds.height;
+	
+			// Calculate the desired viewport position to center the node
+			const desiredViewportX = nodeCenterX - viewportWidth / 2;
+			const desiredViewportY = nodeCenterY - viewportHeight / 2;
+	
+			// Set the diagram's viewport to the desired position
+			this.diagram.position = new go.Point( desiredViewportX, desiredViewportY );
+		}
+		return( result );
+	}
+	doZoomToFitSlectedNode( factor ) {
+		this.doZoomToFit();
+		const isViewSet = this.setViewCenteredOnSelectedNode();
+		if( isViewSet ) {
+			this.doZoomToFactor( factor );
+		}
+	}
+	doZoomToFit() {
+		// Store last view in ViewLast
+		this.viewBookmark[4] = this.getCurrentView();
+		// Go to new view 
+		this.diagram.zoomToFit();
+	}
+	doZoomToFactor( factor ) {
+		this.diagram.scale = this.diagram.scale*factor;
 	}
 	doEditCut() {
 		const cmd = this.diagram.commandHandler;
@@ -676,11 +864,54 @@ class Graph {
 			cmd.pasteSelection( location );
 		}
 	}
+	canEditClone() {
+		const selCount = this.getSelectionCount();
+		const data = this.getFirstSelectedNodeData();
+		return( data && 
+						(( data.isFile || data.isDir ) && data.fileURL ) &&
+						( selCount == 1 ) );
+	}
+	doEditClone() {
+		const cmd = this.diagram.commandHandler;
+		if( cmd.canCopySelection() ) {
+			cmd.copySelection();
+			cmd.pasteSelection();
+
+			// If a single node is selected => clone it
+			const data = this.getFirstSelectedNodeData();
+			if( data ) {
+				this.em.call.onClone( data );
+			}
+		}
+	}
 	doEditDelete() {
 		const cmd = this.diagram.commandHandler;
 		if( cmd.canDeleteSelection() ) {
 			cmd.deleteSelection();
 		}
+	}
+	canUngroupSelectedNodes() {
+		let result = false;
+		const selection = this.getSelection();
+		const selIter = selection.iterator;
+		while( selIter.next() ) {
+			const node = selIter.value;
+			const data = node.data;
+			if( data.group !== undefined ) {
+				result = true;
+				break;
+			}
+		}
+		return( result );
+	}
+	doUngroupSelectedNodes() {
+		const selection = this.getSelection();
+		selection.each( (node) => { 
+			const data = node.data;
+			if( data.group !== undefined ) {
+				setNodeDataField( data, 'group', null );
+			}
+		});
 	}
 	centerGraphToNodeKey( key ) {
 		const node = this.diagram.findNodeForKey( key );
@@ -774,11 +1005,11 @@ class Graph {
 				let dataClean = {};
 				if( isInternalFunction ) {
 					// If it is an internal function we don't need to start from templateName
-					dataClean = this._getNodeDataCopy( d );
+					dataClean = this._getDataCopy( d );
 				} else {
 					// If external function we should define all possible field so user condition 
 					// will work all the time
-					dataClean = this._getNodeDataCopy( d, templateNode );
+					dataClean = this._getDataCopy( d, templateNode );
 				}
 				try {
 					if( conditionFn( dataClean )) {
@@ -810,7 +1041,7 @@ class Graph {
 					found = ( valueStr.includes( searchValue ) );
 				}
 				if( found ) {
-					const dataClean = this._getNodeDataCopy( d );
+					const dataClean = this._getDataCopy( d );
 					result.push( dataClean );
 					if( isFirstOnly ) {
 						break;
@@ -845,12 +1076,12 @@ class Graph {
 		if( data ) {
 			if( data.isSystem ) {
 				// If is system node => we give a copy of it
-				const nodeData = this._getNodeDataCopy( data );
+				const nodeData = this._getDataCopy( data );
 				result = this.updateSystemNode( nodeData );
 			} else {
 				// If isCopy => return a shallow copy of the data
 				if( isCopy ) {
-					result = this._getNodeDataCopy( data );
+					result = this._getDataCopy( data );
 				} else {
 					// If not system node => we give a pointer to it
 					result = data;
@@ -859,9 +1090,12 @@ class Graph {
 		}
 		return( result );
 	}
-	setNodeDataField( key, field, value ) {
-		// Get node data for the given key
-		const data = this.diagram.model.findNodeDataForKey( key );
+	setNodeDataField( keyOrData, field, value ) {
+		let data = keyOrData;
+		if( typeof( keyOrData ) != 'object' ) {
+			// Get node data for the given key
+			data = this.diagram.model.findNodeDataForKey( keyOrData );
+		}
 		if( data ) {
 			if( data.isSystem && ( field == 'fileContent' ) ) {
 				switch( data.isSystem ) {
@@ -881,9 +1115,39 @@ class Graph {
 					delete data.fileContent;
 				}
 				this.diagram.startTransaction( 'Set Data Propery' );
+				if( field == 'fileContent' && ( typeof( value ) != 'string' ) ) {
+					// Force value to be a string in case is not (number, boolean,...)
+					value = ''+value;
+				}
 				this.diagram.model.setDataProperty( data, field, value );
 				this.diagram.commitTransaction( 'Set Data Propery' );
+				this._callOnNodeGraphSelectionChanged();
 			}
+			this.em.call.onGraphChanged();
+		}
+	}
+	getLinkData( key, isCopy ) {
+		let result = null;
+		// Get link data for the given key
+		const data = this.diagram.model.findLinkDataForKey( key );
+		if( data ) {
+			// If isCopy => return a shallow copy of the data
+			if( isCopy ) {
+				result = this._getDataCopy( data );
+			} else {
+				// If not system node => we give a pointer to it
+				result = data;
+			}
+		}
+		return( result );
+	}
+	setLinkDataField( key, field, value ) {
+		// Get link data for the given key
+		const data = this.diagram.model.findLinkDataForKey( key );
+		if( data ) {
+			this.diagram.startTransaction( 'Set Data Propery' );
+			this.diagram.model.setDataProperty( data, field, value );
+			this.diagram.commitTransaction( 'Set Data Propery' );
 			this.em.call.onGraphChanged();
 		}
 	}
@@ -919,6 +1183,10 @@ class Graph {
 				data.onNodeChanged = (f)=> { 
 					this.onNodeGraphSelectionChanged = { nodeData: data, callback: f };
 				};
+				break;
+			case '$GraphSource$':
+				const source = this.getEditorSource( true );
+				data.fileContent = source;
 				break;
 		}
 		return( data );
@@ -968,7 +1236,7 @@ class Graph {
 	}
 	doSetReadOnly( status ) {
 		this.isReadOnly = status;
-		this.em.call.onSetReadOnly( false );
+		this.em.call.onSetReadOnly( status );
 	}
 	//------------------------------------------
 	// Private Functions
@@ -1253,6 +1521,10 @@ class Graph {
 		return( palette );
 	}
 	newDiagram( divId ) {
+		// To be used in "function(){}" definitions
+		const graphThis = this;
+		go.Diagram.licenseKey = "28f846ebb66458c511d35a25403c7efb0fa42d35ce804df3590717a0ed0d6012269ffa6856dbd892d2fa1df84e79c2dbddc13a7a921f0c38e333d5da41e781acb03e24b71009138fa70a21c590aa22f2f92a21a6c6b565b2dc2ddcf4ebfa939d4ef8f0d54bc811bb2a670631";
+
 		let diagram = null;
 		if( divId ) {
 			diagram = $( go.Diagram, divId ); // Create visual diagram
@@ -1260,7 +1532,12 @@ class Graph {
 			diagram = $( go.Diagram ); // Create batch diagram
 		}
 
+
+		// Store Graph pointer to retrieve this class
+		diagram['__graphThis'] = graphThis;
+
 		diagram.clickCreatingTool = new InGroupClickCreatingTool();
+		// Avoid that the diagram comes slowly from the bottom in an animation
 		diagram.animationManager.isInitial = false;
 		// what to do when a drag-drop occurs in the Diagram's background
 		diagram.mouseDrop = (e)=> this._onFinishDrop( e, null );
@@ -1268,26 +1545,8 @@ class Graph {
 		diagram.toolManager.mouseWheelBehavior = go.ToolManager.WheelZoom;
 		// Disable port gravity (snap to port)
 		diagram.toolManager.linkingTool.portGravity = 0;
-
-		/*
-		// allow Ctrl-G to call groupSelection()
-		"commandHandler.archetypeGroupData": { // TODO: Put in DSL
-			label: "Group",
-			isGroup: true,
-			color: "gray"
-		},*/
 		// enable undo & redo
 		diagram.undoManager.isEnabled = true;
-
-		/*
-		// allow Ctrl-G to call groupSelection()
-		diagram.commandHandler.archetypeGroupData = { // TODO: Put in DSL
-			label: "Group",
-			isGroup: true,
-			color: "gray"
-		};
-		diagram.groupTemplate = this.newGroupTemplate();
-		*/
 
 		// Define grid
 		const mainColor = {
@@ -1302,7 +1561,7 @@ class Graph {
 				lineColor2: 'rgb(200, 200, 200)',
 			},
 		};
-		const schema = config.graph.colorSkema;
+		const schema = config.graph.colorSchema;
 		diagram.grid = $(go.Panel, "Grid",
 			{
 			  name: "GRID",
@@ -1328,7 +1587,8 @@ class Graph {
 		diagram.toolManager.resizingTool.isGridSnapEnabled = true;
 
 		// Set zoom speed
-		diagram.commandHandler.zoomFactor = 1.5;
+		diagram.commandHandler.zoomFactor = ( config.graph.zoomFactor?  
+																					config.graph.zoomFactor: 1.25 );
 		// Allow infinite canvas
 		diagram.scrollMode = go.Diagram.InfiniteScroll;
 
@@ -1374,25 +1634,53 @@ class Graph {
 		//////////////////////////////////
 
 		diagram.commandHandler.doKeyDown = function() {
+			// Get last input
 			const e = diagram.lastInput;
-			// The meta (Command) key substitutes for "control" for Mac commands
-		  const control = e.control || e.meta;
 			const key = e.key;
-
-			// Key code
-			const deleteKey = 'Del';
-			const backspaceKey = 'Backspace';
-			// Quit on any undo/redo key combination:
-			//if (control && (key === 'Z' || key === 'Y')) return;
 			
-			// Avoid to delete nodes/selection by del key
+			// Avoid to delete nodes/selection by del/backspace key
 			if( !diagram.isDeleteEnabled ) {
+				// Key code
+				const deleteKey = 'Del';
+				const backspaceKey = 'Backspace';
 				if( ( key === deleteKey ) || ( key === backspaceKey ) ) return;
 			}
-		
+
 			// call base method with no arguments (default functionality)
 			go.CommandHandler.prototype.doKeyDown.call(this);
 		};
+		diagram.commandHandler.doKeyUp = function() {
+			// Get last input
+			const e = diagram.lastInput;
+			// The meta (Command) key substitutes for "control" for Mac commands
+		  const control = e.control || e.meta;
+			const alt = e.alt;
+			const shift = e.shift;
+			const key = e.key;
+
+			// Evalue keyboard shortcut
+			for( const shortcut of graphThis.shortcutList ) {
+				if( shortcut.key == key ) { 
+					if( ( ( shortcut.control == undefined ) && control ) ||
+					    ( ( shortcut.control != undefined ) && !control ) ) {
+						continue;
+					}
+					if( ( ( shortcut.alt == undefined ) && alt ) ||
+					    ( ( shortcut.alt != undefined ) && !alt ) ) {
+						continue;
+					}
+					if( ( ( shortcut.shift == undefined ) && shift ) ||
+					    ( ( shortcut.shift != undefined ) && !shift ) ) {
+						continue;
+					}
+					shortcut.do();
+					break;
+				}
+			}
+
+			// call base method with no arguments (default functionality)
+			go.CommandHandler.prototype.doKeyUp.call(this);
+		}
 
 		// Move the pasted selection a bit on the side from copied seleciton
 		diagram.addDiagramListener( 'ClipboardPasted', (e)=> {
@@ -1450,9 +1738,10 @@ class Graph {
 		return $("ToolTip",
 			$(go.TextBlock, { margin: 4 },  // the tooltip shows the result of calling nodeInfo(data)
 				new go.Binding("text", "", ( d )=> {
-					// Tooltip info for a node data object
 					const label = ( d.label? d.label: (d.text? d.text: '' ) );
-					let info = "Node [" + d.key + "]: " + label + "\n";
+					// Tooltip label for a node data object (limit length to 50 charaters)
+					const shortLabel = label.substring( 0, 50 )+( label.length > 50? '...': '' );
+					let info = "Node [" + d.key + "]: " + shortLabel + "\n";
 					if( d.category ) {
 						info = info+" Category: " + d.category + "\n";
 					}
@@ -1501,10 +1790,25 @@ class Graph {
 		return( info );
 	}
 	getDiagramInfo( model ) {
+		const dependencyInfo = this.getDependencyList();
+		const depList = [];
+		for( const key in dependencyInfo.files ) {
+			depList.push( ` Node[${key}] ${dependencyInfo.files[key]}` );
+		}
+		const dslList = [];
+		for( const key in dependencyInfo.dsl ) {
+			const nc = dependencyInfo.dsl[key].node;
+			const lc = dependencyInfo.dsl[key].link;
+			dslList.push( ` ${key} used by ${nc} nodes, ${lc} links` );
+		}
 		// Tooltip info for the diagram's model
-		const info = "Model:\n" + model.nodeDataArray.length + " nodes, "+ 
-		                          model.linkDataArray.length + " links\n"+
-								 "Graph URL: "+this.graphPath;
+		const info = " Model: "+model.nodeDataArray.length + " nodes, "+ 
+		                         model.linkDataArray.length + " links \n"+
+								 " Graph URL: "+this.graphPath+" \n"+
+								 "--- Dependencies ---------------\n"+
+								 depList.join( '\n' )+
+								 "\n--- DSL ---------------\n"+
+								 dslList.join( '\n' );
 		return( info );
 	}
 	_canOpenFile() {
@@ -1541,7 +1845,7 @@ class Graph {
 			}
 		}
 	}
-	_reSetSelectionFromPalette() {
+	_resetSelectionFromPalette() {
 		const selection = this.getSelection();
 		selection.each( (node) => {
 			let templateData = null;
@@ -1558,38 +1862,48 @@ class Graph {
 			} else if( node instanceof go.Link ) {
 				if( this.linkPalette ) {
 					const it = this.linkPalette.selection;
-					const link = it.first();
-					if( link ) {
-						templateData = link.data;
+					const linkLabel = it.first();
+					if( linkLabel ) {
+						// Selection is on the text label
+						// We need to take the incoming link to it
+						const linkNode = linkLabel.findLinksInto();
+						if( linkNode ) {
+							const link = linkNode.first();
+							if( link ) {
+								templateData = link.data;
+							}
+						}
 					}
 				}
 				systemFieldList = this.systemLinkDataFieldList;
 			}
 			if( templateData ) {
 				const dataNode = node.data;
-				const dataNodeFieldList = Object.keys( dataNode );
+				const dataNodeFieldList = Object.keys( templateData );
+				this.diagram.startTransaction( 'Set From Palette' );
 				for( const field of dataNodeFieldList ) {
 					// If the field does not start with '_' and is not a system field
 					if( !field.startsWith('_') &&
 					    ( systemFieldList.indexOf( field ) == -1 ) &&
-						( field != 'label' ) ) {
+						  ( ![ 'label', 'fileURL', 'fileContent' ].includes( field ) ) ) {
 						if( templateData[field] ) {
 							const value = templateData[field];
 							this.diagram.model.setDataProperty( dataNode, field, value );
 						}
 					}
 				}
+				this.diagram.commitTransaction( 'Set From Palette' );
 				this.diagram.requestUpdate();
 			}
 		});
 	}
-	_getNodeDataCopy( nodeData, templateNode ) {
+	_getDataCopy( data, templateData ) {
 		// If we get a template node, we set result to a clone of it (avoid reference to template)
-		let result = ( templateNode? Object.assign( {}, templateNode ): {} );
-		const fieldList = Object.keys( nodeData );
+		let result = ( templateData? Object.assign( {}, templateData ): {} );
+		const fieldList = Object.keys( data );
 		for( const field of fieldList ) {
 			if( !field.startsWith( '_' ) ) {
-				result[field] = nodeData[field];
+				result[field] = data[field];
 			}
 		}
 		return( result );
@@ -1605,7 +1919,7 @@ class Graph {
 				// Strip out any GoJS internal data field
 				const dataNode = it.value.data;
 				const filterDataNode = this.filterObjectData( dataNode );
-				const stripData = this._getNodeDataCopy( filterDataNode );
+				const stripData = this._getDataCopy( filterDataNode );
 				// Push stripped data object
 				dataList[++keyIndex] = stripData;
 				keyList.push( dataNode.key );

@@ -10,10 +10,21 @@ Date: 10.07.2020
 =============================================================================
 */
 
+// This code detects the first definition of 'nodeData'
+// window.__defineSetter__('nodeData', function() {
+//   debugger;
+// });
+
+// The appData stores data for the full browser session (reload cleans it)
+const appData = {};
+// The graphData stores data for the loaded graph (loading a different grap cleans it)
+let graphData = {}; // Set in Graph.js on setEditorSource()
+
 const codeFileType = {
   "JavaScript":     {color: "orange",         fileType: "text/javascript",                ext: "js"},
   "Text":           {color: "yellow",         fileType: "text/text",                      ext: "txt"},
   "JSON":           {color: "orange",         fileType: "text/json",                      ext: "json"},
+  "XML":            {color: "orange",         fileType: "text/xml",                       ext: "xml"},
   "HTML":           {color: "lightsalmon",    fileType: "text/html",                      ext: "html"},
   "Web Page":       {color: "lightsalmon",    fileType: "application/html",               ext: "html"},
   "CSS":            {color: "peachpuff",      fileType: "text/css",                       ext: "css"},
@@ -24,6 +35,7 @@ const codeFileType = {
   "H++":            {color: "mediumseagreen", fileType: "text/c_cpp",                     ext: "hpp"},
   "C#":             {color: "seagreen",       fileType: "text/c_cpp",                     ext: "cs"},
   "Binary":         {color: "white",          fileType: "application/octet-stream",       ext: "bin"},
+  "Shell":          {color: "gray",           fileType: "application/x-shellscript",      ext: "sh"},
   "Rich Text":      {color: "aquamarine",     fileType: "application/explore",            ext: "html"},
   "JPEG":           {color: "lavender",       fileType: "image/jpeg",                     ext: "jpeg"},
   "PNG":            {color: "lavender",       fileType: "image/png",                      ext: "png"},
@@ -36,6 +48,28 @@ const codeFileType = {
 let urlParams = { name: 'DefaultUser' };
 
 function loadSystem() {
+  /*
+    
+    // Get params value
+    const url = new URL(
+      'http://example.com/path/index.html?message=hello&who=world'
+    );
+
+    // Get host name
+    console.log(url.hostname); // => 'example.com'
+    // Get path name
+    console.log(url.pathname); // => '/path/index.html'
+    // Get search string
+    console.log(url.search); // => '?message=hello&who=world'
+    // Get params
+    console.log(url.searchParams.get('message')); // => 'hello'
+    console.log(url.searchParams.get('missing')); // => null
+
+    // Get hash
+    const url = new URL('http://example.com/path/index.html#top');
+
+    console.log(url.hash); // => '#top'
+  */
   // Decode url parameter (remove firs char '?')
   const urlStrParams = decodeURI( document.location.search.substring( 1 ) );
   // Get url params values
@@ -44,7 +78,10 @@ function loadSystem() {
   console.log( urlParams );
   
   if( !urlParams.name ) {
-    cookie = JSON.parse(document.cookie);
+    let cookie = { name: 'UserLocal' };
+    try {
+      cookie = JSON.parse(document.cookie);
+    } catch( e ) {}
     urlParams.name = cookie.name;
   } else {
     document.cookie = JSON.stringify({name: urlParams.name});
@@ -52,18 +89,18 @@ function loadSystem() {
 
   // Define list of system scripts to be loaded
   scriptList = [
-    `./configs/${urlParams.name}_config.js`,
-    './EditorChangeManager.js',
-    './EventManager.js',
-    './Graph.js',
-    './Editors.js',
-    './ModelExplorer.js',
-    './MainScript.js',
-    './EditorManager.js',
-    './BlockCodeEditor.js',
-    './SmartBlockEditor.js',
-    './ACESourceCodeEditor.js',
-    './GraphParser.js',
+    `configs/${urlParams.name}_config.js`,
+    'EditorChangeManager.js',
+    'EventManager.js',
+    'Graph.js',
+    'Editors.js',
+    'ModelExplorer.js',
+    'MainScript.js',
+    'EditorManager.js',
+    'BlockCodeEditor.js',
+    'SmartBlockEditor.js',
+    'ACESourceCodeEditor.js',
+    //'GraphParser.js',
   ];
   loadScriptList( scriptList, ()=> {
     console.log( 'Depentency loaded' );
@@ -87,12 +124,18 @@ function getExtByFileType( fileType ) {
   }
   return( result );
 }
+function getNewGraphFileServerURL( extension ) {
+  const g = getMainGraph();
+  const url = g.getNextGraphFileServerURL( extension );
+  return( url );
+}
 function getNewFileServerURL( extension ) {
   extension = ( extension? extension: 'bin' );
   // Path creation function
   const getPath = function( pathV ) {
     let result = '';
     for( let i = 0; i < pathV.length; i=i+2 ) {
+      // TODO: check, why am I taking i, i+2???? should not be i, i+1
       result = result+'/'+pathV.substring( i, i+2 );
     }
     return( result );
@@ -121,13 +164,13 @@ function getNewFileServerURL( extension ) {
     pathV = pathV.substring( 0, pathVlen-1 )+'0'+pathV.substring( pathVlen-1 );
   }
   const newPath = getPath( pathV );
-  setStatus( (s)=> s.fileServer = fsInfo );
+  setFileIndexStatus( (s)=> s.fileServer = fsInfo );
   
   // Generate next file/path
   const host = ''; document.location.origin;
   const newFilePath = `${host}${config.host.fileServerURL}${newPath}/${newFile}`;
   // Update fileIndex file
-  const url = `${config.host.fileServerURL}/fileIndex.json`;
+  const url = `${config.host.fileServerSystemURL}/fileIndex.json`;
   const source = JSON.stringify( m.fileInfo );
   _saveFile( url, source );
   return( newFilePath );
@@ -152,7 +195,38 @@ function loadScriptList( urlList, onLoad, isAvoidCache ) {
     }
   }
 }
+function unloadLocalGraphScript() {
+  const scriptList = document.querySelectorAll( '.LocalGraph_IncludeScript' );
+  for( const script of scriptList ) {
+    script.remove();
+  }
+}
+function loadScriptSource( source, onLoad, isLocalToGraph ) {
+  const script = document.createElement( 'script' );
+  script.type = 'text/javascript';
+  script.onload = ()=> {
+    console.log( `Script source loaded` );
+    if( onLoad ) {
+      onLoad();
+    }
+  };
+
+  if( isLocalToGraph ) {
+    script.className = 'LocalGraph_IncludeScript';
+  }
+  script.innerHTML = source;
+  document.head.append( script );
+}
 function loadScript( url, onLoad, isAvoidCache ) {
+  const baseURL = window.location.href;
+  const urlObj = new URL( url, baseURL );
+  if( urlObj.pathname.endsWith( '.css' ) ) {
+    loadCSSScript( url, onLoad, isAvoidCache );
+  } else {
+    loadJSScript( url, onLoad, isAvoidCache );
+  }
+}
+function loadJSScript( url, onLoad, isAvoidCache ) {
   isAvoidCache = ( isAvoidCache == undefined? true: isAvoidCache );
   const prevScript = document.getElementById( url );
   if( prevScript ) {
@@ -176,10 +250,55 @@ function loadScript( url, onLoad, isAvoidCache ) {
     const timestamp = new Date().getTime();
     uniqueURL = '?_='+timestamp;
   }
+
+  // Handle localMode (file:///...)
+  url = _updataURLIfLocalMode( url );
+
+  // Set src url
   script.src = url+uniqueURL;
+
+  document.head.append( script );
+}
+function loadCSSScript( url, onLoad, isAvoidCache ) {
+  isAvoidCache = ( isAvoidCache == undefined? true: isAvoidCache );
+  const prevScript = document.getElementById( url );
+  if( prevScript ) {
+    document.head.removeChild( prevScript );
+  }
+  const script = document.createElement( 'link' );
+  script.id = url;
+  script.type = 'text/css';
+  script.rel = 'stylesheet';
+  script.onload = ()=> {
+    console.log( `Script ${url} loaded` );
+    if( onLoad ) {
+      onLoad();
+    }
+  };
+  script.onerror = ()=> {
+    console.log( `Error loading stylesheet ${url}` );
+  };
+  let uniqueURL = '';
+  if( isAvoidCache ) {
+    // Avoid server cache with timestamp
+    const timestamp = new Date().getTime();
+    uniqueURL = '?_='+timestamp;
+  }
+
+  // Handle localMode (file:///...)
+  url = _updataURLIfLocalMode( url );
+
+  script.href = url+uniqueURL;
   document.head.append( script )
 }
 function loadNodeContent( nodeData, onLoaded ) {
+  // This is used in local mode (file:///...)
+  if( nodeData.fileURL == 'noURL' ) {
+    const source = getCurrentLocalGraph();
+    onLoaded( source );
+    return;
+  }
+
   if( nodeData.isModel ) {  // Check on isModel must be first
     // Load content from main graph model
     const source = nodeData.fileContent;
@@ -187,8 +306,16 @@ function loadNodeContent( nodeData, onLoaded ) {
       onLoaded( source );
     }
   } else if( nodeData.fileURL != undefined ) { // Check on fileURL must be second
-    // Load content from file system
-    _openFile( nodeData.fileURL, onLoaded );
+    if( nodeData.fileURL.startsWith( 'graph://' ) ) {
+      const g = getMainGraph();
+      const source = g.openFile( nodeData.fileURL );
+      if( onLoaded ) {
+        onLoaded( source );
+      }
+    } else {
+      // Load content from file system
+      _openFile( nodeData.fileURL, onLoaded );
+    }
   } else if( nodeData.fileContent != undefined ) { // Check on fileContent must be third
     // Load content from node
     const source = nodeData.fileContent;
@@ -211,16 +338,26 @@ function saveNodeContent( nodeData, onSaved ) {
       onSaved();
     }
   } else if( nodeData.fileURL != undefined ) { // Check on fileURL must be second
-    const sourceEncoding = ( nodeData.fileEncoding? nodeData.fileEncoding: 'utf8' );
-    const source = nodeData.fileContent;
-    _saveFile( nodeData.fileURL, source, onSaved, sourceEncoding );
+    if( nodeData.fileURL.startsWith( 'graph://' ) ) {
+      const g = getMainGraph();
+      const sourceEncoding = ( nodeData.fileEncoding? nodeData.fileEncoding: 'utf8' );
+      const source = nodeData.fileContent;
+      g.saveFile( nodeData.fileURL, source, sourceEncoding );
+      if( onSaved ) {
+        onSaved();
+      }
+    } else {
+      const sourceEncoding = ( nodeData.fileEncoding? nodeData.fileEncoding: 'utf8' );
+      const source = nodeData.fileContent;
+      _saveFile( nodeData.fileURL, source, onSaved, sourceEncoding );
+    }
   } else if( nodeData.fileContent != undefined ) { // Check on fileContent must be third
-    const e = m.e.getEditor( config.htmlDiv.graphDiv );
-    if( e ) {
+    //const e = m.e.getEditor( config.htmlDiv.graphDiv );
+    //if( e ) {
       const source = nodeData.fileContent;
       //e.setNodeDataField( nodeData.key, 'fileContent', source );
-      setNodeDataField( e, nodeData.key, 'fileContent', source );
-    }
+      setNodeDataField( nodeData.key, 'fileContent', source );
+    //}
     if( onSaved ) {
       onSaved();
     }
@@ -260,11 +397,26 @@ function getNodeInfoFromServer( nodeData, onInfo ) {
   }
 }
 function executeScript( scriptName, onExecuted ) {
-  _openFile( '/executeScript/'+scriptName, onExecuted );
+  _openFile( '/executeScript/'+scriptName, onExecuted, true );
 }
 //------------------------
 // Private Functions
 //------------------------
+function _updataURLIfLocalMode( url ) {
+  let result = url;
+  if( url.startsWith( '/fileServer/' ) ) {
+    if( config.isLocalMode ) {
+      // Translate to local server (defined in local config)
+      result = url.replace( '/fileServer', config.host.fileServerURL );
+    }
+  } else if( url.startsWith( '/library/' ) ) {
+    if( config.isLocalMode ) {
+      // Translate to local server (defined in local config)
+      result = url.replace( '/library', config.host.libraryURL );
+    }
+  }
+  return( result );
+}
 function _openFile( url, onLoad, noTimeStamp ) {
   // Decide if attach a timestamp or not (timestamp used to avoid chache)
   noTimeStamp = ( noTimeStamp != undefined? noTimeStamp: false );
@@ -280,7 +432,8 @@ function _openFile( url, onLoad, noTimeStamp ) {
   request.open( 'GET', url, true );
   //request.setRequestHeader('Cache-Control', 'no-cache');
   request.onerror = (e)=> {
-    alert( 'Server not responding' );
+    winAlert( 'Server not responding' );
+    setTimeout( setSystemError, 2500 );
     if( onLoad ) {
       onLoad( '' );
     }
@@ -288,7 +441,8 @@ function _openFile( url, onLoad, noTimeStamp ) {
 
   try {
     request.send( '' );
-  } catch(e) {
+  } catch( e ) {
+    console.log( e );
     if( onLoad ) {
       onLoad( '' );
     }
@@ -322,7 +476,8 @@ function _saveFile( url, source, onSaveDone, sourceEncoding ) {
     request.setRequestHeader( 'Content-Type', 'text/plain;charset=UTF-8' );
     //request.setRequestHeader('Cache-Control', 'no-cache');
     request.onerror = (e)=> {
-      alert( 'Server not responding' );
+      winAlert( 'Server not responding' );
+      setTimeout( setSystemError, 2500 );
       if( onSaveDone ) {
         onSaveDone();
       }
@@ -334,7 +489,16 @@ function _saveFile( url, source, onSaveDone, sourceEncoding ) {
     });
     console.log( 'Saving: '+url );
     const fileInfo = { url, source, sourceEncoding, };
-    request.send( JSON.stringify( fileInfo ) );
+    try {
+      request.send( JSON.stringify( fileInfo ) );
+    } catch( e ) {
+      console.log( e );
+      // TODO: I am not sure in this case is good to call the callback!!!
+      debugger;
+      if( onSaveDone ) {
+        onSaveDone();
+      }
+    }
   } else {
     console.log( 'Read-only mode. No save request serverd' );
     if( onSaveDone ) {
@@ -349,7 +513,8 @@ function saveRemoteFile( remoteServerURL, url, source, onSaveDone ) {
     request.setRequestHeader( 'Content-Type', 'text/plain;charset=UTF-8' );
     //request.setRequestHeader('Cache-Control', 'no-cache');
     request.onerror = (e)=> {
-      alert( 'Server not responding' );
+      winAlert( 'Server not responding' );
+      setTimeout( setSystemError, 2500 );
       if( onSaveDone ) {
         onSaveDone();
       }
@@ -367,7 +532,14 @@ function saveRemoteFile( remoteServerURL, url, source, onSaveDone ) {
       remotePort,
       url, 
       source, };
-    request.send( JSON.stringify( fileInfo ) );
+    try {
+      request.send( JSON.stringify( fileInfo ) );
+    } catch( e ) {
+      console.log( e );
+      if( onSaveDone ) {
+        onSaveDone();
+      }
+    }
   } else {
     console.log( 'Read-only mode. No save request serverd' );
     if( onSaveDone ) {
