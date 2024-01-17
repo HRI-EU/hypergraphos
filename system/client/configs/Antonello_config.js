@@ -10,9 +10,7 @@ const config = {
     "fileStatusURL": "/fileStatus",
     "statusURL": "/fileServer/Users/Antonello_status.json"
   },
-  "remoteHost": {
-    "NUC": "192.168.1.11:7575"
-  },
+  "remoteHost": {},
   "htmlDiv": {
     "mainDiv": "mainDiv",
     "graphDiv": "diagram",
@@ -37,6 +35,6 @@ const config = {
     "maxHistoryLength": 30
   },
   "server": {
-    "ip": "192.168.1.12"
+    "ip": "192.168.1.205"
   }
 };

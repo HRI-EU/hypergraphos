@@ -17,9 +17,9 @@ class DataFlowEngine {
     // Model ID for the current graph
     this.modelId = 'main';
     this.loadModel();
-    // Runtime instance execution data for all nodes
+    // Exdecution Data: runtime instance execution data for all nodes
     this.ed = {};
-    // Runtime viewer data for all nodes
+    // Storage Data: runtime storage data for all nodes
     this.sd = {};
 
     //------------------------------
@@ -43,6 +43,8 @@ class DataFlowEngine {
   }
   clearInstanceData() {
     this.ed = {};
+    this.isPause = false;
+    this.pauseData = null;
   }
   setLogOn() {
     this.isLogOn = true;
@@ -711,18 +713,24 @@ class DataFlowEngine {
     return (inState);
   }
   _evalValue( value ) {
-    switch( value ) {
-      case 'true':
-        value = true;
-        break;
-      case 'false':
-        value = false;
-        break;
-      default:
-        // Check if the value is a number
-        if( !isNaN( value ) ) {
-          value = parseFloat( value );
+    switch( typeof( value ) ) {
+      case 'string':
+        switch( value ) {
+          case 'true':
+            value = true;
+            break;
+          case 'false':
+            value = false;
+            break;
+          default:
+            // Check if the value is a number
+            if( !isNaN( value ) ) {
+              value = parseFloat( value );
+            }
+            break;
         }
+        break;
+      case 'boolean':
         break;
     }
     return( value );
