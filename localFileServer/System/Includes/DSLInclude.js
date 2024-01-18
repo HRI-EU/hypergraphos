@@ -442,26 +442,64 @@
     return geo;
   });
   go.Shape.defineFigureGenerator("CircleRectangle", function(shape, w, h) {  // predefined in 2.0
-  let radius = h / 2;
-  let KAPPA = 4 * ((Math.sqrt(2) - 1) / 3);
-  let cpOffset = radius * KAPPA;
-  let geo = new go.Geometry()
-         .add(new go.PathFigure(radius, 0, true)
-              .add(new go.PathSegment(go.PathSegment.Line, w - radius, 0))
-              .add(new go.PathSegment(go.PathSegment.Bezier, w, radius, w - cpOffset, 0, w, cpOffset))
-              .add(new go.PathSegment(go.PathSegment.Line, w, h - radius))
-              .add(new go.PathSegment(go.PathSegment.Bezier, w - radius, h, w, h - cpOffset, w - cpOffset, h))
-              .add(new go.PathSegment(go.PathSegment.Line, radius, h))
-              .add(new go.PathSegment(go.PathSegment.Bezier, 0, h - radius, cpOffset, h, 0, h - cpOffset))
-              .add(new go.PathSegment(go.PathSegment.Line, 0, radius))
-              .add(new go.PathSegment(go.PathSegment.Bezier, radius, 0, 0, cpOffset, cpOffset, 0).close()));
-  //if (cpOffset > 1) {
-    cpOffset = 10;
-    geo.spot1 = new go.Spot(0, 0, cpOffset, 0);
-    geo.spot2 = new go.Spot(1, 1, -cpOffset, -0);
-  //}
-  return geo;
-});
+    let radius = h / 2;
+    let KAPPA = 4 * ((Math.sqrt(2) - 1) / 3);
+    let cpOffset = radius * KAPPA;
+    let geo = new go.Geometry()
+      .add(new go.PathFigure(radius, 0, true)
+      .add(new go.PathSegment(go.PathSegment.Line, w - radius, 0))
+      .add(new go.PathSegment(go.PathSegment.Bezier, w, radius, w - cpOffset, 0, w, cpOffset))
+      .add(new go.PathSegment(go.PathSegment.Line, w, h - radius))
+      .add(new go.PathSegment(go.PathSegment.Bezier, w - radius, h, w, h - cpOffset, w - cpOffset, h))
+      .add(new go.PathSegment(go.PathSegment.Line, radius, h))
+      .add(new go.PathSegment(go.PathSegment.Bezier, 0, h - radius, cpOffset, h, 0, h - cpOffset))
+      .add(new go.PathSegment(go.PathSegment.Line, 0, radius))
+      .add(new go.PathSegment(go.PathSegment.Bezier, radius, 0, 0, cpOffset, cpOffset, 0).close()));
+    //if (cpOffset > 1) {
+      cpOffset = 10;
+      geo.spot1 = new go.Spot(0, 0, cpOffset, 0);
+      geo.spot2 = new go.Spot(1, 1, -cpOffset, -0);
+    //}
+    return geo;
+  });
+  go.Shape.defineFigureGenerator("HalfCircleRight", function(shape, w, h) {  // predefined in 2.0
+    let radius = h / 2;
+    let KAPPA = 4 * ((Math.sqrt(2) - 1) / 3);
+    let cpOffset = radius * KAPPA;
+    let geo = new go.Geometry()
+      .add(new go.PathFigure(radius, 0, true)
+      .add(new go.PathSegment(go.PathSegment.Line, w - radius, 0))
+      .add(new go.PathSegment(go.PathSegment.Bezier, w, radius, w - cpOffset, 0, w, cpOffset))
+      .add(new go.PathSegment(go.PathSegment.Line, w, h - radius))
+      .add(new go.PathSegment(go.PathSegment.Bezier, w - radius, h, w, h - cpOffset, w - cpOffset, h))
+      .add(new go.PathSegment(go.PathSegment.Line, 0, h))
+      .add(new go.PathSegment(go.PathSegment.Line, 0, 0).close()));
+    //if (cpOffset > 1) {
+      cpOffset = 0;
+      geo.spot1 = new go.Spot(0, 0, cpOffset, 0);
+      geo.spot2 = new go.Spot(1, 1, -cpOffset, -0);
+    //}
+    return geo;
+  });
+  go.Shape.defineFigureGenerator("HalfCircleLeft", function(shape, w, h) {  // predefined in 2.0
+    let radius = h / 2;
+    let KAPPA = 4 * ((Math.sqrt(2) - 1) / 3);
+    let cpOffset = radius * KAPPA;
+    let geo = new go.Geometry()
+      .add(new go.PathFigure(radius, 0, true)
+      .add(new go.PathSegment(go.PathSegment.Line, w, 0))
+      .add(new go.PathSegment(go.PathSegment.Line, w, h))
+      .add(new go.PathSegment(go.PathSegment.Line, radius, h))
+      .add(new go.PathSegment(go.PathSegment.Bezier, 0, h - radius, cpOffset, h, 0, h - cpOffset))
+      .add(new go.PathSegment(go.PathSegment.Line, 0, radius))
+      .add(new go.PathSegment(go.PathSegment.Bezier, radius, 0, 0, cpOffset, cpOffset, 0).close()));
+    //if (cpOffset > 1) {
+      cpOffset = 10;
+      geo.spot1 = new go.Spot(0, 0, cpOffset, 0);
+      geo.spot2 = new go.Spot(1, 1, -cpOffset, -0);
+    //}
+    return geo;
+  });
 
   //-------------------------
   // Define DSL API function

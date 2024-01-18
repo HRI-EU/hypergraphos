@@ -1,5 +1,9 @@
 class HChat {
   constructor( divId, width, height ) {
+    this.property = {
+      messageGap: null,
+      iconHeight: null,
+    };
     this.divId = divId;
     this.divEl = document.getElementById( divId );
     this.divEl.classList.add( 'hchat-div' );
@@ -7,9 +11,12 @@ class HChat {
     this.userList = {};
     this.resize( width, height );
     // Create chat skeleton
+    this.messageInputAreaEl = this._getElementById('hchat-input-area');
     this.inputMessage = this._getElementById( 'hchat-input-message' );
     // Cache divs
+    this.messageAreaHEl = this._getElementById('hchat-area-header');
     this.messageAreaEl = this._getElementById('hchat-area');
+    this.messageAreaFEl = this._getElementById('hchat-area-footer');
     this.senderDropDownEl = this._getElementById('hchat-sender-dropdown');
     this.selectedSenderEl = this._getElementById('hchat-sender_selection');
     this.selectedSenderEl.onclick = this._setSenderDropdown.bind( this, true );
@@ -59,6 +66,30 @@ class HChat {
       this.divEl.style.height = height+( parseInt( height ) == height? 'px': '');
     }
   }
+  setProperty( name, value ) {
+    switch( name ) {
+      case 'hasInputField':
+        if( value ) {
+          this.messageAreaEl.classList = 'hchat-container hchat-area-part';
+          this.messageInputAreaEl.style.visibility = 'visible';
+        } else {
+          this.messageAreaEl.classList = 'hchat-container hchat-area-full';
+          this.messageInputAreaEl.style.visibility = 'hidden';
+        }
+        break;
+      case 'messageGap':
+        this.property.messageGap = value;
+        break;
+      case 'iconHeight':
+        this.property.iconHeight = value;
+        break;
+      case 'backgroundColor':
+        this.messageAreaHEl.style.background = value;
+        this.messageAreaEl.style.background = value;
+        this.messageAreaFEl.style.background = value;
+        break;
+    }
+  }
   getHistory( isFull ) {
     const result = [];
     for( const m of document.querySelectorAll(`#${this.divId} .hchat-text`) ) {
@@ -75,10 +106,10 @@ class HChat {
       this.addMessage( item.sender, item.receiver, item.text );
     }
   }
-  addUser( userName, imageURL, isSender, isReceiver ) {
+  addUser( userName, imageURL, userColor, isSender, isReceiver ) {
     isSender = ( isSender == undefined? true: isSender );
     isReceiver = ( isReceiver == undefined? true: isReceiver );
-    const color = this._generateRandomColor();
+    const color = ( userColor || this._generateRandomColor() );
     this.userList[userName] = { imageURL, isSender, isReceiver, color };
 
     // Populate dropdown
@@ -124,13 +155,20 @@ class HChat {
     if( senderInfo && receiverInfo ) {
       const newMessage = document.createElement("div");
       newMessage.classList.add("hchat-message");
+      if( this.property.messageGap ) {
+        newMessage.style['margin-bottom'] = this.property.messageGap;
+      }
       const senderImgSrc =  senderInfo.imageURL; 
       const receiverImgSrc =  receiverInfo.imageURL; 
-      const senderColor = senderInfo.color
+      const senderColor = senderInfo.color;
+      let iconStyle = '';
+      if( this.property.iconHeight ) {
+        iconStyle = `style="height: ${this.property.iconHeight}"`;
+      }
       newMessage.innerHTML = `
-        <img src="${senderImgSrc}" alt="Sender Icon" class="hchat-user-img">
+        <img src="${senderImgSrc}" alt="Sender Icon" class="hchat-user-img" ${iconStyle}>
         <div class="hchat-text" style="background-color: ${senderColor}" sender="${sender}" receiver="${receiver}">${messageText}</div>
-        <img src="${receiverImgSrc}" alt="Receiver Icon" class="hchat-user-img">
+        <img src="${receiverImgSrc}" alt="Receiver Icon" class="hchat-user-img" ${iconStyle}>
       `;
       const messageList = this._getElementById('hchat-area');
       messageList.append(newMessage);
@@ -210,7 +248,7 @@ class HChat {
   _initChat() {
     this.divEl.innerHTML = `
       <div id="hchat-area-header"></div>
-      <div id="hchat-area" class="hchat-container">
+      <div id="hchat-area" class="hchat-container hchat-area-part">
       </div>
       <div id="hchat-area-footer"></div>
       <!-- Input Area -->

@@ -16,7 +16,7 @@ function DataFlowDSL_setupDSL() {
   }
 }
 function DataFlowDSL_getDSL( g ) {
-
+  let diagram = (g.diagram? g.diagram: g.nodePalette);
   const cm = g.contextMenu;
   cm.add( menuDSL, 'figureMenu' );
 
@@ -41,6 +41,17 @@ function DataFlowDSL_getDSL( g ) {
   //-----------------------
   // Define event handler
   //-----------------------
+  turnOnVisibitityOfButtonsProxy = function(evt) {
+    turnOnVisibitityOfButtons(evt,diagram);
+  }
+  turnOffVisibitityOfButtonsProxy = function(evt) {
+    turnOffVisibitityOfButtons(evt,diagram);
+  }
+  if( diagram ) {
+    diagram.addDiagramListener( 'ChangingSelection', turnOffVisibitityOfButtonsProxy );
+    diagram.addDiagramListener( 'ChangedSelection', turnOnVisibitityOfButtonsProxy );
+  }
+  
   function dataSend( event, obj ) {
     const nodeData = obj.part.data;
     DataFlow_Data( nodeData, 'in' );
@@ -107,6 +118,7 @@ function DataFlowDSL_getDSL( g ) {
       { category: 'DataFlow_SetOut',           template: dsl_Component, param: { g, figure: 'Rectangle',        hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasProperties: true, hasValue: true, hasUnit: false, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/SetOut.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: false, isOutputLinkableSelfNode: false,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
       { category: 'DataFlow_PassOnTrigger',    template: dsl_Component, param: { g, figure: 'Rectangle',        hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasProperties: true, hasValue: true, hasUnit: false, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/PassOnTrigger.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: false, isOutputLinkableSelfNode: false,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
       { category: 'DataFlow_BlockOnTrigger',   template: dsl_Component, param: { g, figure: 'Rectangle',        hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasProperties: false, hasValue: true, hasUnit: false, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/BlockOnTrigger.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: false, isOutputLinkableSelfNode: false,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
+      { category: 'DataFlow_Gate',             template: dsl_Component, param: { g, figure: 'Rectangle',        hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasProperties: true, hasValue: true, hasUnit: false, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/Gate.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: false, isOutputLinkableSelfNode: false,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
       { category: 'DataFlow_ConvertToEvent',   template: dsl_Component, param: { g, figure: 'Rectangle',        hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasProperties: false, hasValue: true, hasUnit: false, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/DataToEvent.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: false, isOutputLinkableSelfNode: false,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
       { category: 'DataFlow_SetInArray',       template: dsl_Component, param: { g, figure: 'Rectangle',        hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasProperties: true, hasValue: true, hasUnit: false, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/PutInArray.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: false, isOutputLinkableSelfNode: false,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
       { category: 'DataFlow_GetFromArray',     template: dsl_Component, param: { g, figure: 'Rectangle',        hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasProperties: true, hasValue: true, hasUnit: false, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/GetFromArray.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: false, isOutputLinkableSelfNode: false,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
@@ -116,6 +128,8 @@ function DataFlowDSL_getDSL( g ) {
       { category: 'DataFlow_Merge',            template: dsl_Component, param: { g, portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,  isOutputEditable: false,                       hasValue: false, hasUnit: false,  figure: 'Rectangle',hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: true, canAddOutput: false, isResizable: false, isLabelEditable: false, maxSize: new go.Size(10, NaN),  } },
       { category: 'DataFlow_Dispatch',         template: dsl_Component, param: { g, portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: false, hasUnit: false,  figure: 'Rectangle', hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: false, canAddOutput: true, isResizable: false, isLabelEditable: false, maxSize: new go.Size(10, NaN),  } },
       { category: 'DataFlow_Message',          template: dsl_Component, param: { g, figure: 'RoundedRectangle', fill: 'LightYellow', hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasTag: false, hasType:false, hasProperties: false, minSize: new go.Size(30,30), labelTextAlign: "left", isFromLinkable: false, isToLinkable: false, stroke: "transparent", labelFont: "45px sans-serif", isLabelWrap: true } },
+      { category: 'DataFlow_TunnelIn',         template: dsl_Component, param: { g, figure: 'HalfCircleLeft',   hasInputs: true,  canAddInput: false, hasOutputs: false, canAddOutput: false, hasProperties: false, canAddProperties: false, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: false, minSize: new go.Size(80, 80), isInputLinkableSelfNode: true, isOutputLinkableSelfNode: true,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
+      { category: 'DataFlow_TunnelOut',        template: dsl_Component, param: { g, figure: 'HalfCircleRight',  hasInputs: false,  canAddInput: false, hasOutputs: true, canAddOutput: false, hasProperties: false, canAddProperties: false, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: false, minSize: new go.Size(80, 80), isInputLinkableSelfNode: true, isOutputLinkableSelfNode: true,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
     ],
     dataNodeList: [
       {
@@ -429,18 +443,24 @@ function DataFlowDSL_getDSL( g ) {
         size: '240 80',
         color: 'Salmon',
         in_: [
-          { portId: '1in', name:'clear' },
-          { portId: '2in', name:'init' },
-          { portId: '3in', name:'messageIn' },
-          { portId: '4in', name:'selectSender' },
+          { portId: '1in', name:'clear', tooltip: 'Event to empmty history.' },
+          { portId: '2in', name:'init', tooltip: 'Array of message to set history.'  },
+          { portId: '3in', name:'message', tooltip: 'Object defining a message:\n{\n  text: "msg",\n  sender: "name of sender",\n  receiver: "name of receiver",\n}'  },
+          { portId: '4in', name:'selectSender', tooltip: 'Set name of sender in UI.'  },
+          { portId: '5in', name:'userList', tooltip: 'Array of names/pictures for senders/receivers\n(has priority over the property)' },
         ],
         out_: [
-          { portId: '1out', name:'history' },
-          { portId: '2out', name:'dialog' },
-          { portId: '3out', name:'messageOut' },
+          { portId: '1out', name:'history', tooltip: 'Array of message including last input message.'  },
+          { portId: '2out', name:'dialog', tooltip: 'Array of message except last input message.'  },
+          { portId: '3out', name:'allMessage', tooltip: 'Last input or typed message.' },
+          { portId: '4out', name:'uiMessage', tooltip: 'Last typed message only.' },
         ], 
         props_: [
-          { name: 'userList', value: '- { name: all, url: ~/allUsers.png }\n- { name: user1, url: ~/Male1.png }\n- { name: Female1, url: /fileServer/pictures/Monalisa.png }' },
+          { name: 'userList', value: '- { name: all, url: ~/allUsers.png }\n- { name: user1, url: ~/Male1.png }\n- { name: Female1, url: /fileServer/pictures/Monalisa.png }', tooltip: 'List of names/pictures for senders/receivers' },
+          { name: 'hasInputField', value: false, tooltip: 'true to have an input field' },
+          { name: 'messageGap', value: '15px', tooltip: 'distance between messages, default = 15px' },
+          { name: 'iconHeight', value: '40px', tooltip: 'message icon height, default = 40px' },
+          { name: 'backgroundColor', value: '#C1D0F6', tooltip: 'chat background color, default = #C1D0F6' },
         ], 
         isFile: true,
         isLocalDiv: true,
@@ -947,6 +967,34 @@ function DataFlowDSL_getDSL( g ) {
         doCompute: 'DataFlow_BlockOnTrigger',
       },
       {
+        label: 'Gate',
+        category: 'DataFlow_Gate',
+        size: '240 80',
+        color: 'LimeGreen',
+        in_: [
+          {
+            portId: '1in', name:'gate',
+            tooltip: 'This input state defined if the "in" is transfered to "out" or not.',
+          },
+          {
+            portId: '2in', name:'in',
+            tooltip: 'This input expects any input type.',
+          },
+        ],
+        out_: [
+          {
+            portId: '1out', name:'out',
+            tooltip: "This output returns the data defined\nin the input when gate == gateOn.",
+          }
+        ],
+        props_: [
+          { name: 'gateOn', value: 'true', tooltip: 'this property defines the active state of the gate (true or false)' },
+        ],
+        fileTypeName: 'Gate',
+        fileType: 'text/javascript',
+        doCompute: 'DataFlow_Gate',
+      },
+      {
         label: 'Data to Event',
         category: 'DataFlow_ConvertToEvent',
         size: '240 80',
@@ -989,7 +1037,7 @@ function DataFlowDSL_getDSL( g ) {
         out_: [
           {
             portId: '1out', name:'out',
-            tooltip: "Updated array"
+            tooltip: "Updated array (inplace operation)"
           },
           {
             portId: '2out', name:'outIndex'
@@ -1040,7 +1088,7 @@ function DataFlowDSL_getDSL( g ) {
         out_: [
           {
             portId: '1out', name:'out',
-            tooltip: "Updated array"
+            tooltip: "Updated array (inplace operation)"
           },
           {
             portId: '2out', name:'outIndex'
@@ -1072,6 +1120,38 @@ function DataFlowDSL_getDSL( g ) {
         fileTypeName: "Get From Array",
         fileType: "text/javascript",
         doCompute: 'DataFlow_GetFromArray',
+      },
+      {
+        label: "Name",
+        category: "DataFlow_TunnelIn",
+        size: "100 80",
+        color: "Moccasin",
+        in_: [
+          {
+            portId: '1in', name:'in',
+            tooltip: "Any data entering the tunnel"
+          }
+        ],
+        
+        fileTypeName: "Tunnel In",
+        fileType: "text/javascript",
+        doCompute: 'DataFlow_TunnelIn',
+      },
+      {
+        label: "Name",
+        category: "DataFlow_TunnelOut",
+        size: "100 80",
+        color: "Moccasin",
+        out_: [
+          {
+            portId: '1out', name:'out',
+            tooltip: "Any data leaving the tunnel"
+          }
+        ],
+        
+        fileTypeName: "Tunnel Out",
+        fileType: "text/javascript",
+        doCompute: 'DataFlow_TunnelOut',
       },
     ],
     templateLinkList: [
@@ -1354,16 +1434,40 @@ function DataFlow_Chat_initChat( dataKey ) {
   dfe.setStorage( dataKey, 'chatInstance', hc );
 
   hc.registerEvent( 'onSend', (mi)=> DataFlow_Chat_sendMessage( dataKey, hc, mi ) );
-  const data = getNodeData( dataKey );
-  const userListProperty = data.props_.find( (e)=>e.name == 'userList' );
-  if( userListProperty ) {
-    const userList = jsyaml.load( userListProperty.value );
+  const nodeData = getNodeData( dataKey );
+}
+function DataFlow_Chat_initUserList( nodeData, hc ) {
+  // Get userList input
+  let userList = graphData.dfe.getInput( nodeData, 'userList', null );
+  const dfe = DataFlowEngine.getInstance();
+  if( !userList ) {
+    // // If no input -> get userList property
+    // const userListProperty = nodeData.props_.find( (p)=>p.name == 'userList' );
+    // if( userListProperty ) {
+    //   userList = jsyaml.load( userListProperty.value );
+    // }
+    // Alternative with DataFlowEngine
+    const userListPropValue = dfe.getProperty( nodeData, 'userList', null );
+    if( userListPropValue ) {
+      userList = jsyaml.load( userListPropValue );
+    }
+  } // This is not an else
+  if( userList ) {
+    // If userList is defined (input or property)
     for( const userInfo of userList ) {
       const userName = userInfo.name;
       const userImageURL = userInfo.url.replace( '~', HChat.path );
       const isSender = ( userName.toLowerCase() != 'all' );
-      hc.addUser( userName, userImageURL, isSender );
+      const userColor = userInfo.color;
+      hc.addUser( userName, userImageURL, userColor, isSender );
     }
+  }
+  // // Option 1
+  // nodeData.props_.forEach( (p)=> hc.setProperty( p.name, jsyaml.load( p.value ) ));
+  // Opition 2
+  const propList = dfe.getPropertyList( nodeData );
+  for( const name in propList ) {
+    hc.setProperty( name, propList[name] );
   }
 }
 function DataFlow_Chat_sendMessage( dataKey, hc, messageInfo ) {
@@ -1372,19 +1476,21 @@ function DataFlow_Chat_sendMessage( dataKey, hc, messageInfo ) {
   const history = hc.getHistory( true );
   graphData.dfe.fireOutput( data, 'history', history );
   graphData.dfe.fireOutput( data, 'dialog', dialog );
-  graphData.dfe.fireOutput( data, 'messageOut', messageInfo );
+  graphData.dfe.fireOutput( data, 'allMessage', messageInfo );
+  graphData.dfe.fireOutput( data, 'uiMessage', messageInfo );
 }
 function DataFlow_Chat( nodeData, name, value ) {
   const hc = graphData.dfe.getStorage( nodeData, 'chatInstance' );
   if( hc ) {
     if( name == 'clear' ) {
       hc.clear();
+      DataFlow_Chat_initUserList( nodeData, hc );
     } else if( name == 'init' ) {
       hc.clear();
       hc.setHistory( value );
     } else if( name == 'selectSender' ) {
       hc.selectSender( value );
-    } else if( name == 'messageIn' ) {
+    } else if( name == 'message' ) {
       hc.addMessage( value.sender, value.receiver, value.text );
       const history = hc.getHistory( true );
       graphData.dfe.fireOutput( nodeData, 'history', history );
@@ -1392,7 +1498,7 @@ function DataFlow_Chat( nodeData, name, value ) {
       if( !value.sender.startsWith( '_' ) ) {
         const dialog = hc.getHistory( false );
         graphData.dfe.fireOutput( nodeData, 'dialog', dialog );
-        graphData.dfe.fireOutput( nodeData, 'messageOut', value );
+        graphData.dfe.fireOutput( nodeData, 'allMessage', value );
       }
     }
   }
@@ -1410,6 +1516,7 @@ function DataFlow_Message( nodeData, name, value ) {
     try {
       value = JSON.parse( value );
     } catch( e ) {
+      value = jsyaml.load( value );
     }
   }
 
@@ -1428,7 +1535,7 @@ function DataFlow_Template( nodeData, name, value ) {
         } else if( typeof( v.value ) == 'string' ) {
           return( v.value );
         } else {
-          return( '' );
+          return( JSON.stringify( v, null, 2 ) );
         }
       } else {
         if( isKeepUnmatchedValues ) {
@@ -1914,11 +2021,16 @@ function DataFlow_Watchdog( nodeData, name, value ) {
     const timer = graphData.dfe.get( nodeData, 'timer', null );
     if( timer ) {
       clearTimeout( timer );
+      graphData.dfe.set( nodeData, 'timer', null );
       graphData.dfe.fireOutput( nodeData, 'out', value );
     }
   } else if( name == 'start' ) {
+    let timer = graphData.dfe.get( nodeData, 'timer', null );
+    if( timer ) {
+      clearTimeout( timer );
+    }
     const timeOut = graphData.dfe.getProperty( nodeData, 'timeOut', 4 );
-    const timer = setTimeout( ()=> {
+    timer = setTimeout( ()=> {
                                  const outValue = graphData.dfe.getInput( nodeData, 'timeOutIn', null );
                                  graphData.dfe.fireOutput( nodeData, 'out', outValue );
                                  graphData.dfe.set( nodeData, 'timer', null );
@@ -1933,6 +2045,15 @@ function DataFlow_SetOut( nodeData, name, value ) {
   graphData.dfe.fireOutput( nodeData, 'out', cValue );
 }
 function DataFlow_PassOnTrigger( nodeData, name, value ) {
+  // isInputCleaned: true
+  // doTrigger:   1        1    1           1     1
+  //        in:        A            B   C
+  //       out:             A                C      
+
+  // isInputCleaned: false
+  // doTrigger:   1        1    1           1     1
+  //        in:        A            B   C
+  //       out:             A    A           C     C
 
   // Update input values
   if( name == 'doTrigger' ) {
@@ -1948,7 +2069,10 @@ function DataFlow_PassOnTrigger( nodeData, name, value ) {
   }
 }
 function DataFlow_BlockOnTrigger( nodeData, name, value ) {
-  
+  // doTrigger:   1              1      
+  //        in:        A     B     C  D   E
+  //       out:               B        D   E
+
   // Update input values
   if( name == 'doTrigger' ) {
     graphData.dfe.set( nodeData, 'isTriggerOn', true );
@@ -1958,6 +2082,30 @@ function DataFlow_BlockOnTrigger( nodeData, name, value ) {
       graphData.dfe.fireOutput( nodeData, 'out', value );
     } else {
       graphData.dfe.set( nodeData, 'isTriggerOn', false );
+    }
+  }
+}
+function DataFlow_Gate( nodeData, name, value ) {
+  //  gateOn: true
+  //    gate:   T          F        T      
+  //      in:      A    B      C  D   E
+  //     out:       A    B             E
+
+  //  gateOn: false
+  //    gate:   F          T        F      
+  //      in:      A    B      C  D   E
+  //     out:       A    B             E
+
+  // Update input values
+  if( name == 'in' ) {
+    // Get gateOn value
+    const gateOn = graphData.dfe.getProperty( nodeData, 'gateOn', true );
+    const gate = graphData.dfe.getInput( nodeData, 'gate', true );
+    
+    // Generate ouptut if gate on
+    if( gateOn == gate ) {
+      // Generate an output trigger
+      graphData.dfe.fireOutput( nodeData, 'out', value );
     }
   }
 }
@@ -2067,4 +2215,16 @@ function DataFlow_GetFromArray( nodeData, name, value ) {
       graphData.dfe.fireOutput( nodeData, 'outIndex', index );
     }
   }
+}
+function DataFlow_TunnelIn( nodeData, name, value ) {
+
+  if( name == 'in' ) {
+    const outNodeDataList = graphData.dfe.me.getNodeListBy( graphData.dfe.modelId, 'label', nodeData.label, (d)=> d.category == 'DataFlow_TunnelOut' );
+    for( const outNodeData of outNodeDataList ) {
+      DataFlow_TunnelOut( outNodeData, name, value );
+    }
+  }
+}
+function DataFlow_TunnelOut( nodeData, name, value ) {
+  graphData.dfe.fireOutput( nodeData, 'out', value );
 }

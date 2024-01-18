@@ -26,9 +26,21 @@
   padding: 10px;
   border-radius: 10px;
   max-width: 70%;
+  box-shadow: rgba(0,0,0,0.2) 0px 18px 50px -10px;
 }
 .hchat-text {
   color: black;
+  transform: scale(0.94);
+  opacity: o;
+  filter: blur(8px);
+  animation: appear 1s forwards cubic-bezier(0.49,0,0.6,1);
+}
+@keyframes appear {
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    filter: blur(0);
+  }
 }
 .hchat-user-img {
   width: auto;
@@ -46,7 +58,12 @@
   overflow-y: scroll;
   position: relative;
   box-sizing: border-box;
+}
+.hchat-area-part {
   height:calc(100% - 80px);
+}
+.hchat-area-full {
+  height:calc(100% - 20px);
 }
 #hchat-area-footer {
   background: #c1d0f6;
