@@ -3,6 +3,7 @@ class HChat {
     this.property = {
       messageGap: null,
       iconHeight: null,
+      fontSize: null,
     };
     this.divId = divId;
     this.divEl = document.getElementById( divId );
@@ -88,6 +89,9 @@ class HChat {
         this.messageAreaEl.style.background = value;
         this.messageAreaFEl.style.background = value;
         break;
+      case 'fontSize':
+        this.property.fontSize = value;
+        break;
     }
   }
   getHistory( isFull ) {
@@ -155,19 +159,29 @@ class HChat {
     if( senderInfo && receiverInfo ) {
       const newMessage = document.createElement("div");
       newMessage.classList.add("hchat-message");
+      // Set message gap
       if( this.property.messageGap ) {
         newMessage.style['margin-bottom'] = this.property.messageGap;
       }
+      // Set message icons
       const senderImgSrc =  senderInfo.imageURL; 
       const receiverImgSrc =  receiverInfo.imageURL; 
       const senderColor = senderInfo.color;
+      // Set icon style
       let iconStyle = '';
       if( this.property.iconHeight ) {
         iconStyle = `style="height: ${this.property.iconHeight}"`;
       }
+      // Set text style
+      let textStyle = 'style="background-color: ${senderColor}';
+      if( this.property.fontSize ) {
+        textStyle = `${textStyle}; font-size: ${this.property.fontSize}`;
+      }
+      textStyle = textStyle+'"';
+      // Create message
       newMessage.innerHTML = `
         <img src="${senderImgSrc}" alt="Sender Icon" class="hchat-user-img" ${iconStyle}>
-        <div class="hchat-text" style="background-color: ${senderColor}" sender="${sender}" receiver="${receiver}">${messageText}</div>
+        <div class="hchat-text" ${textStyle} sender="${sender}" receiver="${receiver}">${messageText}</div>
         <img src="${receiverImgSrc}" alt="Receiver Icon" class="hchat-user-img" ${iconStyle}>
       `;
       const messageList = this._getElementById('hchat-area');
