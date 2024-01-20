@@ -350,6 +350,18 @@ class ModelExplorer {
     }
     return( result );
   }
+  getInPortName( id, key, portId ) {
+    return( this._getPortName( id, key, 'in', portId ) );
+  }
+  getInPortId( id, key, portName ) {
+    return( this._getPortId( id, key, 'in', portName ) );
+  }
+  getOutPortName( id, key, portId ) {
+    return( this._getPortName( id, key, 'out', portId ) );
+  }
+  getOutPortId( id, key, portName ) {
+    return( this._getPortId( id, key, 'out', portName ) );
+  }
   getMapValue( value, map, compare ) {
     let result = '';
     for( const item of map ) {
@@ -399,6 +411,18 @@ class ModelExplorer {
       const portList = subject[0][portType+'_'];
       if( portList ) {
         portList.find( (p)=>{ if( p.name == portName ) { result = p.portId; return(true) } } );
+      }
+    }
+    return( result );
+  }
+  _getPortName( id, key, portType, portId ) {
+    let result = null;
+
+    const subject = this.model[id].indexModel.node.key[key];
+    if( subject && subject[0] ) {
+      const portList = subject[0][portType+'_'];
+      if( portList ) {
+        portList.find( (p)=>{ if( p.portId == portId ) { result = p.name; return(true) } } );
       }
     }
     return( result );
