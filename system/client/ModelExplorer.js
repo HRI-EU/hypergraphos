@@ -25,7 +25,7 @@ class ModelExplorer {
   constructor( indexNodeFieldNameList, indedLinkFieldNameList ) {
     this.model = {};
 
-    this.nodeIndexList = [ 'key', 'category', 'label', 'text' ];
+    this.nodeIndexList = [ 'key', 'category', 'label', 'text', 'group' ];
     this.linkIndexList = [ 'key', 'category', 'from', 'to', 'fromPort', 'toPort' ];
     
     this.indexNodeFieldNameList = this.nodeIndexList; //indexNodeFieldNameList;
@@ -164,6 +164,9 @@ class ModelExplorer {
       return( result );
     }
 
+    // Translate port into a portId
+    toPort = this._getPortId( id, key, 'in', toPort );
+
     let nodeKeyList = [];
     const subject = this.model[id].indexModel.nodeKeyFanIn;
     if( subject ) {
@@ -206,6 +209,9 @@ class ModelExplorer {
     if( !id ) {
       return( result );
     }
+
+    // Translate port into a portId
+    fromPort = this._getPortId( id, key, 'out', fromPort );
 
     const subject = this.model[id].indexModel.nodeKeyFanOut;
     if( subject ) {
@@ -276,6 +282,9 @@ class ModelExplorer {
       return( result );
     }
 
+    // Translate port into a portId
+    toPort = this._getPortId( id, key, 'in', toPort );
+
     const subject = this.model[id].indexModel.linkKeyOfNodeKeyFanIn;
     if( subject && subject[key] ) {
       const linkKeyList = subject[key];
@@ -310,6 +319,9 @@ class ModelExplorer {
     if( !id ) {
       return( result );
     }
+
+    // Translate port into a portId
+    fromPort = this._getPortId( id, key, 'out', fromPort );
 
     const subject = this.model[id].indexModel.linkKeyOfNodeKeyFanOut;
     if( subject && subject[key] ) {
@@ -379,6 +391,18 @@ class ModelExplorer {
   //------------------------
   // Private Functions
   //------------------------
+  _getPortId( id, key, portType, portName ) {
+    let result = null;
+
+    const subject = this.model[id].indexModel.node.key[key];
+    if( subject && subject[0] ) {
+      const portList = subject[0][portType+'_'];
+      if( portList ) {
+        portList.find( (p)=>{ if( p.name == portName ) { result = p.portId; return(true) } } );
+      }
+    }
+    return( result );
+  }
   _evalValue( value ) {
     switch( value ) {
       case 'true':
