@@ -128,15 +128,15 @@ function generateDirectory( modelId, me, gData, path, isOverwrite ) {
             let isFileSaved = false;
             if( isSrcFileExist && 
                 ( !isDestFileExist || ( isDestFileExist && isOverwrite ) ) ) {
-              if( !srcFilePath && data.fileContent ) {
-                const source = data.fileContent;
-                saveFileContent( destFilePath, source );
-                isFileSaved = true;
-              } else if( data.fileURL ) {
+              if( data.fileURL ) {
                 console.log( `copy ${srcFilePath} ${currPath}` );
                 //ls( currPath );
                 //ls( realFilePath.substring( 0, realFilePath.lastIndexOf( '/' ) ) );
                 fs.copyFileSync( srcFilePath, destFilePath );
+                isFileSaved = true;
+              } else if( !srcFilePath && data.fileContent ) {
+                const source = data.fileContent;
+                saveFileContent( destFilePath, source );
                 isFileSaved = true;
               }
               // Set access flags in linux if file has been saved
