@@ -350,6 +350,28 @@ class ModelExplorer {
     }
     return( result );
   }
+  getInPortNameList( id, key ) {
+    let result = [];
+    const subject = this.model[id].indexModel.node.key[key];
+    if( subject && subject[0] ) {
+      const portList = subject[0]['in_'];
+      if( portList ) {
+        portList.forEach( (p)=> result.push( p.name ) );
+      }
+    }
+    return( result );
+  }
+  getOutPortNameList( id, key ) {
+    let result = [];
+    const subject = this.model[id].indexModel.node.key[key];
+    if( subject && subject[0] ) {
+      const portList = subject[0]['out_'];
+      if( portList ) {
+        portList.forEach( (p)=> result.push( p.name ) );
+      }
+    }
+    return( result );
+  }
   getInPortName( id, key, portId ) {
     return( this._getPortName( id, key, 'in', portId ) );
   }

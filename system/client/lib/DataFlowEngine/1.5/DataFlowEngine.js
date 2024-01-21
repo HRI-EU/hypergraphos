@@ -268,10 +268,11 @@ class DataFlowEngine {
     // Check if name exist
     if (nodeData.in_) {
       for (const inputData of nodeData.out_) {
-        if (inputData.name == InName) {
-          const inPortId = inputData.portId;
+        if (inputData.name == inName) {
+          //---const inPortId = inputData.portId;
           // Get output link from name port
-          const outLinkDataList = graphData.me.getLinkListFanOutByNodeKey(this.modelId, nodeData.key, inPortId);
+          //---const outLinkDataList = graphData.me.getLinkListFanOutByNodeKey(this.modelId, nodeData.key, inPortId);
+          const outLinkDataList = graphData.me.getLinkListFanOutByNodeKey(this.modelId, nodeData.key, inName);
 
           if (outLinkDataList.length) {
             for (const outData of outLinkDataList) {
@@ -292,9 +293,10 @@ class DataFlowEngine {
     if (nodeData.in_) {
       for (const inputData of nodeData.in_) {
         if (inputData.name == name) {
-          const portId = inputData.portId;
+          //--const portId = inputData.portId;
           // Get input link from name port
-          result = this.me.getNodeListFanInByNodeKey(this.modelId, nodeData.key, portId);
+          //--result = this.me.getNodeListFanInByNodeKey(this.modelId, nodeData.key, portId);
+          result = this.me.getNodeListFanInByNodeKey(this.modelId, nodeData.key, name);
           break;
         }
       }
@@ -307,9 +309,10 @@ class DataFlowEngine {
     if (nodeData.out_) {
       for (const outputData of nodeData.out_) {
         if (outputData.name == name) {
-          const portId = outputData.portId;
+          //--const portId = outputData.portId;
           // Get output link from name port
-          result = this.me.getNodeListFanOutByNodeKey(this.modelId, nodeData.key, portId);
+          //--result = this.me.getNodeListFanOutByNodeKey(this.modelId, nodeData.key, portId);
+          result = this.me.getNodeListFanOutByNodeKey(this.modelId, nodeData.key, name);
           break;
         }
       }
@@ -322,9 +325,10 @@ class DataFlowEngine {
     if (nodeData.in_) {
       for (const inputData of nodeData.in_) {
         if (inputData.name == name) {
-          const portId = inputData.portId;
+          //--const portId = inputData.portId;
           // Get input link from name port
-          result = this.me.getLinkListFanInByNodeKey(this.modelId, nodeData.key, portId);
+          //--result = this.me.getLinkListFanInByNodeKey(this.modelId, nodeData.key, portId);
+          result = this.me.getLinkListFanInByNodeKey(this.modelId, nodeData.key, name);
           break;
         }
       }
@@ -337,9 +341,10 @@ class DataFlowEngine {
     if (nodeData.out_) {
       for (const outputData of nodeData.out_) {
         if (outputData.name == name) {
-          const portId = outputData.portId;
+          //--const portId = outputData.portId;
           // Get output link from name port
-          result = this.me.getLinkListFanOutByNodeKey(this.modelId, nodeData.key, portId);
+          //--result = this.me.getLinkListFanOutByNodeKey(this.modelId, nodeData.key, portId);
+          result = this.me.getLinkListFanOutByNodeKey(this.modelId, nodeData.key, name);
           break;
         }
       }
@@ -515,7 +520,7 @@ class DataFlowEngine {
             let logMsg = outLinkData.label;
             if( logMsg == 'debugger' ) {
               debugger
-            } else if( !logMsg.startsWith( '//' ) ) {
+            } else if( logMsg && !logMsg.startsWith( '//' ) ) {
               if( logMsg.indexOf( '{value}' ) != -1 ) {
                 let valueStr = ( typeof( value ) == 'object'?
                                   JSON.stringify( value, null, 2 ):
