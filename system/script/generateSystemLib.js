@@ -133,7 +133,6 @@ function generateDirectory( modelId, me, gData, path, isOverwrite ) {
                 saveFileContent( destFilePath, source );
                 isFileSaved = true;
               } else if( data.fileURL ) {
-                generateFileContent( modelId, me, data );  
                 console.log( `copy ${srcFilePath} ${currPath}` );
                 //ls( currPath );
                 //ls( realFilePath.substring( 0, realFilePath.lastIndexOf( '/' ) ) );
@@ -171,31 +170,6 @@ function isNodeEnabled( modelId, me, data ) {
     }
   }
   return( result );
-}
-function generateFileContent( modelId, me, data ) {
-  // Set true if the file has links from output of some nodes
-  const isGenerationNeeded = false;
-
-  if( isGenerationNeeded ) {
-    // Compute source from generation process
-    const source = '';
-
-    if( isServer ) {
-      if( data.isFile ) {
-        if( data.fileURL ) {
-          const realPath = recomputeURL( data.fileURL, 
-                                         config.client.host.fileServerURL, 
-                                         config.server.dataRoot );
-          try {
-            saveFileContent( realPath, source );
-          } catch( e ) {}
-        } else if( data.fileContent ) {
-          data.fileContent = source;
-        }
-      }
-    } else {
-    }
-  }
 }
 function saveFileContent( filePathName, source ) {
   // Compute encoding...
