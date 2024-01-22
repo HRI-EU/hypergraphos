@@ -38,8 +38,8 @@ function startScript( args ) {
     console.log( 'Error in parameters' );
     return;
   }
-  modelFileURL = params.modelFileURL;
-  deployKey = params.deployKey;
+  const modelFileURL = params.modelFileURL;
+  const deployKey = params.deployKey;
   
   console.log( `
     modelFileURL ${modelFileURL}
@@ -114,29 +114,39 @@ function generateDirectory( modelId, me, gData, path, isOverwrite ) {
           if( data.label.startsWith( '$$' ) ) {
             // Copy dependency
           } else {
+            // If the node do not have a fileURL => we probably have fileContent
             const srcFilePath = recomputeURL( data.fileURL, 
-                                           config.client.host.fileServerURL, 
-                                           config.server.dataRoot );
+                                              config.client.host.fileServerURL, 
+                                              config.server.dataRoot );
             //const fileName = srcFilePath.substring( srcFilePath.lastIndexOf( '/' )+1 );
             const fileName = data.label;
             const destFilePath = currPath+'/'+fileName;
             
-            const isSrcFileExist = fs.existsSync( srcFilePath );
+            // If we have not srcFilePath => no need to check file exists
+            const isSrcFileExist = ( srcFilePath? fs.existsSync( srcFilePath ): true );
             const isDestFileExist = fs.existsSync( destFilePath );
+            let isFileSaved = false;
             if( isSrcFileExist && 
                 ( !isDestFileExist || ( isDestFileExist && isOverwrite ) ) ) {
-              generateFileContent( modelId, me, data );  
-              console.log( `copy ${srcFilePath} ${currPath}` );
-              //ls( currPath );
-              //ls( realFilePath.substring( 0, realFilePath.lastIndexOf( '/' ) ) );
-              fs.copyFileSync( srcFilePath, destFilePath );
-
-              // Set access flags in linux
-              if( data.isExecutable && ( config.host.platformType == 'linux' ) ) {
-                // Set rwxrwxrwx
-                fs.chmodSync( destFilePath, 0o765 );
+              if( data.fileURL ) {
+                console.log( `copy ${srcFilePath} ${currPath}` );
+                //ls( currPath );
+                //ls( realFilePath.substring( 0, realFilePath.lastIndexOf( '/' ) ) );
+                fs.copyFileSync( srcFilePath, destFilePath );
+                isFileSaved = true;
+              } else if( !srcFilePath && data.fileContent ) {
+                const source = data.fileContent;
+                saveFileContent( destFilePath, source );
+                isFileSaved = true;
               }
-              ++numFiles;
+              // Set access flags in linux if file has been saved
+              if( isFileSaved ) {
+                ++numFiles;
+                if( data.isExecutable && ( config.host.platformType == 'linux' ) ) {
+                  // Set rwxrwxrwx
+                  fs.chmodSync( destFilePath, 0o765 );
+                }
+              }
             }
           }
         }
@@ -160,31 +170,6 @@ function isNodeEnabled( modelId, me, data ) {
     }
   }
   return( result );
-}
-function generateFileContent( modelId, me, data ) {
-  // Set true if the file has links from output of some nodes
-  const isGenerationNeeded = false;
-
-  if( isGenerationNeeded ) {
-    // Compute source from generation process
-    const source = '';
-
-    if( isServer ) {
-      if( data.isFile ) {
-        if( data.fileURL ) {
-          const realPath = recomputeURL( data.fileURL, 
-                                         config.client.host.fileServerURL, 
-                                         config.server.dataRoot );
-          try {
-            saveFileContent( realPath, source );
-          } catch( e ) {}
-        } else if( data.fileContent ) {
-          data.fileContent = source;
-        }
-      }
-    } else {
-    }
-  }
 }
 function saveFileContent( filePathName, source ) {
   // Compute encoding...
@@ -215,6 +200,12 @@ function getModel( fileURL ) {
   return( model );
 }
 function recomputeURL( url, virtualPath, realPath ) {
+  // If no url => let know
+  if( !url ) {
+    return( null );
+  }
+
+  // Otherwise translate url
   if( !virtualPath.endsWith( '/' ) ) {
     virtualPath = virtualPath+'/';
   }

@@ -25,7 +25,7 @@ class ModelExplorer {
   constructor( indexNodeFieldNameList, indedLinkFieldNameList ) {
     this.model = {};
 
-    this.nodeIndexList = [ 'key', 'category', 'label', 'text' ];
+    this.nodeIndexList = [ 'key', 'category', 'label', 'text', 'group' ];
     this.linkIndexList = [ 'key', 'category', 'from', 'to', 'fromPort', 'toPort' ];
     
     this.indexNodeFieldNameList = this.nodeIndexList; //indexNodeFieldNameList;
@@ -164,6 +164,9 @@ class ModelExplorer {
       return( result );
     }
 
+    // Translate port into a portId
+    toPort = this._getPortId( id, key, 'in', toPort );
+
     let nodeKeyList = [];
     const subject = this.model[id].indexModel.nodeKeyFanIn;
     if( subject ) {
@@ -206,6 +209,9 @@ class ModelExplorer {
     if( !id ) {
       return( result );
     }
+
+    // Translate port into a portId
+    fromPort = this._getPortId( id, key, 'out', fromPort );
 
     const subject = this.model[id].indexModel.nodeKeyFanOut;
     if( subject ) {
@@ -276,6 +282,9 @@ class ModelExplorer {
       return( result );
     }
 
+    // Translate port into a portId
+    toPort = this._getPortId( id, key, 'in', toPort );
+
     const subject = this.model[id].indexModel.linkKeyOfNodeKeyFanIn;
     if( subject && subject[key] ) {
       const linkKeyList = subject[key];
@@ -311,6 +320,9 @@ class ModelExplorer {
       return( result );
     }
 
+    // Translate port into a portId
+    fromPort = this._getPortId( id, key, 'out', fromPort );
+
     const subject = this.model[id].indexModel.linkKeyOfNodeKeyFanOut;
     if( subject && subject[key] ) {
       const linkKeyList = subject[key];
@@ -337,6 +349,40 @@ class ModelExplorer {
       }
     }
     return( result );
+  }
+  getInPortNameList( id, key ) {
+    let result = [];
+    const subject = this.model[id].indexModel.node.key[key];
+    if( subject && subject[0] ) {
+      const portList = subject[0]['in_'];
+      if( portList ) {
+        portList.forEach( (p)=> result.push( p.name ) );
+      }
+    }
+    return( result );
+  }
+  getOutPortNameList( id, key ) {
+    let result = [];
+    const subject = this.model[id].indexModel.node.key[key];
+    if( subject && subject[0] ) {
+      const portList = subject[0]['out_'];
+      if( portList ) {
+        portList.forEach( (p)=> result.push( p.name ) );
+      }
+    }
+    return( result );
+  }
+  getInPortName( id, key, portId ) {
+    return( this._getPortName( id, key, 'in', portId ) );
+  }
+  getInPortId( id, key, portName ) {
+    return( this._getPortId( id, key, 'in', portName ) );
+  }
+  getOutPortName( id, key, portId ) {
+    return( this._getPortName( id, key, 'out', portId ) );
+  }
+  getOutPortId( id, key, portName ) {
+    return( this._getPortId( id, key, 'out', portName ) );
   }
   getMapValue( value, map, compare ) {
     let result = '';
@@ -379,6 +425,30 @@ class ModelExplorer {
   //------------------------
   // Private Functions
   //------------------------
+  _getPortId( id, key, portType, portName ) {
+    let result = null;
+
+    const subject = this.model[id].indexModel.node.key[key];
+    if( subject && subject[0] ) {
+      const portList = subject[0][portType+'_'];
+      if( portList ) {
+        portList.find( (p)=>{ if( p.name == portName ) { result = p.portId; return(true) } } );
+      }
+    }
+    return( result );
+  }
+  _getPortName( id, key, portType, portId ) {
+    let result = null;
+
+    const subject = this.model[id].indexModel.node.key[key];
+    if( subject && subject[0] ) {
+      const portList = subject[0][portType+'_'];
+      if( portList ) {
+        portList.find( (p)=>{ if( p.portId == portId ) { result = p.name; return(true) } } );
+      }
+    }
+    return( result );
+  }
   _evalValue( value ) {
     switch( value ) {
       case 'true':
