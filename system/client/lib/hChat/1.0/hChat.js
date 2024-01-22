@@ -73,9 +73,11 @@ class HChat {
         if( value ) {
           this.messageAreaEl.classList = 'hchat-container hchat-area-part';
           this.messageInputAreaEl.style.visibility = 'visible';
+          this.messageInputAreaEl.style.display = '';
         } else {
           this.messageAreaEl.classList = 'hchat-container hchat-area-full';
           this.messageInputAreaEl.style.visibility = 'hidden';
+          this.messageInputAreaEl.style.display = 'none';
         }
         break;
       case 'messageGap':
