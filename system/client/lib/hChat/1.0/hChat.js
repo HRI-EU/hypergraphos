@@ -175,7 +175,7 @@ class HChat {
         iconStyle = `style="height: ${this.property.iconHeight}"`;
       }
       // Set text style
-      let textStyle = 'style="background-color: ${senderColor}';
+      let textStyle = `style="background-color: ${senderColor}`;
       if( this.property.fontSize ) {
         textStyle = `${textStyle}; font-size: ${this.property.fontSize}`;
       }
