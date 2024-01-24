@@ -76,7 +76,7 @@ function generateSystem( fileURL, deployKey ) {
     
     // Get deployment node
     const deployData = me.getNode( modelId, deployKey );
-    let isOverwrite = me.getProperty( modelId, deployData, 'isOverwrite', null, true );
+    let isOverwrite = me.getProperty( modelId, deployData, 'isOverwrite', true );
     //isOverwrite = ( isOverwrite == 'true' );
     
     // Get output link from name port

@@ -241,6 +241,16 @@ function setNodeDataField( key, field, value ) {
   } else {
     g.setNodeDataField( key, field, value );
   }
+
+  // Check if editor open => update editor source
+  if( field == 'fileContent' ) {
+    // Get the editor from the node data
+    const e = m.e.getEditor( data );
+    if( e ) {
+      // Set editor content
+      e.setEditorSource( value );
+    }
+  }
 }
 function getNodeDataField( key, field, defaultValue ) {
   let result = defaultValue;

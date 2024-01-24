@@ -224,7 +224,7 @@ class ExecuteScript {
 
     const pathInfo = getPathInfo( path );
     console.log( JSON.stringify( pathInfo ));
-	  console.log( '---- path:'+path );
+	  //console.log( '---- path:'+path );
 
     // Execute script
     if( pathInfo.extension == 'js' ) {  // As javascript function in the server

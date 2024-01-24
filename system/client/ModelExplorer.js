@@ -39,8 +39,8 @@ class ModelExplorer {
     }
     this._createModelIndex( id );
   }
-  getProperty( id, keyOrData, name, field, defaultValue ) {
-    field = field || 'value';
+  getProperty( id, keyOrData, name, defaultValue, subField ) {
+    subField = subField || 'value';
     // Get node data from a node key
     let data = keyOrData; // Assume is data
     if( typeof( data ) != 'object' ) {
@@ -53,7 +53,7 @@ class ModelExplorer {
       for( const rowEl of data.props_ ) {
         if( rowEl.name == name ) {
           // Get property value
-          propertyValue = rowEl[field];
+          propertyValue = rowEl[subField];
           break;
         }
       }
@@ -63,6 +63,20 @@ class ModelExplorer {
     propertyValue = this._evalValue( propertyValue );
     // Return property value
     return( propertyValue );
+  }
+  gerPropertyList( id, keyOrData ) {
+    const result = {};
+    // Get node data from a node key
+    let data = keyOrData; // Assume is data
+    if( typeof( data ) != 'object' ) {
+      data = this.getNode( id, keyOrData ); // Assume is key
+    }
+    
+    // Find property
+    if( data && data.props_ ) {
+      data.props_.forEach( (p)=> result[p.name] = p.value );
+    }
+    return( result );
   }
   getNode( id, key ) {
     id = this._getId( id );
@@ -366,6 +380,17 @@ class ModelExplorer {
     const subject = this.model[id].indexModel.node.key[key];
     if( subject && subject[0] ) {
       const portList = subject[0]['out_'];
+      if( portList ) {
+        portList.forEach( (p)=> result.push( p.name ) );
+      }
+    }
+    return( result );
+  }
+  getPropertytNameList( id, key ) {
+    let result = [];
+    const subject = this.model[id].indexModel.node.key[key];
+    if( subject && subject[0] ) {
+      const portList = subject[0]['props_'];
       if( portList ) {
         portList.forEach( (p)=> result.push( p.name ) );
       }
