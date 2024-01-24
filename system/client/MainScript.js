@@ -244,12 +244,7 @@ function setNodeDataField( key, field, value ) {
 
   // Check if editor open => update editor source
   if( field == 'fileContent' ) {
-    // Get the editor from the node data
-    const e = m.e.getEditor( data );
-    if( e ) {
-      // Set editor content
-      e.setEditorSource( value );
-    }
+    mainScript_updateEditorSource( data, value );
   }
 }
 function getNodeDataField( key, field, defaultValue ) {
@@ -491,4 +486,11 @@ function loadTestModel() {
     ]
   );
 }
-
+function mainScript_updateEditorSource( nodeData, source ) {
+  // Get the editor from the node data
+  const e = m.e.getEditor( nodeData );
+  if( e ) {
+    // Set editor content
+    e.setEditorSource( source );
+  }
+}

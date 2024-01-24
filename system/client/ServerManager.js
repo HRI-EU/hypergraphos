@@ -343,6 +343,10 @@ function saveNodeContent( nodeData, onSaved ) {
       const sourceEncoding = ( nodeData.fileEncoding? nodeData.fileEncoding: 'utf8' );
       const source = nodeData.fileContent;
       g.saveFile( nodeData.fileURL, source, sourceEncoding );
+
+      // Check if editor open => update editor source
+      mainScript_updateEditorSource( nodeData, source );
+
       if( onSaved ) {
         onSaved();
       }
@@ -350,6 +354,9 @@ function saveNodeContent( nodeData, onSaved ) {
       const sourceEncoding = ( nodeData.fileEncoding? nodeData.fileEncoding: 'utf8' );
       const source = nodeData.fileContent;
       _saveFile( nodeData.fileURL, source, onSaved, sourceEncoding );
+
+      // Check if editor open => update editor source
+      mainScript_updateEditorSource( nodeData, source );
     }
   } else if( nodeData.fileContent != undefined ) { // Check on fileContent must be third
     //const e = m.e.getEditor( config.htmlDiv.graphDiv );
