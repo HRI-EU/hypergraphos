@@ -355,8 +355,9 @@ function saveNodeContent( nodeData, onSaved ) {
       const source = nodeData.fileContent;
       _saveFile( nodeData.fileURL, source, onSaved, sourceEncoding );
 
-      // Check if editor open => update editor source
-      mainScript_updateEditorSource( nodeData, source );
+      // NOTE: no need to update since it is done on the seNodeDataField()
+      // // Check if editor open => update editor source
+      // mainScript_updateEditorSource( nodeData, source );
     }
   } else if( nodeData.fileContent != undefined ) { // Check on fileContent must be third
     //const e = m.e.getEditor( config.htmlDiv.graphDiv );
