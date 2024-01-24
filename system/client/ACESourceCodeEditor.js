@@ -34,7 +34,9 @@ class ACESourceCodeEditor {
     this.aceEditor.setTheme( 'ace/theme/'+name );
   }
   setEditorSource( source ) {
-    this.aceEditor.setValue( source, -1 );
+    const cursorPos = this.aceEditor.getCursorPosition();
+    this.aceEditor.setValue( source, cursorPos );
+    this.aceEditor.moveCursorTo( cursorPos.row, cursorPos.column );
   }
   getEditorSource() {
     return( this.aceEditor.getValue() );
