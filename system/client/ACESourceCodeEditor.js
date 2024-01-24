@@ -34,9 +34,16 @@ class ACESourceCodeEditor {
     this.aceEditor.setTheme( 'ace/theme/'+name );
   }
   setEditorSource( source ) {
+    // Get current folding status
+    const currFold = this.aceEditor.session.getAllFolds().map( fold => fold.range );
+    // Get current cursor position
     const cursorPos = this.aceEditor.getCursorPosition();
+    // Set editor source
     this.aceEditor.setValue( source, cursorPos );
+    // Restore current cursor position
     this.aceEditor.moveCursorTo( cursorPos.row, cursorPos.column );
+    // Restore current folding status
+    currFold.forEach( range => this.aceEditor.session.addFold( '...', range ) );
   }
   getEditorSource() {
     return( this.aceEditor.getValue() );
