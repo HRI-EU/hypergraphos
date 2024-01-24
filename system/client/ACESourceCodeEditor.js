@@ -39,11 +39,12 @@ class ACESourceCodeEditor {
     // Get current cursor position
     const cursorPos = this.aceEditor.getCursorPosition();
     // Set editor source
-    this.aceEditor.setValue( source, cursorPos );
-    // Restore current cursor position
-    this.aceEditor.moveCursorTo( cursorPos.row, cursorPos.column );
+    this.aceEditor.setValue( source, cursorPos, -1 );
     // Restore current folding status
     currFold.forEach( range => this.aceEditor.session.addFold( '...', range ) );
+    // Restore current cursor position
+    this.aceEditor.moveCursorTo( cursorPos.row, cursorPos.column );
+    this.aceEditor.clearSelection();
   }
   getEditorSource() {
     return( this.aceEditor.getValue() );
