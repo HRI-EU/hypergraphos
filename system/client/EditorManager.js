@@ -762,6 +762,23 @@ class EditorManager extends EditorChangeManager {
     }
     this._closeIdListEditor( idList, onDone );
   }
+  toogleShowWindows() {
+    let currentVisibility = null;
+    const windowDivList = this.getAllWindowDiv();
+    for( const div of windowDivList ) {
+      if( div.classList.contains( 'pinned' ) ||
+          div.classList.contains( 'GraphSelection' ) || // Selection
+          div.classList.contains( 'GraphModel' ) ||     // Model Editor
+          ( div.id == '_systemMonitor__System_Monitor' ) ) {
+        continue;
+      }
+      if( currentVisibility === null ) {
+        currentVisibility = div.style.visibility;
+      }
+
+      div.style.visibility = ( currentVisibility == 'hidden'? '': 'hidden' );
+    }
+  }
   moveAllWindowTo( direction ) {
     if( this.isMoveAllWindowRunning ) {
       return;

@@ -355,17 +355,16 @@ function saveNodeContent( nodeData, onSaved ) {
       const source = nodeData.fileContent;
       _saveFile( nodeData.fileURL, source, onSaved, sourceEncoding );
 
-      // NOTE: no need to update since it is done on the seNodeDataField()
-      // // Check if editor open => update editor source
-      // mainScript_updateEditorSource( nodeData, source );
+      // Check if editor open => update editor source
+      mainScript_updateEditorSource( nodeData, source );
     }
   } else if( nodeData.fileContent != undefined ) { // Check on fileContent must be third
-    //const e = m.e.getEditor( config.htmlDiv.graphDiv );
-    //if( e ) {
+      // TODO: this set may be done twice
+      // Eg: a code generator may set this value to the node with setNode...
+      // and if an editor is open, it may set itself to unsaved,
+      // then the auto save will execute this a second time
       const source = nodeData.fileContent;
-      //e.setNodeDataField( nodeData.key, 'fileContent', source );
       setNodeDataField( nodeData.key, 'fileContent', source );
-    //}
     if( onSaved ) {
       onSaved();
     }
