@@ -1710,6 +1710,13 @@ class Graph {
 				}
 			}
 		});
+		// Allow to hide/show all windows
+		diagram.addDiagramListener( 'BackgroundSingleClicked', ()=> {
+			// TODO: not nice that in graph I access m.e.
+			// I should generate an event that is handled
+			// in Editor
+			m.e.toogleShowWindows();
+		});
 
 		diagram.addDiagramListener( 'InitialLayoutCompleted', (diagramEvent)=> {
 			this.em.call.onFirstLayoutCompleted();
