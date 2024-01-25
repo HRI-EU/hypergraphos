@@ -533,6 +533,8 @@ class DataFlowEngine {
           case 'DataFlow_Pause':
             this.doPause();
             break;
+          case 'DataFlow_Stop':
+            return;
         }
 
         this._fireInput(outNodeData, inName, value);
