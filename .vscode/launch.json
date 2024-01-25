@@ -50,9 +50,9 @@
             "name": "Launch DFECodeGeneration",
             "request": "launch",
             "type": "node",
-            "cwd": "/Users/antonelloceravola/Library/CloudStorage/Dropbox/DevAll/MDDToolsDeployRoot/DFEGen/1.3/",
-            "args": ["{\"modelFileURL\":\"./41.json\",\"groupKey\":36}"],
-            "program": "/Users/antonelloceravola/Library/CloudStorage/Dropbox/DevAll/MDDToolsDeployRoot/DFEGen/1.3/MainCodeGenerate.js"
+            "cwd": "/Users/antonelloceravola/Library/CloudStorage/Dropbox/DevAll/MDDToolsDeployRoot/DFEGen/1.3.2/",
+            "args": ["{\"modelFileURL\":\"./43.json\",\"groupKey\":36}"],
+            "program": "/Users/antonelloceravola/Library/CloudStorage/Dropbox/DevAll/MDDToolsDeployRoot/DFEGen/1.3.2/MainCodeGenerate.js"
         },
         {
             "name": "Attach by Process ID",
