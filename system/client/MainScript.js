@@ -22,6 +22,7 @@ const m = {
   // System Object for field value references
 	// See: parseRefValue()
   system: {
+    userName: function(){ return getUserName() },
     dateTime: function(){ return( new Date().toLocaleString() ) },
     date: function(){ return( new Date().toLocaleDateString() ) },
     time: function(){ return( new Date().toLocaleTimeString()	) },

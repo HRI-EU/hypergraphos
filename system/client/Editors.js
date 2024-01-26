@@ -549,76 +549,100 @@ class GraphEditor extends EditorBase {
       // }
       unloadLocalGraphScript();
     } else {
-      let isGraphReadOnly = true;
-
       const it = this.editor.diagram.nodes;
       it.reset();
       // Loop over all nodes
       while ( it.next() ) {
         // Get node data
         const nodeData = it.value.data;
+        // Update GrapInfo node
         if( nodeData.category == 'Hierarchy_GraphInfo' ) {
-          if( nodeData.props_ ) {
-            // Set Date field with date if value is 'date@system'
-            const dateInfo = nodeData.props_.find( (e)=> e.name == 'Date' );
-            if( dateInfo ) {
-              const pValue = getRefValue( nodeData, dateInfo.value );
-              if( !pValue.isRef ) {
-                setNodeDataField( dateInfo, 'value', pValue.value );
-              }
-            }
+          this._processGraphInfo( nodeData );
+        }
+        // Source all include files
+        this._processIncludeFiles( nodeData );
+      }
+    }
+	}
+  _processGraphInfo( nodeData ) {
+    let isGraphReadOnly = true;
+    let isTemplate = false;
 
-            // Set Path field with date if value is 'date@system'
-            const pathInfo = nodeData.props_.find( (e)=> e.name == 'Path' );
-            if( pathInfo ) {
-              const pValue = getRefValue( nodeData, pathInfo.value );
-              if( !pValue.isRef ) {
-                setNodeDataField( pathInfo, 'value', pValue.value );
-              }
-            }
+    // Set Name field with 'graph name'
+    const nameInfo = nodeData.props_.find( (e)=> e.name == 'Name' );
+    if( nameInfo ) {
+      // Skip graph info interpretation if template
+      if( nameInfo.value.toLowerCase().startsWith( '<template>' ) ) {
+        isTemplate = true;
+      }
+    }
 
-            // Set Name field with 'graph name'
-            const nameInfo = nodeData.props_.find( (e)=> e.name == 'Name' );
-            if( nameInfo ) {
-              // Get graph name
-              const graphName = ( this.nodeData.label? this.nodeData.label: this.nodeData.key );
-              const pValue = getRefValue( nodeData, nameInfo.value );
-              if( !pValue.isRef && ( typeof( pValue.nodeData ) == 'object' ) ) {
-                setNodeDataField( pValue.nodeData.key, pValue.name, graphName );
-              } else {
-                // Set only the graph name in 'Name' property in props_
-                setNodeDataField( nameInfo, 'value', graphName );
-              }
-            }
+    if( !isTemplate ) {
+      if( nameInfo ) {
+        // Get graph name
+        const graphName = ( this.nodeData.label? this.nodeData.label: this.nodeData.key );
+        const pValue = getRefValue( nodeData, nameInfo.value );
+        if( !pValue.isRef && ( typeof( pValue.nodeData ) == 'object' ) ) {
+          setNodeDataField( pValue.nodeData.key, pValue.name, graphName );
+        } else {
+          // Set only the graph name in 'Name' property in props_
+          setNodeDataField( nameInfo, 'value', graphName );
+        }
+      }
 
-            // Check Author for default read access
-            const authorInfo = nodeData.props_.find( (e)=> e.name == 'Authors' );
-            const authorList = jsyaml.load( authorInfo.value );
-            if( typeof( authorList ) == 'string' ) {
-              isGraphReadOnly = ( authorList != getUserName() );
-            } else {
-              isGraphReadOnly = !authorList.includes( getUserName() );
-            }
+      if( nodeData.props_ ) {
+        // Set Date field with date if value is 'date@system'
+        const dateInfo = nodeData.props_.find( (e)=> e.name == 'Date' );
+        if( dateInfo ) {
+          const pValue = getRefValue( nodeData, dateInfo.value );
+          if( !pValue.isRef ) {
+            setNodeDataField( dateInfo, 'value', pValue.value );
           }
         }
-        // If we find a isIncludeScript node
-        if( ( ( nodeData.fileType == 'text/javascript' ) ||
-              ( nodeData.fileType == 'text/css' ) ) &&
-            nodeData.isFile && nodeData.isIncludeScript ) {
-          switch( action ) {
-            case 'load': {
-              if( nodeData.fileURL ) {
-                loadScript( nodeData.fileURL );
-              } else if( nodeData.fileContent ) {
-                loadScriptSource( nodeData.fileContent, null, true );
-              }
-            }
+
+        // Set Path field with date if value is 'date@system'
+        const pathInfo = nodeData.props_.find( (e)=> e.name == 'Path' );
+        if( pathInfo ) {
+          const pValue = getRefValue( nodeData, pathInfo.value );
+          if( !pValue.isRef ) {
+            setNodeDataField( pathInfo, 'value', pValue.value );
+          }
+        }
+
+        // Check Author for default read access
+        const authorInfo = nodeData.props_.find( (e)=> e.name == 'Authors' );
+        const aValue = getRefValue( nodeData, authorInfo.value );
+        if( !aValue.isRef ) {
+          setNodeDataField( authorInfo, 'value', aValue.value );
+          authorInfo.value = aValue.value;
+        }
+
+        const authorList = jsyaml.load( authorInfo.value );
+        if( typeof( authorList ) == 'string' ) {
+          isGraphReadOnly = ( authorList != getUserName() );
+        } else {
+          isGraphReadOnly = !authorList.includes( getUserName() );
+        }
+      }
+    }
+    setSystemReadOnly( isGraphReadOnly );
+  }
+  _processIncludeFiles( nodeData ) {
+    // If we find a isIncludeScript node
+    if( ( ( nodeData.fileType == 'text/javascript' ) ||
+          ( nodeData.fileType == 'text/css' ) ) &&
+        nodeData.isFile && nodeData.isIncludeScript ) {
+      switch( action ) {
+        case 'load': {
+          if( nodeData.fileURL ) {
+            loadScript( nodeData.fileURL );
+          } else if( nodeData.fileContent ) {
+            loadScriptSource( nodeData.fileContent, null, true );
           }
         }
       }
-      setSystemReadOnly( isGraphReadOnly );
     }
-	}
+  }
 }
 class TextEditor extends EditorBase {
   constructor( id, nodeData, position ) {
@@ -1295,28 +1319,37 @@ class GraphTemplateViewer extends EditorBase {
     const element = document.getElementById( this.editorDivId );
     element.innerHTML = `<div id='searchResult' ></div>`;
     const showTemplates = (sourceTemplateList)=> {
+      // Generate Template Name List
       templateList = JSON.parse( sourceTemplateList );
       let source = '';
       const templateNameList = Object.keys( templateList );
       for( const templateName of templateNameList ) {
         const templateUrl = templateList[templateName];
         // Generate html
-        source = source+`<div class="findResult graphTemplateItem">${templateName}</div>`;
+        if( templateUrl.endsWith( '.json' ) ) {
+          source = source+`<div class="findResult graphTemplateItem">
+                            ${templateName}
+                          </div>`;
+        }
       }
       searchResult.innerHTML = source;
+
+      // Apply Template function
       const applyTemplate = ( name )=> {
         console.log( 'Appying template: '+name );
         if( templateList[name] ) {
           const url = templateList[name];
           _openFile( url, (sourceTemplate)=> {
             const e = m.e.getEditor( config.htmlDiv.graphDiv );
-            e.setJSONModel( sourceTemplate );
+            // Remove Template flag
+            sourceTemplate = sourceTemplate.replace( /\<Template\>/, '' );
+            e.setEditorSource( sourceTemplate );
           });
         }
       }
       const itemElementList = document.querySelectorAll( '.graphTemplateItem' );
       for( const item of itemElementList ) {
-        item.onclick = ()=> applyTemplate( item.textContent );
+        item.onclick = ()=> applyTemplate( item.innerText );
       }
     }
     // Load Templates
