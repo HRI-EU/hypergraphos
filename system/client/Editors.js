@@ -1388,7 +1388,7 @@ class GraphTemplateViewer extends EditorBase {
           _openFile( url, (sourceTemplate)=> {
             const e = m.e.getEditor( config.htmlDiv.graphDiv );
             // Remove Template flag
-            sourceTemplate = sourceTemplate.replace( /\<Template\>/, '' );
+            sourceTemplate = sourceTemplate.replace( /\<Template\>/i, '' );
             e.setEditorSource( sourceTemplate );
           });
         }
