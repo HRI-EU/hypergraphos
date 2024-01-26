@@ -1536,7 +1536,7 @@ class AnimatorEditor extends EditorBase {
                    '// To continue click arrow key down/up\n'+
                    '//\n'+
                    '// To animate (1sec auto trigger), make a selection with CRTL+a\n'+
-                   '\n';
+                   '\n\n';
     this.editor.setEditorSource( source );
     this.editor.onEvent( 'changeSelection', this._onEditorSelectionChanged.bind( this ) );
     this.graphEditor = m.e.getEditor( config.htmlDiv.graphDiv );
