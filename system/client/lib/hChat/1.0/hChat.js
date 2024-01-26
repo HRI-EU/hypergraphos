@@ -157,21 +157,22 @@ class HChat {
   addMessage( sender, receiver, messageText ) {
     const senderInfo = this.userList[sender];
     const receiverInfo = this.userList[receiver];
-	const senderColor = senderInfo.color;
+	  const senderColor = senderInfo.color;
     let lineStyle = `style="background-color: ${senderColor}`;
-	let imgStyle = '';
-	let defaultMessageGap = this.property.messageGap;
-	if( messageText.startsWith( '---' ) ) {
-	  messageText = '';
-	  lineStyle = `style="background-color: lightgray;
-		font-size: 26px;
-		width: 100%;
-		height: 10px;
-		max-width: 100%;
-		padding: 0;`;
-	  imgStyle = 'display: none;';
-	  defaultMessageGap = '0';
-	}
+    let imgStyle = '';
+    let defaultMessageGap = this.property.messageGap;
+    // Separator management
+    if( messageText.startsWith( '---' ) ) {
+      messageText = '';
+      lineStyle = `style="background-color: lightgray;
+        font-size: 26px;
+        width: 100%;
+        height: 10px;
+        max-width: 100%;
+        padding: 0;`;
+      imgStyle = 'display: none;';
+      defaultMessageGap = '0'; 
+    }
     if( senderInfo && receiverInfo ) {
       const newMessage = document.createElement("div");
       newMessage.classList.add("hchat-message");
