@@ -590,8 +590,8 @@ class GraphEditor extends EditorBase {
       // Get all model nodes
       const it = this.editor.diagram.nodes;
       it.reset();
-      // Default ReadOnly state
-      let isGraphReadOnly = true;
+      // Default ReadOnly state: false if model empty, true otherwise
+      let isGraphReadOnly = ( it.count > 0? true: false );
       let isGraphInfoFound = false;
       // Loop over all nodes
       while ( it.next() ) {
@@ -1536,7 +1536,7 @@ class AnimatorEditor extends EditorBase {
                    '// To continue click arrow key down/up\n'+
                    '//\n'+
                    '// To animate (1sec auto trigger), make a selection with CRTL+a\n'+
-                   ',,\n';
+                   '\n';
     this.editor.setEditorSource( source );
     this.editor.onEvent( 'changeSelection', this._onEditorSelectionChanged.bind( this ) );
     this.graphEditor = m.e.getEditor( config.htmlDiv.graphDiv );
