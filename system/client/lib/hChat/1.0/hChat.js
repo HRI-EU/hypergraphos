@@ -157,26 +157,39 @@ class HChat {
   addMessage( sender, receiver, messageText ) {
     const senderInfo = this.userList[sender];
     const receiverInfo = this.userList[receiver];
-
+	const senderColor = senderInfo.color;
+    let lineStyle = `style="background-color: ${senderColor}`;
+	let imgStyle = '';
+	let defaultMessageGap = this.property.messageGap;
+	if( messageText.startsWith( '---' ) ) {
+	  messageText = '';
+	  lineStyle = `style="background-color: lightgray;
+		font-size: 26px;
+		width: 100%;
+		height: 10px;
+		max-width: 100%;
+		padding: 0;`;
+	  imgStyle = 'display: none;';
+	  defaultMessageGap = '0';
+	}
     if( senderInfo && receiverInfo ) {
       const newMessage = document.createElement("div");
       newMessage.classList.add("hchat-message");
       // Set message gap
       if( this.property.messageGap ) {
-        newMessage.style['margin-bottom'] = this.property.messageGap;
+        newMessage.style['margin-bottom'] = defaultMessageGap;
       }
       // Set message icons
       const senderImgSrc =  senderInfo.imageURL; 
       const receiverImgSrc =  receiverInfo.imageURL; 
-      const senderColor = senderInfo.color;
       // Set icon style
-      let iconStyle = '';
-      if( this.property.iconHeight ) {
+      let iconStyle = imgStyle;
+      if( this.property.iconHeight && messageText != '' ) {
         iconStyle = `style="height: ${this.property.iconHeight}"`;
       }
       // Set text style
-      let textStyle = `style="background-color: ${senderColor}`;
-      if( this.property.fontSize ) {
+      let textStyle = lineStyle;
+      if( this.property.fontSize && messageText != '' ) {
         textStyle = `${textStyle}; font-size: ${this.property.fontSize}`;
       }
       textStyle = textStyle+'"';
