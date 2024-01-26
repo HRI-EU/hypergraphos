@@ -1538,11 +1538,11 @@ class AnimatorEditor extends EditorBase {
                    '// To animate (timeout = 1sec auto trigger), make a selection with CRTL+a\n'+
                    '// NOTE: you can change the timeout (eg. from 1sec to 500ms) by a line like\n'+
                    '//:      { animTimeout: 0.5 },'+
-                   '\n';
+                   '\n\n';
     this.editor.setEditorSource( source );
     this.editor.onEvent( 'changeSelection', this._onEditorSelectionChanged.bind( this ) );
     this.graphEditor = m.e.getEditor( config.htmlDiv.graphDiv );
-    this.lineTimeout = 1; // 1sec
+    this.animTimeout = 1; // 1sec
 
     this.loadEditorContent( nodeData );
   }
@@ -1560,26 +1560,10 @@ class AnimatorEditor extends EditorBase {
     if( nodeData && nodeData.animTimeout ) {
       const value = Math.abs( parseFloat( nodeData.animTimeout ) );
       if( value ) {
-        this.lineTimeout = value;
+        this.animTimeout = value;
       }
     }
 
-    if( nodeData ) {
-      // If object has no field with name "key" ==> we search for a node from a different field
-      if( nodeData.key == undefined ) {
-        // If "key" is not a filed, we search for any other field we could use
-        const lineInfoFieldList = Object.keys( lineInfo );
-        for( const fieldName of lineInfoFieldList ) {
-          if( this.graphEditor.isDataValidField( fieldName ) ) {
-            // Find here only perfect match (last true param of the next line)
-            nodeData = this.graphEditor.findNodeData( fieldName, lineInfo[fieldName], true );
-            if( nodeData ) {
-              break;
-            }
-          }
-        }
-      }
-    }
     // If we found a node and it has a "key" field
     if( nodeData && nodeData.key ) {
       m.e.selectAndCenterNodeInGraph( nodeData.key );
@@ -1600,13 +1584,13 @@ class AnimatorEditor extends EditorBase {
       this.animateNode();
     } else {
       selLines.currLine = selLines.start;
-      setTimeout( ()=> this._playAnimation( selLines ), this.lineTimeout*1000 );
+      setTimeout( ()=> this._playAnimation( selLines ), this.animTimeout*1000 );
     }
   }
   _playAnimation( animationInfo ) {
     this.animateNode( animationInfo.currLine++ );
     if( animationInfo.currLine <= animationInfo.end ) {
-      setTimeout( ()=> this._playAnimation( animationInfo ), this.lineTimeout*1000 );
+      setTimeout( ()=> this._playAnimation( animationInfo ), this.animTimeout*1000 );
     }
   }
   _getJSONLineInfo( lineText ) {
