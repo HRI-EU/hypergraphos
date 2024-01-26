@@ -606,10 +606,8 @@ class GraphEditor extends EditorBase {
         this._processIncludeFiles( nodeData, action );
       }
 
-      // If WorkSpace has no GraphInfo ==> set read only
-      if( !isGraphInfoFound ) {
-        setSystemReadOnly( isGraphReadOnly );
-      }
+      // Set readonly state
+      setSystemReadOnly( isGraphReadOnly );
     }
 	}
   _processGraphInfo( nodeData ) {
