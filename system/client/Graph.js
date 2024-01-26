@@ -1712,10 +1712,18 @@ class Graph {
 		});
 		// Allow to hide/show all windows
 		diagram.addDiagramListener( 'BackgroundSingleClicked', ()=> {
+			// Get last input
+			const e = diagram.lastInput;
+			// The meta (Command) key substitutes for "control" for Mac commands
+		  const control = e.control || e.meta;
+			const alt = e.alt;
+			const shift = e.shift;
 			// TODO: not nice that in graph I access m.e.
 			// I should generate an event that is handled
 			// in Editor
-			m.e.toogleShowWindows();
+			if( shift ) {
+				m.e.toogleShowWindows();
+			}
 		});
 
 		diagram.addDiagramListener( 'InitialLayoutCompleted', (diagramEvent)=> {
