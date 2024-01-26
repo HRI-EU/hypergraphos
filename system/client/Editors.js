@@ -1589,10 +1589,13 @@ class AnimatorEditor extends EditorBase {
   }
   _getJSONLineInfo( lineText ) {
     let result = null;
+    lineText = lineText.trim();
     if( lineText.startsWith( '{' ) ) {
+      // Remove ',' in this case
       if( lineText.endsWith( '},' ) ) {
         lineText = lineText.substring( 0, lineText.length-1 )
       }
+      // Check for JSON line
       if( lineText.endsWith( '}' ) ) {
         try {
           // Parse object at current line
