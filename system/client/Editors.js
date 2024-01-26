@@ -1535,11 +1535,14 @@ class AnimatorEditor extends EditorBase {
                    '// To animate move cursor in the lines with { "key"...},\n'+
                    '// To continue click arrow key down/up\n'+
                    '//\n'+
-                   '// To animate (1sec auto trigger), make a selection with CRTL+a\n'+
+                   '// To animate (timeout = 1sec auto trigger), make a selection with CRTL+a\n'+
+                   '// NOTE: you can change the timeout (eg. from 1sec to 500ms) by a line like\n'+
+                   '//:      { animTimeout: 0.5 },'+
                    '\n';
     this.editor.setEditorSource( source );
     this.editor.onEvent( 'changeSelection', this._onEditorSelectionChanged.bind( this ) );
     this.graphEditor = m.e.getEditor( config.htmlDiv.graphDiv );
+    this.lineTimeout = 1; // 1sec
 
     this.loadEditorContent( nodeData );
   }
@@ -1552,6 +1555,14 @@ class AnimatorEditor extends EditorBase {
     }
     // We look for lines like: { "key": "value, .... } with or without an ending like '},' (comma)
     let nodeData = this._getJSONLineInfo( lineText );
+
+    // Check for timeout update
+    if( nodeData && nodeData.animTimeout ) {
+      const value = Math.abs( parseFloat( nodeData.animTimeout ) );
+      if( value ) {
+        this.lineTimeout = value;
+      }
+    }
 
     if( nodeData ) {
       // If object has no field with name "key" ==> we search for a node from a different field
@@ -1589,13 +1600,13 @@ class AnimatorEditor extends EditorBase {
       this.animateNode();
     } else {
       selLines.currLine = selLines.start;
-      setTimeout( ()=> this._playAnimation( selLines ), 1*1000 ); // 1 second delay
+      setTimeout( ()=> this._playAnimation( selLines ), this.lineTimeout*1000 );
     }
   }
   _playAnimation( animationInfo ) {
     this.animateNode( animationInfo.currLine++ );
     if( animationInfo.currLine <= animationInfo.end ) {
-      setTimeout( ()=> this._playAnimation( animationInfo ), 1*1000 ); // 1 second delay
+      setTimeout( ()=> this._playAnimation( animationInfo ), this.lineTimeout*1000 );
     }
   }
   _getJSONLineInfo( lineText ) {
