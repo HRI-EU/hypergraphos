@@ -1526,7 +1526,18 @@ class AnimatorEditor extends EditorBase {
     this.editor = new ACESourceCodeEditor( this.editorDivId );
     const language = 'text';
     this.editor.setEditorMode( 'ace/mode/'+language );
-    this.editor.setEditorSource( '// Put here animation info, like: {"key":10}' );
+    const source = '// Put here animation info\n'+
+                   '// You can paste a json file like'+
+                   '//   ['+
+                   '//     { "key": 10 },'+
+                   '//     { "key": 11 },'+
+                   '//   ]'+
+                   '// To animate move cursor in the line with ..."key"...'+
+                   '// To continue click arrow key down/up'+
+                   '//'+
+                   '// To animate (1sec auto trigger), make a selection with CRTL+a'+
+                   ',,';
+    this.editor.setEditorSource( source );
     this.editor.onEvent( 'changeSelection', this._onEditorSelectionChanged.bind( this ) );
     this.graphEditor = m.e.getEditor( config.htmlDiv.graphDiv );
 
