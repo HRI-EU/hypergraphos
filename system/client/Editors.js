@@ -453,6 +453,8 @@ class GraphEditor extends EditorBase {
       }
     };
     const onGraphSaved = ()=> {
+      // In case it is a template ==> update template list
+      this.updateGraphTemplate();
       // Load last file update time from the server
       this.doLoadLastUpdateTime( this.nodeData, onEditorSaved )
     };
@@ -521,6 +523,42 @@ class GraphEditor extends EditorBase {
       }
     }
   }
+  updateGraphTemplate() {
+    // Get model nodes
+    const it = this.editor.diagram.nodes;
+    it.reset();
+    // Loop over all nodes
+    while ( it.next() ) {
+      // Get node data
+      const nodeData = it.value.data;
+      // Update GrapInfo node
+      if( nodeData.category == 'Hierarchy_GraphInfo' ) {
+        // Get Name field
+        const nameInfo = nodeData.props_.find( (e)=> e.name == 'Name' );
+        if( nameInfo ) {
+          // Skip graph info interpretation if template
+          if( nameInfo.value.toLowerCase().startsWith( '<template>' ) ) {
+            // Load Templates
+            let templateURL = `${config.host.fileServerSystemURL}/graphTemplateList.json`;
+            _openFile( templateURL, (source)=> {
+              // Get Template Name List
+              const templateList = JSON.parse( source );
+              // Check if template not present ==> if not add it
+              if( !templateList[this.title] ) {
+                templateList[this.title] = this.nodeData.fileURL;
+                // Save updated template list
+                const templateSource = JSON.stringify( templateList, null, 2 );
+                _saveFile( templateURL, templateSource );
+              }
+            });
+          }
+        }
+
+        // Stop model navigation
+        break;
+      }
+    }
+  }
   processNodeWithIncludeScripts( action ) {
     // Load nodes with data like:
     //
@@ -549,18 +587,28 @@ class GraphEditor extends EditorBase {
       // }
       unloadLocalGraphScript();
     } else {
+      // Get all model nodes
       const it = this.editor.diagram.nodes;
       it.reset();
+      // Default ReadOnly state
+      let isGraphReadOnly = true;
+      let isGraphInfoFound = false;
       // Loop over all nodes
       while ( it.next() ) {
         // Get node data
         const nodeData = it.value.data;
-        // Update GrapInfo node
-        if( nodeData.category == 'Hierarchy_GraphInfo' ) {
-          this._processGraphInfo( nodeData );
+        // Update GrapInfo node (only the first found)
+        if( !isGraphInfoFound && ( nodeData.category == 'Hierarchy_GraphInfo' ) ) {
+          isGraphInfoFound = true;
+          isGraphReadOnly = this._processGraphInfo( nodeData );
         }
         // Source all include files
-        this._processIncludeFiles( nodeData );
+        this._processIncludeFiles( nodeData, action );
+      }
+
+      // If WorkSpace has no GraphInfo ==> set read only
+      if( !isGraphInfoFound ) {
+        setSystemReadOnly( isGraphReadOnly );
       }
     }
 	}
@@ -625,9 +673,9 @@ class GraphEditor extends EditorBase {
         }
       }
     }
-    setSystemReadOnly( isGraphReadOnly );
+    return( isGraphReadOnly );
   }
-  _processIncludeFiles( nodeData ) {
+  _processIncludeFiles( nodeData, action ) {
     // If we find a isIncludeScript node
     if( ( ( nodeData.fileType == 'text/javascript' ) ||
           ( nodeData.fileType == 'text/css' ) ) &&
