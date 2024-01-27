@@ -1517,6 +1517,7 @@ class AnimatorEditor extends EditorBase {
     this.id = id;
     this.editor = null;
 
+    position[3] = 600; // Make height higher
     this.title = 'Animator Editor';
     this.editorDivId = m.e.newDOMWindow( id, this.title, 
                                          config.htmlDiv.mainDiv,
@@ -1541,17 +1542,19 @@ class AnimatorEditor extends EditorBase {
                    '// NOTE: you can change the timeout (eg. from 1sec to 500ms) by\n'+
                    '// adding a line like:\n'+
                    '//   { "animTimeout": 0.5 },\n'+
+                   '// You can pause an animation by adding the line:\n'+
+                   '//   { "puase": true },\n'+
                    '//\n'+
                    '\n';
     this.editor.setEditorSource( source );
     this.editor.onEvent( 'changeSelection', this._onEditorSelectionChanged.bind( this ) );
     this.graphEditor = m.e.getEditor( config.htmlDiv.graphDiv );
     this.animTimeout = 1; // default 1sec
+    this.animTimer = null;
 
     this.loadEditorContent( nodeData );
   }
   animateNode( lineIndex ) {
-    let isKeyFound = false;
     let lineText = '';
     if( lineIndex == undefined ) {
       lineText = this.editor.getCurrentLineText()
@@ -1572,9 +1575,8 @@ class AnimatorEditor extends EditorBase {
     // If we found a node and it has a "key" field
     if( nodeData && nodeData.key ) {
       m.e.selectAndCenterNodeInGraph( nodeData.key );
-      isKeyFound = true;
     }
-    return( isKeyFound );
+    return( nodeData );
   }
   loadEditorContent( nodeData ) {
     this.nodeData = nodeData;
@@ -1591,19 +1593,31 @@ class AnimatorEditor extends EditorBase {
     if( selLines.start == selLines.end ) {
       this.animateNode();
     } else {
-      selLines.currLine = selLines.start;
-      // Start animation
-      this._playAnimation( selLines );
+      if( this.animTimer ) {
+        clearTimeout( this.animTimer );
+        this.animTimer = null;
+      }
+      this.animTimer = setTimeout( ()=>
+        {
+          selLines.currLine = selLines.start;
+          // Start animation
+          this._playAnimation( selLines );
+        }, 1*1000 );
     }
   }
   _playAnimation( animationInfo ) {
     // Find the first key
-    let isKeyFound = false;
-    while( !isKeyFound && ( animationInfo.currLine <= animationInfo.end ) ) {
-      isKeyFound = this.animateNode( ++animationInfo.currLine );
+    let nodeData = null;
+    while( !nodeData && ( animationInfo.currLine <= animationInfo.end ) ) {
+      nodeData = this.animateNode( ++animationInfo.currLine );
     }
+    // Execute pause if found
+    if( nodeData && nodeData.pause ) {
+      return;
+    }
+    // Next animation step
     if( animationInfo.currLine <= animationInfo.end ) {
-      setTimeout( ()=> this._playAnimation( animationInfo ), this.animTimeout*1000 );
+      this.animTimer = setTimeout( ()=> this._playAnimation( animationInfo ), this.animTimeout*1000 );
     }
   }
   _getJSONLineInfo( lineText ) {
