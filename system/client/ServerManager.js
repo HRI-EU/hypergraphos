@@ -100,6 +100,7 @@ function loadSystem() {
     'BlockCodeEditor.js',
     'SmartBlockEditor.js',
     'ACESourceCodeEditor.js',
+    'ExploreEditorEditor.js',
     //'GraphParser.js',
   ];
   loadScriptList( scriptList, ()=> {

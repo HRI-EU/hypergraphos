@@ -703,23 +703,15 @@ class TextEditor extends EditorBase {
                                           this.storeWindowPosition.bind(this),
                                           position );
     this.editor = new ACESourceCodeEditor( this.editorDivId );
-    const language = this.fileType.substring( 5 ); // get value after 'text/'
+    const [ format, language ] = this.fileType.split( '/' ); // get text/<language>
     this.editor.setEditorMode( 'ace/mode/'+language );
-    const tww = { name: 'toogleWrapMode', 
-                  bindKey: { win: 'Alt-Z', mac: 'Option-Z' }, 
-                  exec: function(ed) {
-                          const wrapMode = ed.getOption( 'wrap' );
-                          ed.setOption( 'wrap', ( wrapMode == 'off'? true: false ) );
-                        }
-                };
-    this.editor.aceEditor.commands.addCommand( tww ); 
+
     if( nodeData.editorTheme ) {
       this.editor.setEditorTheme( nodeData.editorTheme );
     } else {
       const editorDiv = document.getElementById( this.editorDivId );
       editorDiv.style.background = '#1d1f21';
     }
-
 
     // Pause tracking editor changes
     this.setPauseChange( true );
@@ -812,57 +804,18 @@ class HTMLExploreEditor extends EditorBase {
                                           this.storeWindowPosition.bind(this),
                                           position );
 
-    // Make editor with document scrollable and set color
-    const editorDiv = document.getElementById( this.editorDivId );
     // Instantiate the editor
-    this.editor = ExploreEditor.create( editorDiv, {
-      width: 'auto',
-      height: 'auto',
-      mode: 'inline',
-      //lang: ExploreEditor_LANG['en'],
-      //plugins: plugins,
-      katex: katex,
-      toolbarItem: [
-        ['undo', 'redo'],
-        ['font', 'fontSize', 'formatBlock'],
-        ['bold', 'underline', 'italic', 'strike', 'subscript', 
-         'superscript', 'fontColor', 'hiliteColor'],
-        ['outdent', 'indent', 'align', 'list', 'horizontalRule'],
-        ['link', 'table', 'image', 'audio', 'video'],
-        //'/', // Line break
-        ['lineHeight', 'paragraphStyle', 'textStyle'],
-        ['showBlocks', 'codeView'],
-        ['math'],
-        ['preview', 'print', 'fullScreen'],
-        ['save', 'template'],
-        ['removeFormat']
-      ],
-      templates: [
-        {
-        name: 'Template-1',
-        html: '<p>HTML source1</p>'
-        },
-        {
-        name: 'Template-2',
-        html: '<p>HTML source2</p>'
-        },
-      ],
-      charCounter: true,
-    });
-
-    // To set the document to first line
-    //document.querySelector(".meta-explore-editor-editable").scrollTo(0,0)
+    this.editor = new ExploreEditorEditor( this.editorDivId );
 
     // Pause tracking editor changes
     this.setPauseChange( true );
-
     // Saving events
-    this.editor.onChange = ()=> {
+    this.editor.onSourceChanged( ()=> {
       if( !this.isJustStarted ) {
         this.editorHasChanged();
       }
       this.isJustStarted = false;
-    };
+    });
 
     //this.onNeedSave( ... ) // Show star in title...
     this.onDoSave( ()=> {
@@ -884,12 +837,12 @@ class HTMLExploreEditor extends EditorBase {
     this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${this.fileType}]`;
     this.setTitle( this.title );
     // Update pin
-    if( nodeData.fileURL ) {
+    if( nodeData.fileURL && !nodeData.fileURL.startsWith( 'graph://' ) ) {
       m.e.showWindowPin( this.id );
     }
     // Set editor content
     loadNodeContent( nodeData, (source)=> {
-      this.editor.setContents( source );
+      this.editor.setEditorSource( source );
       this.doLoadLastUpdateTime( nodeData, ()=> {
         // After loading update time, clear pause change
         this.setPauseChange( false );
@@ -916,7 +869,7 @@ class HTMLExploreEditor extends EditorBase {
           onSaved();
         }
       } else {
-        const source = this.editor.getContents();
+        const source = this.editor.getEditorSource();
         const e = m.e.getEditor( config.htmlDiv.graphDiv );
         const nodeDataTemp = e._getDataCopy( this.nodeData );
         nodeDataTemp.fileContent = source;

@@ -16,7 +16,18 @@ class ACESourceCodeEditor {
     this.aceEditor = ace.edit( editorDivId );
     this.setEditorTheme( 'tomorrow_night' );
 
-    // Set default mode to text
+    // Set shortcut
+    const tww = {
+      name: 'toogleWrapMode', 
+      bindKey: { win: 'Alt-Z', mac: 'Option-Z' }, 
+      exec: function(ed) {
+              const wrapMode = ed.getOption( 'wrap' );
+              ed.setOption( 'wrap', ( wrapMode == 'off'? true: false ) );
+            }
+    };
+    this.aceEditor.commands.addCommand( tww ); 
+
+    // Set default mode to javascript
     this.aceEditor.getSession().setMode( 'ace/mode/javascript' );
 
     // Set soft tab to 2 spaces
