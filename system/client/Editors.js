@@ -1532,7 +1532,7 @@ class AnimatorEditor extends EditorBase {
                    '//     { "key": 10 },\n'+
                    '//     { "key": 11 },\n'+
                    '//   ]\n'+
-                   '// To animate move cursor in the lines with { "key"...},\n'+
+                   '// To animate move cursor in a line with { "key"...},\n'+
                    '// To continue press Up/Down arrow keys (animate back/forward)\n'+
                    '//\n'+
                    '// To animate (timeout = 1sec auto trigger), make a selection with CRTL+A\n'+
