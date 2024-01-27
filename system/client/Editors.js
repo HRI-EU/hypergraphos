@@ -1537,7 +1537,7 @@ class AnimatorEditor extends EditorBase {
                    '//\n'+
                    '// To animate (timeout = 1sec auto trigger), make a selection with CRTL+a\n'+
                    '// NOTE: you can change the timeout (eg. from 1sec to 500ms) by a line like\n'+
-                   '//:      { animTimeout: 0.5 },'+
+                   '//:      { "animTimeout": 0.5 },'+
                    '\n\n';
     this.editor.setEditorSource( source );
     this.editor.onEvent( 'changeSelection', this._onEditorSelectionChanged.bind( this ) );
