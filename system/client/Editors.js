@@ -559,7 +559,7 @@ class GraphEditor extends EditorBase {
       }
     }
   }
-  processNodeWithIncludeScripts( action ) {
+  processNodeWithIncludeScripts( action ) {//
     // Load nodes with data like:
     //
     // nodeData = {
@@ -711,6 +711,11 @@ class TextEditor extends EditorBase {
     } else {
       const editorDiv = document.getElementById( this.editorDivId );
       editorDiv.style.background = '#1d1f21';
+    }
+
+    // Check readonly
+    if( nodeData.isReadOnly ) {
+      this.editor.setReadOnly( true );
     }
 
     // Pause tracking editor changes
@@ -1576,19 +1581,19 @@ class AnimatorEditor extends EditorBase {
   }
   _getJSONLineInfo( lineText ) {
     let result = null;
+
     lineText = lineText.trim();
     if( lineText.startsWith( '{' ) ) {
-      // Remove ',' in this case
-      if( lineText.endsWith( '},' ) ) {
-        lineText = lineText.substring( 0, lineText.length-1 )
-      }
-      // Check for JSON line
-      if( lineText.endsWith( '}' ) ) {
+      // Get end of JSON element
+      const idx = lineText.lastIndexOf( '},' );
+      if( idx != -1 ) {
+        lineText = lineText.substring( 0, idx+1 )
+        // Parse JSON
         try {
           // Parse object at current line
           result = JSON.parse( lineText );
-        } catch( error ) {
-          // Skip wrong json text
+        } catch( e ) {
+          // Skip line
         }
       }
     }

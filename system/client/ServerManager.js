@@ -97,11 +97,8 @@ function loadSystem() {
     'ModelExplorer.js',
     'MainScript.js',
     'EditorManager.js',
-    'BlockCodeEditor.js',
-    'SmartBlockEditor.js',
     'ACESourceCodeEditor.js',
     'ExploreEditorEditor.js',
-    //'GraphParser.js',
   ];
   loadScriptList( scriptList, ()=> {
     console.log( 'Depentency loaded' );

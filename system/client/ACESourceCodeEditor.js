@@ -35,10 +35,10 @@ class ACESourceCodeEditor {
     this.aceEditor.getSession().setTabSize(2);
   }
   isReadOnly() {
-    // 
+    return( this.aceEditor.getReadOnly() );
   }
   setReadOnly( status ) {
-    // Check how to set read only
+    this.aceEditor.setReadOnly( status );
   }
   setEditorTheme( name ) {
     // Set editor theme
