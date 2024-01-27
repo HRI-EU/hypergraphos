@@ -1602,7 +1602,8 @@ class AnimatorEditor extends EditorBase {
           selLines.currLine = selLines.start;
           // Start animation
           this._playAnimation( selLines );
-        }, 1*1000 );
+        }, 1*1000
+      );
     }
   }
   _playAnimation( animationInfo ) {
