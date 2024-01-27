@@ -1526,9 +1526,9 @@ class AnimatorEditor extends EditorBase {
     this.editor = new ACESourceCodeEditor( this.editorDivId );
     const language = 'text';
     this.editor.setEditorMode( 'ace/mode/'+language );
-    const source = '// Put here animation info.\n'+
-                   '// Animator can animate nodes by their unique "key" value.'
-                   '// You can paste a json file like\n'+
+    const source = '// Animator can animate nodes by their unique "key" value.'+
+                   '// Type/Past in this editor animation info.\n'+
+                   '// E.g. you can paste a json file like:\n'+
                    '//   [\n'+
                    '//     { "key": 10 },\n'+
                    '//     { "key": 11 },\n'+
