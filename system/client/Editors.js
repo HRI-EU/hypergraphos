@@ -1526,24 +1526,27 @@ class AnimatorEditor extends EditorBase {
     this.editor = new ACESourceCodeEditor( this.editorDivId );
     const language = 'text';
     this.editor.setEditorMode( 'ace/mode/'+language );
-    const source = '// Animator can animate nodes by their unique "key" value.'+
+    const source = '// Animator can animate nodes by their unique "key" value.\n'+
                    '// Type/Paste in this editor animation info.\n'+
                    '// E.g. you can paste a json file like:\n'+
                    '//   [\n'+
                    '//     { "key": 10 },\n'+
                    '//     { "key": 11 },\n'+
                    '//   ]\n'+
-                   '// To animate move cursor in a line with { "key"...},\n'+
+                   '// To step animate move cursor in a line with { "key"...},\n'+
                    '// To continue press Up/Down arrow keys (animate back/forward)\n'+
                    '//\n'+
-                   '// To animate (timeout = 1sec auto trigger), make a selection with CRTL+A\n'+
-                   '// NOTE: you can change the timeout (eg. from 1sec to 500ms) by a line like\n'+
-                   '//:      { "animTimeout": 0.5 },'+
-                   '\n\n';
+                   '// To auto animate (default timeout = 1sec), make a selection,\n'+
+                   '// on a set of lines or a full selection with CRTL+A\n'+
+                   '// NOTE: you can change the timeout (eg. from 1sec to 500ms) by\n'+
+                   '// adding a line like:\n'+
+                   '//   { "animTimeout": 0.5 },\n'+
+                   '//\n'+
+                   '\n';
     this.editor.setEditorSource( source );
     this.editor.onEvent( 'changeSelection', this._onEditorSelectionChanged.bind( this ) );
     this.graphEditor = m.e.getEditor( config.htmlDiv.graphDiv );
-    this.animTimeout = 1; // 1sec
+    this.animTimeout = 1; // default 1sec
 
     this.loadEditorContent( nodeData );
   }
