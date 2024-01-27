@@ -22,6 +22,10 @@ class DataFlowEngine {
     // Storage Data: runtime storage data for all nodes
     this.sd = {};
 
+    // Debug mode
+    this.isDebugCompute = false;
+    this.isTraceLogOn = false;
+    this.execTraceLog = [];
     //------------------------------
     // Engine State
     //------------------------------
@@ -39,18 +43,37 @@ class DataFlowEngine {
       case 'isOutputBuffered':
         this.isOutputBuffered = value;
         break;
+      case 'isTraceLogOn':
+        this.isTraceLogOn = value;
+        break;
+      case 'isLogOn':
+        this.isLogOn = value;
     }
   }
   clearInstanceData() {
     this.ed = {};
     this.isPause = false;
     this.pauseData = null;
+    this.execTraceLog = [];
   }
   setLogOn() {
     this.isLogOn = true;
   }
   setLogOff() {
     this.isLogOn = false;
+  }
+  getTraceLog( isCommentOn ) {
+    const traceLogLen = this.execTraceLog.length;
+    if( traceLogLen ) {
+      let log = '';
+      this.execTraceLog.forEach( (l, i)=> {
+        const comma = ( i == traceLogLen-1? '': ',' );
+        log = log+`\n  { "key": ${l.key} }${comma}${ isCommentOn? `  // ${l.label}`: '' }`;
+      });
+      return( `[${log}\n]`)
+    } else {
+      return( '[]' );
+    }
   }
   loadModel() {
     // Get current graph model
@@ -514,12 +537,15 @@ class DataFlowEngine {
         const portId = outLinkData.toPort;
         const inName = this._getPortName( outNodeData, portId, 'in' );
 
+        // Reset debug compute
+        this.isDebugCompute = false;
         // Log link message if present
         switch( outLinkData.category ) {
           case 'DataFlow_Log':
             let logMsg = outLinkData.label;
             if( logMsg == 'debugger' ) {
-              debugger
+              //debugger
+              this.isDebugCompute = true;
             } else if( logMsg && !logMsg.startsWith( '//' ) ) {
               if( logMsg.indexOf( '{value}' ) != -1 ) {
                 let valueStr = ( typeof( value ) == 'object'?
@@ -537,7 +563,7 @@ class DataFlowEngine {
             return;
         }
 
-        this._fireInput(outNodeData, inName, value);
+        this._fireInput(outNodeData, inName, value );
       }
     }
   }
@@ -565,6 +591,17 @@ class DataFlowEngine {
     }
   }
   _fireEvent(nodeData, name, value) {
+    // Update execution log if on
+    if( this.isTraceLogOn ) {
+      let label = ( nodeData.label? nodeData.label: nodeData.category );
+      const labelLen = label.length;
+      // Remove new lines, "}" since I will look for that, and cut to 30 chars
+      label = label.replaceAll( '\n', ' ' ).replaceAll( '}', '' ).substring( 0, 30 );
+      if( label.length < labelLen ) {
+        label = label+'...';
+      }
+      this.execTraceLog.push( { key: nodeData.key, label } );
+    }
     // const doEval = function( nodeData, name, value ) {
     //   eval(_nodeData_.fileContent);
     // }
@@ -572,13 +609,18 @@ class DataFlowEngine {
       window[nodeData.doCompute](nodeData, name, value);
     } else if (nodeData.fileContent && (nodeData.fileType == 'text/javascript')) {
       //eval( nodeData.fileContent );
-      DataFlowEngine_doExecuteNode( nodeData, name, value );
+      DataFlowEngine_doExecuteNode( nodeData, name, value, this.isDebugCompute );
+      this.isDebugCompute = false;
       // const nodeBody = nodeData.fileContent;
       // const nodeFunction = Function( 'nodeData', 'name', 'value', nodeBody );
       // nodeFunction( nodeData, name, value );
     } else if( nodeData.fileURL && nodeData.fileURL.startsWith( 'graph://' ) &&
                ( nodeData.fileType == 'text/javascript' ) ) {
-      loadNodeContent( nodeData, (source)=> DataFlowEngine_doExecuteGraphNode( nodeData, name, value, source ) );
+      const onLoaded = ()=> {
+        DataFlowEngine_doExecuteGraphNode( nodeData, name, value, source, this.isDebugCompute );
+      }
+      loadNodeContent( nodeData, onLoaded );
+      this.isDebugCompute = false;
     } 
   }
   _getPortName( nodeData, portId, portType ) {
@@ -754,11 +796,17 @@ DataFlowEngine.getInstance = function (engineData) {
   return (graphData.dfe);
 }
 
-function DataFlowEngine_doExecuteNode( nodeData, name, value ) {
-  //const a = name+value;
-  eval( nodeData.fileContent );
+function DataFlowEngine_doExecuteNode( nodeData, name, value, isDebugCompute ) {
+  let computeSource = nodeData.fileContent;
+  if( isDebugCompute ) {
+    computeSource = 'debugger;'+computeSource;
+  }
+  eval( computeSource );
 }
-function DataFlowEngine_doExecuteGraphNode( nodeData, name, value, source ) {
-  //const a = name+value;
-  eval( source );
+function DataFlowEngine_doExecuteGraphNode( nodeData, name, value, source, isDebugCompute ) {
+  let computeSource = source;
+  if( isDebugCompute ) {
+    computeSource = 'debugger;'+computeSource;
+  }
+  eval( computeSource );
 }

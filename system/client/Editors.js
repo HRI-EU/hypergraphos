@@ -683,7 +683,7 @@ class GraphEditor extends EditorBase {
           if( nodeData.fileURL ) {
             loadScript( nodeData.fileURL );
           } else if( nodeData.fileContent ) {
-            loadScriptSource( nodeData.fileContent, null, true );
+            loadScriptSource( nodeData.fileContent, null, false );
           }
         }
       }
@@ -1585,7 +1585,7 @@ class AnimatorEditor extends EditorBase {
     lineText = lineText.trim();
     if( lineText.startsWith( '{' ) ) {
       // Get end of JSON element
-      const idx = lineText.lastIndexOf( '},' );
+      const idx = lineText.lastIndexOf( '}' );
       if( idx != -1 ) {
         lineText = lineText.substring( 0, idx+1 )
         // Parse JSON

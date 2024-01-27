@@ -47,6 +47,9 @@ const codeFileType = {
 //const urlParams = new URLSearchParams( window.location.search );
 let urlParams = { name: 'DefaultUser' };
 
+// Unique timeId for the session
+const sessionTimeId = new Date().getTime();
+
 function loadSystem() {
   /*
     
@@ -227,9 +230,19 @@ function loadScript( url, onLoad, isAvoidCache ) {
 function loadJSScript( url, onLoad, isAvoidCache ) {
   isAvoidCache = ( isAvoidCache == undefined? true: isAvoidCache );
   const prevScript = document.getElementById( url );
+  
+  if( prevScript && !isAvoidCache ) {
+    console.log( '***** ALREADY LOADED', url );
+    if( onLoad ) {
+      onLoad();
+    }
+    return; // Avoid loading twice
+  }
+
   if( prevScript ) {
     document.head.removeChild( prevScript );
   }
+
   const script = document.createElement( 'script' );
   script.id = url;
   script.type = 'text/javascript';
@@ -247,6 +260,13 @@ function loadJSScript( url, onLoad, isAvoidCache ) {
     // Avoid server cache with timestamp
     const timestamp = new Date().getTime();
     uniqueURL = '?_='+timestamp;
+  } else {
+    // I need this so that between reload of a page
+    // files are loaded and not chached.
+    // This is useful in case I have changed a script,
+    // and by reloading the browser I want the new version
+    // to be loaded
+    uniqueURL = '?_='+sessionTimeId;
   }
 
   // Handle localMode (file:///...)
@@ -260,6 +280,14 @@ function loadJSScript( url, onLoad, isAvoidCache ) {
 function loadCSSScript( url, onLoad, isAvoidCache ) {
   isAvoidCache = ( isAvoidCache == undefined? true: isAvoidCache );
   const prevScript = document.getElementById( url );
+  if( prevScript && !isAvoidCache ) {
+    console.log( '***** ALREADY LOADED', url );
+    if( onLoad ) {
+      onLoad();
+    }
+    return; // Avoid loading twice
+  }
+
   if( prevScript ) {
     document.head.removeChild( prevScript );
   }
@@ -281,6 +309,13 @@ function loadCSSScript( url, onLoad, isAvoidCache ) {
     // Avoid server cache with timestamp
     const timestamp = new Date().getTime();
     uniqueURL = '?_='+timestamp;
+  } else {
+    // I need this so that between reload of a page
+    // files are loaded and not chached.
+    // This is useful in case I have changed a script,
+    // and by reloading the browser I want the new version
+    // to be loaded
+    uniqueURL = '?_='+sessionTimeId;
   }
 
   // Handle localMode (file:///...)

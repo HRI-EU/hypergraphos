@@ -211,6 +211,7 @@ function getRefValue( nodeData, value ) {
 function getNodeData( key, isCopy ) {
   const g = getMainGraph();
   let result = g.getNodeData( key, isCopy );
+
   if( result && ( result.linkToKey != undefined ) ) {
     const linkedData = g.getNodeData( result.linkToKey );
     if( linkedData.fileURL != undefined ) {
@@ -230,7 +231,11 @@ function getNodeData( key, isCopy ) {
 }
 function setNodeDataField( key, field, value ) {
   const g = getMainGraph();
-  const data = g.getNodeData( key, true );
+  let data = key; // default we assume key is nodeData
+  if( typeof( key ) != 'object' ) { // if not, is a key
+    data = g.getNodeData( key, true );
+  }
+  
   if( data && ( data.linkToKey != undefined ) ) {
     // Set field to link node
     g.setNodeDataField( key, field, value );
@@ -250,8 +255,12 @@ function setNodeDataField( key, field, value ) {
 }
 function getNodeDataField( key, field, defaultValue ) {
   let result = defaultValue;
-  const g = getMainGraph();
-  const data = g.getNodeData( key );
+  let data = key; // default we assume key is nodeData
+  if( typeof( key ) != 'object' ) { // if not, is a key
+    const g = getMainGraph();
+    data = g.getNodeData( key );
+  }
+  
   if( data.category && window[data.category+'_get'] ) {
     result = window[data.category+'_get']( data, 'field', field );
   } else if( data[field] !== undefined ) {
@@ -281,7 +290,9 @@ function getLinkData( key, isCopy ) {
   return( result );
 }
 function setLinkDataField( key, field, value ) {
-  
+  if( typeof( key ) == 'object' ) { // in this case key is a data
+    key = key.key;
+  }
   g.setLinkDataField( key, field, value );
 }
 function setViewFromLabel( nodeLabel, deltaX, deltaY ) {
@@ -455,13 +466,17 @@ function loadDSLScript( dslName, onLoad ) {
     loadScript( m.dslNameList[dslName], ()=> {
       if( window[dslName+'_includeList'] ) {
         const includeList = window[dslName+'_includeList']();
-        loadScriptList( includeList, onLoad );
+        loadScriptList( includeList, onLoad, false ); // Script must be loaded with 'false'
+                                                      // the load script in this case avoid
+                                                      // loading twice
       } else {
         if( onLoad ) {
           onLoad();
         }
       }
-    })
+    }, false ); // Script must be loaded with 'false'
+                // the load script in this case avoid
+                // loading twice
   } else {
     console.log( `DSL not found ${dslName}}` );
     if( onLoad ) {
