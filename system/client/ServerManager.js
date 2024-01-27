@@ -232,7 +232,7 @@ function loadJSScript( url, onLoad, isAvoidCache ) {
   const prevScript = document.getElementById( url );
   
   if( prevScript && !isAvoidCache ) {
-    console.log( '***** ALREADY LOADED', url );
+    //console.log( '***** ALREADY LOADED', url );
     if( onLoad ) {
       onLoad();
     }
@@ -281,7 +281,7 @@ function loadCSSScript( url, onLoad, isAvoidCache ) {
   isAvoidCache = ( isAvoidCache == undefined? true: isAvoidCache );
   const prevScript = document.getElementById( url );
   if( prevScript && !isAvoidCache ) {
-    console.log( '***** ALREADY LOADED', url );
+    //console.log( '***** ALREADY LOADED', url );
     if( onLoad ) {
       onLoad();
     }
