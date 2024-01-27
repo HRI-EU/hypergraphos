@@ -1535,7 +1535,7 @@ class AnimatorEditor extends EditorBase {
                    '// To animate move cursor in the lines with { "key"...},\n'+
                    '// To continue click arrow key down/up\n'+
                    '//\n'+
-                   '// To animate (timeout = 1sec auto trigger), make a selection with CRTL+a\n'+
+                   '// To animate (timeout = 1sec auto trigger), make a selection with CRTL+A\n'+
                    '// NOTE: you can change the timeout (eg. from 1sec to 500ms) by a line like\n'+
                    '//:      { "animTimeout": 0.5 },'+
                    '\n\n';
@@ -1547,6 +1547,7 @@ class AnimatorEditor extends EditorBase {
     this.loadEditorContent( nodeData );
   }
   animateNode( lineIndex ) {
+    let isKeyFound = false;
     let lineText = '';
     if( lineIndex == undefined ) {
       lineText = this.editor.getCurrentLineText()
@@ -1567,7 +1568,9 @@ class AnimatorEditor extends EditorBase {
     // If we found a node and it has a "key" field
     if( nodeData && nodeData.key ) {
       m.e.selectAndCenterNodeInGraph( nodeData.key );
+      isKeyFound = true;
     }
+    return( isKeyFound );
   }
   loadEditorContent( nodeData ) {
     this.nodeData = nodeData;
@@ -1580,15 +1583,21 @@ class AnimatorEditor extends EditorBase {
   }
   _onEditorSelectionChanged() {
     let selLines = this.editor.getCurrentSelectionLines();
+    
     if( selLines.start == selLines.end ) {
       this.animateNode();
     } else {
       selLines.currLine = selLines.start;
-      setTimeout( ()=> this._playAnimation( selLines ), this.animTimeout*1000 );
+      // Start animation
+      this._playAnimation( selLines );
     }
   }
   _playAnimation( animationInfo ) {
-    this.animateNode( animationInfo.currLine++ );
+    // Find the first key
+    let isKeyFound = false;
+    while( !isKeyFound && ( animationInfo.currLine <= animationInfo.end ) ) {
+      isKeyFound = this.animateNode( ++animationInfo.currLine );
+    }
     if( animationInfo.currLine <= animationInfo.end ) {
       setTimeout( ()=> this._playAnimation( animationInfo ), this.animTimeout*1000 );
     }
