@@ -1527,7 +1527,7 @@ class AnimatorEditor extends EditorBase {
     const language = 'text';
     this.editor.setEditorMode( 'ace/mode/'+language );
     const source = '// Animator can animate nodes by their unique "key" value.'+
-                   '// Type/Past in this editor animation info.\n'+
+                   '// Type/Paste in this editor animation info.\n'+
                    '// E.g. you can paste a json file like:\n'+
                    '//   [\n'+
                    '//     { "key": 10 },\n'+
