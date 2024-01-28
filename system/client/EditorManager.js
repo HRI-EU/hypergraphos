@@ -36,6 +36,9 @@ class EditorManager extends EditorChangeManager {
     this.isStatusOnUpdate = false;
     this.isMoveAllWindowRunning = false;
 
+    // Store Selection or Model window nodeData
+    this.selctionOrModelNodeData = null;
+
     // Saving events
     //this.onNeedSave( ... ) // Show star in title...
     this.onDoSave( ()=> {
@@ -131,6 +134,14 @@ class EditorManager extends EditorChangeManager {
     const e = this.getEditor( config.htmlDiv.graphDiv );
     const nodeData = e.findNodeData( 'isSystem', '$GraphSelection$' );
     if( nodeData ) {
+      // Close Model window before opening Selection
+      const ei = this.getEditorInfo( this.selctionOrModelNodeData );
+      if( ei ) {
+        this.closeEditor( true, ei.id );
+      }
+      // Store nodeData so to make Selection and Model exclusive
+      this.selctionOrModelNodeData = nodeData;
+
       e.updateSystemNode( nodeData );
       // Get a copy of the node data
       //const newNodeData = e.getNodeData( nodeData.key, true );
@@ -149,6 +160,14 @@ class EditorManager extends EditorChangeManager {
     const e = this.getEditor( config.htmlDiv.graphDiv );
     const nodeData = e.findNodeData( 'isSystem', '$GraphModel$' );
     if( nodeData ) {
+      // Close Selection window before opening Model
+      const ei = this.getEditorInfo( this.selctionOrModelNodeData );
+      if( ei ) {
+        this.closeEditor( true, ei.id );
+      }
+      // Store nodeData so to make Selection and Model exclusive
+      this.selctionOrModelNodeData = nodeData;
+
       e.updateSystemNode( nodeData );
       // Get a copy of the node data
       //const newNodeData = e.getNodeData( nodeData.key, true );
