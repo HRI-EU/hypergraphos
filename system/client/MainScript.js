@@ -258,6 +258,8 @@ function setNodeDataField( key, field, value ) {
   // Check if editor open => update editor source
   if( field == 'fileContent' ) {
     mainScript_updateEditorSource( data, value );
+  } else if( field == 'label' ) {
+    mainScript_updateEditorTitle( data, value );
   }
 }
 function getNodeDataField( key, field, defaultValue ) {
@@ -515,5 +517,14 @@ function mainScript_updateEditorSource( nodeData, source ) {
   if( e ) {
     // Set editor content
     e.setEditorSource( source );
+  }
+}
+function mainScript_updateEditorTitle( nodeData, title ) {
+  // Get the editor from the node data
+  const eId = m.e._getDOMUniqueId( nodeData );
+  const e = m.e.getEditorInfo( eId );
+  if( e ) {
+    // Set editor content
+    e.setTitle( `${title} [${data.fileType}]` );
   }
 }
