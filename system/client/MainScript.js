@@ -490,6 +490,7 @@ function loadDSLScript( dslName, onLoad ) {
   }
 }
 function loadTestModel() {
+  const g = getMainGraph();
   g.diagram.model = new go.GraphLinksModel(
     [ // a JavaScript Array of JavaScript objects, one per node;
       // the "color" property is added specifically for this app
