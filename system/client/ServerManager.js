@@ -45,7 +45,6 @@ const codeFileType = {
 
 // Define list of system scripts to be loaded
 const systemIncludeList = [
-  `configs/${urlParams.name}_config.js`,
   'EditorChangeManager.js',
   'EventManager.js',
   'Graph.js',
@@ -107,6 +106,9 @@ function loadSystem() {
     document.cookie = JSON.stringify({name: urlParams.name});
   }
 
+  // Add user config file
+  systemIncludeList.unshift( `configs/${urlParams.name}_config.js` );
+  // Load includes
   loadScriptList( systemIncludeList, ()=> {
     console.log( 'Depentency loaded' );
   }, false ); // The 'false' is for alowing caching files (don't load twice)
