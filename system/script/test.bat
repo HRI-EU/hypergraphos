@@ -1,2 +1,2 @@
-@echo "Test.sh executed" > ./output.txt
-@echo "Test.sh has been executed" %*
+@echo "test.sh executed" > ./output.txt
+@echo "test.sh has been executed" %*

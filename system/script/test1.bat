@@ -1,1 +1,1 @@
-echo Test.sh has been executed
+echo test1.bat has been executed
