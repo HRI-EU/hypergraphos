@@ -18,6 +18,7 @@ const m = {
   fileInfo: {},
   dslNameList: {},  // List of registered dsl name/url
   status: {},       // Current status of the system
+  mddStatus: null,  // Status border el
 
   // System Object for field value references
 	// See: parseRefValue()
@@ -92,6 +93,9 @@ function popFromHistory() {
   const prevNodeData = history.pop();
   return( prevNodeData );
 }
+function setSystemReady() {
+  m.mddStatus.className = 'default';
+}
 function setSystemReadOnly( status ) {
   status = ( status == undefined? true: status );
   m.status.isReadOnly = status;
@@ -100,8 +104,11 @@ function setSystemReadOnly( status ) {
 function getSystemReadOnly() {
   return( m.status.isReadOnly );
 }
-function setSystemError( status ) {
+function setSystemError() {
   m.mddStatus.className = 'error';
+}
+function setSystemLoading() {
+  m.mddStatus.className = 'loading';
 }
 function setSystemNeedSave() {
   if( !m.status.isReadOnly ) {

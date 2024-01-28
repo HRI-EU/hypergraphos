@@ -48,6 +48,9 @@ html{
    from { border-color: rgba(123, 255, 0, 0.6); }
    to { border-color: rgba(125, 125, 125, 0.6); }
  }
+ #mdd-status.loading {
+  border-color: rgba(30, 144, 255, 0.6);
+}
 .diagramDiv {
   position: absolute;
   /*top: -70px;   /* TODO: This allow hiding top left corner of graph */

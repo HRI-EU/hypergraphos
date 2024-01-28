@@ -314,6 +314,7 @@ class GraphEditor extends EditorBase {
       return;
     }
 
+    setSystemLoading();
     // Pause tracking editor changes
     this.setPauseChange( true );
     this.isContentJustLoaded = true;
@@ -360,6 +361,7 @@ class GraphEditor extends EditorBase {
           }
         }
       } 
+      setSystemReady();
       if( onLoaded ) {
         onLoaded();
       }
