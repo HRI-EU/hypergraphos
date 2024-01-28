@@ -519,7 +519,9 @@ class EditorManager extends EditorChangeManager {
       const ei = this.getEditorInfo( config.htmlDiv.graphDiv );
       const position = this.getEditorPosition( id );
       // Set position in nodeData too
-      nodeData.editorPosition = position;
+      //nodeData.editorPosition = position;
+      // TODO: save position in user config file!!!
+
       // Check if window is pinned or not
       if( isPin ) {  // If window pinned
         const pw = getStatus( 'pinnedWindow' );
@@ -593,7 +595,7 @@ class EditorManager extends EditorChangeManager {
           isFile: nodeData.isFile,
           fileURL: nodeData.fileURL,
           fileType: nodeData.fileType,
-          editorPosition: nodeData.editorPosition,
+          //editorPosition: nodeData.editorPosition,  // Review that
         };
         if( nodeData.isVisible != undefined ) {
           pw[nodeData.fileURL]['isVisible'] = nodeData.isVisible;
@@ -637,7 +639,7 @@ class EditorManager extends EditorChangeManager {
         if( url != '#systemPalette#' ) {
           const id = this._getDOMUniqueId( nodeData );
           const isPinned = true;
-          const position = nodeData.editorPosition;
+          const position = null; //nodeData.editorPosition;
           this.openWindow( id, null, nodeData, position, isPinned );
           this.showWindowPin( id, 'hidden' );
           // Show save button for system nodes
@@ -672,7 +674,7 @@ class EditorManager extends EditorChangeManager {
               if( nodeData.isSystem ) {
                 // Store Selection or Model nodeData
                 m.e.selctionOrModelNodeData = nodeData;
-                
+
                 const ei = m.e.getEditorInfo( id );
                 ei.showSaveButton();
                 // Set class for selection/model
