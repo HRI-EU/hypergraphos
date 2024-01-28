@@ -1503,7 +1503,10 @@ class Graph {
 				layout: $(go.GridLayout, { 
 					alignment: go.GridLayout.Location,
 					wrappingColumn: 1,
-				})
+				}),
+				"panningTool.isEnabled": false,  // disable panning
+				"allowHorizontalScroll": false,  // no horizontal scroll
+				//"allowVerticalScroll": false,  // no vertical scroll
 			}
 		);
 		return( palette );
