@@ -720,7 +720,7 @@ class TextEditor extends EditorBase {
     }
 
     // Check readonly
-    if( nodeData.isReadOnly ) {
+    if( nodeData.isContentReadOnly ) {
       this.editor.setReadOnly( true );
     }
 
@@ -816,7 +816,7 @@ class HChatEditor extends EditorBase {
     this.editor = new HChatManagerEditor( this.editorDivId );
     
     // Check readonly
-    if( nodeData.isReadOnly ) {
+    if( nodeData.isContentReadOnly ) {
       this.editor.setReadOnly( true );
     }
 

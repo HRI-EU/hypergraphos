@@ -95,35 +95,35 @@ function popFromHistory() {
 }
 function setSystemReady() {
   m.mddStatus.className = 'default';
-  console.log( '---> System READY' );
+  //console.log( '---> System READY' );
 }
 function setSystemReadOnly( status ) {
   status = ( status == undefined? true: status );
   m.status.isReadOnly = status;
   m.mddStatus.style['border-style'] = ( status? 'dashed': 'solid' );
-  console.log( '---> System READONLY', status );
+  //console.log( '---> System READONLY', status );
 }
 function getSystemReadOnly() {
   return( m.status.isReadOnly );
 }
 function setSystemError() {
   m.mddStatus.className = 'error';
-  console.log( '---> System ERROR' );
+  //console.log( '---> System ERROR' );
 }
 function setSystemLoading() {
   m.mddStatus.className = 'loading';
-  console.log( '---> System LOADING' );
+  //console.log( '---> System LOADING' );
 }
 function setSystemNeedSave() {
   if( !m.status.isReadOnly ) {
     m.mddStatus.className = 'warning';
-    console.log( '---> System WARNING' );
+    //console.log( '---> System WARNING' );
   }
 }
 function setSystemSaved() {
   if( !m.status.isReadOnly ) {
     m.mddStatus.className = 'saved';
-    console.log( '---> System SAVED' );
+    //console.log( '---> System SAVED' );
   }
 }
 function setFileIndexStatus( setFunction ) {
