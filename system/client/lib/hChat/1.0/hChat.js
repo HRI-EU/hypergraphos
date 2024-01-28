@@ -26,6 +26,9 @@ class HChat {
     this.selectedReceiverEl = this._getElementById('hchat-receiver-selection');
     this.selectedReceiverEl.onclick = this._setReceiverDropdown.bind( this, true );
 
+    // Last receieved message
+    this.lastMessageInfo = {};
+
     this._getElementById('hchat-input-message').addEventListener('keydown', (event)=> {
       if (event.keyCode === 13) { // 13 is the key code for the Enter key
         let messageText = this._getElementById('hchat-input-message').value.trim();
@@ -112,6 +115,44 @@ class HChat {
       this.addMessage( item.sender, item.receiver, item.text );
     }
   }
+  getHistoryLength() {
+    let result = 0;
+    const mList = document.querySelectorAll(`#${this.divId} .hchat-text`);
+    if( mList ) {
+      result = mList.length;
+    }
+    return( result );
+  }
+  getMessageAt( index ) {
+    let result = {};
+    const mList = document.querySelectorAll(`#${this.divId} .hchat-text`);
+    if( mList ) {
+      const m = mList[index];
+      if( m ) {
+        const sender = m.getAttribute( 'sender' );
+        const receiver = m.getAttribute( 'receiver' );
+        result = { text: m.innerText, sender, receiver };
+      }
+    }
+    return( result );
+  }
+  getLastMessage() {
+    return( this.lastMessageInfo );
+  }
+  getUserInfoList() {
+    let result = [];
+    for( const userName in this.userList ) {
+      const ui = this.userList[userName];
+      result.push( { 
+        userName, 
+        imageURL: ui.imageURL,
+        userColor: ui.color, 
+        isSender: ui.isSender, 
+        isReceiver: ui.isReceiver, 
+      });
+    }
+    return( result );
+  }
   addUser( userName, imageURL, userColor, isSender, isReceiver ) {
     isSender = ( isSender == undefined? true: isSender );
     isReceiver = ( isReceiver == undefined? true: isReceiver );
@@ -158,6 +199,10 @@ class HChat {
     const senderInfo = this.userList[sender];
     const receiverInfo = this.userList[receiver];
 	  const senderColor = senderInfo.color;
+
+    // Update last message
+    this.lastMessageInfo = { sender, receiver, text: messageText };
+
     let lineStyle = `style="background-color: ${senderColor}`;
     let imgStyle = '';
     let defaultMessageGap = this.property.messageGap;

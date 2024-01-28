@@ -27,6 +27,7 @@ class EditorManager extends EditorChangeManager {
       { name: 'GraphTemplateViewer',  fileType: (ft)=> ft == 'input/fields',              classRef: GraphTemplateViewer },
       { name: 'SystemMonitorViewer',  fileType: (ft)=> ft == 'system/status',             classRef: SystemMonitorViewer },
       { name: 'AnimatorEditor',       fileType: (ft)=> ft == 'input/fields',              classRef: AnimatorEditor },
+      { name: 'HChatEditor',          fileType: (ft)=> ft == 'application/hchat',         classRef: HChatEditor },
       //window.open('https://www.google.com','node13',"width=200,height=100")
     ];
 
@@ -669,6 +670,9 @@ class EditorManager extends EditorChangeManager {
               this.openWindow( id, null, nodeData, position );
               // Show save button for system nodes
               if( nodeData.isSystem ) {
+                // Store Selection or Model nodeData
+                m.e.selctionOrModelNodeData = nodeData;
+                
                 const ei = m.e.getEditorInfo( id );
                 ei.showSaveButton();
                 // Set class for selection/model

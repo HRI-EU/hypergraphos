@@ -797,6 +797,99 @@ class TextEditor extends EditorBase {
     }
   }
 }
+class HChatEditor extends EditorBase {
+  constructor( id, nodeData, position ) {
+    super();
+    this.isJustStarted = true;
+    this.id = id;
+    this.fileType = '';
+    
+    this.fileType = nodeData.fileType;
+    this.editorDivId = m.e.newDOMWindow( id, this.title, 
+                                          config.htmlDiv.mainDiv,
+                                          this.storeWindowPosition.bind(this),
+                                          position );
+    this.editor = new HChatManagerEditor( this.editorDivId );
+    
+    // Check readonly
+    if( nodeData.isReadOnly ) {
+      this.editor.setReadOnly( true );
+    }
+
+    // Pause tracking editor changes
+    this.setPauseChange( true );
+    // Saving events
+    this.editor.onSourceChanged( ()=> {
+      if( !this.isJustStarted ) {
+        this.editorHasChanged();
+      }
+      this.isJustStarted = false;
+    });
+    //this.onNeedSave( ... ) // Show star in title...
+    this.onDoSave( ()=> {
+      console.log( 'Saving text editor: '+this.nodeData.key );
+      this.saveEditorContent();
+    });
+
+    this.setPauseChange( false );
+    this.loadEditorContent( nodeData );
+  }
+  loadEditorContent( nodeData ) {
+    // Pause tracking editor changes
+    this.setPauseChange( true );
+
+    this.fileType = ( nodeData.fileType? nodeData.fileType: this.fileType );
+    // Update current nodeData
+    this.nodeData = nodeData;
+    // Set window title
+    this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${this.fileType}]`;
+    this.setTitle( this.title );
+    
+    // Set editor content
+    loadNodeContent( nodeData, (source)=> {
+      this.editor.setEditorSource( source );
+      this.doLoadLastUpdateTime( nodeData, ()=> {
+        // After loading update time, clear pause change
+        this.setPauseChange( false );
+      });
+    });
+    // Register on changes of the node if available
+    if( nodeData.onNodeChanged ) {
+      nodeData.onNodeChanged( this.loadEditorContent.bind(this) );
+    }
+  }
+  saveEditorContent( onSaved ) {
+    const onEditorSaved = ()=> {
+      this.editorSaved();
+      if( onSaved ) {
+        onSaved();
+      }
+    };
+    const onTimeChecked = ( doAbortSave )=> {
+      if( doAbortSave ) {
+        // We clear save status
+        this.clearStatus();
+        // We call the callback anyway, but...
+        if( onSaved ) {
+          onSaved();
+        }
+      } else {
+        const source = this.editor.getEditorSource();
+        const g = getMainGraph();
+        const nodeDataTemp = g._getDataCopy( this.nodeData );
+        nodeDataTemp.fileContent = source;
+        saveNodeContent( nodeDataTemp, onEditorSaved );
+      }
+    };
+    if( this.nodeData ) {
+      // First check destination file info from the server
+      // to avoid to overwrite a newer version of the graph
+      this.doCheckLastUpdateTime( this.nodeData, onTimeChecked );
+    } else {
+      onEditorSaved();
+    }
+  }
+}
 class HTMLExploreEditor extends EditorBase {
   constructor( id, nodeData, position ) {
     super();
@@ -1485,26 +1578,27 @@ class AnimatorEditor extends EditorBase {
                                          position );
 
     this.editor = new ACESourceCodeEditor( this.editorDivId );
-    const language = 'text';
+    const language = 'javascript';
     this.editor.setEditorMode( 'ace/mode/'+language );
-    const source = '// Animator can animate nodes by their unique "key" value.\n'+
-                   '// Type/Paste in this editor animation info.\n'+
-                   '// E.g. you can paste a json file like:\n'+
-                   '//   [\n'+
-                   '//     { "key": 10 },\n'+
-                   '//     { "key": 11 },\n'+
-                   '//   ]\n'+
-                   '// To step animate move cursor in a line with { "key"...},\n'+
-                   '// To continue press Up/Down arrow keys (animate back/forward)\n'+
-                   '//\n'+
-                   '// To auto animate (default timeout = 1sec), make a selection,\n'+
-                   '// on a set of lines or a full selection with CRTL+A\n'+
-                   '// NOTE: you can change the timeout (eg. from 1sec to 500ms) by\n'+
-                   '// adding a line like:\n'+
-                   '//   { "animTimeout": 0.5 },\n'+
-                   '// You can pause an animation by adding the line:\n'+
-                   '//   { "puase": true },\n'+
-                   '//\n'+
+    const source = '/* \n'+
+                   '  Animator can animate nodes by their unique "key" value.\n'+
+                   '   Type/Paste in this editor animation info.\n'+
+                   '   E.g. you can paste a json file like:\n'+
+                   '     [\n'+
+                   '       { "key": 10 },\n'+
+                   '       { "key": 11 },\n'+
+                   '     ]\n'+
+                   '   To step animate move cursor in a line with { "key"...},\n'+
+                   '   To continue press Up/Down arrow keys (animate back/forward)\n'+
+                   '  \n'+
+                   '   To auto animate (default timeout = 1sec), make a selection,\n'+
+                   '   on a set of lines or a full selection with CRTL+A\n'+
+                   '   NOTE: you can change the timeout (eg. from 1sec to 500ms) by\n'+
+                   '   adding a line like:\n'+
+                   '     { "animTimeout": 0.5 },\n'+
+                   '  You can pause an animation by adding the line:\n'+
+                   '     { "puase": true },\n'+
+                   '*/\n'+
                    '\n';
     this.editor.setEditorSource( source );
     this.editor.onEvent( 'changeSelection', this._onEditorSelectionChanged.bind( this ) );

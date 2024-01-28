@@ -102,6 +102,9 @@ function loadSystem() {
     'EditorManager.js',
     'ACESourceCodeEditor.js',
     'ExploreEditorEditor.js',
+    '/library/hChat/1.0/hChat.css',
+    '/library/hChat/1.0/hChat.js',
+    'HChatManagerEditor.js',
   ];
   loadScriptList( scriptList, ()=> {
     console.log( 'Depentency loaded' );
