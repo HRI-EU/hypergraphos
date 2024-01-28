@@ -708,7 +708,7 @@ class Graph {
 	}
 	getJSONSelection() {
 		const list = this._getFilteredSelection( 4 );
-		const jsonSelection = '';
+		let jsonSelection = '';
 		try {
 		  jsonSelection = JSON.stringify( list, null, 2 );	
 		} catch( error ) {}

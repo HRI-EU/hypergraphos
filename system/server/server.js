@@ -36,7 +36,7 @@ config.server.ip = getServerIp();
 config.client.server = { ip: config.server.ip };
 
 // Log Configuratio
-const configurationStr = 'None';
+let configurationStr = 'None';
 try {
   configurationStr = JSON.stringify( config, null, 2 );
 } catch( error ) {}
