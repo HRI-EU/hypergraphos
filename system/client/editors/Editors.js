@@ -544,13 +544,17 @@ class GraphEditor extends EditorBase {
             let templateURL = `${config.host.fileServerSystemURL}/graphTemplateList.json`;
             _openFile( templateURL, (source)=> {
               // Get Template Name List
-              const templateList = JSON.parse( source );
-              // Check if template not present ==> if not add it
-              if( !templateList[this.title] ) {
-                templateList[this.title] = this.nodeData.fileURL;
-                // Save updated template list
-                const templateSource = JSON.stringify( templateList, null, 2 );
-                _saveFile( templateURL, templateSource );
+              try {
+                const templateList = JSON.parse( source );
+                // Check if template not present ==> if not add it
+                if( !templateList[this.title] ) {
+                  templateList[this.title] = this.nodeData.fileURL;
+                  // Save updated template list
+                  const templateSource = JSON.stringify( templateList, null, 2 );
+                  _saveFile( templateURL, templateSource );
+                }
+              } catch (error) {
+                alert( 'Error loading template list' );
               }
             });
           }
@@ -1419,36 +1423,40 @@ class GraphTemplateViewer extends EditorBase {
     element.innerHTML = `<div id='searchResult' ></div>`;
     const showTemplates = (sourceTemplateList)=> {
       // Generate Template Name List
-      templateList = JSON.parse( sourceTemplateList );
-      let source = '';
-      const templateNameList = Object.keys( templateList );
-      for( const templateName of templateNameList ) {
-        const templateUrl = templateList[templateName];
-        // Generate html
-        if( templateUrl.endsWith( '.json' ) ) {
-          source = source+`<div class="findResult graphTemplateItem">
-                            ${templateName}
-                          </div>`;
+      try {
+        templateList = JSON.parse( sourceTemplateList );
+        let source = '';
+        const templateNameList = Object.keys( templateList );
+        for( const templateName of templateNameList ) {
+          const templateUrl = templateList[templateName];
+          // Generate html
+          if( templateUrl.endsWith( '.json' ) ) {
+            source = source+`<div class="findResult graphTemplateItem">
+                              ${templateName}
+                            </div>`;
+          }
         }
-      }
-      searchResult.innerHTML = source;
-
-      // Apply Template function
-      const applyTemplate = ( name )=> {
-        console.log( 'Appying template: '+name );
-        if( templateList[name] ) {
-          const url = templateList[name];
-          _openFile( url, (sourceTemplate)=> {
-            const e = m.e.getEditor( config.htmlDiv.graphDiv );
-            // Remove Template flag
-            sourceTemplate = sourceTemplate.replace( /\<Template\>/i, '' );
-            e.setEditorSource( sourceTemplate );
-          });
+        searchResult.innerHTML = source;
+  
+        // Apply Template function
+        const applyTemplate = ( name )=> {
+          console.log( 'Appying template: '+name );
+          if( templateList[name] ) {
+            const url = templateList[name];
+            _openFile( url, (sourceTemplate)=> {
+              const e = m.e.getEditor( config.htmlDiv.graphDiv );
+              // Remove Template flag
+              sourceTemplate = sourceTemplate.replace( /\<Template\>/i, '' );
+              e.setEditorSource( sourceTemplate );
+            });
+          }
         }
-      }
-      const itemElementList = document.querySelectorAll( '.graphTemplateItem' );
-      for( const item of itemElementList ) {
-        item.onclick = ()=> applyTemplate( item.innerText );
+        const itemElementList = document.querySelectorAll( '.graphTemplateItem' );
+        for( const item of itemElementList ) {
+          item.onclick = ()=> applyTemplate( item.innerText );
+        }
+      } catch (error) {
+        alert( 'Error showing templates. Chacek templateList file' );
       }
     }
     // Load Templates

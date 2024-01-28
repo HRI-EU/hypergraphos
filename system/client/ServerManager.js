@@ -97,7 +97,11 @@ function loadSystem() {
   const urlStrParams = decodeURI( document.location.search.substring( 1 ) );
   // Get url params values
   urlParams = {};
-  eval( `urlParams = {${urlStrParams}}` );
+  try {
+    eval( `urlParams = {${urlStrParams}}` );
+  } catch (error) {
+    alert( 'Error in url parameters\n'+error );
+  }
   console.log( urlParams );
   
   if( !urlParams.name ) {
@@ -107,7 +111,9 @@ function loadSystem() {
     } catch( e ) {}
     urlParams.name = cookie.name;
   } else {
-    document.cookie = JSON.stringify({name: urlParams.name});
+    try {
+      document.cookie = JSON.stringify( { name: urlParams.name } );
+    } catch( error ) {}
   }
 
   // Add user config file
@@ -184,8 +190,12 @@ function getNewFileServerURL( extension ) {
   const newFilePath = `${host}${config.host.fileServerURL}${newPath}/${newFile}`;
   // Update fileIndex file
   const url = `${config.host.fileServerSystemURL}/fileIndex.json`;
-  const source = JSON.stringify( m.fileInfo );
-  _saveFile( url, source );
+  try {
+    const source = JSON.stringify( m.fileInfo );
+    _saveFile( url, source );
+  } catch (error) {
+    return( null );
+  }
   return( newFilePath );
 }
 function loadScriptList( urlList, onLoad, isAvoidCache ) {
@@ -428,7 +438,13 @@ function saveNodeContent( nodeData, onSaved ) {
 function getNodeInfoFromServer( nodeData, onInfo ) {
   const onLoaded = ( source ) => {
     //console.log( `File status for "${nodeData.fileURL}": ${source}` );
-    const fileInfo = JSON.parse( source );
+    let fileInfo = {};
+    try {
+      fileInfo = JSON.parse( source );
+    } catch( error ) {
+      const label = ( nodeData.label? nodeData.label: nodeData.category )+`[${nodeData.key}]`;
+      alert( 'Error loading file info for node: '+label+'\n'+error );
+    }
     if( onInfo ) {
       onInfo( fileInfo );
     }

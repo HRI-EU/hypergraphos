@@ -629,7 +629,9 @@ class Graph {
 		let objModel = null;
 		if( source ) {
 			if( typeof( source ) == 'string' ) {
-				objModel = JSON.parse( source );
+				try {
+					objModel = JSON.parse( source );
+				} catch( error ) {}
 			} else {
 				// In this case we expect an object
 				objModel = source;
@@ -706,7 +708,10 @@ class Graph {
 	}
 	getJSONSelection() {
 		const list = this._getFilteredSelection( 4 );
-		const jsonSelection = JSON.stringify( list, null, 2 );
+		const jsonSelection = '';
+		try {
+		  jsonSelection = JSON.stringify( list, null, 2 );	
+		} catch( error ) {}
 		return( jsonSelection );
 	}
 	setJSONSelection( jsonSelection ) {
@@ -933,7 +938,11 @@ class Graph {
 		const fieldNameList = Array.from( this.dslNodeFieldNameList );
 		let templateNode = {};
 		const templateNodeStr = 'templateNode = {'+fieldNameList.join( ':"",' )+':""}';
-		eval( templateNodeStr );
+		try {
+			eval( templateNodeStr );
+		} catch( e ) {
+      alert( 'Error in search expression\n'+e );
+		}
 
 		// Define here the search condition
 		let conditionFn = null;
@@ -1171,12 +1180,14 @@ class Graph {
 		}
 		switch( data.isSystem ) {
 			case '$GraphModel$':
-				const strModel = this.getJSONModel();
-				const objModel = JSON.parse( strModel );
-				data.fileContent = JSON.stringify( objModel, null, 2 );
-				data.onNodeChanged = (f)=> { 
-					this.onNodeGraphModelChanged = { nodeData: data, callback: f };
-				};
+				try {
+					const strModel = this.getJSONModel();
+					const objModel = JSON.parse( strModel );
+					data.fileContent = JSON.stringify( objModel, null, 2 );
+					data.onNodeChanged = (f)=> { 
+						this.onNodeGraphModelChanged = { nodeData: data, callback: f };
+					};
+				} catch (error) {}
 				break;
 			case '$GraphSelection$':
 				data.fileContent = this.getJSONSelection();

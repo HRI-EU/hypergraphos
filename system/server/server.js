@@ -35,8 +35,11 @@ const { exec } = require( 'child_process' );
 config.server.ip = getServerIp();
 config.client.server = { ip: config.server.ip };
 
-// Log Configuration
-const configurationStr = JSON.stringify( config, null, 2 );
+// Log Configuratio
+const configurationStr = 'None';
+try {
+  configurationStr = JSON.stringify( config, null, 2 );
+} catch( error ) {}
 console.log( 'Runnin on configuration:' );
 console.log( configurationStr );
 console.log( '------------------------\n' );
@@ -318,7 +321,7 @@ espresso.addGET(  '/test',    espresso.static( config.server.testPath ), onGet )
 webServer.listen(config.server.webServerPort, function(){
   const url = `${config.server.webServerProtocol}:\\${config.server.webServerName}:${config.server.webServerPort}`;
   console.log( `WebServer running at ${url}!` );
-  console.log( ` Access with user: ${url}?name:'Antonello'` );
+  console.log( ` Access with user: ${url}?name:'${config.client.host.name}'` );
 });
 
 function getPathInfo( path ) {

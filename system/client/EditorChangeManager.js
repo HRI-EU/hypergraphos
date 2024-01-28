@@ -51,6 +51,7 @@ class EditorChangeManager {
     this.onNeedSaveCallback = callback;
   }
   editorSaved() {
+    setSystemSaved();
     this.clearStatus();
     // TODO: count all saved/unsaved file. We can show the orange frame if all 
     // editor are saved. All!

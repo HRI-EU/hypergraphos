@@ -27,7 +27,9 @@ class HChatManagerEditor {
   setEditorSource( source ) {
     let msgData = source;
     if( typeof( source ) == 'string' ) {
-      msgData = JSON.parse( source );
+      try {
+        msgData = JSON.parse( source );
+      } catch( error ) {}
     }
     if( msgData.userInfoList ) {
       msgData.userInfoList.forEach( ui=> {

@@ -1202,7 +1202,12 @@ console.log( 'Button Status: '+obj.data.checked );`;
         // const buttonStatus = obj.data.checked;
         //
         if( fileContent ) {
-          eval( fileContent );
+          try {
+            eval( fileContent );
+          } catch( e ) {
+            const label = ( nodeData.label? nodeData.label: nodeData.category )+`[${nodeData.key}]`;
+            alert( 'Error in executing node: '+label+'\n'+e )
+          }
         }
       };
       const nodePart = obj.part;

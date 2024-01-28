@@ -127,7 +127,11 @@ if( process.argv.length > 2 ) {
   
   // Evaluate parameter indo an object
   let fileInfo = {};
-  eval( `fileInfo ={${params}}` );
+  try {
+    eval( `fileInfo ={${params}}` );
+  } catch (error) {
+    console.log( 'Error in params\n'+ error );
+  }
   //console.log( JSON.stringify( fileInfo, null, 2 ) );
 
   // Get file soruce if specified

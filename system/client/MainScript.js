@@ -95,31 +95,35 @@ function popFromHistory() {
 }
 function setSystemReady() {
   m.mddStatus.className = 'default';
+  console.log( '---> System READY' );
 }
 function setSystemReadOnly( status ) {
   status = ( status == undefined? true: status );
   m.status.isReadOnly = status;
   m.mddStatus.style['border-style'] = ( status? 'dashed': 'solid' );
+  console.log( '---> System READONLY', status );
 }
 function getSystemReadOnly() {
   return( m.status.isReadOnly );
 }
 function setSystemError() {
   m.mddStatus.className = 'error';
+  console.log( '---> System ERROR' );
 }
 function setSystemLoading() {
   m.mddStatus.className = 'loading';
+  console.log( '---> System LOADING' );
 }
 function setSystemNeedSave() {
   if( !m.status.isReadOnly ) {
-    //document.body.style["background-color"] = 'orange';
     m.mddStatus.className = 'warning';
+    console.log( '---> System WARNING' );
   }
 }
 function setSystemSaved() {
   if( !m.status.isReadOnly ) {
-    //document.body.style["background-color"] = 'gray';
     m.mddStatus.className = 'saved';
+    console.log( '---> System SAVED' );
   }
 }
 function setFileIndexStatus( setFunction ) {
@@ -364,12 +368,19 @@ function getNodeDataOutPortContent( nodeData, outPort ) {
 function saveStatus( onSaved ) {
   const url = config.host.statusURL;
   m.e.updateSessionStatus();
-  _saveFile( url, JSON.stringify( m.status, null, 2 ), ()=> {
-    m.e.editorSaved( m.e.id );
-    if( onSaved ) {
-      onSaved();
-    }
-  });
+  let strStatus = null;
+  try {
+    strStatus = JSON.stringify( m.status, null, 2 )
+  } catch( error ) {}
+
+  if( strStatus ) {
+    _saveFile( url, strStatus, ()=> {
+      m.e.editorSaved( m.e.id );
+      if( onSaved ) {
+        onSaved();
+      }
+    });
+  }
 }
 function saveAllEditorContent() {
   const idList = Object.keys( EditorChangeManager.unsavedEditor );
@@ -382,11 +393,19 @@ function saveAllEditorContent() {
 function loadFileServerInfo() {
   let url = `${config.host.fileServerSystemURL}/dslList.json`;
   _openFile( url, (source)=> {
-    m.dslNameList = JSON.parse( source );
+    try {
+      m.dslNameList = JSON.parse( source );
+    } catch( error ) {
+      alert( 'Error loading DSL list file' );
+    }
   });
   url = `${config.host.fileServerSystemURL}/fileIndex.json`;
   _openFile( url, (source)=> {
-    m.fileInfo = JSON.parse( source );
+    try {
+      m.fileInfo = JSON.parse( source );
+    } catch( error ) {
+      alert( 'Error loading fileIndex' );
+    }
   });
 }
 function loadCurrentStatus( params ) {
@@ -394,47 +413,51 @@ function loadCurrentStatus( params ) {
   const url = config.host.statusURL;
   // Load user config
   _openFile( url, (source)=> {
-    m.status = JSON.parse( source );
-    // TODO: to clean the fileServer info in the status
-    // We could do that
-    if( m.status.fileServer ) {
-      delete m.status.fileServer;
-    }
-
-    // Create a new Editor Manager
-    m.e = new EditorManager( m.status );
-
-    // Open last opened graph
-    const id = config.htmlDiv.graphDiv;
-    // Set current graph as starting graph (from user status file)
-    let nodeData = m.status.currentGraphNode;
-    if( params.url &&
-        params.url.startsWith( config.host.fileServerURL ) &&
-        params.url.endsWith( '.json' ) ) {  // If we get a url from params => we load it
-      nodeData = {
-        "key": "URLParams Graph",
-        "isDir": true,
-        "fileURL": params.url,
-        "fileType": "text/json",
+    try {
+      m.status = JSON.parse( source );
+      // TODO: to clean the fileServer info in the status
+      // We could do that
+      if( m.status.fileServer ) {
+        delete m.status.fileServer;
       }
+  
+      // Create a new Editor Manager
+      m.e = new EditorManager( m.status );
+  
+      // Open last opened graph
+      const id = config.htmlDiv.graphDiv;
+      // Set current graph as starting graph (from user status file)
+      let nodeData = m.status.currentGraphNode;
+      if( params.url &&
+          params.url.startsWith( config.host.fileServerURL ) &&
+          params.url.endsWith( '.json' ) ) {  // If we get a url from params => we load it
+        nodeData = {
+          "key": "URLParams Graph",
+          "isDir": true,
+          "fileURL": params.url,
+          "fileType": "text/json",
+        }
+      }
+      // If nodeData do not have a fileURL => got to root graph
+      if( !nodeData.fileURL ) { //
+        nodeData = config.graph.rootGraphNodeData;
+      }
+      m.e.openWindow( id, 'GraphEditor', nodeData );
+      // Load start session
+      m.e.reopenStartSession();
+      // We just finish loading the system
+      // We just finished the first loading, now we can tell 
+      // that we are not anymore just started ==> any change will be saved
+      // NOTE: we set this with timeout because the GoJS graph keep
+      // generating change event after loading
+      setTimeout( ()=> m.isJustStarted = false, 500 );
+  
+      // Set global save callback
+      EditorChangeManager.onGlobalNeedSave( setSystemNeedSave );
+      EditorChangeManager.onGlobalIsSaved( setSystemSaved );
+    } catch( error ) {
+      alert( 'Error loading user status' );
     }
-    // If nodeData do not have a fileURL => got to root graph
-    if( !nodeData.fileURL ) { //
-      nodeData = config.graph.rootGraphNodeData;
-    }
-    m.e.openWindow( id, 'GraphEditor', nodeData );
-    // Load start session
-    m.e.reopenStartSession();
-    // We just finish loading the system
-    // We just finished the first loading, now we can tell 
-    // that we are not anymore just started ==> any change will be saved
-    // NOTE: we set this with timeout because the GoJS graph keep
-    // generating change event after loading
-    setTimeout( ()=> m.isJustStarted = false, 500 );
-
-    // Set global save callback
-    EditorChangeManager.onGlobalNeedSave( setSystemNeedSave );
-    EditorChangeManager.onGlobalIsSaved( setSystemSaved );
   });
 }
 function loadSystemInLocalMode() {

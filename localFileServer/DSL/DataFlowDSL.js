@@ -1509,7 +1509,12 @@ function DataFlow_Message( nodeData, name, value ) {
     if( typeof( value ) == 'string' ) {
       setNodeDataField( nodeData, 'label', value );
     } else {
-      setNodeDataField( nodeData, 'label', JSON.stringify( value, null, 2 ) );
+      try {
+        value = JSON.stringify( value, null, 2 );
+      } catch( error ) {
+        value = ''+value;
+      }
+      setNodeDataField( nodeData, 'label', value );
     }
   } else {
     value = nodeData.label;
@@ -1630,7 +1635,11 @@ function DataFlow_Data( nodeData, name, value ) {
     }
   } else {
     if( typeof( value ) == 'object' ) {
-      strValue = JSON.stringify( value, null, 2 );
+      try {
+        strValue = JSON.stringify( value, null, 2 );
+      } catch( error ) {
+        strValue = ''+strValue;
+      }
     } else {
       strValue = value;
     }
