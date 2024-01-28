@@ -475,17 +475,13 @@ function loadDSLScript( dslName, onLoad ) {
     loadScript( m.dslNameList[dslName], ()=> {
       if( window[dslName+'_includeList'] ) {
         const includeList = window[dslName+'_includeList']();
-        loadScriptList( includeList, onLoad, false ); // Script must be loaded with 'false'
-                                                      // the load script in this case avoid
-                                                      // loading twice
+        loadScriptList( includeList, onLoad );
       } else {
         if( onLoad ) {
           onLoad();
         }
       }
-    }, false ); // Script must be loaded with 'false'
-                // the load script in this case avoid
-                // loading twice
+    });
   } else {
     console.log( `DSL not found ${dslName}}` );
     if( onLoad ) {

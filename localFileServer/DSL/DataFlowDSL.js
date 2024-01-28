@@ -3,13 +3,13 @@
 */
 function DataFlowDSL_includeList() {
   return(['/fileServer/System/Includes/DSLInclude.js',
-          '/library/hChat/1.0/hChat.css',
-          '/library/hChat/1.0/hChat.js',
-          '/library/DataFlowEngine/1.5/DataFlowEngine.js' ]);
+          'lib/hChat/1.0/hChat.css',
+          'lib/hChat/1.0/hChat.js',
+          'lib/DataFlowEngine/1.5/DataFlowEngine.js' ]);
 }
 function DataFlowDSL_setupDSL() {
   if( !graphData.chatGPT ) {
-    loadScript( '/library/ChatGPT/1.1/ChatGPT.js', ()=>{
+    loadScript( 'lib/ChatGPT/1.1/ChatGPT.js', ()=>{
         graphData.chatGPT = new ChatGPT();
         console.log( 'Instanciate ChatGPT' );
       });

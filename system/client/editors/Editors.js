@@ -685,7 +685,7 @@ class GraphEditor extends EditorBase {
           if( nodeData.fileURL ) {
             loadScript( nodeData.fileURL );
           } else if( nodeData.fileContent ) {
-            loadScriptSource( nodeData.fileContent, null, false );
+            loadScriptSource( nodeData.fileContent, null );
           }
         }
       }

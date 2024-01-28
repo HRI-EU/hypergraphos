@@ -48,16 +48,20 @@ const systemIncludeList = [
   'EditorChangeManager.js',
   'EventManager.js',
   'Graph.js',
-  'Editors.js',
   'lib/ModelExplorer/2.0/ModelExplorer.js',
   'MainScript.js',
   'EditorManager.js',
-  'ACESourceCodeEditor.js',
-  'ExploreEditorEditor.js',
+];
+
+// Define list of editors and viewers
+const editorList = [
+  'editors/Editors.js',
+  'editors/ACESourceCodeEditor.js',
+  'editors/ExploreEditorEditor.js',
   'lib/hChat/1.0/hChat.css',
   'lib/hChat/1.0/hChat.js',
-  'HChatManagerEditor.js',
-];
+  'editors/HChatManagerEditor.js',
+]
 
 /* TODO: Use this way to get url params */
 //const urlParams = new URLSearchParams( window.location.search );
@@ -110,8 +114,10 @@ function loadSystem() {
   systemIncludeList.unshift( `configs/${urlParams.name}_config.js` );
   // Load includes
   loadScriptList( systemIncludeList, ()=> {
-    console.log( 'Depentency loaded' );
-  }, false ); // The 'false' is for alowing caching files (don't load twice)
+    loadScriptList( editorList, ()=> {
+      console.log( 'Depentency loaded' );
+    }, false);
+  }, false);
 }
 function getFileTypeInfoByName( name ) {
   if( codeFileType[name] ) {
@@ -225,6 +231,11 @@ function loadScriptSource( source, onLoad, isLocalToGraph ) {
   document.head.append( script );
 }
 function loadScript( url, onLoad, isAvoidCache ) {
+  // NOTE: by default all scripts/css must be loaded
+  // with isAvoidCache = false. In this way we make
+  // sure we don't load twice the same JavaScript sibmles
+  isAvoidCache = ( isAvoidCache == undefined? false: isAvoidCache );
+
   const baseURL = window.location.href;
   const urlObj = new URL( url, baseURL );
   if( urlObj.pathname.endsWith( '.css' ) ) {
