@@ -43,6 +43,23 @@ const codeFileType = {
   "SVG":            {color: "lavender",       fileType: "image/svg",                      ext: "svg"},
 };
 
+// Define list of system scripts to be loaded
+const systemIncludeList = [
+  `configs/${urlParams.name}_config.js`,
+  'EditorChangeManager.js',
+  'EventManager.js',
+  'Graph.js',
+  'Editors.js',
+  'lib/ModelExplorer/2.0/ModelExplorer.js',
+  'MainScript.js',
+  'EditorManager.js',
+  'ACESourceCodeEditor.js',
+  'ExploreEditorEditor.js',
+  'lib/hChat/1.0/hChat.css',
+  'lib/hChat/1.0/hChat.js',
+  'HChatManagerEditor.js',
+];
+
 /* TODO: Use this way to get url params */
 //const urlParams = new URLSearchParams( window.location.search );
 let urlParams = { name: 'DefaultUser' };
@@ -90,23 +107,7 @@ function loadSystem() {
     document.cookie = JSON.stringify({name: urlParams.name});
   }
 
-  // Define list of system scripts to be loaded
-  scriptList = [
-    `configs/${urlParams.name}_config.js`,
-    'EditorChangeManager.js',
-    'EventManager.js',
-    'Graph.js',
-    'Editors.js',
-    'ModelExplorer.js',
-    'MainScript.js',
-    'EditorManager.js',
-    'ACESourceCodeEditor.js',
-    'ExploreEditorEditor.js',
-    '/library/hChat/1.0/hChat.css',
-    '/library/hChat/1.0/hChat.js',
-    'HChatManagerEditor.js',
-  ];
-  loadScriptList( scriptList, ()=> {
+  loadScriptList( systemIncludeList, ()=> {
     console.log( 'Depentency loaded' );
   }, false ); // The 'false' is for alowing caching files (don't load twice)
 }
