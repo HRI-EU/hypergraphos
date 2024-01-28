@@ -260,7 +260,7 @@ class Graph {
 			{ key: '4', do: this.doZoomToFactor.bind(this,4) },
 			{ key: '5', do: this.doZoomToFactor.bind(this,4) },
 			// Center Graph
-			{ key: 'C', do: this.setViewCenteredOnSelectedNode.bind(this) },
+			{ key: 'G', do: this.setViewCenteredOnSelectedNode.bind(this) },
 		];
 
 		this.diagram.contextMenu = this.contextMenu.getMenu( 'diagramContextMenu' );
