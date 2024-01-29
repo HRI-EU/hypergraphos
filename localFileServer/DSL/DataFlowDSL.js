@@ -1511,9 +1511,7 @@ function DataFlow_Message( nodeData, name, value ) {
     } else {
       try {
         value = JSON.stringify( value, null, 2 );
-      } catch( error ) {
-        value = ''+value;
-      }
+      } catch( error ) {}
       setNodeDataField( nodeData, 'label', value );
     }
   } else {
@@ -1625,7 +1623,7 @@ function DataFlow_Data( nodeData, name, value ) {
       case 'text/text':
         outValue = strValue;
         break;
-      case 'text/json':
+      default: //'text/json'
         try {
           outValue = JSON.parse( strValue );
         } catch (error) {
@@ -1637,9 +1635,7 @@ function DataFlow_Data( nodeData, name, value ) {
     if( typeof( value ) == 'object' ) {
       try {
         strValue = JSON.stringify( value, null, 2 );
-      } catch( error ) {
-        strValue = ''+strValue;
-      }
+      } catch( error ) {}
     } else {
       strValue = value;
     }
@@ -1647,7 +1643,7 @@ function DataFlow_Data( nodeData, name, value ) {
       case 'text/text':
         outValue = strValue;
         break;
-      case 'text/json':
+      default: //'text/json'
         if( typeof( value ) == 'object' ) {
           outValue = value;
         } else {

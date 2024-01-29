@@ -1126,7 +1126,9 @@ class Graph {
 				this.diagram.startTransaction( 'Set Data Propery' );
 				if( field == 'fileContent' && ( typeof( value ) != 'string' ) ) {
 					// Force value to be a string in case is not (number, boolean,...)
-					value = ''+value;
+					try {
+						value = JSON.stringify( value );
+					} catch( e ) {}
 				}
 				this.diagram.model.setDataProperty( data, field, value );
 				this.diagram.commitTransaction( 'Set Data Propery' );
