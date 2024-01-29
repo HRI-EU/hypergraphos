@@ -1579,7 +1579,7 @@ class AnimatorEditor extends EditorBase {
     this.editor = null;
 
     position[3] = 600; // Make height higher
-    this.title = 'Animator Editor';
+    this.title = 'Animator';
     this.editorDivId = m.e.newDOMWindow( id, this.title, 
                                          config.htmlDiv.mainDiv,
                                          this.storeWindowPosition.bind(this),
