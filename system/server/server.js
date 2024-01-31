@@ -284,7 +284,7 @@ fs.writeFileSync( ccPathFileName, source, 'utf8' );
 
 // require the http module of node.js
 const http = require('http');
-const espresso = require( './Espresso' );
+const espresso = require( '../client/lib/Espresso/1.0/Espresso.js' );
 //var httpolyglot = require( 'httpolyglot' );
 
 //const ssl = config.server.ssl;
