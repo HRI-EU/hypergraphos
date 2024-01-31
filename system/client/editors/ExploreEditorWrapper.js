@@ -10,7 +10,7 @@ Date: 10.10.2020
 =============================================================================
 */
 
-class ExploreEditorEditor {
+class ExploreEditorWrapper {
   constructor( editorDivId ) {
     this.editorDivId = editorDivId;
     // We should not instantiate an editor at start.

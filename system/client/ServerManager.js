@@ -47,21 +47,17 @@ const codeFileType = {
 const systemIncludeList = [
   'EditorChangeManager.js',
   'EventManager.js',
-  'Graph.js',
+  'EditorManager.js',
+  'EditorBase.js',
+  'GraphWrapper.js',
+  'GraphEditor.js',
   'lib/ModelExplorer/2.0/ModelExplorer.js',
   'MainScript.js',
-  'EditorManager.js',
+  'editors/Editors.js',
 ];
 
-// Define list of editors and viewers
-const editorList = [
-  'editors/Editors.js',
-  'editors/ACESourceCodeEditor.js',
-  'editors/ExploreEditorEditor.js',
-  'lib/hChat/1.0/hChat.css',
-  'lib/hChat/1.0/hChat.js',
-  'editors/HChatManagerEditor.js',
-]
+// List of editors and viewers registered
+const editorList = [];
 
 /* TODO: Use this way to get url params */
 //const urlParams = new URLSearchParams( window.location.search );

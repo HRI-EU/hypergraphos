@@ -10,7 +10,7 @@ Date: 10.07.2020
 =============================================================================
 */
 
-class ACESourceCodeEditor {
+class ACEWrapper {
   constructor( editorDivId ) {
     // Create editor instance
     this.aceEditor = ace.edit( editorDivId );

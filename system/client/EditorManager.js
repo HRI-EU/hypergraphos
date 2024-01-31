@@ -11,25 +11,10 @@ Date: 10.07.2020
 */
 
 class EditorManager extends EditorChangeManager {
-  constructor() {
+  constructor( status ) {
     super( 0.5 ); // Saving timeout: 0.5 (500 milli seconds)
     this.id = 'Session';
-    this.registeredEditorList = [
-      // NOTE: order matter here, since the first matching editor get selected
-      { name: 'WebViewer',            fileType: (ft)=> ft == 'application/html',          classRef: WebViewer },
-      { name: 'HTMLExploreEditor',    fileType: (ft)=> ft == 'application/explore',       classRef: HTMLExploreEditor },
-      { name: 'TextEditor',           fileType: (ft)=> ft.startsWith( 'text/' ),          classRef: TextEditor },
-      { name: 'TextEditor',           fileType: (ft)=> ft == 'application/x-shellscript', classRef: TextEditor },
-      { name: 'ImageEditor',          fileType: (ft)=> ft.startsWith( 'image/' ),         classRef: ImageEditor },
-      { name: 'GraphEditor',          fileType: (ft)=> ft == 'text/json',                 classRef: GraphEditor },
-      { name: 'FindViewer',           fileType: (ft)=> ft == 'input/fields',              classRef: FindViewer },
-      { name: 'DSLViewer',            fileType: (ft)=> ft == 'input/fields',              classRef: DSLViewer },
-      { name: 'GraphTemplateViewer',  fileType: (ft)=> ft == 'input/fields',              classRef: GraphTemplateViewer },
-      { name: 'SystemMonitorViewer',  fileType: (ft)=> ft == 'system/status',             classRef: SystemMonitorViewer },
-      { name: 'AnimatorEditor',       fileType: (ft)=> ft == 'input/fields',              classRef: AnimatorEditor },
-      { name: 'HChatEditor',          fileType: (ft)=> ft == 'application/hchat',         classRef: HChatEditor },
-      //window.open('https://www.google.com','node13',"width=200,height=100")
-    ];
+    this.registeredEditorList = m.registeredEditorList;
 
     // Status variables
     this.editorList = {};

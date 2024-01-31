@@ -29,6 +29,12 @@ const m = {
     time: function(){ return( new Date().toLocaleTimeString()	) },
     graphPath: function(){ g = getMainGraph(); return( g.graphPath ) },
   },
+
+  // Registered editors
+  registeredEditorList: [
+    // NOTE: order matter here, since the first matching editor get selected
+    { name: 'GraphEditor', fileType: (ft)=> ft == 'text/json', classRef: GraphEditor },
+  ],
 };
 
 function winAlert( msg, isCenter ) 
@@ -84,6 +90,12 @@ function _init() {
 
   // System started
   console.log( 'System Started' );
+}
+function addEditorIncludes( includeList ) {
+  includeList.forEach( (i)=> editorList.push( i ) );
+}
+function registerEditor( editorInfo ) {
+  m.registeredEditorList.unshift( editorInfo );
 }
 function getUserName() {
   return( m.userInfo.name );
@@ -422,7 +434,7 @@ function loadCurrentStatus( params ) {
       }
   
       // Create a new Editor Manager
-      m.e = new EditorManager( m.status );
+      m.e = new EditorManager( m );
   
       // Open last opened graph
       const id = config.htmlDiv.graphDiv;

@@ -12,7 +12,7 @@ Date: 10.07.2020
 
 var $ = go.GraphObject.make;  // for conciseness in defining templates
 
-class Graph {
+class GraphWrapper {
 	constructor( param ) {
 		// fullPaletteId, nodePaletteId, linkPaletteId, graphId
 		param = ( param? param: {} );

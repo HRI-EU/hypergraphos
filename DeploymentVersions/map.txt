@@ -15,7 +15,7 @@ SystemMonitorViewer       -> _smv14_
 AnimatorEditor            -> _ae15_
 EditorManager             -> _em16_
 BlockCodeEditor           -> _bce17_
-ACESourceCodeEditor       -> _asce18_
+ACEWrapper       -> _asce18_
 setPauseChange            -> _spc19_
 editorHasChanged          -> _shc20_
 isNeedSave                -> _ins21_

@@ -10,7 +10,7 @@ Date: 10.07.2020
 =============================================================================
 */
 
-class HChatManagerEditor {
+class HChatWrapper {
   constructor( editorDivId ) {
     // Create editor instance
     this.hchatEditor = new HChat( editorDivId, '100%', '100%' );
