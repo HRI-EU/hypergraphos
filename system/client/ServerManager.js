@@ -68,7 +68,6 @@ const sessionTimeId = new Date().getTime();
 
 function loadSystem() {
   /*
-    
     // Get params value
     const url = new URL(
       'http://example.com/path/index.html?message=hello&who=world'
