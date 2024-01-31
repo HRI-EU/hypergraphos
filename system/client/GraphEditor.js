@@ -437,20 +437,23 @@ class GraphEditor extends EditorBase {
       const nodeData = it.value.data;
       // Update GrapInfo node
       if( nodeData.category == 'Hierarchy_GraphInfo' ) {
-        // Get Name field
-        const nameInfo = nodeData.props_.find( (e)=> e.name == 'Name' );
-        if( nameInfo ) {
+        // Get Type field
+        const typeInfo = nodeData.props_.find( (e)=> e.name == 'Type' );
+        if( typeInfo ) {
           // Skip graph info interpretation if template
-          if( nameInfo.value.toLowerCase().startsWith( '<template>' ) ) {
+          if( ( typeInfo.value == 'TemplateWorkSpace' ) ||
+              ( typeInfo.value == '<TemplateWorkSpace>' ) ) {
             // Load Templates
             let templateURL = `${config.host.fileServerSystemURL}/graphTemplateList.json`;
             _openFile( templateURL, (source)=> {
               // Get Template Name List
               try {
                 const templateList = JSON.parse( source );
-                // Check if template not present ==> if not add it
-                if( !templateList[this.title] ) {
-                  templateList[this.title] = this.nodeData.fileURL;
+                // Check if template not present or needs to be renamed
+                if( ( !templateList[this.nodeData.fileURL] ) ||
+                    ( templateList[this.nodeData.fileURL] != this.title ) ) {
+                  // Insert new or update name
+                  templateList[this.nodeData.fileURL] = this.title;
                   // Save updated template list
                   const templateSource = JSON.stringify( templateList, null, 2 );
                   _saveFile( templateURL, templateSource );
@@ -522,18 +525,19 @@ class GraphEditor extends EditorBase {
     let isGraphReadOnly = true;
     let isTemplate = false;
 
-    // Set Name field with 'graph name'
-    const nameInfo = nodeData.props_.find( (e)=> e.name == 'Name' );
+    // Get Type field
     const typeInfo = nodeData.props_.find( (e)=> e.name == 'Type' );
-    if( nameInfo || typeInfo ) {
+    if( typeInfo ) {
       // Skip graph info interpretation if template
-      if( nameInfo && nameInfo.value.toLowerCase().startsWith( '<template>' ) ||
-          typeInfo && typeInfo.value.toLowerCase().startsWith( 'templateworkspace' ) ) {
+      if( ( typeInfo.value == 'TemplateWorkSpace' ) || 
+          ( typeInfo.value == '<TemplateWorkSpace>' ) ) {
         isTemplate = true;
       }
     }
 
     if( !isTemplate ) {
+      // Set Name field with 'graph name'
+      const nameInfo = nodeData.props_.find( (e)=> e.name == 'Name' );
       if( nameInfo ) {
         // Get graph name
         const graphName = ( this.nodeData.label? this.nodeData.label: this.nodeData.key );
