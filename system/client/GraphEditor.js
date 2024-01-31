@@ -392,7 +392,7 @@ class GraphEditor extends EditorBase {
     }
   }
   _verifyFileURL_old( nodeData ) {
-    if( !nodeData.isLink && ( nodeData.isDir || nodeData.isFile ) ) {
+    if( nodeData && !nodeData.isLink && ( nodeData.isDir || nodeData.isFile ) ) {
       if( ( nodeData.fileURL != undefined ) && ( nodeData.fileURL == '' ) ) {
         const ext = getExtByFileType( nodeData.fileType );
         const url = getNewFileServerURL( ext );
@@ -404,7 +404,7 @@ class GraphEditor extends EditorBase {
     }
   }
   _verifyFileURL( nodeData ) {
-    if( !nodeData.isLink && ( nodeData.isDir || nodeData.isFile ) ) {
+    if( nodeData && !nodeData.isLink && ( nodeData.isDir || nodeData.isFile ) ) {
       if( nodeData.fileURL != undefined ) {
         if( ( nodeData.fileURL == '' ) || ( nodeData.fileURL == '/fileServer/' ) ) {
           // Initialize fileServer URL if is not complete
@@ -524,9 +524,11 @@ class GraphEditor extends EditorBase {
 
     // Set Name field with 'graph name'
     const nameInfo = nodeData.props_.find( (e)=> e.name == 'Name' );
-    if( nameInfo ) {
+    const typeInfo = nodeData.props_.find( (e)=> e.name == 'Type' );
+    if( nameInfo || typeInfo ) {
       // Skip graph info interpretation if template
-      if( nameInfo.value.toLowerCase().startsWith( '<template>' ) ) {
+      if( nameInfo && nameInfo.value.toLowerCase().startsWith( '<template>' ) ||
+          typeInfo && typeInfo.value.toLowerCase().startsWith( 'templateworkspace' ) ) {
         isTemplate = true;
       }
     }

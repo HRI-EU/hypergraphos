@@ -15,7 +15,7 @@ ls();
 console.log( 'System Generation started' );
 
 const config = require( '../serverConfig.js' );
-const ModelExplorer = require( '../client/ModelExplorer.js' );
+const ModelExplorer = require( '../client/lib/ModelExplorer/2.0/ModelExplorer.js' );
 const isServer = true;
 
 // Statistic info
@@ -77,7 +77,7 @@ function generateSystem( fileURL, deployKey ) {
     // Get deployment node
     const deployData = me.getNode( modelId, deployKey );
     let isOverwrite = me.getProperty( modelId, deployData, 'isOverwrite', true );
-    //isOverwrite = ( isOverwrite == 'true' );
+    let isAllEnabled = me.getProperty( modelId, deployData, 'isAllEnabled', false );
     
     // Get output link from name port
     const outDataList = me.getNodeListFanOutByNodeKey( modelId, deployKey );
@@ -85,11 +85,11 @@ function generateSystem( fileURL, deployKey ) {
     const targetPath = config.server.deployRoot;
     // Loop over out components
     for( const outData of outDataList ) {
-      generateDirectory( modelId, me, outData, targetPath, isOverwrite );
+      generateDirectory( modelId, me, outData, targetPath, isOverwrite, isAllEnabled );
     }
   } catch( e ) {}
 }
-function generateDirectory( modelId, me, gData, path, isOverwrite ) {
+function generateDirectory( modelId, me, gData, path, isOverwrite, isAllEnabled ) {
   if( gData.isGroup ) {
     const dirName = gData.label;
     const currPath = path+'/'+dirName;
@@ -109,7 +109,7 @@ function generateDirectory( modelId, me, gData, path, isOverwrite ) {
       } else {
         ++tNumFiles;
         // Check if node is enabled
-        let isEnabled = isNodeEnabled( modelId, me, data );
+        let isEnabled = ( isAllEnabled || isNodeEnabled( modelId, me, data ) );
         if( isEnabled ) {
           if( data.label.startsWith( '$$' ) ) {
             // Copy dependency
