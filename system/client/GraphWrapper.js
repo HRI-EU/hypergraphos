@@ -557,6 +557,10 @@ class GraphWrapper {
 
 		return( result );
 	}
+	isModelEmpty() {
+		return( this.diagram.model.nodeDataArray.length+
+						this.diagram.model.linkDataArray.length == 0 );
+	}
 	setModel( model ) {
 		if( this.diagram ) {
 			this.clearInstance();
@@ -675,6 +679,7 @@ class GraphWrapper {
 				onDone();
 			}
 		};
+
 		// Here, if there are DSL to load
 		// - then we load all DSL and only after we load the model/window (by finalizeLoading)
 		// - otherwise we just load model/window (by finalizeLoading)

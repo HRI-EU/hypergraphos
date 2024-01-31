@@ -37,6 +37,7 @@ const m = {
   ],
 };
 
+// WinBox alert dialog
 function winAlert( msg, isCenter ) 
 {
   isCenter = ( isCenter == undefined? true: isCenter );
@@ -53,6 +54,34 @@ function winAlert( msg, isCenter )
 }
 // Override standard alert function
 alert = winAlert;
+// WinBox yes/no dialog
+function winConfirm( msg, yesCallback, noCallback, isCenter ) 
+{
+  isCenter = ( isCenter == undefined? true: isCenter );
+  const win = new WinBox( 'Alert', {
+    modal: true,
+    autosize: true,
+    background: 'Crimson',
+    onclose: noCallback,
+    html: `<div style="margine: 0px;">`+
+            `<pre style="${isCenter? 'text-align: center;':''}">`+
+            `  ${msg}<br><br>`+
+            `<button id="winConfirm_no" type="button">Cancel</button>&nbsp`+
+            `<button id="winConfirm_yes" type="button">Ok</button>`+
+            `</pre>`+
+          `</div>`,
+  });
+
+  // Register buttons callback
+  const yesEl = document.getElementById( 'winConfirm_yes' );
+  const noEl = document.getElementById( 'winConfirm_no' );
+  if( yesEl ) {
+    yesEl.onclick = ()=> { if( yesCallback ) yesCallback(); win.close(); };
+  }
+  if( noEl ) {
+    noEl.onclick = ()=> { if( noCallback ) noCallback(); win.close(); };
+  }
+}
 
 function _init() {
   m.mddStatus = document.getElementById( 'mdd-status' );
