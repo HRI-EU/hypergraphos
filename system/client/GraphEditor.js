@@ -130,12 +130,6 @@ class GraphEditor extends EditorBase {
       onSetReadOnly: ( status )=> {
         setSystemReadOnly( status );
       },
-      // onShowParentGraph: ()=> {
-      //   //TODO: temporary fix because I don't know how to handle parent
-      //   showPreviousGraph();
-      //   //const newNodeData = this.getParentGraph();
-      //   //this.navigateToGraph( newNodeData );
-      // },
       onShowPreviousGraph: ()=> {
         showPreviousGraph();
       },
