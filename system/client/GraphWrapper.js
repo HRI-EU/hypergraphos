@@ -109,6 +109,8 @@ class GraphWrapper {
 					{ label: 'View',       layout: 'vertical',	subMenu: [
 						{ label: 'Zoom to Fit',			  do: this.doZoomToFit.bind(this) },
 						{ separator: '-' },
+						{ label: 'Add Bookmark',		  do: this.addBookmark.bind(this) },
+						{ separator: '-' },
 						{ label: 'Show View 1',				do: (o)=> { if( o.event.shiftKey ) {
 																												this.setCurrentViewToBookmark( 1 );
 																											} else {
@@ -172,7 +174,7 @@ class GraphWrapper {
 																						do: (o)=> { if( !this.isRootGraph) this.em.call.onShowParentGraph(); } },*/
 						{ label: 'Back To Previous Graph',	if: (o)=> !this.isHistoryEmpty,
 																						do: (o)=> { if( !this.isHistoryEmpty ) this.em.call.onShowPreviousGraph(); } },
-						{ separator: '-' },
+						{ separator: '-',               if: (o)=> !this.isRootGraph },
 						{ label: 'Go To Root Graph',		if: (o)=> !this.isRootGraph,
 																						do: (o)=> this.em.call.onShowRootGraph() },
 					]},
@@ -748,6 +750,9 @@ class GraphWrapper {
 			nodeList.push( this.diagram.findPartForKey( key ) );
 		}
 		this.diagram.selectCollection( nodeList );
+	}
+	addBookmark() {
+
 	}
 	getCurrentView() {
 		// Get current position
