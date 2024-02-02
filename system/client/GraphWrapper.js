@@ -110,6 +110,18 @@ class GraphWrapper {
 				{	layout: 'vertical', itemList: [
 					{ label: 'Properties',					do: ( o )=> winAlert( this.getDiagramInfo( this.diagram.model ), false )},
 					{ label: 'View',       layout: 'vertical',	subMenu: [
+						{ label: 'Toggle Visible Palette', 	if: (o)=> ( this.fullPaletteId? true: false ),
+																								do: (o)=> { const htmlObj = document.querySelector( `#${this.fullPaletteId}` );
+																														const v = htmlObj.style.visibility;
+																														htmlObj.style.visibility = ( v == 'visible'? 'hidden': 'visible' ); 
+																													  // Position palette in browser view
+																														const browserWidth = window.innerWidth;
+																														const browserHeight = window.innerHeight;
+																														htmlObj.style.left = Math.min( browserWidth-100, Math.max( 0, htmlObj.offsetLeft ) );
+																														htmlObj.style.top = Math.min( browserHeight-100, Math.max( 0, htmlObj.offsetTop ) );
+																													}},
+						{ label: 'Toggle Visible Grid', do: (o)=> this.diagram.grid.visible = !this.diagram.grid.visible },
+						{ separator: '-' },
 						{ label: 'Zoom to Fit',			  do: this.doZoomToFit.bind(this) },
 						{ separator: '-' },
 						{ label: 'Add Bookmark',		  do: this.addBookmark.bind(this) },
@@ -130,18 +142,6 @@ class GraphWrapper {
 																											this.em.fire.onShowBookmarks( mousePos.x, mousePos.y ) } },
 					{ separator: '-' },
 					{ label: 'Tools',       layout: 'vertical', subMenu: [
-						{ label: 'Toggle Visible Palette', 	if: (o)=> ( this.fullPaletteId? true: false ),
-																								do: (o)=> { const htmlObj = document.querySelector( `#${this.fullPaletteId}` );
-																														const v = htmlObj.style.visibility;
-																														htmlObj.style.visibility = ( v == 'visible'? 'hidden': 'visible' ); 
-																													  // Position palette in browser view
-																														const browserWidth = window.innerWidth;
-																														const browserHeight = window.innerHeight;
-																														htmlObj.style.left = Math.min( browserWidth-100, Math.max( 0, htmlObj.offsetLeft ) );
-																														htmlObj.style.top = Math.min( browserHeight-100, Math.max( 0, htmlObj.offsetTop ) );
-																													}},
-						{ label: 'Toggle Visible Grid', do: (o)=> this.diagram.grid.visible = !this.diagram.grid.visible },
-						{ separator: '-' },
 						{ label: 'Show DSL List',			do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
 																											this.em.fire.onShowDSLListDialog( mousePos.x, mousePos.y ); } },
 						{ label: 'Show Graph Template',	do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
