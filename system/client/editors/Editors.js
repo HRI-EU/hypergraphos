@@ -47,6 +47,14 @@ class BookmarkViewer extends EditorBase {
     this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${nodeData.fileType}]`;
     this.setTitle( this.title );
     
+    this.updateBookmarks();
+  }
+  saveEditorContent( onSaved ) {
+    if( onSaved ) {
+      onSaved();
+    }
+  }
+  updateBookmarks() {
     // Set editor content
     const element = document.getElementById( this.editorDivId );
     element.innerHTML = `<div id='bookmarkList' ></div>`;
@@ -61,13 +69,16 @@ class BookmarkViewer extends EditorBase {
         // Generate html
         source = source+`<div style="display: flex;"`+
                         `     class="findResult graphBookmark" bookmarkIndex="${i}">`+
-                          `<button type="button" class="graphBookmarkButton" style="margin-right: 10px;">🖊</button>`+
-                          `<div contenteditable="false" class="graphBookmarkTitle" bookmarkIndex="${i}">`+
+                          `<button type="button" class="graphBookmarkButton" bookmarkIndex="${i}" style="margin-right: 10px;">Go</button>`+
+                          `<div contenteditable="true" class="graphBookmarkTitle" bookmarkIndex="${i}">`+
                             `${title}`+
                           `</div>`+
                         `</div>`;
       }
-      bookmarkEl.innerHTML = source;
+      // Create a closing div to avoid selection/editing problem
+      const closingDiv = '<div contenteditable="false" style="width: 100%;height: 20px;"></div>';
+      // Set list
+      bookmarkEl.innerHTML = source+closingDiv;
 
       // Apply Template function
       const jumpToBookmark = ( title, index )=> {
@@ -89,31 +100,28 @@ class BookmarkViewer extends EditorBase {
           }
         }
       }
+      // Set button event
       let itemElementList = document.querySelectorAll( '.graphBookmark' );
       for( const item of itemElementList ) {
-        // Set click method of button for edit mode
         item.childNodes[0].addEventListener( 'click', ()=> {
-          item.childNodes[1].contentEditable = true;
-          item.childNodes[1].focus();
-          document.getSelection().modify( 'move', 'forward', 'documentboundary' );
+          jumpToBookmark( item.innerText, item.getAttribute( 'bookmarkIndex' ) )
         });
       }
+      // Set bookmark title events
       itemElementList = document.querySelectorAll( '.graphBookmarkTitle' );
       for( const item of itemElementList ) {
-        // On click => jump
-        item.onclick = ()=> jumpToBookmark( item.innerText, item.getAttribute( 'bookmarkIndex' ) );
         // On title changed => update bookmark title
         item.addEventListener( 'blur', function( e ) {
           const index = item.getAttribute( 'bookmarkIndex' );
-          bookmarkList[index].title = item.innerText.replaceAll( '\n', '' ).trim();
-          item.contentEditable = false;
+          const newTitle = item.innerText.replaceAll( '\n', '' ).trim();
+          if( newTitle ) {
+            bookmarkList[index].title = newTitle; // Update title
+          } else {
+            bookmarkList.splice( index, 1 ); // Delete bookmark
+            item.parentNode.remove();
+          }
         }, false);
       }
-    }
-  }
-  saveEditorContent( onSaved ) {
-    if( onSaved ) {
-      onSaved();
     }
   }
 }

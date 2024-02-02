@@ -35,6 +35,43 @@ const m = {
     // NOTE: order matter here, since the first matching editor get selected
     { name: 'GraphEditor', fileType: (ft)=> ft == 'text/json', classRef: GraphEditor },
   ],
+
+  // Special nodes
+  specialNodeData: {
+    diagram: {},
+    bookmarViewer: {
+      key: 'Bookmarks Viewer',
+      isFile: true,
+      fileType: 'input/fields',
+    },
+    findDialog: {
+      key: 'Find in Graph',
+      isFile: true,
+      fileType: 'input/fields',
+    },
+    animatorViewer: {
+      key: 'Animate Graph',
+      isFile: true,
+      fileType: 'input/fields',
+      fileURL: '',
+    },
+    dslListViewer: {
+      key: 'Show DSL List',
+      isFile: true,
+      fileType: 'input/fields',
+    },
+    graphTemplateViewer: {
+      key: 'Graph Templates',
+      isFile: true,
+      fileType: 'input/fields',
+    },
+    systemMonitorViewer: {
+      key: 'System Monitor',
+      isFile: true,
+      fileType: 'system/status',
+      fileURL: '#systemMonitor#',
+    },
+  },
 };
 
 // WinBox alert dialog
@@ -197,9 +234,14 @@ function addBookmark( bookmarkInfo ) {
   if( !m.status.bookmarkList ) {
     m.status.bookmarkList = [];
   }
-  
+  // Add new bookmark
   m.status.bookmarkList.push( bookmarkInfo );
-  // FIRE notification that bookmars changed
+
+  // If bookmark viewer is open => update list
+  const e = m.e.getEditorInfo( m.specialNodeData.bookmarViewer );
+  if( e ) {
+    e.updateBookmarks();
+  }
 }
 // TODO: parseRefValue should be implemented in ModelExplorer
 function parseRefValue( nodeData, value ) {

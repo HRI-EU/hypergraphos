@@ -130,70 +130,38 @@ class GraphEditor extends EditorBase {
       onSetReadOnly: ( status )=> {
         setSystemReadOnly( status );
       },
-      onShowParentGraph: ()=> {
-        //TODO: temporary fix because I don't know how to handle parent
-        showPreviousGraph();
-        //const newNodeData = this.getParentGraph();
-        //this.navigateToGraph( newNodeData );
-      },
+      // onShowParentGraph: ()=> {
+      //   //TODO: temporary fix because I don't know how to handle parent
+      //   showPreviousGraph();
+      //   //const newNodeData = this.getParentGraph();
+      //   //this.navigateToGraph( newNodeData );
+      // },
       onShowPreviousGraph: ()=> {
         showPreviousGraph();
       },
       onShowBookmarks: ( x, y )=> {
-        const nodeData = {
-          key: 'Bookmarks Viewer',
-          isFile: true,
-          fileType: 'input/fields',
-        };
-        const id = m.e._getDOMUniqueId( nodeData );
-        m.e.openWindow( id, 'BookmarkViewer', nodeData, [x, y, 470, 200 ] );
+        const nodeData = m.specialNodeData.bookmarViewer;
+        m.e.openWindow( null, 'BookmarkViewer', nodeData, [x, y, 470, 200 ] );
       },
       onShowFindDialog: ( x, y )=> {
-        const nodeData = {
-          key: 'Find in Graph',
-          isFile: true,
-          fileType: 'input/fields',
-        };
-        const id = m.e._getDOMUniqueId( nodeData );
-        m.e.openWindow( id, 'FindViewer', nodeData, [x, y, 470, 200 ] );
+        const nodeData = m.specialNodeData.findDialog;
+        m.e.openWindow( null, 'FindViewer', nodeData, [x, y, 470, 200 ] );
       },
       onShowAnimatorEditor: ( x, y )=> {
-        const nodeData = {
-          key: 'Animate Graph',
-          isFile: true,
-          fileType: 'input/fields',
-          fileURL: '',
-        };
-        const id = m.e._getDOMUniqueId( nodeData );
-        m.e.openWindow( id, 'AnimatorEditor', nodeData, [x, y, 470, 200 ] );
+        const nodeData = m.specialNodeData.animatorViewer;
+        m.e.openWindow( null, 'AnimatorEditor', nodeData, [x, y, 470, 200 ] );
       },
       onShowDSLListDialog: ( x, y )=> {
-        const nodeData = {
-          key: 'Show DSL List',
-          isFile: true,
-          fileType: 'input/fields',
-        };
-        const id = m.e._getDOMUniqueId( nodeData );
-        m.e.openWindow( id, 'DSLViewer', nodeData, [x, y, 160, 450 ] );
+        const nodeData = m.specialNodeData.dslListViewer;
+        m.e.openWindow( null, 'DSLViewer', nodeData, [x, y, 160, 450 ] );
       },
       onShowGraphTemplateDialog: ( x, y )=> {
-        const nodeData = {
-          key: 'Graph Templates',
-          isFile: true,
-          fileType: 'input/fields',
-        };
-        const id = m.e._getDOMUniqueId( nodeData );
-        m.e.openWindow( id, 'GraphTemplateViewer', nodeData, [x, y, 260, 160 ] );
+        const nodeData = m.specialNodeData.graphTemplateViewer;
+        m.e.openWindow( null, 'GraphTemplateViewer', nodeData, [x, y, 260, 160 ] );
       },
       onShowSysMonitorDialog: ( x, y )=> {
-        const nodeData = {
-          key: 'System Monitor',
-          isFile: true,
-          fileType: 'system/status',
-          fileURL: '#systemMonitor#',
-        };
-        const id = m.e._getDOMUniqueId( nodeData );
-        m.e.openWindow( id, 'SystemMonitorViewer', nodeData, [x, y, 540, 170 ] );
+        const nodeData = m.specialNodeData.systemMonitorViewer;
+        m.e.openWindow( null, 'SystemMonitorViewer', nodeData, [x, y, 540, 170 ] );
       },
     });
     

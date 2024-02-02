@@ -179,6 +179,7 @@ class EditorManager extends EditorChangeManager {
     }
   }
   openWindow( id, name, nodeData, position, isPinned ) {
+    id = id || this._getDOMUniqueId( nodeData );
     position = ( position == undefined? [100, 100, 400, 350]: position );
     isPinned = ( isPinned == undefined? false: isPinned );
     // If editor already open => put window on top
