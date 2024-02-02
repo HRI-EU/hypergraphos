@@ -170,8 +170,9 @@ class GraphWrapper {
 					{ label: 'Navigate', layout: 'vertical', if: (o)=> !config.isLocalMode, subMenu: [
 						{ label: 'Go To Parent Graph',	if: (o)=> !this.isRootGraph,
 																						do: (o)=> { if( !this.isRootGraph) this.em.call.onShowParentGraph(); } },
-						{ label: 'Back To Previous Graph',	if: (o)=> !this.isHistoryEmpty,
-																						do: (o)=> { if( !this.isHistoryEmpty ) this.em.call.onShowPreviousGraph(); } },
+						{ separator: '-' },
+						/*{ label: 'Back To Previous Graph',	if: (o)=> !this.isHistoryEmpty,
+																						do: (o)=> { if( !this.isHistoryEmpty ) this.em.call.onShowPreviousGraph(); } },*/
 						{ label: 'Go To Root Graph',		if: (o)=> !this.isRootGraph,
 																						do: (o)=> this.em.call.onShowRootGraph() },
 					]},
