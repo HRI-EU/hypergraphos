@@ -35,6 +35,7 @@
             "name": "Launch Server Node",
             "request": "launch",
             "type": "node",
+            "args": ["Antonello"]],
             "cwd": "${workspaceFolder}/system/server",
             "program": "${workspaceFolder}/system/server/server.js"
         },

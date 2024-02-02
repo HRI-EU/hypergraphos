@@ -28,7 +28,30 @@ ls();
 //   ls( '.' );
 // }
 
+// Load Server Configuration
 const config = require( '../serverConfig.js' );
+let userNameArg = 'Default';
+const argList = process.argv;
+if( argList[2] ) {
+  userNameArg = argList[2];
+} else {
+  const os = require('os');
+  userNameArg = os.hostname();
+}
+// Load optional user configuration settings
+const userConfig = `./sconfigs/${userNameArg}_sconfig.js`;
+try {
+  console.log( 'INFO: trying to load: ', userConfig );
+  const userConfigFunction = require( userConfig );
+  if( userConfigFunction ) {
+    userConfigFunction( config );
+  }
+} catch( e ) {
+  console.log( 'INFO: no user configuration found' );
+}
+
+
+// Define Server Network Settings
 const { exec } = require( 'child_process' );
 
 // Set Server IP
@@ -36,7 +59,7 @@ config.server.ip = getServerIp();
 config.client.server = { ip: config.server.ip };
 
 // Log Configuratio
-let configurationStr = 'None';
+let configurationStr = '{}';
 try {
   configurationStr = JSON.stringify( config, null, 2 );
 } catch( error ) {}

@@ -14,5 +14,5 @@ REM
 cd server
 IF NOT exist ..\node_modules\ npm install
 
-node server.js
+node server.js %*
 cd ..

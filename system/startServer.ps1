@@ -11,7 +11,7 @@
 #
 
 cd server
-$process = Start-Process -FilePath "c:\Program Files\nodejs\node.exe" -ArgumentList "server.js" -PassThru
+$process = Start-Process -FilePath "c:\Program Files\nodejs\node.exe" -ArgumentList "server.js" $Args[1] -PassThru
 $procid = $process.Id
 Write-Output "Stop-Process -Id $procid" > ..\stopServer.ps1
 cd ..

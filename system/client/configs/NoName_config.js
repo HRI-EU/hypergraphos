@@ -23,6 +23,7 @@ const config = {
     "isDoubleClickCreateNodeEnabled": true,
     "allowDeleteKey": false,
     "colorSchema": "light",
+    "zoomFactor": 1.25,
     "defaultDSL": "DefaultDSL",
     "rootGraphURL": "/fileServer/graphRoot.json",
     "rootGraphNodeData": {
@@ -34,6 +35,6 @@ const config = {
     "maxHistoryLength": 30
   },
   "server": {
-    "ip": "192.168.1.39"
+    "ip": "192.168.1.12"
   }
 };
