@@ -115,9 +115,9 @@ class BookmarkViewer extends EditorBase {
           const index = item.getAttribute( 'bookmarkIndex' );
           const newTitle = item.innerText.replaceAll( '\n', '' ).trim();
           if( newTitle ) {
-            bookmarkList[index].title = newTitle; // Update title
+            updateBookmarkTitle( index, newTitle );
           } else {
-            bookmarkList.splice( index, 1 ); // Delete bookmark
+            removeBookmark( index );
             item.parentNode.remove();
           }
         }, false);

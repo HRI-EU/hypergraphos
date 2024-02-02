@@ -38,7 +38,12 @@ const m = {
 
   // Special nodes
   specialNodeData: {
-    diagram: {},
+    diagram: {
+      key: 'Main Diagram',
+      isDir: true,
+      fileURL: '',
+      fileType: "text/json",
+    },
     bookmarViewer: {
       key: 'Bookmarks Viewer',
       isFile: true,
@@ -235,12 +240,28 @@ function addBookmark( bookmarkInfo ) {
     m.status.bookmarkList = [];
   }
   // Add new bookmark
-  m.status.bookmarkList.push( bookmarkInfo );
+  setStatus( (s)=> s.bookmarkList.push( bookmarkInfo ) );
 
   // If bookmark viewer is open => update list
   const e = m.e.getEditorInfo( m.specialNodeData.bookmarViewer );
   if( e ) {
     e.updateBookmarks();
+  }
+}
+function removeBookmark( index ) {
+  if( m.status.bookmarkList ) {
+    const bookmark = m.status.bookmarkList[index];
+    if( bookmark ) {
+      setStatus( (s)=> s.bookmarkList.splice( index, 1 ) );
+    }
+  }
+}
+function updateBookmarkTitle( index, title ) {
+  if( m.status.bookmarkList ) {
+    const bookmark = m.status.bookmarkList[index];
+    if( bookmark ) {
+      setStatus( (s)=> s.bookmarkList[index].title = title );
+    }
   }
 }
 // TODO: parseRefValue should be implemented in ModelExplorer
@@ -522,12 +543,8 @@ function loadCurrentStatus( params ) {
       if( params.url &&
           params.url.startsWith( config.host.fileServerURL ) &&
           params.url.endsWith( '.json' ) ) {  // If we get a url from params => we load it
-        nodeData = {
-          "key": "URLParams Graph",
-          "isDir": true,
-          "fileURL": params.url,
-          "fileType": "text/json",
-        }
+        nodeData = m.specialNodeData.diagram;
+        nodeData.fileURL = params.url;
       }
       // If nodeData do not have a fileURL => got to root graph
       if( !nodeData.fileURL ) { //
