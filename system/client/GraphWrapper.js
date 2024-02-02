@@ -168,11 +168,11 @@ class GraphWrapper {
 																											this.em.call.onShowAnimatorEditor( mousePos.x, mousePos.y ); } },
 					]},
 					{ label: 'Navigate', layout: 'vertical', if: (o)=> !config.isLocalMode, subMenu: [
-						{ label: 'Go To Parent Graph',	if: (o)=> !this.isRootGraph,
-																						do: (o)=> { if( !this.isRootGraph) this.em.call.onShowParentGraph(); } },
+						/*{ label: 'Go To Parent Graph',	if: (o)=> !this.isRootGraph,
+																						do: (o)=> { if( !this.isRootGraph) this.em.call.onShowParentGraph(); } },*/
+						{ label: 'Back To Previous Graph',	if: (o)=> !this.isHistoryEmpty,
+																						do: (o)=> { if( !this.isHistoryEmpty ) this.em.call.onShowPreviousGraph(); } },
 						{ separator: '-' },
-						/*{ label: 'Back To Previous Graph',	if: (o)=> !this.isHistoryEmpty,
-																						do: (o)=> { if( !this.isHistoryEmpty ) this.em.call.onShowPreviousGraph(); } },*/
 						{ label: 'Go To Root Graph',		if: (o)=> !this.isRootGraph,
 																						do: (o)=> this.em.call.onShowRootGraph() },
 					]},
@@ -238,7 +238,7 @@ class GraphWrapper {
 																									if( data ) {
 																										this.em.call.onLoadGraph( data );
 																									} }},
-					{ separator: '-',         if: (o)=> o.d.cmd.canUndo() || o.d.cmd.canRedo() },
+					{ separator: '-',       if: (o)=> o.d.cmd.canUndo() || o.d.cmd.canRedo() },
 					{ label: 'Undo',        if: (o)=> o.d.cmd.canUndo(),
 																	do: (o)=> o.d.cmd.undo() },
 					{ label: 'Redo',        if: (o)=> o.d.cmd.canRedo(),
