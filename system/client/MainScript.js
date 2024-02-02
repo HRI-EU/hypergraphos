@@ -249,19 +249,15 @@ function addBookmark( bookmarkInfo ) {
   }
 }
 function removeBookmark( index ) {
-  if( m.status.bookmarkList ) {
-    const bookmark = m.status.bookmarkList[index];
-    if( bookmark ) {
-      setStatus( (s)=> s.bookmarkList.splice( index, 1 ) );
-    }
+  if( m.status.bookmarkList && 
+      m.status.bookmarkList[index] ) {
+    setStatus( (s)=> s.bookmarkList.splice( index, 1 ) );
   }
 }
 function updateBookmarkTitle( index, title ) {
-  if( m.status.bookmarkList ) {
-    const bookmark = m.status.bookmarkList[index];
-    if( bookmark ) {
-      setStatus( (s)=> s.bookmarkList[index].title = title );
-    }
+  if( m.status.bookmarkList && 
+      m.status.bookmarkList[index] ) {
+    setStatus( (s)=> s.bookmarkList[index].title = title );
   }
 }
 // TODO: parseRefValue should be implemented in ModelExplorer
