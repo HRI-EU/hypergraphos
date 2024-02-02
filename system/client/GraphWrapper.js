@@ -256,7 +256,6 @@ class GraphWrapper {
 		this.isDoubleClickCreateNodeEnabled = true;
 		this.isRootGraph = true;
 		this.isHistoryEmpty = true;
-		this.viewBookmark = new Array( 2 );
 		this.systemNodeDataFieldList = [
 			'text',
 			'location',
@@ -815,8 +814,6 @@ class GraphWrapper {
 		}
 	}
 	doZoomToFit() {
-		// Store last view in ViewLast
-		this.viewBookmark[4] = this.getCurrentView();
 		// Go to new view 
 		this.diagram.zoomToFit();
 	}
