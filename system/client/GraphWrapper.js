@@ -113,29 +113,6 @@ class GraphWrapper {
 						{ label: 'Zoom to Fit',			  do: this.doZoomToFit.bind(this) },
 						{ separator: '-' },
 						{ label: 'Add Bookmark',		  do: this.addBookmark.bind(this) },
-						/*{ separator: '-' },
-						{ label: 'Show View 1',				do: (o)=> { if( o.event.shiftKey ) {
-																												this.setCurrentViewToBookmark( 1 );
-																											} else {
-																												this.setToBookmarkView( 1 );
-																											} }},
-						{ label: 'Show View 2',				do: (o)=> { if( o.event.shiftKey ) {
-																												this.setCurrentViewToBookmark( 2 );
-																											} else {
-																												this.setToBookmarkView( 2 );
-																											} }},
-						{ label: 'Show View 3',				do: (o)=> { if( o.event.shiftKey ) {
-																												this.setCurrentViewToBookmark( 3 );
-																											} else {
-																												this.setToBookmarkView( 3 );
-																											} }},
-						{ label: 'Show View 4',				do: (o)=> { if( o.event.shiftKey ) {
-																												this.this.setCurrentViewToBookmark( 4 );
-																											} else {
-																												this.setToBookmarkView( 4 );
-																											} }},
-						{ separator: '-' },
-						{ label: 'Show Prev View',		do: this.setCurrentViewToPreviousView.bind(this) },*/
 					]},
 					{ separator: '-',               if: (o)=> { // NOTE: if we define a location, paste do not showup in the popup menu
 																											//const location = o.d.cmt.mouseDownPoint;
@@ -793,22 +770,6 @@ class GraphWrapper {
 			this.diagram.grid.visible = viewInfo.isGridOn;
 		}
 	}
-	// setCurrentViewToBookmark( index ) {
-	// 	this.viewBookmark[index] = this.getCurrentView();
-	// }
-	// setCurrentViewToPreviousView() {
-	// 	if( this.viewBookmark[0] != undefined ) {
-	// 		this.setCurrentView( this.viewBookmark[0] );
-	// 	}
-	// }
-	// setToBookmarkView( index ) {
-	// 	if( this.viewBookmark[index] != undefined ) {
-	// 		// Store last view in ViewLast
-	// 		this.viewBookmark[0] = this.getCurrentView();
-	// 		// Go to new view
-	// 		this.setCurrentView( this.viewBookmark[index] );
-	// 	}
-	// }
 	setViewFromNode( node, deltaX, deltaY ) {
 		let result = false;
 		if( node ) {
