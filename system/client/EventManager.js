@@ -13,7 +13,7 @@ Date: 10.07.2020
 class EventManager {
 	constructor() {
 		this.eventList = {};
-		this.call = {};
+		this.fire = {};
 	}
 	add( name, help, params ) {
 		if( name && !this.eventList[name] ) {  // Add a new event if not already there
@@ -21,7 +21,7 @@ class EventManager {
 			params = ( params? params: {} );
 			help = ( help? help: '' )
 			this.eventList[name] = { help, params, callbackList };
-			this.call[name] = (...paramList)=> this.fire( name, ...paramList );
+			this.fire[name] = (...paramList)=> this.fireEvent( name, ...paramList );
 		}
 	}
 	addList( eventList ) {
@@ -60,7 +60,7 @@ class EventManager {
 			}
 		}
 	}
-	fire( name, ...paramList ) { // after name, all other parameters will be passed to the callback
+	fireEvent( name, ...paramList ) { // after name, all other parameters will be passed to the callback
 		if( name && this.eventList[name] &&
 			  this.eventList[name].callbackList.length ) { // Fire event if not empty
 			for( const callback of this.eventList[name].callbackList ) {

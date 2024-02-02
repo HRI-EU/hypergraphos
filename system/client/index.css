@@ -169,7 +169,7 @@ html{
 }
 .findResult {
  color: #908aa2;
- font-size: smaller;
+ font-size: large;
 }
 .findResult:hover {
  background-color: #5a5a5a;

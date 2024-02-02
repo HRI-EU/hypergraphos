@@ -63,6 +63,9 @@ class GraphWrapper {
 																		params: { dataList: 'List of selected node-data' } },
 			onGraphChanged:							{ help: 	'Inform that graph has changed' },
 			onFirstLayoutCompleted:			{ help: 	'Inform that graph has completed the first layout after load' },
+			onShowBookmarks:  					{ help: 	'Open bookmark dialog' },
+			onAddBookmark:							{ help: 	'Store the current view and graph path into a bookmark list',
+																		params: { bookmarkInfo: 'graph path/nodeData/current view' } },
 			onLoadGraph: 								{ help:   'Load a new graph in canvas', 
 			  	           								params: { nodeData: 'node-data of the the graph to load' } },
 		  onLoadFile:       					{ help:   'Open dialog with a file in a new editor',
@@ -144,8 +147,10 @@ class GraphWrapper {
 																												o.d.cmd.pasteSelection( location ); }},
 					{ separator: '-' },
 					{ label: 'Find',      					do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
-																											this.em.call.onShowFindDialog( mousePos.x, mousePos.y );
+																											this.em.fire.onShowFindDialog( mousePos.x, mousePos.y );
 																										} },
+					{ label: 'Bookmarks',		  			do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
+																											this.em.fire.onShowBookmarks( mousePos.x, mousePos.y ) } },
 					{ separator: '-' },
 					{ label: 'Tools',       layout: 'vertical', subMenu: [
 						{ label: 'Toggle Visible Palette', 	if: (o)=> ( this.fullPaletteId? true: false ),
@@ -161,30 +166,30 @@ class GraphWrapper {
 						{ label: 'Toggle Visible Grid', do: (o)=> this.diagram.grid.visible = !this.diagram.grid.visible },
 						{ separator: '-' },
 						{ label: 'Show DSL List',			do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
-																											this.em.call.onShowDSLListDialog( mousePos.x, mousePos.y ); } },
+																											this.em.fire.onShowDSLListDialog( mousePos.x, mousePos.y ); } },
 						{ label: 'Show Graph Template',	do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
-																												this.em.call.onShowGraphTemplateDialog( mousePos.x, mousePos.y ); } },
+																												this.em.fire.onShowGraphTemplateDialog( mousePos.x, mousePos.y ); } },
 						{ label: 'Show System Monitor',		do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
-																													this.em.call.onShowSysMonitorDialog( mousePos.x, mousePos.y ); } },
+																													this.em.fire.onShowSysMonitorDialog( mousePos.x, mousePos.y ); } },
 						{ label: 'Show Animator',			do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
-																											this.em.call.onShowAnimatorEditor( mousePos.x, mousePos.y ); } },
+																											this.em.fire.onShowAnimatorEditor( mousePos.x, mousePos.y ); } },
 					]},
 					{ label: 'Navigate', layout: 'vertical', if: (o)=> !config.isLocalMode, subMenu: [
 						/*{ label: 'Go To Parent Graph',	if: (o)=> !this.isRootGraph,
-																						do: (o)=> { if( !this.isRootGraph) this.em.call.onShowParentGraph(); } },*/
+																						do: (o)=> { if( !this.isRootGraph) this.em.fire.onShowParentGraph(); } },*/
 						{ label: 'Back To Previous Graph',	if: (o)=> !this.isHistoryEmpty,
-																						do: (o)=> { if( !this.isHistoryEmpty ) this.em.call.onShowPreviousGraph(); } },
+																						do: (o)=> { if( !this.isHistoryEmpty ) this.em.fire.onShowPreviousGraph(); } },
 						{ separator: '-',               if: (o)=> !this.isRootGraph },
 						{ label: 'Go To Root Graph',		if: (o)=> !this.isRootGraph,
-																						do: (o)=> this.em.call.onShowRootGraph() },
+																						do: (o)=> this.em.fire.onShowRootGraph() },
 					]},
 					{ separator: '-', if: (o)=> !config.isLocalMode },
 					{ label: 'Set Read-only Mode',    if: (o)=> !config.isLocalMode && !this.isReadOnly,
 																						do: (o)=> { this.isReadOnly = true;
-																												this.em.call.onSetReadOnly( true ); } },
+																												this.em.fire.onSetReadOnly( true ); } },
 					{ label: 'Unset Read-only Mode',  if: (o)=> !config.isLocalMode && this.isReadOnly,
 																						do: (o)=> { this.isReadOnly = false;
-																												this.em.call.onSetReadOnly( false ); } },
+																												this.em.fire.onSetReadOnly( false ); } },
 					{ separator: '-',         if: (o)=> o.d.cmd.canUndo() || o.d.cmd.canRedo() },
 					/*{ label: 'Undo',      					if: (o)=> o.d.cmd.canUndo(),
 																					do: (o)=> o.d.cmd.undo() },
@@ -233,12 +238,12 @@ class GraphWrapper {
 																	do: (o)=> { const data = this.getFirstSelectedNodeData();
 																							if( data ) {
 																								const mousePos = this.diagram.lastInput.viewPoint;
-																								this.em.call.onLoadFile( data, mousePos.x, mousePos.y );
+																								this.em.fire.onLoadFile( data, mousePos.x, mousePos.y );
 																							} }},
 					{ label: 'Open Sub-Graph',	if: (o)=> this._canOpenSubGraph(),
 																			do: (o)=> { const data = this.getFirstSelectedNodeData();
 																									if( data ) {
-																										this.em.call.onLoadGraph( data );
+																										this.em.fire.onLoadGraph( data );
 																									} }},
 					{ separator: '-',       if: (o)=> o.d.cmd.canUndo() || o.d.cmd.canRedo() },
 					{ label: 'Undo',        if: (o)=> o.d.cmd.canUndo(),
@@ -400,7 +405,7 @@ class GraphWrapper {
 		if( idx >= 0 ) {
 			// TODO: check for the sourceEncoding
 			this.graphFileServer[idx] = source;
-			this.em.call.onGraphChanged();
+			this.em.fire.onGraphChanged();
 		}
 	}
 	isDataValidField( fieldName ) {
@@ -752,7 +757,11 @@ class GraphWrapper {
 		this.diagram.selectCollection( nodeList );
 	}
 	addBookmark() {
-
+		// Store bookmark
+		const graphPath = this.getGraphPath();
+		const viewInfo = this.getCurrentView();
+		const bookmarkInfo = { graphPath, view: viewInfo };
+		this.em.fire.onAddBookmark( bookmarkInfo );
 	}
 	getCurrentView() {
 		// Get current position
@@ -896,7 +905,7 @@ class GraphWrapper {
 			// If a single node is selected => clone it
 			const data = this.getFirstSelectedNodeData();
 			if( data ) {
-				this.em.call.onClone( data );
+				this.em.fire.onClone( data );
 			}
 		}
 	}
@@ -1145,7 +1154,7 @@ class GraphWrapper {
 				this.diagram.commitTransaction( 'Set Data Propery' );
 				this._callOnNodeGraphSelectionChanged();
 			}
-			this.em.call.onGraphChanged();
+			this.em.fire.onGraphChanged();
 		}
 	}
 	getLinkData( key, isCopy ) {
@@ -1170,7 +1179,7 @@ class GraphWrapper {
 			this.diagram.startTransaction( 'Set Data Propery' );
 			this.diagram.model.setDataProperty( data, field, value );
 			this.diagram.commitTransaction( 'Set Data Propery' );
-			this.em.call.onGraphChanged();
+			this.em.fire.onGraphChanged();
 		}
 	}
 	moveSelectionRel( dx, dy ) {
@@ -1260,7 +1269,7 @@ class GraphWrapper {
 	}
 	doSetReadOnly( status ) {
 		this.isReadOnly = status;
-		this.em.call.onSetReadOnly( status );
+		this.em.fire.onSetReadOnly( status );
 	}
 	//------------------------------------------
 	// Private Functions
@@ -1490,12 +1499,12 @@ class GraphWrapper {
 			var txn = e.object;  // a Transaction
 			// Call callback only if there is a model change
 			if( txn !== null  ) {
-				//this.em.call.onGraphChanged();
+				//this.em.fire.onGraphChanged();
 			}
 			//console.log( 'GoJS say graph is changed' );
 			this._callOnNodeModelChanged();
 			this._callOnNodeGraphSelectionChanged();
-			this.em.call.onGraphChanged();
+			this.em.fire.onGraphChanged();
 		}
 	}
 	newEmptyModel() {
@@ -1722,7 +1731,7 @@ class GraphWrapper {
 		// Allow to navigate out from a graph and go to parent graph (Alt+click)
 		diagram.addDiagramListener( 'BackgroundSingleClicked', ()=> {
 			if( diagram.lastInput.alt ) {
-				this.em.call.onShowParentGraph();
+				this.em.fire.onShowParentGraph();
 			}
 		});
 		// Allow to navigate into a sub graph of a node (Alt+click)
@@ -1730,10 +1739,10 @@ class GraphWrapper {
 			if( diagram.lastInput.alt ) {
 				const data = this.getFirstSelectedNodeData();
 				if( data && ( data.isDir == true ) ) {
-					this.em.call.onLoadGraph( data );
+					this.em.fire.onLoadGraph( data );
 				} else {
 					const mousePos = this.diagram.lastInput.viewPoint;
-					this.em.call.onLoadFile( data, mousePos.x, mousePos.y );
+					this.em.fire.onLoadFile( data, mousePos.x, mousePos.y );
 				}
 			}
 		});
@@ -1754,7 +1763,7 @@ class GraphWrapper {
 		});
 
 		diagram.addDiagramListener( 'InitialLayoutCompleted', (diagramEvent)=> {
-			this.em.call.onFirstLayoutCompleted();
+			this.em.fire.onFirstLayoutCompleted();
 			if( this.nodePalette ) {
 				// Scroll a bit up to show first node well
 				this.nodePalette.scroll( 'pixel', 'up', 20 );
@@ -1768,7 +1777,7 @@ class GraphWrapper {
 		diagram.addDiagramListener( 'ChangedSelection', ()=> {
 			if( this.diagram ) {
 				const dataList = this._getFilteredSelection();
-				this.em.call.onSelection( dataList );
+				this.em.fire.onSelection( dataList );
 				this._callOnNodeGraphSelectionChanged();
 			}
 		});

@@ -19,6 +19,7 @@ class GraphEditor extends EditorBase {
     this.listenerList = {
       'onLoad': [],
     };
+    this.nodeData = nodeData;
 
     // New graph editor
     this.editor = new GraphWrapper({ 
@@ -55,7 +56,7 @@ class GraphEditor extends EditorBase {
       const history = getStatus( 'graphHistory' );
       this.editor.setIsHistoryEmpty( history.length <= 0 );
       // Load previous graph
-      this.navigateToGraph( newNodeData, true );
+      this.navigateToGraph( newNodeData, null, true );
     };
 
     // Setup events
@@ -69,14 +70,13 @@ class GraphEditor extends EditorBase {
         const e = m.e.getEditor( config.htmlDiv.graphDiv );
         const jsonSelection = e.getJSONSelection();
       },
+      onAddBookmark: ( bookmarkInfo )=> {
+        bookmarkInfo.title = this.getTitle( this.nodeData );
+        bookmarkInfo.nodeData = this.editor._getDataCopy( this.nodeData );
+        addBookmark( bookmarkInfo );
+      },
       onLoadGraph: ( nodeData )=> {
-        // Get a copy of the node data
-        //const newNodeData = this.editor.getNodeData( nodeData.key, true );
-        const newNodeData = getNodeData( nodeData.key, true );
-        // Give a new url in case fileURL is empty
-        this._verifyFileURL( newNodeData );
-        // Navigate to node
-        this.navigateToGraph( newNodeData );
+        this.doLoadGraph( nodeData );
       },
       onLoadFile: ( nodeData, x, y )=> {
         // Get a copy of the node data
@@ -139,6 +139,15 @@ class GraphEditor extends EditorBase {
       onShowPreviousGraph: ()=> {
         showPreviousGraph();
       },
+      onShowBookmarks: ( x, y )=> {
+        const nodeData = {
+          key: 'Bookmarks Viewer',
+          isFile: true,
+          fileType: 'input/fields',
+        };
+        const id = m.e._getDOMUniqueId( nodeData );
+        m.e.openWindow( id, 'BookmarkViewer', nodeData, [x, y, 470, 200 ] );
+      },
       onShowFindDialog: ( x, y )=> {
         const nodeData = {
           key: 'Find in Graph',
@@ -191,12 +200,34 @@ class GraphEditor extends EditorBase {
     this.setPauseChange( false );
     this.loadEditorContent( nodeData );
   }
+  getTitle( nodeData ) {
+    let result = this.id;
+    const isNumber = (n)=> !isNaN( n );
+    
+    if( nodeData.label ) {
+      result = nodeData.label;
+    } else if( nodeData.text ) {
+      result = nodeData.text;
+    } else if( nodeData.key && ( !isNumber( nodeData.key )) ) {
+      result = nodeData.key;
+    }
+    return( result );
+  }
   addListerner( event, callaback ) {
     if( this.listenerList[event] ) {
       this.listenerList[event].push( callaback );
     }
   }
-  navigateToGraph( newNodeData, isBackFromHistory ) {
+  doLoadGraph( nodeData, onLoaded ) {
+    // Get a copy of the node data
+    //const newNodeData = this.editor.getNodeData( nodeData.key, true );
+    const newNodeData = this.editor._getDataCopy( nodeData );
+    // Give a new url in case fileURL is empty
+    this._verifyFileURL( newNodeData );
+    // Navigate to node
+    this.navigateToGraph( newNodeData, onLoaded );
+  }
+  navigateToGraph( newNodeData, onLoaded, isBackFromHistory ) {
     isBackFromHistory = ( isBackFromHistory == undefined? false: isBackFromHistory );
     // If nodeData is defined ==> we are not at the root graph
     if( newNodeData ) {
@@ -207,8 +238,12 @@ class GraphEditor extends EditorBase {
           m.e.updateGraphHistory();
         }
         // Load new graph
-        this.loadEditorContent( newNodeData );
+        this.loadEditorContent( newNodeData, onLoaded );
       });
+    } else {
+      if( onLoaded ) {
+        onLoaded();
+      }
     }
   }
   loadEditorContent( nodeData, onLoaded ) {
@@ -227,6 +262,9 @@ class GraphEditor extends EditorBase {
       this.processNodeWithIncludeScripts( 'unload' ); // Remove previous scripts
       this.processNodeWithIncludeScripts( 'load' ); // Load new one
 
+      // Update current nodeData
+      this.nodeData = nodeData;
+
       // Reopen windows in case we have some for this url
       setStatus( (s)=> s.currentGraphNode = nodeData );
       m.e.reopenGraphSession( nodeData.fileURL );
@@ -237,15 +275,7 @@ class GraphEditor extends EditorBase {
       this.editor.setIsRootGraph( nodeData.fileURL == config.graph.rootGraphURL );
       this.setPauseChange( false );
       // Set title
-      const isNumber = (n)=> !isNaN( n );
-      this.title = this.id;
-      if( nodeData.label ) {
-        this.title = nodeData.label;
-      } else if( nodeData.text ) {
-        this.title = nodeData.text;
-      } else if( nodeData.key && ( !isNumber( nodeData.key )) ) {
-        this.title = nodeData.key;
-      }
+      this.title = this.getTitle( nodeData );
       // We just finished the first loading, now we can tell 
       // that we are not anymore just started ==> any change will be saved
       // NOTE: we set this with timeout because the GoJS graph keep

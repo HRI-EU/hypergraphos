@@ -193,6 +193,14 @@ function getMainGraphURL() {
   const g = getMainGraph();
   return( g.graphPath );
 }
+function addBookmark( bookmarkInfo ) {
+  if( !m.status.bookmarkList ) {
+    m.status.bookmarkList = [];
+  }
+  
+  m.status.bookmarkList.push( bookmarkInfo );
+  // FIRE notification that bookmars changed
+}
 // TODO: parseRefValue should be implemented in ModelExplorer
 function parseRefValue( nodeData, value ) {
   // Check if value is like:

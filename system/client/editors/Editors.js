@@ -20,6 +20,105 @@ addEditorIncludes([
   'editors/HChatWrapper.js',
 ]);
 
+class BookmarkViewer extends EditorBase {
+  constructor( id, nodeData, position ) {
+    super();
+    this.id = id;
+    this.editor = null;
+
+    position[2] = 300; // Set with
+    this.editorDivId = m.e.newDOMWindow( id, this.title, 
+                                         config.htmlDiv.mainDiv,
+                                         this.storeWindowPosition.bind(this),
+                                         position );
+    
+    // Set background
+    const editorDiv = document.getElementById( this.editorDivId );
+    editorDiv.style.background = '#1d1f21';
+    // Load content
+    this.loadEditorContent( nodeData );
+  }
+  loadEditorContent( nodeData ) {
+    // Load graph editor
+    const graphEditor = m.e.getEditor( config.htmlDiv.graphDiv );
+    // Update current nodeData
+    this.nodeData = nodeData;
+    // Update window title with:
+    this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${nodeData.fileType}]`;
+    this.setTitle( this.title );
+    
+    // Set editor content
+    const element = document.getElementById( this.editorDivId );
+    element.innerHTML = `<div id='bookmarkList' ></div>`;
+    const bookmarkEl = document.querySelector( '#bookmarkList' );
+    // List Bookmarks
+    let source = '';
+    const bookmarkList = m.status.bookmarkList;
+    if( bookmarkList ) {
+      for( let i = 0; i < bookmarkList.length; ++i ) {
+        const bookmark = bookmarkList[i];
+        const title = bookmark.title;
+        // Generate html
+        source = source+`<div style="display: flex;"`+
+                        `     class="findResult graphBookmark" bookmarkIndex="${i}">`+
+                          `<button type="button" class="graphBookmarkButton" style="margin-right: 10px;">🖊</button>`+
+                          `<div contenteditable="false" class="graphBookmarkTitle" bookmarkIndex="${i}">`+
+                            `${title}`+
+                          `</div>`+
+                        `</div>`;
+      }
+      bookmarkEl.innerHTML = source;
+
+      // Apply Template function
+      const jumpToBookmark = ( title, index )=> {
+        console.log( 'Jumping to bookmark: ', title, '[', index, ']' );
+        const bookmark = bookmarkList[index];
+        if( bookmark ) {
+          // Close the viewer
+          m.e.closeEditor( this.id );
+
+          // Jump to view
+          const ge = m.e.getEditorInfo( 'diagram' );
+          const graphPath = ge.editor.getGraphPath();
+          if( graphPath == bookmark.graphPath ) {
+            ge.editor.setCurrentView( bookmark.view );
+          } else {
+            ge.doLoadGraph( bookmark.nodeData, ()=>{
+              ge.editor.setCurrentView( bookmark.view );
+            });
+          }
+        }
+      }
+      let itemElementList = document.querySelectorAll( '.graphBookmark' );
+      for( const item of itemElementList ) {
+        // Set click method of button for edit mode
+        item.childNodes[0].addEventListener( 'click', ()=> {
+          item.childNodes[1].contentEditable = true;
+          item.childNodes[1].focus();
+          document.getSelection().modify( 'move', 'forward', 'documentboundary' );
+        });
+      }
+      itemElementList = document.querySelectorAll( '.graphBookmarkTitle' );
+      for( const item of itemElementList ) {
+        // On click => jump
+        item.onclick = ()=> jumpToBookmark( item.innerText, item.getAttribute( 'bookmarkIndex' ) );
+        // On title changed => update bookmark title
+        item.addEventListener( 'blur', function( e ) {
+          const index = item.getAttribute( 'bookmarkIndex' );
+          bookmarkList[index].title = item.innerText.replaceAll( '\n', '' ).trim();
+          item.contentEditable = false;
+        }, false);
+      }
+    }
+  }
+  saveEditorContent( onSaved ) {
+    if( onSaved ) {
+      onSaved();
+    }
+  }
+}
+registerEditor({ name: 'BookmarkViewer', fileType: (ft)=> ft == 'input/fields', classRef: BookmarkViewer });
+
 class AnimatorEditor extends EditorBase {
   constructor( id, nodeData, position ) {
     super();
@@ -286,7 +385,8 @@ class GraphTemplateViewer extends EditorBase {
     let templateList = {};
     // Set editor content
     const element = document.getElementById( this.editorDivId );
-    element.innerHTML = `<div id='searchResult' ></div>`;
+    element.innerHTML = `<div id='templateList' ></div>`;
+    const templateEl = document.querySelector( '#templateList' );
     const showTemplates = (sourceTemplateList)=> {
       // Generate Template Name List
       try {
@@ -302,7 +402,7 @@ class GraphTemplateViewer extends EditorBase {
                             </div>`;
           }
         }
-        searchResult.innerHTML = source;
+        templateEl.innerHTML = source;
   
         // Apply Template function
         const applyTemplate = ( templateName, templateURL )=> {
