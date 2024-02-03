@@ -269,18 +269,18 @@ class EditorManager extends EditorChangeManager {
     // Create HTML elements
     emDiv.innerHTML = `<div class='editorMainDivChild' >
                         <div class='resizerObj'>
-                          <div class='resizerHeader' onmousedown="this.putWindowOnTop('${id}')">
+                          <div class='resizerHeader' onmousedown="m.e.putWindowOnTop('${id}')">
                             <button class='editorDivBClose' type="button" 
-                                    onclick="this.closeEditor( true, '${id}')">&#x2715
+                                    onclick="m.e.closeEditor( true, '${id}')">&#x2715
                             </button>
                             <!--button class='editorDivBCollapse' type="button"
-                                    onclick="this.toogleCollapseWindow('${id}')">-
+                                    onclick="m.e.toogleCollapseWindow('${id}')">-
                             </button-->
                             <button class='editorDivBPin' type="button"
-                                    onclick="this.pinEditor('${id}')">📎
+                                    onclick="m.e.pinEditor('${id}')">📎
                             </button>
                             <button class='editorDivBSave' type="button"
-                                    onclick="this.saveEditor('${id}')">Save
+                                    onclick="m.e.saveEditor('${id}')">Save
                             </button>
                             <div class='title' ondblclick="selectNodeOfWindow('${id}')">${name}</div>
                           </div>
