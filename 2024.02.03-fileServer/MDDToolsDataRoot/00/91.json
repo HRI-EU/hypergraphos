@@ -1,0 +1,26 @@
+{
+  "dslNameList": [
+    "DefaultDSL",
+    "HierarchyDSL",
+    "ThinkingDSL",
+    "TextLabelsDSL",
+    "PropertyDSL",
+    "CodeFlowDSL",
+    "DialogDSL",
+    "TestFlowDSL",
+    "ConnectorsDSL",
+    "ButtonDSL",
+    "PicturesDSL",
+    "NoteDSL",
+    "KanbanDSL"
+  ],
+  "view": {
+    "scale": 1.6718538648828076,
+    "position": [
+      614.8948309083503,
+      -2023.4810517139197
+    ],
+    "isGridOn": true
+  },
+  "model": "{ \"class\": \"GraphLinksModel\",\n  \"copiesArrays\": true,\n  \"copiesArrayObjects\": true,\n  \"copiesKey\": false,\n  \"linkKeyProperty\": \"key\",\n  \"linkFromPortIdProperty\": \"fromPort\",\n  \"linkToPortIdProperty\": \"toPort\",\n  \"nodeDataArray\": [ \n{\"label\":\"Code in File\", \"color\":\"orange\", \"size\":\"180 35\", \"category\":\"Hierarchy_CodeInFile\", \"isFile\":true, \"fileTypeName\":\"Javascript\", \"fileType\":\"text/javascript\", \"fileURL\":\"\", \"key\":7, \"location\":\"1090 -1680\"},\n{\"label\":\"Kanban Board\", \"category\":\"KanbanDSL_KanbanBoard\", \"isGroup\":true, \"size\":\"352.248046875 NaN\", \"key\":8, \"location\":\"1118 -1282.5\", \"expanded\":true, \"savedBreadth\":352.248046875},\n{\"category\":\"KanbanDSL_KanbanCard\", \"label\":\"text for twoA\", \"color\":\"1\", \"key\":10, \"location\":\"1130 -1400\", \"group\":8},\n{\"category\":\"KanbanDSL_KanbanCard\", \"label\":\"text for twoA\", \"color\":\"1\", \"key\":12, \"location\":\"1130 -1340\", \"group\":8},\n{\"category\":\"KanbanDSL_KanbanCard\", \"label\":\"text for twoA\", \"color\":\"1\", \"key\":14, \"location\":\"1520 -1159\", \"group\":11},\n{\"text\":\"Note2\", \"color\":\"Khaki\", \"figure\":\"Rectangle\", \"category\":\"Note_NodeType1\", \"size\":\"125 28\", \"key\":16, \"location\":\"1130 -1153.5\", \"group\":8},\n{\"label\":\"ComponentBKV\", \"tag\":\"tag\", \"type\":\"type\", \"category\":\"TestFlow_ComponentBKV\", \"size\":\"200 100\", \"buttons_\":[ {\"name\":\"button1\"},{\"name\":\"button2\"},{\"name\":\"button3\"} ], \"props_\":[ {\"name\":\"name1\", \"value\":\"value1\"},{\"name\":\"name2\", \"value\":\"value2\"} ], \"in_\":[ {\"portId\":\"in0\",\"name\":\"in0\"},{\"portId\":\"in1\",\"name\":\"in1\"} ], \"out_\":[ {\"portId\":\"out0\",\"name\":\"out0\"},{\"portId\":\"out1\",\"name\":\"out1\"} ], \"isFile\":true, \"fileType\":\"text/javascript\", \"fileContent\":\"var event, obj, nodeData;\\n  // Uncomment the next line to start debugging\\n  //debugger;\\nconsole.log( 'NodeData Info: '+JSON.stringify( nodeData ) );\\nconsole.log( 'Button Label: '+obj.data.name );\\nconsole.log( 'Button Status: '+obj.data.checked );\", \"key\":18, \"location\":\"1169.6826171875 -1255.5\", \"group\":8},\n{\"label\":\"Group New\", \"category\":\"Group_BasicGroup\", \"isGroup\":true, \"key\":20},\n{\"label\":\"Folder Image\", \"size\":\"150 100\", \"category\":\"Hierarchy_FolderImage\", \"fileType\":\"text/json\", \"isDir\":true, \"fileURL\":\"/fileServer/00/92.json\", \"imageURL\":\"\", \"key\":22, \"location\":\"1520 -1272\", \"group\":11},\n{\"label\":\"Kanban Board\", \"category\":\"KanbanDSL_KanbanBoard\", \"isGroup\":true, \"size\":\"205 NaN\", \"key\":11, \"location\":\"1508 -1252.0000000000005\", \"expanded\":true, \"savedBreadth\":205},\n{\"label\":\"File\", \"size\":\"180 35\", \"category\":\"Hierarchy_DataInFile\", \"isFile\":true, \"fileTypeName\":\"Javascript\", \"fileType\":\"text/javascript\", \"fileURL\":\"\", \"key\":15, \"location\":\"1520 -1350\", \"group\":11}\n ],\n  \"linkDataArray\": [ {\"category\":\"CodeFlow_Code\", \"fromPort\":\"out0\", \"toPort\":\"\", \"from\":18, \"to\":22, \"points\":[1417.9306640625,-1265.5,1427.9306640625,-1265.5,1520.0003757403783,-1269.0713761265336], \"key\":-1} ]}"
+}

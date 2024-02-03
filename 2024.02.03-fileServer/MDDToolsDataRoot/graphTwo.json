@@ -1,0 +1,14 @@
+{
+  "dslNameList": [
+    "DefaultDSL"
+  ],
+  "view": {
+    "scale": 1.8749382330016586,
+    "position": [
+      -209.93089818905776,
+      -145.00089111502388
+    ],
+    "isGridOn": true
+  },
+  "model": "{ \"class\": \"GraphLinksModel\",\n  \"copiesArrays\": true,\n  \"copiesArrayObjects\": true,\n  \"copiesKey\": false,\n  \"linkKeyProperty\": \"key\",\n  \"linkFromPortIdProperty\": \"fromPort\",\n  \"linkToPortIdProperty\": \"toPort\",\n  \"nodeDataArray\": [ \n{\"key\":\"Zero Node\", \"color\":\"yellow\", \"category\":\"Default\", \"isDir\":true, \"fileURL\":\"/fileServer/graphRoot.json\", \"fileType\":\"text/json\"},\n{\"key\":\"Alpha Node\", \"color\":\"lightblue\", \"category\":\"Default\", \"isFile\":true, \"fileContent\":\"console.log('ciao ciao');\\n\\nlet name = 'Graph Two';\", \"fileType\":\"text/javascript\", \"editorPosition\":[ 775,181,335,174 ]},\n{\"key\":\"Beta Node\", \"color\":\"orange\", \"category\":\"Default\", \"isFile\":true, \"fileURL\":\"/fileServer/Graph2.js\", \"fileType\":\"text/javascript\", \"editorPosition\":[ 541,273,500,807 ]},\n{\"key\":3, \"color\":\"Red\", \"category\":\"Default\"},\n{\"key\":4, \"color\":\"Red\", \"category\":\"Default\"}\n ],\n  \"linkDataArray\": [ \n{\"from\":\"Alpha Node\", \"to\":\"Beta Node\", \"key\":-1},\n{\"from\":\"Beta Node\", \"to\":\"Beta Node\", \"key\":-3}\n ]}"
+}

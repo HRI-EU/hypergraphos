@@ -1,0 +1,1054 @@
+{
+  "graphHistory": [
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": "DSL Creation",
+      "size": "150 100",
+      "category": "Hierarchy_FolderContent",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/00/97.json",
+      "key": 59,
+      "location": "-2650 -570",
+      "group": 64
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": "Frankonello Home",
+      "size": "280 180",
+      "category": "Hierarchy_FolderContent",
+      "isDir": true,
+      "fileType": "text/json",
+      "fileURL": "/fileServer/00/01.json",
+      "key": 41,
+      "location": "1480 921",
+      "group": 13
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": "HyperGraph DevRoot",
+      "size": "150 100",
+      "category": "Hierarchy_FolderContent",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/01/02.json",
+      "key": 72,
+      "location": "-2190 -330",
+      "group": 69
+    },
+    {
+      "label": "HyperGraph 2.0",
+      "size": "150 100",
+      "category": "Hierarchy_FolderContent",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/01/03.json",
+      "key": 4,
+      "location": "-1370 390"
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": "Frankonello Home",
+      "size": "280 180",
+      "category": "Hierarchy_FolderContent",
+      "isDir": true,
+      "fileType": "text/json",
+      "fileURL": "/fileServer/00/01.json",
+      "key": 41,
+      "location": "1480 921",
+      "group": 13
+    },
+    {
+      "label": "integretor test 2",
+      "size": "570 400",
+      "category": "Hierarchy_FolderContent",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/00/85.json",
+      "key": 34,
+      "location": "1330 510"
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": "HyperGraph DevRoot",
+      "size": "150 100",
+      "category": "Hierarchy_FolderContent",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/01/02.json",
+      "key": 72,
+      "location": "-2190 -330",
+      "group": 69
+    },
+    {
+      "label": "HyperGraph 2.1",
+      "size": "150 100",
+      "category": "Hierarchy_FolderContent",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/01/07.json",
+      "key": 7,
+      "location": "-1180 380"
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": "HyperGraph DevRoot",
+      "size": "150 100",
+      "category": "Hierarchy_FolderContent",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/01/02.json",
+      "key": 72,
+      "location": "-2190 -330",
+      "group": 69
+    },
+    {
+      "label": "HyperGraph 2.1",
+      "size": "150 100",
+      "category": "Hierarchy_FolderContent",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/01/07.json",
+      "key": 7,
+      "location": "-1150 390"
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": "DSL Creation",
+      "size": "150 100",
+      "category": "Hierarchy_FolderContent",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/00/97.json",
+      "key": 59,
+      "location": "-2650 -570",
+      "group": 64
+    },
+    {
+      "label": "GWW 2023 Demo 3",
+      "size": "150 100",
+      "category": "Hierarchy_FolderContent",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/01/35.json",
+      "key": 126,
+      "location": "9100 330"
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": "Frankonello Home",
+      "size": "280 180",
+      "category": "Hierarchy_FolderContent",
+      "isDir": true,
+      "fileType": "text/json",
+      "fileURL": "/fileServer/00/01.json",
+      "key": 41,
+      "location": "1480 921",
+      "group": 13
+    },
+    {
+      "label": "Test",
+      "size": "600 430",
+      "category": "Hierarchy_FolderContent",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/00/94.json",
+      "key": 44,
+      "location": "-3290 790"
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": "DSL Creation",
+      "size": "150 100",
+      "category": "Hierarchy_FolderContent",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/00/97.json",
+      "key": 59,
+      "location": "-2650 -570",
+      "group": 64
+    },
+    {
+      "label": "GWW 2023 Demo 3",
+      "size": "150 100",
+      "category": "Hierarchy_FolderContent",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/01/35.json",
+      "key": 126,
+      "location": "9100 330"
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    },
+    {
+      "label": "Frankonello Home",
+      "size": "280 180",
+      "category": "Hierarchy_FolderContent",
+      "isDir": true,
+      "fileType": "text/json",
+      "fileURL": "/fileServer/00/01.json",
+      "key": 41,
+      "location": "1480 921",
+      "group": 13
+    },
+    {
+      "label": "Test",
+      "size": "600 430",
+      "category": "Hierarchy_FolderContent",
+      "fileType": "text/json",
+      "isDir": true,
+      "fileURL": "/fileServer/00/94.json",
+      "key": 44,
+      "location": "-3290 790"
+    },
+    {
+      "key": "Root Graph",
+      "isDir": true,
+      "fileURL": "/fileServer/graphRoot.json",
+      "fileType": "text/json"
+    }
+  ],
+  "currentGraphNode": {
+    "label": "DSL Creation",
+    "size": "150 100",
+    "category": "Hierarchy_FolderContent",
+    "fileType": "text/json",
+    "isDir": true,
+    "fileURL": "/fileServer/00/97.json",
+    "key": 59,
+    "location": "-2650 -570",
+    "group": 64
+  },
+  "openWindowList": {
+    "/fileServer/graphRoot.json": {},
+    "/fileServer/graphTwo.json": {
+      "Alpha Node": [
+        775,
+        181,
+        335,
+        174
+      ]
+    },
+    "/fileServer/graphTest.json": {
+      "13": [
+        1293,
+        821,
+        807,
+        853
+      ],
+      "17": [
+        100,
+        100,
+        400,
+        350
+      ],
+      "18": [
+        1952,
+        909,
+        400,
+        350
+      ],
+      "24": [
+        2765,
+        426,
+        696,
+        791
+      ]
+    },
+    "undefined": {
+      "0": [
+        1740,
+        231,
+        537,
+        622
+      ],
+      "2": [
+        2000,
+        381,
+        424,
+        347
+      ],
+      "5": [
+        1468,
+        408,
+        514,
+        915
+      ],
+      "7": [
+        735,
+        96,
+        466,
+        385
+      ],
+      "16": [
+        38,
+        553,
+        390,
+        405
+      ],
+      "Show DSL List": [
+        966,
+        438,
+        260,
+        160
+      ]
+    },
+    "#systemMonitor#": {
+      "System Monitor": [
+        581,
+        380,
+        260,
+        160
+      ]
+    },
+    "/fileServer/DialogDSL.js": {
+      "244": [
+        909,
+        153,
+        878,
+        1308
+      ]
+    },
+    "/fileServer/00/11.json": {
+      "39": [
+        100,
+        100,
+        400,
+        350
+      ],
+      "41": [
+        1286,
+        56,
+        400,
+        350
+      ],
+      "62": [
+        2222,
+        30,
+        1032,
+        1774
+      ]
+    },
+    "/fileServer/00/30.json": {},
+    "/fileServer/00/19.json": {
+      "19": [
+        3323,
+        646,
+        442,
+        1299
+      ],
+      "20": [
+        2895,
+        648,
+        422,
+        1297
+      ],
+      "23": [
+        1574,
+        640,
+        1308,
+        1345
+      ],
+      "34": [
+        177,
+        872,
+        412,
+        152
+      ],
+      "35": [
+        178,
+        689,
+        396,
+        173
+      ],
+      "38": [
+        174,
+        1092,
+        385,
+        154
+      ],
+      "39": [
+        165,
+        1251,
+        392,
+        193
+      ],
+      "43": [
+        165,
+        1604,
+        403,
+        165
+      ],
+      "44": [
+        160,
+        1773,
+        414,
+        164
+      ]
+    },
+    "/fileServer/00/01.json": {
+      "20": [
+        2102,
+        153,
+        400,
+        350
+      ]
+    },
+    "/fileServer/00/42.json": {},
+    "/fileServer/00/43.json": {},
+    "/fileServer/00/47.bin": {
+      "318": [
+        2249,
+        625,
+        305,
+        556
+      ]
+    },
+    "/fileServer/00/52.json": {
+      "5": [
+        92,
+        88,
+        400,
+        350
+      ],
+      "60": [
+        651,
+        21,
+        758,
+        1192
+      ]
+    },
+    "/fileServer/00/49.json": {
+      "19": [
+        2325,
+        631,
+        400,
+        350
+      ],
+      "20": [
+        2312,
+        239,
+        400,
+        350
+      ],
+      "23": [
+        2728,
+        242,
+        429,
+        755
+      ]
+    },
+    "/fileServer/00/62.json": {
+      "12": [
+        1504,
+        214,
+        400,
+        350
+      ]
+    },
+    "/fileServer/00/65.json": {
+      "2": [
+        1814,
+        35,
+        400,
+        350
+      ]
+    },
+    "/fileServer/00/67.json": {},
+    "/fileServer/00/68.json": {
+      "6": [
+        901,
+        20,
+        400,
+        350
+      ],
+      "99": [
+        1159,
+        1311,
+        400,
+        350
+      ],
+      "102": [
+        2208,
+        1105,
+        400,
+        350
+      ]
+    },
+    "/fileServer/00/69.json": {
+      "108": [
+        1558,
+        8,
+        434,
+        1054
+      ],
+      "110": [
+        1491,
+        33,
+        425,
+        1054
+      ],
+      "115": [
+        1412,
+        50,
+        429,
+        1052
+      ],
+      "117": [
+        100,
+        101,
+        400,
+        350
+      ],
+      "122": [
+        452,
+        957,
+        404,
+        148
+      ],
+      "123": [
+        451,
+        792,
+        406,
+        152
+      ],
+      "127": [
+        452,
+        1210,
+        404,
+        164
+      ],
+      "130": [
+        452,
+        1383,
+        404,
+        172
+      ],
+      "135": [
+        451,
+        1631,
+        408,
+        153
+      ],
+      "136": [
+        454,
+        879,
+        396,
+        147
+      ]
+    },
+    "/fileServer/00/29.json": {},
+    "/fileServer/00/03.json": {
+      "14": [
+        100,
+        100,
+        400,
+        350
+      ]
+    },
+    "/fileServer/00/28.json": {},
+    "/fileServer/00/80.json": {
+      "9": [
+        3182,
+        815,
+        400,
+        350
+      ],
+      "12": [
+        2498,
+        798,
+        400,
+        154
+      ],
+      "13": [
+        2500,
+        638,
+        400,
+        147
+      ],
+      "14": [
+        3172,
+        443,
+        400,
+        350
+      ],
+      "17": [
+        2501,
+        506,
+        395,
+        119
+      ],
+      "18": [
+        2500,
+        363,
+        391,
+        129
+      ],
+      "19": [
+        3179,
+        66,
+        400,
+        350
+      ],
+      "21": [
+        2493,
+        77,
+        404,
+        127
+      ],
+      "22": [
+        2496,
+        214,
+        390,
+        133
+      ]
+    },
+    "/fileServer/00/81.json": {
+      "2": [
+        3317,
+        32,
+        400,
+        350
+      ]
+    },
+    "/fileServer/00/85.json": {
+      "86": [
+        1620,
+        21,
+        666,
+        1183
+      ]
+    },
+    "/fileServer/00/00.json": {
+      "2": [
+        100,
+        100,
+        400,
+        350
+      ]
+    },
+    "/fileServer/00/46.json": {
+      "53": [
+        458,
+        342,
+        400,
+        350
+      ]
+    },
+    "/fileServer/00/91.json": {},
+    "/fileServer/00/93.json": {},
+    "/fileServer/00/97.json": {
+      "26": [
+        100,
+        100,
+        400,
+        350
+      ]
+    },
+    "/fileServer/00/98.json": {
+      "7": [
+        579,
+        139,
+        530,
+        1123
+      ],
+      "13": [
+        2130,
+        202,
+        627,
+        1071
+      ],
+      "16": [
+        1295,
+        316,
+        400,
+        350
+      ],
+      "69": [
+        1263,
+        844,
+        400,
+        350
+      ]
+    },
+    "/fileServer/00/94.json": {},
+    "/fileServer/00/99.json": {},
+    "/fileServer/01/02.json": {
+      "12": [
+        26,
+        1581,
+        400,
+        350
+      ]
+    },
+    "fileServer/00/85.json": {
+      "66": [
+        1262,
+        444,
+        403,
+        675
+      ],
+      "86": [
+        2650,
+        607,
+        570,
+        1525
+      ]
+    },
+    "/fileServer/01/03.json": {
+      "4": [
+        27,
+        1121,
+        408,
+        343
+      ]
+    },
+    "/fileServer/01/07.json": {
+      "71": [
+        18,
+        1369,
+        400,
+        350
+      ]
+    },
+    "/fileServer/01/08.json": {
+      "6": [
+        74,
+        1595,
+        400,
+        350
+      ]
+    },
+    "/fileServer/01/11.json": {
+      "20": [
+        25,
+        593,
+        400,
+        350
+      ]
+    },
+    "/fileServer/01/18.json": {
+      "16": [
+        1580,
+        115,
+        400,
+        350
+      ],
+      "20": [
+        100,
+        100,
+        400,
+        350
+      ]
+    },
+    "/fileServer/01/19.json": {
+      "2": [
+        1351,
+        563,
+        400,
+        350
+      ]
+    },
+    "/fileServer/01/20.json": {
+      "9": [
+        1409,
+        616,
+        400,
+        350
+      ]
+    },
+    "/fileServer/01/21.json": {
+      "17": [
+        1440,
+        587,
+        400,
+        350
+      ]
+    },
+    "/fileServer/01/23.json": {
+      "14": [
+        982,
+        554,
+        575,
+        347
+      ],
+      "30": [
+        390,
+        669,
+        400,
+        350
+      ]
+    },
+    "/fileServer/01/24.json": {
+      "16": [
+        375,
+        62,
+        400,
+        350
+      ]
+    },
+    "/fileServer/01/10.json": {},
+    "/fileServer/01/13.json": {},
+    "/fileServer/01/16.json": {
+      "35": [
+        100,
+        100,
+        400,
+        350
+      ]
+    },
+    "/fileServer/01/26.json": {},
+    "/fileServer/01/33.json": {},
+    "/fileServer/01/34.json": {
+      "265": [
+        1323,
+        467,
+        597,
+        653
+      ]
+    },
+    "/fileServer/01/28.json": {
+      "11": [
+        1516,
+        37,
+        400,
+        350
+      ]
+    },
+    "/fileServer/01/35.json": {
+      "115": [
+        902,
+        14,
+        640,
+        1191
+      ]
+    },
+    "/fileServer/01/66.json": {
+      "202": [
+        3462,
+        787,
+        438,
+        478
+      ],
+      "294": [
+        7081,
+        49,
+        450,
+        1222
+      ],
+      "326": [
+        5561,
+        456,
+        617,
+        806
+      ],
+      "372": [
+        6185,
+        204,
+        676,
+        1067
+      ],
+      "389": [
+        9236,
+        -5,
+        1063,
+        1292
+      ],
+      "405": [
+        8392,
+        53,
+        839,
+        1233
+      ],
+      "412": [
+        2605,
+        699,
+        584,
+        563
+      ]
+    },
+    "/fileServer/01/67.json": {
+      "202": [
+        3462,
+        787,
+        438,
+        478
+      ],
+      "218": [
+        5165,
+        121,
+        756,
+        323
+      ],
+      "294": [
+        7081,
+        49,
+        450,
+        1222
+      ],
+      "326": [
+        5561,
+        456,
+        617,
+        806
+      ],
+      "372": [
+        6185,
+        204,
+        676,
+        1067
+      ],
+      "389": [
+        9236,
+        -5,
+        1063,
+        1292
+      ],
+      "405": [
+        8392,
+        53,
+        839,
+        1233
+      ]
+    },
+    "/fileServer/01/69.json": {
+      "218": [
+        -11963,
+        121,
+        756,
+        323
+      ],
+      "290": [
+        801,
+        732,
+        821,
+        1315
+      ],
+      "294": [
+        -10047,
+        49,
+        450,
+        1222
+      ],
+      "326": [
+        -11567,
+        456,
+        617,
+        806
+      ],
+      "327": [
+        -2498,
+        106,
+        640,
+        720
+      ],
+      "329": [
+        -1406,
+        188,
+        701,
+        512
+      ],
+      "333": [
+        -5853,
+        138,
+        1218,
+        133
+      ],
+      "343": [
+        -4562,
+        107,
+        618,
+        265
+      ],
+      "372": [
+        -10943,
+        204,
+        676,
+        1067
+      ],
+      "389": [
+        -7895,
+        -5,
+        1063,
+        1292
+      ]
+    }
+  },
+  "pinnedWindow": {
+    "#systemPalette#": {
+      "key": "DSL Palette",
+      "isFile": true,
+      "fileURL": "#systemPalette#",
+      "fileType": "input/fields",
+      "editorPosition": [
+        29,
+        71,
+        272,
+        1192
+      ],
+      "isVisible": false
+    },
+    "#systemMonitor#": {
+      "key": "System Monitor",
+      "isFile": true,
+      "fileURL": "#systemMonitor#",
+      "fileType": "system/status",
+      "editorPosition": [
+        1259,
+        15,
+        923,
+        91
+      ]
+    }
+  },
+  "isReadOnly": false
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Save String as File</title>
+    <script>
+        function saveStringAsFile() {
+            var stringContent = 'This is an example string';
+            var filename = "./example.txt";
+
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(stringContent));
+            element.setAttribute('download', filename);
+
+            element.style.display = 'none';
+            document.body.appendChild(element);
+
+            element.click();
+
+            document.body.removeChild(element);
+        }
+        async function saveStringAsFile2(event) {
+            var stringContent = 'This is an example string';
+            var filename = "./example.txt";
+            
+            //const image = await new Promise( (res) => canvas.toBlob( res ) );
+            const text = 'data:text/plain;charset=utf-8,' + encodeURIComponent(stringContent);
+            const textObj = await new Promise( (res) => text );
+            if( window.showSaveFilePicker ) {
+                const handle = await showSaveFilePicker();
+                const writable = await handle.createWritable();
+                //await writable.write( image );
+                await writable.write( textObj );
+                writable.close();
+            }
+            else {
+                // const saveImg = document.createElement( "a" );
+                // saveImg.href = URL.createObjectURL( image );
+                // saveImg.download= "image.png";
+                var element = document.createElement('a');
+                element.setAttribute('href', text);
+                element.setAttribute('download', filename);
+                //saveImg.click();
+                element.click();
+                setTimeout(() => URL.revokeObjectURL( element.href ), 60000 );
+            }
+            }
+    </script>
+</head>
+<body>
+    <button onclick="saveStringAsFile()">Save String as File</button>
+    <button onclick="saveStringAsFile2()">Save String as File2</button>
+</body>
+</html>

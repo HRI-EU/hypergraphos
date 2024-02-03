@@ -1,0 +1,205 @@
+<!--
+=============================================================================
+Licensed Materials - Property of Frank Joublin and Antonio Ceravola.
+(C) Copyright Frank Joublin and Antonio Ceravola. 2021, All Rights Reserved.
+France Government Users Restricted Rights - Use, duplication or disclosure
+restricted by GSA ADP Schedule Contract with Frank Joublin and Antonio Ceravola.
+=============================================================================
+Module: MDDTools Main Web Frontend
+Date: 10.07.2020
+=============================================================================
+-->
+<!DOCTYPE html>
+<html>
+<head>
+  <!--Cache test setting-->
+  <!--
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  -->
+
+  <meta charset='utf-8'>
+  <title>HyperGraph 1.0</title>
+  <style>
+    /*[# Begin section #]*/
+    .diagramDiv {
+      position: absolute;
+      /* top: -70px;   /* TODO: Remove this line, remove last lines */
+      width: 100%;
+      /* height: 120%; /* TODO: Restore to 100%
+       remove also last lines in htmlMenu.js in function _computeRootMenuMouseClickXY */
+      height: 100%;
+      background: rgb(160, 160, 160);
+    }
+    /*[# End section #]*/
+  </style>
+  <!--GoJS Editor Includes-->
+  <script type='text/javascript' src='lib/gojs/2.3.3/go.js'></script>
+  <!--End-->
+  <script>
+    window.addEventListener( 'load', ()=>{
+      // Remove default margin
+      window.document.body.style.margin = '0px';
+    });
+
+    window.addEventListener( 'load', ()=>{
+      // Set initialization function
+      document.body.style.setProperty( 'background', '#1d1f21', 'important' ); 
+      init();
+    });
+
+    //[# Begin declaration #]
+    const $ = go.GraphObject.make;  // for conciseness in defining templates
+    //[# End declaration #]
+
+    const p = {
+    //[# Begin pDeclaration #]
+    //[# End pDeclaration #]
+    };
+
+    const t = {
+    //[# Begin tDeclaration #]
+      d_diagram: null,
+    //[# End tDeclaration #]
+    }
+
+    function init() {
+      //[# Begin scriptOnLoad #]
+      Diagram_init( 'diagramDiv' );
+      Diagram_setup();
+      //[# End scriptOnLoad #]
+  
+      // Set a simple model if no model is found (just for test purposes)
+      const d = State_get( 'd_diagram' );
+      if( d && ( d.model.nodeDataArray.length == 0 ) ) {
+        // Simple model with one node
+        const simpleModel = new go.GraphLinksModel(
+          [
+            { key: "Alpha", color: "#f38181" },
+          ],
+          []
+        );
+        Diagram__setDiagramModel( simpleModel );
+      }
+    }
+    //[# Begin section #]
+    //------------------------
+    // API Functions
+    //------------------------
+    function Diagram_init( divId ) {
+  
+      const d_diagram = $(go.Diagram, divId,  // create a d_diagram for the DIV HTML element
+      {
+        "undoManager.isEnabled": true,
+      });
+  
+      State_set( 'd_diagram', d_diagram );
+    }
+    function Diagram_setup() {
+      // Setup for diagram properties
+      const model = new go.GraphLinksModel(
+      [
+        { "key": "Alpha", "color": "#f38181" },
+        { "key": "Beta",  "color": "#eaffd0" },
+        { "key": "Gamma", "color": "#95e1d3" },
+        { "key": "Delta", "color": "#fce38a" }
+      ],
+      [
+        { "from": "Alpha", "to": "Beta" },
+        { "from": "Alpha", "to": "Gamma" },
+        { "from": "Beta",  "to": "Beta" },
+        { "from": "Gamma", "to": "Delta" },
+        { "from": "Delta", "to": "Alpha" }
+      ]);
+      Diagram__setDiagramModel( model );
+      // define a simple Node template (but use the default Link template)
+      const sampleDSL = $(go.Node, "Auto",
+        //{ contextMenu: myContextMenu },
+        $(go.Shape, "RoundedRectangle",
+          {
+            click: setRandomColor,
+          },
+          // Shape.fill is bound to Node.data.color
+          new go.Binding("fill", "color")
+        ),
+        $(go.TextBlock,
+          { 
+            margin: 3,
+          },  // some room around the text
+          // TextBlock.text is bound to Node.data.key
+          new go.Binding("text", "key")
+        )
+      );
+      Diagram_setDSL( sampleDSL );
+    }
+    function Diagram_setDSL( dsl ) {
+      // DSL definition
+      const d = State_get( 'd_diagram' );
+      if( d && dsl ) {
+        d.nodeTemplate = dsl;
+      }
+    }
+    //------------------------
+    // Internal Functions
+    //------------------------
+    function Diagram__getEmptyModel() {
+      return( new go.GraphLinksModel( [], [] ) );
+    }
+    function Diagram__setDiagramModel( model ) {
+      if( model ) {
+        const d = State_get( 'd_diagram' );
+        // create the model data that will be represented by Nodes and Links
+        d.model = model;
+      }
+    }
+    //[# End section #]
+
+    function State_set( name, value ) {
+      if( p[name] !== undefined ) {
+        p[name] = value;
+      } else if( t[name] !== undefined ) {
+        t[name] = value;
+      } else {
+        console.error( `Error: field ${name} not found`)
+      }
+    }
+    function State_get( name ) {
+      if( p[name] !== undefined ) {
+        return( p[name] );
+      } else if( t[name] !== undefined ) {
+        return( t[name] );
+      } else {
+        console.error( `Error: field ${name} not found`)
+      }
+    }
+    function setRandomColor() {
+      const colorList = [ 'red',     'yellow',  'green',   'blue', 
+                          "#fce38a",  '#95e1d3', '#95e1d3', '#eaffd0' ];
+
+      const idx = Math.floor( Math.random()*colorList.length );
+      const d = State_get( 'd_diagram' );
+      changeColor( d, colorList[idx] );
+    }
+    // A custom command, for changing the color of the selected node(s).
+    function changeColor(diagram, color) {
+      // Always make changes in a transaction, except when initializing the diagram.
+      diagram.startTransaction("change color");
+      diagram.selection.each(function(node) {
+        if (node instanceof go.Node) {  // ignore any selected Links and simple Parts
+          // Examine and modify the data, not the Node directly.
+          var data = node.data;
+          // Call setDataProperty to support undo/redo as well as
+          // automatically evaluating any relevant bindings.
+          diagram.model.setDataProperty(data, "color", color);
+        }
+      });
+      diagram.commitTransaction("change color");
+    }
+  </script>
+</head>
+<body onload='init()'>
+  <div id="diagramDiv" class='diagramDiv'>
+  </div>
+</body>
+</html>

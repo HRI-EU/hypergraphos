@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='UTF-8'>
+		<title>Test Studio</title>
+		<script type='text/javascript' src='../1.1/resizableDiv.js'></script>
+		<!-- styles goes here -->
+		<link type='text/css' rel='stylesheet' href='TestStudio.css'></link>
+		<link type='text/css' rel='stylesheet' href='../1.1/resizableDiv.css'></link>
+		<script>
+		  function init() {
+				setDivAsResizable( '#panelPalette' );
+				setDivAsResizable( '#panelEditor' );
+		  }
+		</script>
+	</head>
+	<body onload='init()'>
+		<div class='panel-north'>
+			<h1 id='headerTitle' onclick='m.saveAll()'>
+				Test Studio
+			</h1>
+		</div>
+		<div class="panel-center">
+			<div id="Content1">
+			  This is a test Content Center to see it in the center panel
+			</div>
+		</div>
+		<div id='panelPalette' class='panel-west'>
+		  <div class='resizerObj'>
+				<div id='Content2'>
+				Test Content Left
+				</div>
+				<div class='resizer rightAll'></div>
+			</div>
+		</div>
+		<div id='panelEditor' class="panel-east">
+			<div class='resizerObj'>
+				<div id="Content3">
+					Test Contente Right
+				</div>
+				<div class='resizer leftAll'></div>
+			</div>
+		</div> 
+		<div class="panel-south">
+			<div id="log"></div>
+		</div>
+	</body>
+</html>

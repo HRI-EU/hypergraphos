@@ -1,0 +1,831 @@
+<html>
+<head>
+  <style>
+    .w3-col {
+      float: left;
+      width: 30%;
+    }
+    .colorbox {
+      padding:5px;
+      text-align: center;
+    }
+    .innerbox{
+      padding-top:30px;
+      font-size:120%;
+      font-family:"xSegoe UI",Arial,sans-serif;
+      font-weight:bold;
+    }
+    .colorhexspan {
+      font-size:80%;
+      opacity:0.6;
+    }
+    .linktocolormixerdiv {
+      width:100%;
+      margin-top:5px;
+      font-size:80%;
+      text-align:left;
+      padding-left:5px;
+      padding-bottom:5px;
+      opacity:0.7;
+    }
+    .linktocolorpickerdiv {
+      width:100%;
+      margin-top:5px;
+      font-size:80%;
+      text-align:right;
+      padding-right:5px;
+      padding-bottom:5px;
+      opacity:0.7;
+    }    .colorlinkcontainer {
+      display: none;
+      visibility:hidden;
+      margin-top:9px;
+      background-color:rgba(0,0,0,0.2);
+    }
+    #colornamestable a:link,#colornamestable a:hover,#colornamestable a:visited,#colornamestable a:active {
+      text-decoration:none;
+      color:inherit;
+      opacity:0.8;
+    }
+    #colornamestable a:hover,#colornamestable a:active {
+      opacity:1;
+    }    @media screen and (max-width:992px) {
+    .colorlinkcontainer{
+      visibility:visible;
+    }
+    .colorlinkcontainer{
+      visibility:visible;
+    }
+    }
+    .petter {
+      visibility:visible;
+    }
+    .petter {
+      visibility:visible;
+    }
+    .blackBlock {
+      border-color: white;
+      border-style: inset;
+      border-width: thin;
+      margin: -2px;
+    }
+  </style>
+  <script>
+    function toggleBackground() {
+      const colorList = {
+        'black': 'white',
+        'white': 'red',
+        'red': 'green',
+        'green': 'blue',
+        'blue': 'black',
+      };
+      const bgColor = document.body.style['background-color'];
+      document.body.style['background-color'] = colorList[bgColor];
+    }
+  </script>
+</head>
+<body style="background-color: black;" onclick="toggleBackground()">
+  <div id="colornamestable" class="w3-row">
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box1"  style="background-color: rgb(240, 248, 255); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >AliceBlue</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#F0F8FF</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box2"   style="background-color: rgb(250, 235, 215); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >AntiqueWhite</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FAEBD7</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box3"   style="background-color: rgb(0, 255, 255); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Aqua</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#00FFFF</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box4"   style="background-color: rgb(127, 255, 212); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Aquamarine</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#7FFFD4</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box5"   style="background-color: rgb(240, 255, 255); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Azure</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#F0FFFF</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box6"   style="background-color: rgb(245, 245, 220); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Beige</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#F5F5DC</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box7"   style="background-color: rgb(255, 228, 196); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Bisque</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FFE4C4</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox blackBlock" id="box8"   style="background-color: rgb(0, 0, 0); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >Black</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#000000</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box9"   style="background-color: rgb(255, 235, 205); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >BlanchedAlmond</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FFEBCD</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box10"   style="background-color: rgb(0, 0, 255); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >Blue</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#0000FF</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box11"   style="background-color: rgb(138, 43, 226); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >BlueViolet</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#8A2BE2</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box12"   style="background-color: rgb(165, 42, 42); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >Brown</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#A52A2A</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box13"   style="background-color: rgb(222, 184, 135); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >BurlyWood</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#DEB887</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box14"   style="background-color: rgb(95, 158, 160); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >CadetBlue</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#5F9EA0</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box15"   style="background-color: rgb(127, 255, 0); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Chartreuse</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#7FFF00</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box16"   style="background-color: rgb(210, 105, 30); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >Chocolate</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#D2691E</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box17"   style="background-color: rgb(255, 127, 80); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Coral</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FF7F50</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box18"   style="background-color: rgb(100, 149, 237); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >CornflowerBlue</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#6495ED</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box19"   style="background-color: rgb(255, 248, 220); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Cornsilk</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FFF8DC</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box20"   style="background-color: rgb(220, 20, 60); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >Crimson</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#DC143C</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box21"   style="background-color: rgb(0, 255, 255); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Cyan</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#00FFFF</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box22"   style="background-color: rgb(0, 0, 139); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >DarkBlue</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#00008B</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box23"   style="background-color: rgb(0, 139, 139); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >DarkCyan</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#008B8B</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box24"   style="background-color: rgb(184, 134, 11); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >DarkGoldenRod</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#B8860B</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box25"   style="background-color: rgb(169, 169, 169); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >DarkGray</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#A9A9A9</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box26"   style="background-color: rgb(169, 169, 169); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >DarkGrey</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#A9A9A9</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box27"   style="background-color: rgb(0, 100, 0); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >DarkGreen</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#006400</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box28"   style="background-color: rgb(189, 183, 107); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >DarkKhaki</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#BDB76B</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box29"   style="background-color: rgb(139, 0, 139); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >DarkMagenta</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#8B008B</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box30"   style="background-color: rgb(85, 107, 47); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >DarkOliveGreen</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#556B2F</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box31"   style="background-color: rgb(255, 140, 0); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >DarkOrange</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FF8C00</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box32"   style="background-color: rgb(153, 50, 204); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >DarkOrchid</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#9932CC</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box33"   style="background-color: rgb(139, 0, 0); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >DarkRed</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#8B0000</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box34"   style="background-color: rgb(233, 150, 122); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >DarkSalmon</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#E9967A</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box35"   style="background-color: rgb(143, 188, 143); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >DarkSeaGreen</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#8FBC8F</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box36"   style="background-color: rgb(72, 61, 139); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >DarkSlateBlue</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#483D8B</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box37"   style="background-color: rgb(47, 79, 79); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >DarkSlateGray</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#2F4F4F</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box38"   style="background-color: rgb(47, 79, 79); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >DarkSlateGrey</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#2F4F4F</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box39"   style="background-color: rgb(0, 206, 209); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >DarkTurquoise</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#00CED1</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box40"   style="background-color: rgb(148, 0, 211); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >DarkViolet</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#9400D3</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box41"   style="background-color: rgb(255, 20, 147); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >DeepPink</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FF1493</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box42"   style="background-color: rgb(0, 191, 255); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >DeepSkyBlue</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#00BFFF</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box43"   style="background-color: rgb(105, 105, 105); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >DimGray</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#696969</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box44"   style="background-color: rgb(105, 105, 105); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >DimGrey</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#696969</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box45"   style="background-color: rgb(30, 144, 255); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >DodgerBlue</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#1E90FF</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box46"   style="background-color: rgb(178, 34, 34); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >FireBrick</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#B22222</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box47"   style="background-color: rgb(255, 250, 240); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >FloralWhite</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FFFAF0</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box48"   style="background-color: rgb(34, 139, 34); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >ForestGreen</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#228B22</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box49"   style="background-color: rgb(255, 0, 255); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >Fuchsia</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FF00FF</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box50"   style="background-color: rgb(220, 220, 220); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Gainsboro</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#DCDCDC</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box51"   style="background-color: rgb(248, 248, 255); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >GhostWhite</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#F8F8FF</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box52"   style="background-color: rgb(255, 215, 0); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Gold</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FFD700</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box53"   style="background-color: rgb(218, 165, 32); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >GoldenRod</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#DAA520</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box54"   style="background-color: rgb(128, 128, 128); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >Gray</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#808080</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box55"   style="background-color: rgb(128, 128, 128); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >Grey</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#808080</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box56"   style="background-color: rgb(0, 128, 0); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >Green</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#008000</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box57"   style="background-color: rgb(173, 255, 47); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >GreenYellow</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#ADFF2F</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box58"   style="background-color: rgb(240, 255, 240); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >HoneyDew</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#F0FFF0</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box59"   style="background-color: rgb(255, 105, 180); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >HotPink</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FF69B4</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box60"   style="background-color: rgb(205, 92, 92); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >IndianRed </a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#CD5C5C</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box61"   style="background-color: rgb(75, 0, 130); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >Indigo  </a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#4B0082</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box62"   style="background-color: rgb(255, 255, 240); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Ivory</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FFFFF0</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box63"   style="background-color: rgb(240, 230, 140); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Khaki</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#F0E68C</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box64"   style="background-color: rgb(230, 230, 250); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Lavender</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#E6E6FA</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box65"   style="background-color: rgb(255, 240, 245); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >LavenderBlush</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FFF0F5</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box66"   style="background-color: rgb(124, 252, 0); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >LawnGreen</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#7CFC00</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box67"   style="background-color: rgb(255, 250, 205); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >LemonChiffon</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FFFACD</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box68"   style="background-color: rgb(173, 216, 230); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >LightBlue</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#ADD8E6</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box69"   style="background-color: rgb(240, 128, 128); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >LightCoral</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#F08080</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box70"   style="background-color: rgb(224, 255, 255); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >LightCyan</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#E0FFFF</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box71"   style="background-color: rgb(250, 250, 210); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >LightGoldenRodYellow</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FAFAD2</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box72"   style="background-color: rgb(211, 211, 211); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >LightGray</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#D3D3D3</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box73"   style="background-color: rgb(211, 211, 211); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >LightGrey</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#D3D3D3</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box74"   style="background-color: rgb(144, 238, 144); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >LightGreen</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#90EE90</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box75"   style="background-color: rgb(255, 182, 193); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >LightPink</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FFB6C1</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box76"   style="background-color: rgb(255, 160, 122); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >LightSalmon</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FFA07A</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box77"   style="background-color: rgb(32, 178, 170); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >LightSeaGreen</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#20B2AA</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box78"   style="background-color: rgb(135, 206, 250); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >LightSkyBlue</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#87CEFA</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box79"   style="background-color: rgb(119, 136, 153); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >LightSlateGray</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#778899</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box80"   style="background-color: rgb(119, 136, 153); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >LightSlateGrey</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#778899</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box81"   style="background-color: rgb(176, 196, 222); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >LightSteelBlue</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#B0C4DE</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box82"   style="background-color: rgb(255, 255, 224); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >LightYellow</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FFFFE0</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box83"   style="background-color: rgb(0, 255, 0); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >Lime</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#00FF00</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box84"   style="background-color: rgb(50, 205, 50); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >LimeGreen</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#32CD32</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box85"   style="background-color: rgb(250, 240, 230); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Linen</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FAF0E6</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box86"   style="background-color: rgb(255, 0, 255); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >Magenta</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FF00FF</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box87"   style="background-color: rgb(128, 0, 0); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >Maroon</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#800000</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box88"   style="background-color: rgb(102, 205, 170); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >MediumAquaMarine</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#66CDAA</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box89"   style="background-color: rgb(0, 0, 205); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >MediumBlue</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#0000CD</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box90"   style="background-color: rgb(186, 85, 211); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >MediumOrchid</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#BA55D3</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box91"   style="background-color: rgb(147, 112, 219); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >MediumPurple</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#9370DB</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box92"   style="background-color: rgb(60, 179, 113); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >MediumSeaGreen</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#3CB371</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box93"   style="background-color: rgb(123, 104, 238); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >MediumSlateBlue</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#7B68EE</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box94"   style="background-color: rgb(0, 250, 154); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >MediumSpringGreen</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#00FA9A</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box95"   style="background-color: rgb(72, 209, 204); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >MediumTurquoise</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#48D1CC</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box96"   style="background-color: rgb(199, 21, 133); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >MediumVioletRed</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#C71585</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box97"   style="background-color: rgb(25, 25, 112); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >MidnightBlue</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#191970</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box98"   style="background-color: rgb(245, 255, 250); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >MintCream</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#F5FFFA</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box99"   style="background-color: rgb(255, 228, 225); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >MistyRose</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FFE4E1</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box100"   style="background-color: rgb(255, 228, 181); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Moccasin</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FFE4B5</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box101"   style="background-color: rgb(255, 222, 173); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >NavajoWhite</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FFDEAD</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box102"   style="background-color: rgb(0, 0, 128); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >Navy</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#000080</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box103"   style="background-color: rgb(253, 245, 230); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >OldLace</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FDF5E6</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box104"   style="background-color: rgb(128, 128, 0); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >Olive</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#808000</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box105"   style="background-color: rgb(107, 142, 35); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >OliveDrab</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#6B8E23</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box106"   style="background-color: rgb(255, 165, 0); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Orange</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FFA500</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box107"   style="background-color: rgb(255, 69, 0); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >OrangeRed</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FF4500</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box108"   style="background-color: rgb(218, 112, 214); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Orchid</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#DA70D6</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box109"   style="background-color: rgb(238, 232, 170); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >PaleGoldenRod</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#EEE8AA</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box110"   style="background-color: rgb(152, 251, 152); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >PaleGreen</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#98FB98</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box111"   style="background-color: rgb(175, 238, 238); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >PaleTurquoise</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#AFEEEE</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box112"   style="background-color: rgb(219, 112, 147); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >PaleVioletRed</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#DB7093</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box113"   style="background-color: rgb(255, 239, 213); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >PapayaWhip</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FFEFD5</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box114"   style="background-color: rgb(255, 218, 185); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >PeachPuff</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FFDAB9</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box115"   style="background-color: rgb(205, 133, 63); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >Peru</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#CD853F</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box116"   style="background-color: rgb(255, 192, 203); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Pink</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FFC0CB</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box117"   style="background-color: rgb(221, 160, 221); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Plum</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#DDA0DD</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box118"   style="background-color: rgb(176, 224, 230); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >PowderBlue</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#B0E0E6</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box119"   style="background-color: rgb(128, 0, 128); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >Purple</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#800080</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box120"   style="background-color: rgb(102, 51, 153); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >RebeccaPurple</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#663399</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box121"   style="background-color: rgb(255, 0, 0); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >Red</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FF0000</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box122"   style="background-color: rgb(188, 143, 143); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >RosyBrown</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#BC8F8F</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box123"   style="background-color: rgb(65, 105, 225); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >RoyalBlue</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#4169E1</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box124"   style="background-color: rgb(139, 69, 19); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >SaddleBrown</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#8B4513</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box125"   style="background-color: rgb(250, 128, 114); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Salmon</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FA8072</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box126"   style="background-color: rgb(244, 164, 96); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >SandyBrown</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#F4A460</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box127"   style="background-color: rgb(46, 139, 87); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >SeaGreen</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#2E8B57</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box128"   style="background-color: rgb(255, 245, 238); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >SeaShell</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FFF5EE</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box129"   style="background-color: rgb(160, 82, 45); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >Sienna</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#A0522D</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box130"   style="background-color: rgb(192, 192, 192); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Silver</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#C0C0C0</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box131"   style="background-color: rgb(135, 206, 235); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >SkyBlue</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#87CEEB</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box132"   style="background-color: rgb(106, 90, 205); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >SlateBlue</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#6A5ACD</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box133"   style="background-color: rgb(112, 128, 144); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >SlateGray</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#708090</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box134"   style="background-color: rgb(112, 128, 144); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >SlateGrey</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#708090</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box135"   style="background-color: rgb(255, 250, 250); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Snow</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FFFAFA</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box136"   style="background-color: rgb(0, 255, 127); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >SpringGreen</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#00FF7F</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box137"   style="background-color: rgb(70, 130, 180); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >SteelBlue</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#4682B4</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box138"   style="background-color: rgb(210, 180, 140); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Tan</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#D2B48C</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box139"   style="background-color: rgb(0, 128, 128); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >Teal</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#008080</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box140"   style="background-color: rgb(216, 191, 216); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Thistle</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#D8BFD8</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box141"   style="background-color: rgb(255, 99, 71); color: rgb(255, 255, 255);">
+          <span class="colornamespan"><a target="_blank" >Tomato</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FF6347</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box142"   style="background-color: rgb(64, 224, 208); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Turquoise</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#40E0D0</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box143"   style="background-color: rgb(238, 130, 238); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Violet</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#EE82EE</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box144"   style="background-color: rgb(245, 222, 179); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Wheat</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#F5DEB3</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box145"   style="background-color: rgb(255, 255, 255); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >White</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FFFFFF</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box146"   style="background-color: rgb(245, 245, 245); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >WhiteSmoke</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#F5F5F5</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box147"   style="background-color: rgb(255, 255, 0); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >Yellow</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#FFFF00</a></span></div>        </div>
+    </div>
+    <div class="w3-col l4 m6 w3-center colorbox">
+        <div class="innerbox" id="box148"   style="background-color: rgb(154, 205, 50); color: rgb(31, 45, 61);">
+          <span class="colornamespan"><a target="_blank" >YellowGreen</a></span><br>
+          <div><span class="colorhexspan"><a target="_blank" >#9ACD32</a></span></div>        </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "dslNameList": [
+    "DefaultDSL",
+    "HierarchyDSL",
+    "TextLabelsDSL",
+    "PicturesDSL"
+  ],
+  "view": {
+    "scale": 0.24901077462220544,
+    "position": [
+      -868.3984588159101,
+      -8676.16508198482
+    ],
+    "isGridOn": false
+  },
+  "graphFileServer": [],
+  "model": "{ \"class\": \"GraphLinksModel\",\n  \"copiesArrays\": true,\n  \"copiesArrayObjects\": true,\n  \"copiesKey\": false,\n  \"linkKeyProperty\": \"key\",\n  \"linkFromPortIdProperty\": \"fromPort\",\n  \"linkToPortIdProperty\": \"toPort\",\n  \"nodeDataArray\": [\n{\"label\":\"Graph Info\",\"category\":\"Hierarchy_GraphInfo\",\"size\":\"215 81\",\"props_\":[{\"name\":\"Name\",\"value\":\"label@2\",\"valueChanged\":\"true\"},{\"name\":\"Version\",\"value\":\"1.0\"},{\"name\":\"Date\",\"value\":\"26/10/2023\",\"valueChanged\":true},{\"name\":\"Path\",\"value\":\"/fileServer/01/99.json\",\"valueChanged\":true},{\"name\":\"Authors\",\"value\":\"- Antonello\\n- Frank\\n- Johane\",\"valueChanged\":true}],\"key\":0,\"location\":\"1900 -7229.5\"},\n{\"label\":\"SMILE Project\",\"category\":\"TextLabels_Size6\",\"alignment\":\"0 0.5 0 0\",\"alignmentFocus\":\"0 0.5 0 0\",\"size\":\"1672 240\",\"key\":2,\"location\":\"2210 -7150\"},\n{\"label\":\"Milestone 1\",\"size\":\"352 193\",\"category\":\"Hierarchy_FolderContent\",\"fileType\":\"text/json\",\"isDir\":true,\"fileURL\":\"/fileServer/02/11.json\",\"key\":4,\"location\":\"1900 -6723.5\"},\n{\"label\":\"Milestone 2\",\"size\":\"352 193\",\"category\":\"Hierarchy_FolderContent\",\"fileType\":\"text/json\",\"isDir\":true,\"fileURL\":\"/fileServer/02/01.json\",\"key\":6,\"location\":\"1900 -6390\"},\n{\"label\":\"Milestone 3\",\"size\":\"352 193\",\"category\":\"Hierarchy_FolderContent\",\"fileType\":\"text/json\",\"isDir\":true,\"fileURL\":\"/fileServer/02/00.json\",\"key\":8,\"location\":\"1910 -6030\"},\n{\"label\":\"Milestone 1\",\"category\":\"TextLabels_Size5\",\"alignment\":\"0 0.5 0 0\",\"alignmentFocus\":\"0 0.5 0 0\",\"size\":\"744 30\",\"key\":10,\"location\":\"2300 -6720\"},\n{\"label\":\"Milestone 2\",\"category\":\"TextLabels_Size5\",\"alignment\":\"0 0.5 0 0\",\"alignmentFocus\":\"0 0.5 0 0\",\"size\":\"744 30\",\"key\":12,\"location\":\"2310 -6390\"},\n{\"label\":\"Milestone 3\",\"category\":\"TextLabels_Size5\",\"alignment\":\"0 0.5 0 0\",\"alignmentFocus\":\"0 0.5 0 0\",\"size\":\"744 30\",\"key\":14,\"location\":\"2320 -6010\"}\n],\n  \"linkDataArray\": []}"
+}

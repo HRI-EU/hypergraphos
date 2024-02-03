@@ -1,0 +1,19 @@
+{
+  "dslNameList": [
+    "DefaultDSL",
+    "HierarchyDSL",
+    "ThinkingDSL",
+    "TextLabelsDSL",
+    "PicturesDSL"
+  ],
+  "view": {
+    "scale": 0.7619047619047581,
+    "position": [
+      -925.1250000000088,
+      -1022.2182617187543
+    ],
+    "isGridOn": false
+  },
+  "graphFileServer": [],
+  "model": "{ \"class\": \"GraphLinksModel\",\n  \"copiesArrays\": true,\n  \"copiesArrayObjects\": true,\n  \"copiesKey\": false,\n  \"linkKeyProperty\": \"key\",\n  \"linkFromPortIdProperty\": \"fromPort\",\n  \"linkToPortIdProperty\": \"toPort\",\n  \"nodeDataArray\": [\n{\"label\":\"Dialog learning\",\"size\":\"264 60\",\"category\":\"Hierarchy_Project\",\"isDir\":true,\"fileType\":\"text/json\",\"fileURL\":\"/fileServer/00/43.json\",\"key\":0,\"location\":\"80 20\"},\n{\"label\":\"Learning Scenarios\",\"size\":\"265 60\",\"category\":\"Hierarchy_Project\",\"isDir\":true,\"fileURL\":\"/fileServer/00/47.bin\",\"key\":2,\"location\":\"80 130\",\"fileType\":\"text/json\"},\n{\"label\":\"Proactivity\",\"size\":\"150 100\",\"category\":\"Hierarchy_FolderContent\",\"fileType\":\"text/json\",\"isDir\":true,\"fileURL\":\"/fileServer/01/85.json\",\"key\":4,\"location\":\"130 -350\"},\n{\"label\":\"Proactivity\",\"category\":\"TextLabels_Size4\",\"alignment\":\"0 0.5 0 0\",\"alignmentFocus\":\"0 0.5 0 0\",\"size\":\"422 30\",\"key\":8,\"location\":\"60 -450\"},\n{\"label\":\"Dialog Perception\",\"size\":\"150 100\",\"category\":\"Hierarchy_FolderContent\",\"fileType\":\"text/json\",\"isDir\":true,\"fileURL\":\"/fileServer/01/86.json\",\"key\":6,\"location\":\"690 -340\"},\n{\"label\":\"Dialog Perception\",\"category\":\"TextLabels_Size4\",\"alignment\":\"0 0.5 0 0\",\"alignmentFocus\":\"0 0.5 0 0\",\"size\":\"422 30\",\"key\":7,\"location\":\"610 -490\"},\n{\"label\":\"Folder Content\",\"size\":\"150 100\",\"category\":\"Hierarchy_FolderContent\",\"fileType\":\"text/json\",\"isDir\":true,\"fileURL\":\"/fileServer/02/60.json\",\"key\":10,\"location\":\"410 -170\"}\n],\n  \"linkDataArray\": []}"
+}

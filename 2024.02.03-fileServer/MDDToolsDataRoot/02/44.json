@@ -1,0 +1,17 @@
+{
+  "dslNameList": [
+    "HierarchyDSL",
+    "TextLabelsDSL",
+    "PicturesDSL"
+  ],
+  "view": {
+    "scale": 1.116326679287355,
+    "position": [
+      739.084933080731,
+      -24868.375004267305
+    ],
+    "isGridOn": false
+  },
+  "graphFileServer": [],
+  "model": "{ \"class\": \"GraphLinksModel\",\n  \"copiesArrays\": true,\n  \"copiesArrayObjects\": true,\n  \"copiesKey\": false,\n  \"linkKeyProperty\": \"key\",\n  \"linkFromPortIdProperty\": \"fromPort\",\n  \"linkToPortIdProperty\": \"toPort\",\n  \"nodeDataArray\": [\n{\"label\":\"Graph Info\",\"category\":\"Hierarchy_GraphInfo\",\"size\":\"180 80\",\"props_\":[{\"name\":\"Name\",\"value\":\"label@7\",\"valueChanged\":true},{\"name\":\"Version\",\"value\":\"1.0\"},{\"name\":\"Date\",\"value\":\"1/24/2024\"},{\"name\":\"Path\",\"value\":\"/fileServer/02/44.json\"},{\"name\":\"Authors\",\"value\":\"Bram\",\"valueChanged\":\"true\"}],\"key\":0,\"location\":\"1660 -24760\"},\n{\"label\":\"Model\",\"size\":\"180 60\",\"category\":\"Hierarchy_Model\",\"isFile\":true,\"fileType\":\"text/json\",\"isSystem\":\"$GraphModel$\",\"key\":3,\"location\":\"1400 -24770\"},\n{\"label\":\"Selection\",\"size\":\"180 60\",\"category\":\"Hierarchy_Selection\",\"isFile\":true,\"fileType\":\"text/json\",\"isSystem\":\"$GraphSelection$\",\"key\":5,\"location\":\"1400 -24700\"},\n{\"label\":\"Bram's Home\",\"category\":\"TextLabels_Size6\",\"alignment\":\"0 0.5 0 0\",\"alignmentFocus\":\"0 0.5 0 0\",\"size\":\"1765 253\",\"key\":7,\"location\":\"1880 -24693.5\"},\n{\"label\":\"Playground\",\"size\":\"150 100\",\"category\":\"Hierarchy_FolderContent\",\"fileType\":\"text/json\",\"isDir\":true,\"fileURL\":\"/fileServer/02/45.json\",\"key\":6,\"location\":\"1350 -24360\"},\n{\"label\":\"DSL Element Documentation\",\"size\":\"150 100\",\"category\":\"Hierarchy_FolderContent\",\"fileType\":\"text/json\",\"isDir\":true,\"fileURL\":\"/fileServer/02/53.json\",\"key\":9,\"location\":\"1350 -24520\"},\n{\"label\":\"Hypergraph Evaluation\",\"size\":\"150 100\",\"category\":\"Hierarchy_FolderContent\",\"fileType\":\"text/json\",\"isDir\":true,\"fileURL\":\"/fileServer/02/61.json\",\"key\":10,\"location\":\"860 -24510\"}\n],\n  \"linkDataArray\": []}"
+}

@@ -1,0 +1,17 @@
+{
+  "dslNameList": [
+    "HierarchyDSL",
+    "TextLabelsDSL",
+    "PicturesDSL"
+  ],
+  "view": {
+    "scale": 1.7924688869429783,
+    "position": [
+      1369.4060797270295,
+      -24551.635795755567
+    ],
+    "isGridOn": false
+  },
+  "graphFileServer": [],
+  "model": "{ \"class\": \"GraphLinksModel\",\n  \"copiesArrays\": true,\n  \"copiesArrayObjects\": true,\n  \"copiesKey\": false,\n  \"linkKeyProperty\": \"key\",\n  \"linkFromPortIdProperty\": \"fromPort\",\n  \"linkToPortIdProperty\": \"toPort\",\n  \"nodeDataArray\": [\n{\"label\":\"Graph Info\",\"category\":\"Hierarchy_GraphInfo\",\"size\":\"180 80\",\"props_\":[{\"name\":\"Name\",\"value\":\"label@6\",\"valueChanged\":true},{\"name\":\"Type\",\"value\":\"<TemplateWorkSpace>\",\"valueChanged\":\"true\"},{\"name\":\"Version\",\"value\":\"1.0\"},{\"name\":\"Date\",\"value\":\"date@system\",\"valueChanged\":\"true\"},{\"name\":\"Path\",\"value\":\"graphPath@system\",\"valueChanged\":\"true\"},{\"name\":\"Authors\",\"value\":\"userName@system\",\"valueChanged\":\"true\"}],\"key\":0,\"location\":\"2370 -23980\"},\n{\"label\":\"Model\",\"size\":\"180 60\",\"category\":\"Hierarchy_Model\",\"isFile\":true,\"fileType\":\"text/json\",\"isSystem\":\"$GraphModel$\",\"key\":2,\"location\":\"2120 -23960\"},\n{\"label\":\"Selection\",\"size\":\"180 60\",\"category\":\"Hierarchy_Selection\",\"isFile\":true,\"fileType\":\"text/json\",\"isSystem\":\"$GraphSelection$\",\"key\":4,\"location\":\"2120 -23860\"},\n{\"label\":\"Template WorkSpace\",\"category\":\"TextLabels_Size6\",\"alignment\":\"0 0.5 0 0\",\"alignmentFocus\":\"0 0.5 0 0\",\"size\":\"2777 240\",\"key\":6,\"location\":\"2700 -23900\"}\n],\n  \"linkDataArray\": []}"
+}

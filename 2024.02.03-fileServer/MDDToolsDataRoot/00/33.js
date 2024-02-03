@@ -1,0 +1,16 @@
+[
+  "Define_FileName",
+  "Begin_Header_Info",
+  "Define_Avatar",
+  "Loop_Begin_Rule",
+  [
+    "Begin_Header_Rule",
+    "Loop_Begin_FanIn",
+    [
+      "Begin_OR"
+    ],
+    "Begin_Skip",
+    "Begin_FanOut"
+  ],
+  "Begin_Skip"
+]

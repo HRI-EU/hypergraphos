@@ -1,0 +1,21 @@
+{
+  "dslNameList": [
+    "DefaultDSL",
+    "HierarchyDSL",
+    "TextLabelsDSL",
+    "PicturesDSL"
+  ],
+  "view": {
+    "scale": 1.3580035545246083,
+    "position": [
+      -3035.5979599951293,
+      -4481.69925396395
+    ],
+    "isGridOn": false
+  },
+  "graphFileServer": [
+    "const message = 'Hello World';\n// This has been edited a second time :-)\nconst message2 = 'Nice, from 2nd Instance';\n// Cool from 1st instance\nconst message3 = 'Lets test the onChange process';",
+    "// This is another GrapFile example :-)"
+  ],
+  "model": "{ \"class\": \"GraphLinksModel\",\n  \"copiesArrays\": true,\n  \"copiesArrayObjects\": true,\n  \"copiesKey\": false,\n  \"linkKeyProperty\": \"key\",\n  \"linkFromPortIdProperty\": \"fromPort\",\n  \"linkToPortIdProperty\": \"toPort\",\n  \"nodeDataArray\": [\n{\"label\":\"Test GraphServer\",\"category\":\"TextLabels_Size6\",\"alignment\":\"0 0.5 0 0\",\"alignmentFocus\":\"0 0.5 0 0\",\"size\":\"1971 240\",\"key\":0,\"location\":\"-1540 -4000\"},\n{\"label\":\"Graph Info\",\"category\":\"Hierarchy_GraphInfo\",\"size\":\"180 80\",\"props_\":[{\"name\":\"Name\",\"value\":\"label@0\",\"valueChanged\":true},{\"name\":\"Version\",\"value\":\"1.0\"},{\"name\":\"Date\",\"value\":\"11/11/2023\"},{\"name\":\"Path\",\"value\":\"/fileServer/02/20.json\"},{\"name\":\"Authors\",\"value\":\"Antonello\",\"valueChanged\":true}],\"key\":2,\"location\":\"-1800 -4060\"},\n{\"label\":\"Model\",\"size\":\"180 60\",\"category\":\"Hierarchy_Model\",\"isFile\":true,\"fileType\":\"text/json\",\"isSystem\":\"$GraphModel$\",\"key\":4,\"location\":\"-2050 -4070\"},\n{\"label\":\"Selection\",\"size\":\"180 60\",\"category\":\"Hierarchy_Selection\",\"isFile\":true,\"fileType\":\"text/json\",\"isSystem\":\"$GraphSelection$\",\"key\":6,\"location\":\"-2050 -3960\"},\n{\"label\":\"Code in Graph URL\",\"color\":\"orange\",\"size\":\"423 100\",\"category\":\"Hierarchy_CodeInGraph\",\"isFile\":true,\"fileURL\":\"graph://fileServer/0.js\",\"fileTypeName\":\"Javascript\",\"fileType\":\"text/javascript\",\"key\":7,\"location\":\"-2250 -3590\"},\n{\"label\":\"Code in Graph URL 2nd Instance\",\"color\":\"orange\",\"size\":\"423 100\",\"category\":\"Hierarchy_CodeInGraph\",\"isFile\":true,\"fileURL\":\"graph://fileServer/0.js\",\"fileTypeName\":\"Javascript\",\"fileType\":\"text/javascript\",\"key\":8,\"location\":\"-2240 -3400\"},\n{\"label\":\"Code in Graph URL\",\"color\":\"orange\",\"size\":\"412 164\",\"category\":\"Hierarchy_CodeInGraph\",\"isFile\":true,\"fileURL\":\"graph://fileServer/1.js\",\"fileTypeName\":\"Javascript\",\"fileType\":\"text/javascript\",\"key\":10,\"location\":\"-2090 -3095.5\"}\n],\n  \"linkDataArray\": []}"
+}

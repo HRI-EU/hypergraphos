@@ -1,0 +1,18 @@
+{
+  "dslNameList": [
+    "DefaultDSL",
+    "HierarchyDSL",
+    "TextLabelsDSL",
+    "PicturesDSL"
+  ],
+  "view": {
+    "scale": 0.3853709834469329,
+    "position": [
+      17.922016494182117,
+      -25203.199397512817
+    ],
+    "isGridOn": false
+  },
+  "graphFileServer": [],
+  "model": "{ \"class\": \"GraphLinksModel\",\n  \"copiesArrays\": true,\n  \"copiesArrayObjects\": true,\n  \"copiesKey\": false,\n  \"linkKeyProperty\": \"key\",\n  \"linkFromPortIdProperty\": \"fromPort\",\n  \"linkToPortIdProperty\": \"toPort\",\n  \"nodeDataArray\": [\n{\"label\":\"Graph Info\",\"category\":\"Hierarchy_GraphInfo\",\"size\":\"180 80\",\"props_\":[{\"name\":\"Name\",\"value\":\"label@2\",\"valueChanged\":\"true\"},{\"name\":\"Version\",\"value\":\"1.0\"},{\"name\":\"Date\",\"value\":\"date@system\",\"valueChanged\":true},{\"name\":\"Path\",\"value\":\"graphPath@system\",\"valueChanged\":true},{\"name\":\"Authors\",\"value\":\"userName@system\",\"valueChanged\":true}],\"key\":0,\"location\":\"2080 -24140\"},\n{\"label\":\"GraphInfo WorkSpace\",\"category\":\"TextLabels_Size6\",\"alignment\":\"0 0.5 0 0\",\"alignmentFocus\":\"0 0.5 0 0\",\"size\":\"2521 240\",\"key\":2,\"location\":\"2350 -24080\"},\n{\"label\":\"Model\",\"size\":\"180 60\",\"category\":\"Hierarchy_Model\",\"isFile\":true,\"fileType\":\"text/json\",\"isSystem\":\"$GraphModel$\",\"key\":4,\"location\":\"1810 -24140\"},\n{\"label\":\"Selection\",\"size\":\"180 60\",\"category\":\"Hierarchy_Selection\",\"isFile\":true,\"fileType\":\"text/json\",\"isSystem\":\"$GraphSelection$\",\"key\":6,\"location\":\"1810 -24040\"}\n],\n  \"linkDataArray\": []}"
+}

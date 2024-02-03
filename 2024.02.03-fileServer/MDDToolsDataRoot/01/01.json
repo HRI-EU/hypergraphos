@@ -1,0 +1,23 @@
+{
+  "dslNameList": [
+    "DefaultDSL",
+    "HierarchyDSL",
+    "ThinkingDSL",
+    "TextLabelsDSL",
+    "CodeFlowDSL",
+    "ConnectorsDSL",
+    "PicturesDSL",
+    "TreeDSL",
+    "KanbanDSL",
+    "DataFlowDSL"
+  ],
+  "view": {
+    "scale": 0.6181945828426475,
+    "position": [
+      -4957.203697598075,
+      -1277.8792541304797
+    ],
+    "isGridOn": true
+  },
+  "model": "{ \"class\": \"GraphLinksModel\",\n  \"copiesArrays\": true,\n  \"copiesArrayObjects\": true,\n  \"copiesKey\": false,\n  \"linkKeyProperty\": \"key\",\n  \"linkFromPortIdProperty\": \"fromPort\",\n  \"linkToPortIdProperty\": \"toPort\",\n  \"nodeDataArray\": [{\"label\":\"File\",\"size\":\"180 35\",\"category\":\"Hierarchy_DataInFile\",\"isFile\":true,\"fileTypeName\":\"Javascript\",\"fileType\":\"text/javascript\",\"fileURL\":\"\",\"key\":0,\"location\":\"-3120 -550\"}],\n  \"linkDataArray\": []}"
+}

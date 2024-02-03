@@ -1,0 +1,17 @@
+{
+  "dslNameList": [
+    "DefaultDSL",
+    "HierarchyDSL",
+    "TextLabelsDSL",
+    "PicturesDSL"
+  ],
+  "view": {
+    "scale": 1.2933367185948694,
+    "position": [
+      4384.974366601211,
+      2050.073978979008
+    ],
+    "isGridOn": false
+  },
+  "model": "{ \"class\": \"GraphLinksModel\",\n  \"copiesArrays\": true,\n  \"copiesArrayObjects\": true,\n  \"copiesKey\": false,\n  \"linkKeyProperty\": \"key\",\n  \"linkFromPortIdProperty\": \"fromPort\",\n  \"linkToPortIdProperty\": \"toPort\",\n  \"nodeDataArray\": [\n{\"label\":\"Graph Info\",\"category\":\"Hierarchy_GraphInfo\",\"size\":\"180 80\",\"props_\":[{\"name\":\"Name\",\"value\":\"tbd\"},{\"name\":\"Version\",\"value\":\"1.0\"},{\"name\":\"Date\",\"value\":\"@getDate()\"},{\"name\":\"Path\",\"value\":\"./\"},{\"name\":\"Authors\",\"value\":\"Antonello\",\"valueChanged\":true}],\"key\":0,\"location\":\"4960 2400\"},\n{\"label\":\"Diagram Test\",\"category\":\"TextLabels_Size6\",\"alignment\":\"0 0.5 0 0\",\"alignmentFocus\":\"0 0.5 0 0\",\"size\":\"1567 240\",\"key\":2,\"location\":\"5220 2470\"},\n{\"label\":\"Model\",\"size\":\"180 60\",\"category\":\"Hierarchy_Model\",\"isFile\":true,\"fileType\":\"text/json\",\"isSystem\":\"$GraphModel$\",\"key\":4,\"location\":\"4730 2410\"},\n{\"label\":\"Selection\",\"size\":\"180 60\",\"category\":\"Hierarchy_Selection\",\"isFile\":true,\"fileType\":\"text/json\",\"isSystem\":\"$GraphSelection$\",\"key\":6,\"location\":\"4730 2510\"}\n],\n  \"linkDataArray\": []}"
+}

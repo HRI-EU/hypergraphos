@@ -1,0 +1,17 @@
+{
+  "dslNameList": [
+    "DefaultDSL",
+    "HierarchyDSL",
+    "TextLabelsDSL",
+    "PicturesDSL"
+  ],
+  "view": {
+    "scale": 0.5642785262884348,
+    "position": [
+      -4051.2401907927947,
+      -6228.784090802727
+    ],
+    "isGridOn": false
+  },
+  "model": "{ \"class\": \"GraphLinksModel\",\n  \"copiesArrays\": true,\n  \"copiesArrayObjects\": true,\n  \"copiesKey\": false,\n  \"linkKeyProperty\": \"key\",\n  \"linkFromPortIdProperty\": \"fromPort\",\n  \"linkToPortIdProperty\": \"toPort\",\n  \"nodeDataArray\": [\n{\"label\":\"Graph Info\",\"category\":\"Hierarchy_GraphInfo\",\"size\":\"180 80\",\"props_\":[{\"name\":\"Name\",\"value\":\"tbd\"},{\"name\":\"Version\",\"value\":\"1.0\"},{\"name\":\"Date\",\"value\":\"@getDate()\"},{\"name\":\"Path\",\"value\":\"./\"},{\"name\":\"Authors\",\"value\":\"Antonello\",\"valueChanged\":true}],\"key\":0,\"location\":\"-2120 -4740\"},\n{\"label\":\"Basic Image\",\"category\":\"Pictures_Basic\",\"size\":\"417 870\",\"isFile\":true,\"fileTypeName\":\"Image\",\"fileType\":\"image/png\",\"fileURL\":\"/fileServer/Palette/IMG_4599.PNG\",\"key\":1,\"location\":\"740 -2780\"},\n{\"label\":\"Basic Image\",\"category\":\"Pictures_Basic\",\"size\":\"417 870\",\"isFile\":true,\"fileTypeName\":\"Image\",\"fileType\":\"image/png\",\"fileURL\":\"/fileServer/Palette/IMG_4597.PNG\",\"key\":2,\"location\":\"-570 -2830\"},\n{\"label\":\"Basic Image\",\"category\":\"Pictures_Basic\",\"size\":\"417 870\",\"isFile\":true,\"fileTypeName\":\"Image\",\"fileType\":\"image/png\",\"fileURL\":\"/fileServer/Palette/IMG_4597.PNG\",\"key\":3,\"location\":\"-1030 -2830\"},\n{\"label\":\"Basic Image\",\"category\":\"Pictures_Basic\",\"size\":\"417 870\",\"isFile\":true,\"fileTypeName\":\"Image\",\"fileType\":\"image/png\",\"fileURL\":\"/fileServer/Palette/IMG_4596.PNG\",\"key\":4,\"location\":\"-1480 -2830\"},\n{\"label\":\"Basic Image\",\"category\":\"Pictures_Basic\",\"size\":\"417 870\",\"isFile\":true,\"fileTypeName\":\"Image\",\"fileType\":\"image/png\",\"fileURL\":\"/fileServer/Palette/IMG_4596.PNG\",\"key\":5,\"location\":\"-1940 -2830\"},\n{\"label\":\"Basic Image\",\"category\":\"Pictures_Basic\",\"size\":\"417 870\",\"isFile\":true,\"fileTypeName\":\"Image\",\"fileType\":\"image/png\",\"fileURL\":\"/fileServer/Palette/IMG_4596.PNG\",\"key\":6,\"location\":\"-2390 -2830\"},\n{\"label\":\"Idea on Palette\",\"category\":\"TextLabels_Size6\",\"alignment\":\"0 0.5 0 0\",\"alignmentFocus\":\"0 0.5 0 0\",\"size\":\"1806 240\",\"key\":8,\"location\":\"-1770 -4670\"}\n],\n  \"linkDataArray\": []}"
+}

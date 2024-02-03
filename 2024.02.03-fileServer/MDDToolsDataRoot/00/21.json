@@ -1,0 +1,17 @@
+{
+  "dslNameList": [
+    "DefaultDSL",
+    "HierarchyDSL",
+    "TextLabelsDSL",
+    "DialogDSL"
+  ],
+  "view": {
+    "scale": 0.23201025230086778,
+    "position": [
+      -5936.791218968884,
+      -7046.129299800092
+    ],
+    "isGridOn": true
+  },
+  "model": "{ \"class\": \"GraphLinksModel\",\n  \"copiesArrays\": true,\n  \"copiesArrayObjects\": true,\n  \"copiesKey\": false,\n  \"linkKeyProperty\": \"key\",\n  \"linkFromPortIdProperty\": \"fromPort\",\n  \"linkToPortIdProperty\": \"toPort\",\n  \"nodeDataArray\": [ \n{\"label\":\"I am really\\n00/21.json\", \"category\":\"TextLabels_Size5\", \"size\":\"840 30\", \"key\":0, \"location\":\"-4370 -5790\"},\n{\"label\":\"Frank, thanks a lot for your help :-D\", \"category\":\"TextLabels_Size5\", \"size\":\"2000 30\", \"key\":2, \"location\":\"-4820 -5490\"}\n ],\n  \"linkDataArray\": []}"
+}
