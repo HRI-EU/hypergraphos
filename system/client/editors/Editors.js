@@ -26,7 +26,8 @@ class BookmarkViewer extends EditorBase {
     this.id = id;
     this.editor = null;
 
-    position[2] = 300; // Set with
+    position[2] = 400; // Set with
+    position[3] = 400; // Set with
     this.editorDivId = m.e.newDOMWindow( id, this.title, 
                                          config.htmlDiv.mainDiv,
                                          this.storeWindowPosition.bind(this),
@@ -69,7 +70,8 @@ class BookmarkViewer extends EditorBase {
         // Generate html
         source = source+`<div style="display: flex;"`+
                         `     class="findResult graphBookmark" bookmarkIndex="${i}">`+
-                          `<button type="button" class="graphBookmarkButton" bookmarkIndex="${i}" style="margin-right: 10px;">Go</button>`+
+                          `<button type="button" class="graphBookmarkButton" bookmarkIndex="${i}" `+
+                                  `style="margin-right: 10px;font-size: large;">📥</button>`+
                           `<div contenteditable="true" class="graphBookmarkTitle" bookmarkIndex="${i}">`+
                             `${title}`+
                           `</div>`+

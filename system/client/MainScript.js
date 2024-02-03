@@ -239,8 +239,8 @@ function addBookmark( bookmarkInfo ) {
   if( !m.status.bookmarkList ) {
     m.status.bookmarkList = [];
   }
-  // Add new bookmark
-  setStatus( (s)=> s.bookmarkList.push( bookmarkInfo ) );
+  // Add new bookmark at top of the list
+  setStatus( (s)=> s.bookmarkList.unshift( bookmarkInfo ) );
 
   // If bookmark viewer is open => update list
   const e = m.e.getEditorInfo( m.specialNodeData.bookmarViewer );
