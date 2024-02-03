@@ -47,7 +47,7 @@ class EditorManager extends EditorChangeManager {
     let result = null;
     let id = idOrData;
     if( typeof( idOrData ) == 'object' ) {
-      id = m.e._getDOMUniqueId( idOrData );
+      id = this._getDOMUniqueId( idOrData );
     }
     if( this.editorList[id] ) {
       result = this.editorList[id].editor;
@@ -57,7 +57,7 @@ class EditorManager extends EditorChangeManager {
   getEditorInfo( idOrData ) {
     let id = idOrData;
     if( typeof( idOrData ) == 'object' ) {
-      id = m.e._getDOMUniqueId( idOrData );
+      id = this._getDOMUniqueId( idOrData );
     }
     let result = this.editorList[id];
     if( id == this.id ) {
@@ -68,11 +68,11 @@ class EditorManager extends EditorChangeManager {
   getEditorBasicInfo( idOrData ) {
     let id = idOrData;
     if( typeof( idOrData ) == 'object' ) {
-      id = m.e._getDOMUniqueId( idOrData );
+      id = this._getDOMUniqueId( idOrData );
     }
 
     // Get title
-    const ei = m.e.getEditorInfo( id );
+    const ei = this.getEditorInfo( id );
     const title = ei.title;
     // Get fileURL
     const url = ( ei.nodeData.fileURL? ei.nodeData.fileURL: '' );
@@ -109,7 +109,7 @@ class EditorManager extends EditorChangeManager {
   getWindowDiv( idOrData ) {
     let id = idOrData;
     if( typeof( idOrData ) == 'object' ) {
-      id = m.e._getDOMUniqueId( idOrData );
+      id = this._getDOMUniqueId( idOrData );
     }
     return( document.getElementById( id ) );
   }
@@ -170,11 +170,11 @@ class EditorManager extends EditorChangeManager {
   }
   openWindowFromNodeData( nodeData, x, y ) {
     let position = ( x != undefined && y != undefined? [x, y, 400, 350]: undefined );
-    const id = m.e._getDOMUniqueId( nodeData );
-    m.e.openWindow( id, null, nodeData, position );
+    const id = this._getDOMUniqueId( nodeData );
+    this.openWindow( id, null, nodeData, position );
     // Show save button for system nodes
     if( nodeData.isSystem ) {
-      const ei = m.e.getEditorInfo( id );
+      const ei = this.getEditorInfo( id );
       ei.showSaveButton();
     }
   }
@@ -269,18 +269,18 @@ class EditorManager extends EditorChangeManager {
     // Create HTML elements
     emDiv.innerHTML = `<div class='editorMainDivChild' >
                         <div class='resizerObj'>
-                          <div class='resizerHeader' onmousedown="m.e.putWindowOnTop('${id}')">
+                          <div class='resizerHeader' onmousedown="this.putWindowOnTop('${id}')">
                             <button class='editorDivBClose' type="button" 
-                                    onclick="m.e.closeEditor( true, '${id}')">&#x2715
+                                    onclick="this.closeEditor( true, '${id}')">&#x2715
                             </button>
                             <!--button class='editorDivBCollapse' type="button"
-                                    onclick="m.e.toogleCollapseWindow('${id}')">-
+                                    onclick="this.toogleCollapseWindow('${id}')">-
                             </button-->
                             <button class='editorDivBPin' type="button"
-                                    onclick="m.e.pinEditor('${id}')">📎
+                                    onclick="this.pinEditor('${id}')">📎
                             </button>
                             <button class='editorDivBSave' type="button"
-                                    onclick="m.e.saveEditor('${id}')">Save
+                                    onclick="this.saveEditor('${id}')">Save
                             </button>
                             <div class='title' ondblclick="selectNodeOfWindow('${id}')">${name}</div>
                           </div>
@@ -331,7 +331,7 @@ class EditorManager extends EditorChangeManager {
       // Events
       onmove: onPositionChanged,
       onresize: onPositionChanged,
-      onclose: function(){ m.e.closeEditor( true, id ) },
+      onclose: function(){ this.closeEditor( true, id ) },
       // Window content
       html: ` <div class='editorDiv' id='${editorDivId}'></div>`,
     };
@@ -348,7 +348,7 @@ class EditorManager extends EditorChangeManager {
           // console.log(winbox.id);
           // "this" refers to the button which was clicked:
           this.classList.toggle( "active" );
-          m.e.pinEditor( id );
+          this.pinEditor( id );
       }
     });
     return( { editorDivId, win } );
@@ -411,7 +411,7 @@ class EditorManager extends EditorChangeManager {
         // Ger window related info
         //const nodeData = e.getNodeData( key );
         const nodeData = getNodeData( key );
-        const wId = m.e._getDOMUniqueId( nodeData );
+        const wId = this._getDOMUniqueId( nodeData );
         const we = document.getElementById( wId );
         if( we ) {
           // Get current z order
@@ -431,7 +431,7 @@ class EditorManager extends EditorChangeManager {
       for( const url of pwURLList ) {
         const nodeData = pw[url];
         // Ger window related info
-        const wId = m.e._getDOMUniqueId( nodeData );
+        const wId = this._getDOMUniqueId( nodeData );
         const we = document.getElementById( wId );
         if( we ) {
           // Get current z order
@@ -629,7 +629,7 @@ class EditorManager extends EditorChangeManager {
           this.showWindowPin( id, 'hidden' );
           // Show save button for system nodes
           if( nodeData.isSystem ) {
-            const ei = m.e.getEditorInfo( id );
+            const ei = this.getEditorInfo( id );
             ei.showSaveButton();
           }
         } else {
@@ -658,9 +658,9 @@ class EditorManager extends EditorChangeManager {
               // Show save button for system nodes
               if( nodeData.isSystem ) {
                 // Store Selection or Model nodeData
-                m.e.selctionOrModelNodeData = nodeData;
+                this.selctionOrModelNodeData = nodeData;
 
-                const ei = m.e.getEditorInfo( id );
+                const ei = this.getEditorInfo( id );
                 ei.showSaveButton();
                 // Set class for selection/model
                 const winDiv = this.getWindowDiv( nodeData );
