@@ -127,6 +127,10 @@ function DataFlowDSL_getDSL( g ) {
       
       { category: 'DataFlow_Merge',            template: dsl_Component, param: { g, portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,  isOutputEditable: false,                       hasValue: false, hasUnit: false,  figure: 'Rectangle',hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: true, canAddOutput: false, isResizable: false, isLabelEditable: false, maxSize: new go.Size(10, NaN),  } },
       { category: 'DataFlow_Dispatch',         template: dsl_Component, param: { g, portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: false, hasUnit: false,  figure: 'Rectangle', hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: false, canAddOutput: true, isResizable: false, isLabelEditable: false, maxSize: new go.Size(10, NaN),  } },
+      { category: 'DataFlow_ArrayWrap',        template: dsl_Component, param: { g, portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: false, hasUnit: false,  figure: 'RightPointSquare',hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: true, isInputEditable: true, canAddOutput: false, isOutputEditable: true, isResizable: false, isLabelEditable: false, maxSize: new go.Size(20, NaN),  } },
+      { category: 'DataFlow_ArrayUnwrap',      template: dsl_Component, param: { g, portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: false, hasUnit: false,  figure: 'LeftPointSquare', hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: false, isInputEditable: false, canAddOutput: true, isOutputEditable: true, isResizable: false, isLabelEditable: false, maxSize: new go.Size(20, NaN),  } },
+      { category: 'DataFlow_ObjectWrap',       template: dsl_Component, param: { g, portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: false, hasUnit: false,  figure: 'RightPointSquare',hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: true, isInputEditable: true, canAddOutput: false, isOutputEditable: true, isResizable: false, isLabelEditable: false, maxSize: new go.Size(20, NaN),  } },
+      { category: 'DataFlow_ObjectUnwrap',     template: dsl_Component, param: { g, portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: false, hasUnit: false,  figure: 'LeftPointSquare', hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: false, isInputEditable: false, canAddOutput: true, isOutputEditable: true, isResizable: false, isLabelEditable: false, maxSize: new go.Size(20, NaN),  } },
       { category: 'DataFlow_Message',          template: dsl_Component, param: { g, figure: 'RoundedRectangle', fill: 'LightYellow', hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasTag: false, hasType:false, hasProperties: false, minSize: new go.Size(30,30), labelTextAlign: "left", isFromLinkable: false, isToLinkable: false, stroke: "transparent", labelFont: "45px sans-serif", isLabelWrap: true } },
       { category: 'DataFlow_TunnelIn',         template: dsl_Component, param: { g, figure: 'HalfCircleLeft',   hasInputs: true,  canAddInput: false, hasOutputs: false, canAddOutput: false, hasProperties: false, canAddProperties: false, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: false, minSize: new go.Size(80, 80), isInputLinkableSelfNode: true, isOutputLinkableSelfNode: true,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
       { category: 'DataFlow_TunnelOut',        template: dsl_Component, param: { g, figure: 'HalfCircleRight',  hasInputs: false,  canAddInput: false, hasOutputs: true, canAddOutput: false, hasProperties: false, canAddProperties: false, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: false, minSize: new go.Size(80, 80), isInputLinkableSelfNode: true, isOutputLinkableSelfNode: true,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
@@ -461,6 +465,7 @@ function DataFlowDSL_getDSL( g ) {
           { name: 'messageGap', value: '15px', tooltip: 'distance between messages, default = 15px' },
           { name: 'iconHeight', value: '40px', tooltip: 'message icon height, default = 40px' },
           { name: 'backgroundColor', value: '#C1D0F6', tooltip: 'chat background color, default = #C1D0F6' },
+          { name: 'fontSize', value: '16px', tooltip: 'chat font size, default = 16px' },
         ], 
         isFile: true,
         isLocalDiv: true,
@@ -586,6 +591,60 @@ function DataFlowDSL_getDSL( g ) {
           { portId:'1out', name:'out' },
         ],
         doCompute: 'DataFlow_Message',
+      },
+      {
+        label: '',
+        category: 'DataFlow_ArrayWrap',
+        color: 'seagreen', 
+        in_: [ 
+          { portId:'0in', name:'[]', isEditable: false },
+          { portId:'1in', name:'0' },
+          { portId:'2in', name:'1' },
+        ],
+        out_: [ 
+          { portId:'1out', name:'[]', tooltip: '[] for array or {} for object' },
+        ],
+        doCompute: 'DataFlow_ArrayWrap',
+      },
+      {
+        label: '',
+        category: 'DataFlow_ObjectWrap',
+        color: 'seagreen', 
+        in_: [ 
+          { portId:'0in', name:'{}', isEditable: false },
+          { portId:'1in', name:'in1' },
+          { portId:'2in', name:'in2' },
+        ],
+        out_: [ 
+          { portId:'1out', name:'{}', tooltip: '[] for array or {} for object' },
+        ],
+        doCompute: 'DataFlow_ObjectWrap',
+      },
+      {
+        label: '',
+        category: 'DataFlow_ArrayUnwrap',
+        color: 'seagreen', 
+        in_: [ 
+          { portId:'1in', name:'[]' },
+        ],
+        out_: [ 
+          { portId:'1out', name:'0' },
+          { portId:'2out', name:'1' },
+        ],
+        doCompute: 'DataFlow_ArrayUnwrap',
+      },
+      {
+        label: '',
+        category: 'DataFlow_ObjectUnwrap',
+        color: 'seagreen', 
+        in_: [ 
+          { portId:'1in', name:'{}' },
+        ],
+        out_: [ 
+          { portId:'1out', name:'out1' },
+          { portId:'2out', name:'out2' },
+        ],
+        doCompute: 'DataFlow_ObjectUnwrap',
       },
       {
         label: 'ROS Bridge',
@@ -1155,10 +1214,11 @@ function DataFlowDSL_getDSL( g ) {
       },
     ],
     templateLinkList: [
-      { category: 'DataFlow_Standard', template: dsl_BasicLink, param: { stroke:'SlateBlue', toScale: 2, strokeWidth: 4, toShortLength:0 } },
+      { category: 'DataFlow_Standard', template: dsl_BasicLink, param: { stroke:'black', toScale: 2, strokeWidth: 4, toShortLength:0 } },
       { category: 'DataFlow_Arrow',    template: dsl_BasicLink, param: { stroke:'SlateBlue', toArrow: 'standard', toScale: 2, strokeWidth: 4, toShortLength:10 }},
       { category: 'DataFlow_Log',      template: dsl_BasicLink, param: { stroke:'Gold', toScale: 2, strokeWidth: 4, toShortLength:0, hasLabelShape: true, labelShape: 'Ellipse', hasLabel: true } },
-      { category: 'DataFlow_Pause',    template: dsl_BasicLink, param: { stroke:'Red', toScale: 2, strokeWidth: 8, toShortLength:0, fromArrow:'DoubleLine' } },
+      { category: 'DataFlow_Pause',    template: dsl_BasicLink, param: { stroke:'DarkRed', toScale: 2, strokeWidth: 8, toShortLength:0, fromArrow:'DoubleLine' } },
+      { category: 'DataFlow_Stop',     template: dsl_BasicLink, param: { stroke:'Red', toScale: 2, strokeWidth: 10, toShortLength:0, fromArrow:'DoubleLine' } },
     ],
     dataLinkList: [
       {
@@ -1179,6 +1239,12 @@ function DataFlowDSL_getDSL( g ) {
       },
       {
         category: 'DataFlow_Pause',
+        fromPort: '',
+        toPort: '',
+        label: 'log',
+      },
+      {
+        category: 'DataFlow_Stop',
         fromPort: '',
         toPort: '',
         label: 'log',
@@ -1509,17 +1575,17 @@ function DataFlow_Message( nodeData, name, value ) {
     if( typeof( value ) == 'string' ) {
       setNodeDataField( nodeData, 'label', value );
     } else {
-      try {
-        value = JSON.stringify( value, null, 2 );
-      } catch( error ) {}
-      setNodeDataField( nodeData, 'label', value );
+      setNodeDataField( nodeData, 'label', JSON.stringify( value, null, 2 ) );
     }
   } else {
     value = nodeData.label;
     try {
       value = JSON.parse( value );
     } catch( e ) {
-      value = jsyaml.load( value );
+      try {
+        //value = jsyaml.load( value );
+      } catch( e ) {
+      }
     }
   }
 
@@ -1611,11 +1677,9 @@ function DataFlow_DataSend( nodeData, name, value ) {
 }
 function DataFlow_Data( nodeData, name, value ) {
   let outValue = null;
-  // Get the editor from the node data
-  const e = m.e.getEditor( nodeData );
   
   // Retrieve content
-  let strValue = ( e? e.getEditorSource(): nodeData.fileContent );
+  let strValue = nodeData.fileContent;
     
   // value is undefined for pure event 
   if( value == undefined ) {
@@ -1623,7 +1687,7 @@ function DataFlow_Data( nodeData, name, value ) {
       case 'text/text':
         outValue = strValue;
         break;
-      default: //'text/json'
+        default: //'text/json'
         try {
           outValue = JSON.parse( strValue );
         } catch (error) {
@@ -1633,9 +1697,7 @@ function DataFlow_Data( nodeData, name, value ) {
     }
   } else {
     if( typeof( value ) == 'object' ) {
-      try {
-        strValue = JSON.stringify( value, null, 2 );
-      } catch( error ) {}
+      strValue = JSON.stringify( value, null, 2 );
     } else {
       strValue = value;
     }
@@ -1643,7 +1705,7 @@ function DataFlow_Data( nodeData, name, value ) {
       case 'text/text':
         outValue = strValue;
         break;
-      default: //'text/json'
+        default: //'text/json'
         if( typeof( value ) == 'object' ) {
           outValue = value;
         } else {
@@ -1656,10 +1718,6 @@ function DataFlow_Data( nodeData, name, value ) {
         break;
     }
 
-    if( e ) {
-      // Set editor content
-      e.setEditorSource( strValue );
-    } 
     // Set editor content in output link of Chat editor
     setNodeDataField( nodeData, 'fileContent', strValue );
   }
@@ -2232,4 +2290,124 @@ function DataFlow_TunnelIn( nodeData, name, value ) {
 }
 function DataFlow_TunnelOut( nodeData, name, value ) {
   graphData.dfe.fireOutput( nodeData, 'out', value );
+}
+function DataFlow_ArrayWrap( nodeData, name, value ) {
+  const inNameList = graphData.dfe.getInputNameList( nodeData );
+
+  if( name == '[]' ) {
+    const outNameList = graphData.dfe.getOutputNameList( nodeData );
+      
+    const outValue = ( outNameList && outNameList[0] == '[]'? []: {} );
+    for( const inName of inNameList ) {
+      if( inName != '[]' ) {
+        outValue[inName] = value[inName];
+      }
+    }
+    graphData.dfe.fireOutput( nodeData, outNameList[0], outValue );
+  } else {
+    const inputStat = graphData.dfe.get( nodeData, 'inputStat', {} );
+    
+    inputStat[name] = true;
+    let isObjectReady = true;
+    for( const inName of inNameList ) {
+      if( inName == '[]' ) {
+        continue;
+      } else if( !inputStat[inName] ) {
+        isObjectReady = false;
+        break;
+      }
+    }
+    
+    if( isObjectReady ) {
+      graphData.dfe.set( nodeData, 'inputStat', {} );
+      const outNameList = graphData.dfe.getOutputNameList( nodeData );
+      
+      //const outValue = ( outNameList[0] == '[]'? []: {} );
+      let outValue = null;
+      const in0 = graphData.dfe.getInput( nodeData, '[]', null );
+      if( in0 != null ) {
+        if( outNameList[0] == '[]' ) {
+          outValue = in0;
+        } else {
+          outValue = {};
+          in0.forEach( (e,i)=> outValue[i] = in0[i] );
+        }
+      } else {
+        outValue = ( outNameList[0] == '[]'? []: {} );
+      }
+      // End
+      for( const inName of inNameList ) {
+        if( inName != '[]' ) {
+          outValue[inName] = graphData.dfe.getInput( nodeData, inName, null );
+        } 
+      }
+      graphData.dfe.fireOutput( nodeData, outNameList[0], outValue );
+    }
+  }
+}
+function DataFlow_ArrayUnwrap( nodeData, name, value ) {
+  const outNameList = graphData.dfe.getOutputNameList( nodeData );
+
+  for( const outName of outNameList ) {
+    const outValue = value[outName];
+    graphData.dfe.fireOutput( nodeData, outName, outValue );
+  }
+}
+function DataFlow_ObjectWrap( nodeData, name, value ) {
+  const inNameList = graphData.dfe.getInputNameList( nodeData );
+
+  if( name == '{}' ) {
+    const outNameList = graphData.dfe.getOutputNameList( nodeData );
+      
+    const outValue = ( outNameList[0] == '[]'? []: {} );
+    for( const inName of inNameList ) {
+      if( inName != '{}' ) {
+        outValue[inName] = value[inName];
+      }
+    }
+    graphData.dfe.fireOutput( nodeData, outNameList[0], outValue );
+  } else {
+    const inputStat = graphData.dfe.get( nodeData, 'inputStat', {} );
+    
+    inputStat[name] = true;
+    let isObjectReady = true;
+    for( const inName of inNameList ) {
+      if( inName == '{}' ) {
+        continue;
+      } else if( !inputStat[inName] ) {
+        isObjectReady = false;
+        break;
+      }
+    }
+    
+    if( isObjectReady ) {
+      graphData.dfe.set( nodeData, 'inputStat', {} );
+      const outNameList = graphData.dfe.getOutputNameList( nodeData );
+      
+      //const outValue = ( outNameList[0] == '[]'? []: {} );
+      let outValue = null;
+      const in0 = graphData.dfe.getInput( nodeData, '[]', null );
+      if( in0 != null ) {
+        if( outNameList[0] == '{}' ) {
+          outValue = in0;
+        } else {
+          outValue = [];
+          const keyList = Object.keys( in0 );
+          keyList.forEach( (e)=> outValue.push( in0[e] ) );
+        }
+      } else {
+        outValue = ( outNameList[0] == '[]'? []: {} );
+      }
+      // End
+      for( const inName of inNameList ) {
+        if( inName != '{}' ) {
+          outValue[inName] = graphData.dfe.getInput( nodeData, inName, null );
+        } 
+      }
+      graphData.dfe.fireOutput( nodeData, outNameList[0], outValue );
+    }
+  }
+}
+function DataFlow_ObjectUnwrap( nodeData, name, value ) {
+  DataFlow_ArrayUnwrap( nodeData, name, value );
 }

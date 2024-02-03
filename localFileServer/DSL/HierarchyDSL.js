@@ -422,10 +422,11 @@ function HierarchyDSL_getDSL( g ) {
         size: '180 80',
         props_: [
           { name: 'Name', value: 'use: label@key' },
+          { name: 'Type', value: 'WorkSpace' },
           { name: 'Version', value: '1.0' },
           { name: 'Date', value: 'date@system' },
           { name: 'Path', value: 'graphPath@system' },
-          { name: 'Authors', value: 'Frankonello' },
+          { name: 'Authors', value: 'userName@system' },
         ],
       },
       {

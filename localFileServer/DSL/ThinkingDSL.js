@@ -56,11 +56,14 @@ function ThinkingDSL_setupDSL( g ) {
 }
 function ThinkingDSL_getDSL( g ) {
   let diagram = (g.diagram? g.diagram: g.nodePalette);
-
+/*
+  ANTONELLO: This menu generate an error. I don't know why
+             I also changed the first line of the templateNodeList
   const cm = g.contextMenu;
   cm.add( menuDSL, 'basicNodeMenu' );
 
   const selectedNodeContextMenu = cm.getMenu( 'basicNodeMenu' );
+*/
   //-----------------------
   // Define event handler
   //-----------------------
@@ -80,7 +83,8 @@ function ThinkingDSL_getDSL( g ) {
   
   const dsl = {
     templateNodeList: [
-      { category: 'Thinking_BigComment',              template: dsl_BasicNode, param: {hasTag: false, hasType:false,  minSize: new go.Size(270,60), figure: "rectangle",            fill: "white",         labelTextAlign: "center",  isFromLinkable: false, isToLinkable: false, labelStroke: "darkgray", labelFont: "bold 36px sans-serif", label: "", menu: selectedNodeContextMenu} },
+      //{ category: 'Thinking_BigComment',              template: dsl_BasicNode, param: {hasTag: false, hasType:false,  minSize: new go.Size(270,60), figure: "rectangle",            fill: "white",         labelTextAlign: "center",  isFromLinkable: false, isToLinkable: false, labelStroke: "darkgray", labelFont: "bold 36px sans-serif", label: "", menu: selectedNodeContextMenu} },
+      { category: 'Thinking_BigComment',              template: dsl_BasicNode, param: {hasTag: false, hasType:false,  minSize: new go.Size(270,60), figure: "rectangle",            fill: "white",         labelTextAlign: "center",  isFromLinkable: false, isToLinkable: false, labelStroke: "darkgray", labelFont: "bold 36px sans-serif", label: ""} },
       { category: 'Thinking_Comment',                 template: dsl_BasicNode, param: {hasTag: false, hasType:false,  minSize: new go.Size(270,40), figure: "rectangle",            fill: "LightGray",     labelTextAlign: "center",  isFromLinkable: false, isToLinkable: false, labelStroke: "black", labelFont: "bold 20px sans-serif", } },
       { category: 'Thinking_RectangleCenter',         template: dsl_BasicNode, param: {hasTag: true,  hasType:true,   minSize: new go.Size(10,40), figure: "rectangle",            fill: "powderblue",    labelTextAlign: "center",  isFromLinkable: true,  isToLinkable: true, labelStroke: "black"} },
       { category: 'Thinking_RectangleLeft',           template: dsl_BasicNode, param: {hasTag: true,  hasType:true,   minSize: new go.Size(10,40), figure: "rectangle",            fill: "powderblue",    labelTextAlign: "left",    isFromLinkable: true,  isToLinkable: true, labelStroke: "black"} },
