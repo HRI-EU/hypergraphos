@@ -372,6 +372,8 @@ class GraphTemplateViewer extends EditorBase {
     this.id = id;
     this.editor = null;
 
+    position[2] = 400; // Set with
+    position[3] = 400; // Set with
     this.editorDivId = m.e.newDOMWindow( id, this.title, 
                                          config.htmlDiv.mainDiv,
                                          this.storeWindowPosition.bind(this),
@@ -421,7 +423,7 @@ class GraphTemplateViewer extends EditorBase {
             _openFile( templateURL, (sourceTemplate)=> {
               const e = m.e.getEditor( config.htmlDiv.graphDiv );
               // Remove Template flag
-              if( sourceTemplate.indexOf( '<TemplateWorkSpace>' ) ) {
+              if( sourceTemplate.indexOf( '<TemplateWorkSpace>' ) != -1 ) {
                 sourceTemplate = sourceTemplate.replace( /<TemplateWorkSpace>/, 'TemplateWorkSpace' );  
               } else {
                 sourceTemplate = sourceTemplate.replace( /TemplateWorkSpace/, 'WorkSpace' );

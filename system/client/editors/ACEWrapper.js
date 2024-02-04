@@ -83,6 +83,7 @@ class ACEWrapper {
   }
   onSourceChanged( onSourceChangedCallback ) {
     this.aceEditor.getSession().on( 'change', onSourceChangedCallback );
+    this.aceEditor.on( 'paste', onSourceChangedCallback );
   }
   onEvent( eventName, callback ) {
     this.aceEditor.on( eventName, callback );
