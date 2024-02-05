@@ -10,7 +10,9 @@ const config = {
     "fileStatusURL": "/fileStatus",
     "statusURL": "/fileServer/Users/Frank_status.json"
   },
-  "remoteHost": {},
+  "remoteHost": {
+    "NUC": "192.168.178.25:7575"
+  },
   "htmlDiv": {
     "mainDiv": "mainDiv",
     "graphDiv": "diagram",
@@ -35,6 +37,6 @@ const config = {
     "maxHistoryLength": 30
   },
   "server": {
-    "ip": "172.26.3.127"
+    "ip": "192.168.178.20"
   }
 };
