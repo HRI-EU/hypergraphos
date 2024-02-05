@@ -10,6 +10,16 @@ Date: 10.07.2020
 =============================================================================
 */
 
+/*
+  Execution of server is done via the previous directory.
+  Execute:
+    .startServer.sh [userName]
+  where:
+    userName: optional parameter with your user name
+              the same used in the url?userName:'<userName>'
+              This value is used to select your sconfig file
+*/
+
 const fs = require( 'fs' );
 
 const ls = function( dir ) {
@@ -29,6 +39,13 @@ ls();
 // }
 
 // Load Server Configuration
+// 1) serverConfig.js is loaded
+// 2) Then user configuration is loaded in 3 options:
+// 3) user config is loaded:
+//   3.1) via server/sconfig/<userName>_sconfig.js, otherwise
+//   3.2) via server/sconfig/<os.hostName>_sconfig.js, otherwise
+//   3.3) via server/sconfig/<os.userName>_sconfig.js, otherwise
+//   3.4) a NoName user is loaded
 const config = require( '../serverConfig.js' );
 let userNameArg = 'Default';
 const argList = process.argv;
@@ -38,7 +55,7 @@ if( argList[2] ) {
   const os = require('os');
   userNameArg = os.hostname();
 }
-// Load optional user configuration settings
+// Load optional user configuration settings on hostname
 const userConfig = `./sconfigs/${userNameArg}_sconfig.js`;
 try {
   console.log( 'INFO: trying to load: ', userConfig );
@@ -47,7 +64,18 @@ try {
     userConfigFunction( config );
   }
 } catch( e ) {
-  console.log( 'INFO: no user configuration found' );
+  userNameArg = os.userInfo().username;
+  // Load optional user configuration settings on username
+  const userConfig = `./sconfigs/${userNameArg}_sconfig.js`;
+  try {
+    console.log( 'INFO: trying to load: ', userConfig2 );
+    const userConfigFunction = require( userConfig2 );
+    if( userConfigFunction ) {
+      userConfigFunction( config );
+    }
+  } catch( e ) {
+    console.log( 'INFO: no user configuration found' );
+  }
 }
 
 
