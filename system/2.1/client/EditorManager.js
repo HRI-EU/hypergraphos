@@ -348,7 +348,7 @@ class EditorManager extends EditorChangeManager {
           // console.log(winbox.id);
           // "this" refers to the button which was clicked:
           this.classList.toggle( "active" );
-          this.pinEditor( id );
+          m.e.pinEditor( id );
       }
     });
     return( { editorDivId, win } );
