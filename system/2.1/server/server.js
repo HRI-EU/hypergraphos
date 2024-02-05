@@ -47,12 +47,13 @@ ls();
 //   3.3) via server/sconfig/<os.userName>_sconfig.js, otherwise
 //   3.4) a NoName user is loaded
 const config = require( '../serverConfig.js' );
+const os = require('os');
+
 let userNameArg = 'Default';
 const argList = process.argv;
 if( argList[2] ) {
   userNameArg = argList[2];
 } else {
-  const os = require('os');
   userNameArg = os.hostname();
 }
 // Load optional user configuration settings on hostname
