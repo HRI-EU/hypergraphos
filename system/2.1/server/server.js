@@ -49,15 +49,30 @@ ls();
 const config = require( '../serverConfig.js' );
 const os = require('os');
 
-let userNameArg = 'Default';
+let userNameArg = '';
 const argList = process.argv;
 if( argList[2] ) {
   userNameArg = argList[2];
-} else {
-  userNameArg = os.hostname();
 }
+// TODO: reimplement this check with a map object instead than
+//       in this easy way :-), and consider a default
 // Load optional user configuration settings on hostname
-const userConfig = `./sconfigs/${userNameArg}_sconfig.js`;
+let userConfig = `./sconfigs/${userNameArg}_sconfig.js`;
+let isConfigFound = fs.existsSync( userConfig );
+if( !isConfigFound ) {
+  // If userName config is not found, try with hostName
+  userNameArg = os.hostname();
+  userConfig = `./sconfigs/${userNameArg}_sconfig.js`;
+
+  isConfigFound = fs.existsSync( userConfig );
+  if( !isConfigFound ) {
+    // If previous config is not found, try with os.userName
+    userNameArg = os.userInfo().username;
+    // Load optional user configuration settings on username
+    userConfig = `./sconfigs/${userNameArg}_sconfig.js`;
+  }
+}
+
 try {
   console.log( 'INFO: trying to load: ', userConfig );
   const userConfigFunction = require( userConfig );
@@ -65,18 +80,7 @@ try {
     userConfigFunction( config );
   }
 } catch( e ) {
-  userNameArg = os.userInfo().username;
-  // Load optional user configuration settings on username
-  const userConfig = `./sconfigs/${userNameArg}_sconfig.js`;
-  try {
-    console.log( 'INFO: trying to load: ', userConfig2 );
-    const userConfigFunction = require( userConfig2 );
-    if( userConfigFunction ) {
-      userConfigFunction( config );
-    }
-  } catch( e ) {
-    console.log( 'INFO: no user configuration found' );
-  }
+  console.log( 'INFO: no user configuration found' );
 }
 
 
