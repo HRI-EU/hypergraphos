@@ -331,7 +331,7 @@ class EditorManager extends EditorChangeManager {
       // Events
       onmove: onPositionChanged,
       onresize: onPositionChanged,
-      onclose: function(){ this.closeEditor( true, id ) },
+      onclose: function(){ m.e.closeEditor( true, id ) },
       // Window content
       html: ` <div class='editorDiv' id='${editorDivId}'></div>`,
     };
