@@ -9,3 +9,4 @@ fileSystem/MDDToolsDataRoot/System/.DS_Store
 .DS_Store
 .env
 system/stopServer.sh
+system/2.1/stopServer.sh
