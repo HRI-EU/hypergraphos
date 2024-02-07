@@ -1690,7 +1690,7 @@ class GraphWrapper {
 		// Allow to navigate out from a graph and go to parent graph (Alt+click)
 		diagram.addDiagramListener( 'BackgroundSingleClicked', ()=> {
 			if( diagram.lastInput.alt ) {
-				this.em.fire.onShowParentGraph();
+				this.em.fire.onShowPreviousGraph();
 			}
 		});
 		// Allow to navigate into a sub graph of a node (Alt+click)
