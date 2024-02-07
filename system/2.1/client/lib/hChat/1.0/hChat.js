@@ -242,10 +242,19 @@ class HChat {
       // Create message
       newMessage.innerHTML = `
         <img src="${senderImgSrc}" alt="Sender Icon" class="hchat-user-img" ${iconStyle}>
-        <div class="hchat-text" ${textStyle} sender="${sender}" receiver="${receiver}">${messageText}</div>
+        <div class="hchat-text hchat-anim" ${textStyle} sender="${sender}" receiver="${receiver}">${messageText}</div>
         <img src="${receiverImgSrc}" alt="Receiver Icon" class="hchat-user-img" ${iconStyle}>
       `;
+      // Remove bluring animation from last message
       const messageList = this._getElementById('hchat-area');
+      let lastEl = messageList.lastChild
+      if( lastEl ) {
+        lastEl = lastEl.getElementsByClassName('hchat-text');
+        if( lastEl[0] ) {
+          lastEl[0].classList.remove('hchat-anim');
+        }
+      }
+      // Add new message
       messageList.append(newMessage);
       messageList.scrollTop = messageList.scrollHeight;
       this._getElementById('hchat-input-message').value = "";

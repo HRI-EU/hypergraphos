@@ -30,6 +30,8 @@
 }
 .hchat-text {
   color: black;
+}
+.hchat-anim {
   transform: scale(0.94);
   opacity: o;
   filter: blur(8px);
