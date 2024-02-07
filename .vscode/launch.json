@@ -37,15 +37,15 @@
             "type": "node",
             "args": ["Antonello"]],
             "cwd": "${workspaceFolder}/system/server",
-            "program": "${workspaceFolder}/system/server/server.js"
+            "program": "${workspaceFolder}/system/2.1/server/server.js"
         },
         {
             "name": "Launch Script GenerateSystem",
             "request": "launch",
             "type": "node",
-            "cwd": "${workspaceFolder}/system/script/",
-            "args": ["{\"modelFileURL\":\"/fileServer/02/41.json\",\"deployKey\":80}"],
-            "program": "${workspaceFolder}/system/script/generateSystem.js"
+            "cwd": "${workspaceFolder}/system/2.1/script/",
+            "args": ["{\"modelFileURL\":\"/fileServer/02/72.json\",\"deployKey\":16}"],
+            "program": "${workspaceFolder}/system/2.1/script/generateSystem.js"
         },
         {
             "name": "Launch DFECodeGeneration",

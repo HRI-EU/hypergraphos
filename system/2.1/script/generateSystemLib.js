@@ -14,7 +14,7 @@ ls();
 
 console.log( 'System Generation started' );
 
-const config = require( '../serverConfig.js' );
+const config = require( '../server/Running_config.js' );
 const ModelExplorer = require( '../client/lib/ModelExplorer/2.0/ModelExplorer.js' );
 const isServer = true;
 
