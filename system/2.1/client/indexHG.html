@@ -107,6 +107,22 @@ Date: 10.07.2020
    <!--End-->
 
   <script>
+    async function logOut() {
+      const response = await fetch("/auth/logout", { method: "GET" });
+
+      if (response.status === 204) {
+        window.location.replace("/");
+      }
+    }
+    // Logout button
+    // window.addEventListener('load', () => {
+    //   // Remove default margin
+    //   window.document.body.style.margin = '0px';
+    //   //var logoutBtn = document.getElementById("logoutBtn");
+
+    //   //logoutBtn.addEventListener("click", async (e) => { logOut() })
+    // });
+
     function dragOverHandler( e ) {
       // Prevent default behavior (Prevent file from being opened)
       e.preventDefault();

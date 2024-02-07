@@ -36,8 +36,16 @@
             "request": "launch",
             "type": "node",
             "args": ["Antonello"]],
-            "cwd": "${workspaceFolder}/system/server",
+            "cwd": "${workspaceFolder}/system/2.1/server",
             "program": "${workspaceFolder}/system/2.1/server/server.js"
+        },
+        {
+            "name": "Launch Server Express",
+            "request": "launch",
+            "type": "node",
+            "args": ["Antonello"]],
+            "cwd": "${workspaceFolder}/system/2.1/server",
+            "program": "${workspaceFolder}/system/2.1/server/server-express.js"
         },
         {
             "name": "Launch Script GenerateSystem",

@@ -11,9 +11,7 @@ const config = {
       "fileStatusURL": "/fileStatus",
       "statusURL": "/fileServer/Users/Antonello_status.json"
     },
-    "remoteHost": {
-      "NUC": "192.168.1.11:7575"
-    },
+    "remoteHost": {},
     "htmlDiv": {
       "mainDiv": "mainDiv",
       "graphDiv": "diagram",
@@ -23,10 +21,10 @@ const config = {
       "linkPaletteDiv": "linkPalette"
     },
     "graph": {
-      "isDoubleClickCreateNodeEnabled": true,
+      "isDoubleClickCreateNodeEnabled": false,
       "allowDeleteKey": false,
       "colorSchema": "dark",
-      "zoomFactor": 1.05,
+      "zoomFactor": 1.25,
       "defaultDSL": "DefaultDSL",
       "rootGraphURL": "/fileServer/graphRoot.json",
       "rootGraphNodeData": {
@@ -38,7 +36,7 @@ const config = {
       "maxHistoryLength": 30
     },
     "server": {
-      "ip": "192.168.1.12"
+      "ip": "172.26.3.117"
     }
   },
   "server": {
@@ -50,28 +48,30 @@ const config = {
     "libPath": "../client/lib",
     "scriptPath": "../script",
     "testPath": "../test",
-    "scriptPlatform": "linux",
+    "scriptPlatform": "win32",
     "webServerProtocol": "http",
     "webServerName": "localhost",
     "webServerPort": 80,
     "webSocketURL": "ws://localhost",
+    "jwtSecretKey": "jwt_key_secret123",
     "ssl": {
       "enabled": false,
       "key": "server.key",
       "cert": "server.cert"
     },
-    "ip": "192.168.1.12"
+    "ip": "172.26.3.117"
   },
   "host": {
-    "uid": 501,
-    "gid": 20,
-    "username": "antonelloceravola",
-    "homedir": "/Users/antonelloceravola",
-    "shell": "/bin/zsh",
-    "hostname": "Antonellos-Mini",
-    "platform": "darwin",
-    "platformOS": "MacOS",
-    "platformType": "linux"
+    "uid": -1,
+    "gid": -1,
+    "username": "RE900104",
+    "homedir": "C:\\Users\\re900104",
+    "shell": null,
+    "hostname": "EHRIEXPS-67-DL",
+    "platform": "win32",
+    "platformOS": "Windows",
+    "platformType": "windows"
   }
 };
+
 module.exports = config;
