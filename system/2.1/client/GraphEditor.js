@@ -160,6 +160,7 @@ class GraphEditor extends EditorBase {
     });
     
     this.setPauseChange( false );
+    debugger
     this.loadEditorContent( nodeData );
   }
   getTitle( nodeData ) {

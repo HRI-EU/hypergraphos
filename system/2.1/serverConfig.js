@@ -64,6 +64,7 @@ const config = {
     webServerName:     'localhost',
     webServerPort:     80,
     webSocketURL:      '', // Defined later...
+    jwtSecretKey:      'jwt_key_secret123',
     ssl: {
       enabled: false,
       key: 'server.key',
