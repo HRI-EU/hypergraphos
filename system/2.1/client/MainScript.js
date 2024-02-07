@@ -47,7 +47,8 @@ const m = {
     bookmarViewer: {
       key: 'Bookmarks Viewer',
       isFile: true,
-      fileType: 'input/fields',
+      fileURL: 'bookmark', // Neccesary to allow pin
+      fileType: 'application/bookmark',
     },
     findDialog: {
       key: 'Find in Graph',

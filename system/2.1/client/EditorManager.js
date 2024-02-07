@@ -626,7 +626,8 @@ class EditorManager extends EditorChangeManager {
           const isPinned = true;
           const position = nodeData.editorPosition;
           this.openWindow( id, null, nodeData, position, isPinned );
-          this.showWindowPin( id, 'hidden' );
+          //this.showWindowPin( id, 'hidden' );
+          this.showWindowPin( id, 'pinned' );
           // Show save button for system nodes
           if( nodeData.isSystem ) {
             const ei = this.getEditorInfo( id );

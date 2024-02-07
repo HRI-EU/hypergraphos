@@ -40,6 +40,7 @@ class BookmarkViewer extends EditorBase {
     this.loadEditorContent( nodeData );
   }
   loadEditorContent( nodeData ) {
+    debugger
     // Load graph editor
     const graphEditor = m.e.getEditor( config.htmlDiv.graphDiv );
     // Update current nodeData
@@ -47,7 +48,9 @@ class BookmarkViewer extends EditorBase {
     // Update window title with:
     this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${nodeData.fileType}]`;
     this.setTitle( this.title );
-    
+    // Update pin
+    m.e.showWindowPin( this.id );
+    // Update list of bookmarks from status
     this.updateBookmarks();
   }
   saveEditorContent( onSaved ) {
@@ -69,7 +72,7 @@ class BookmarkViewer extends EditorBase {
         const title = bookmark.title;
         // Generate html
         source = source+`<div style="display: flex;"`+
-                        `     class="findResult graphBookmark" bookmarkIndex="${i}">`+
+                        `     class="bookmarkResult graphBookmark" bookmarkIndex="${i}">`+
                           `<button type="button" class="graphBookmarkButton" bookmarkIndex="${i}" `+
                                   `style="margin-right: 10px;font-size: large;">📥</button>`+
                           `<div contenteditable="true" class="graphBookmarkTitle" bookmarkIndex="${i}">`+
@@ -127,7 +130,7 @@ class BookmarkViewer extends EditorBase {
     }
   }
 }
-registerEditor({ name: 'BookmarkViewer', fileType: (ft)=> ft == 'input/fields', classRef: BookmarkViewer });
+registerEditor({ name: 'BookmarkViewer', fileType: (ft)=> ft == 'application/bookmark', classRef: BookmarkViewer });
 
 class AnimatorEditor extends EditorBase {
   constructor( id, nodeData, position ) {

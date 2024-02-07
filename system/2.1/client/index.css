@@ -174,4 +174,11 @@ html{
 .findResult:hover {
  background-color: #5a5a5a;
 }
+.bookmarkResult {
+  color: #908aa2;
+  font-size: large;
+ }
+ .bookmarkResult:hover {
+  background-color: #5a5a5a;
+ }
 
