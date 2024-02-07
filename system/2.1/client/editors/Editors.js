@@ -40,7 +40,6 @@ class BookmarkViewer extends EditorBase {
     this.loadEditorContent( nodeData );
   }
   loadEditorContent( nodeData ) {
-    debugger
     // Load graph editor
     const graphEditor = m.e.getEditor( config.htmlDiv.graphDiv );
     // Update current nodeData

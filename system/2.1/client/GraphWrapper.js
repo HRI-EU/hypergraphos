@@ -94,6 +94,7 @@ class GraphWrapper {
 			onShowSysMonitorDialog:			{ help: 	'Open dialog for monitoring system information',
 																		params: { x: 'last x mouse click position', 
 																							y: 'last y mouse click position' } },
+			onLogOut:                   { help:   'Log out from HyperGraph' },
 		});
 
 		// Create context menu object
@@ -176,6 +177,8 @@ class GraphWrapper {
 						{ fontIcon: 'action-redo', hint: 'Redo (CTRL-SHIFT-Z)',     if: (o)=> o.d.cmd.canRedo(),
 																																	do: (o)=> o.d.cmd.redo() },
 					]},
+					{ separator: '-' },
+					{ label: 'Log Out',		  do: this.em.fire.onLogOut() },
 				]},
 			'nodeContextMenu':
 				{ layout: 'vertical', itemList: [

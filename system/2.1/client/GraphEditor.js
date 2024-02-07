@@ -75,6 +75,9 @@ class GraphEditor extends EditorBase {
         bookmarkInfo.nodeData = this.editor._getDataCopy( this.nodeData );
         addBookmark( bookmarkInfo );
       },
+      onLogOut: ()=> {
+        logOut();
+      },
       onLoadGraph: ( nodeData )=> {
         this.doLoadGraph( nodeData );
       },
