@@ -38,7 +38,8 @@ router.post( '/login', async (req, res) => {
           }
           const token = jwt.sign( { userId: row.id }, 
                                   config.server.jwtSecretKey, 
-                                  { expiresIn: '30m' } );
+                                  //{ expiresIn: '30m' } ); // 30 minutes
+                                  { expiresIn: '30d' } ); // 30 days
           res.cookie( 'access-token', token, {
             maxAge: 60 * 60 * 24 * 30 * 1000, //30 days
             secure: false,
