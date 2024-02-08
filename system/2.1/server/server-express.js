@@ -135,18 +135,18 @@ const onGet = function( request, response, next ) {
 //const webServer = httpolyglot.createServer( sslOptions, app );
 const webServer = express();
 
-webServer.use(express.json());
-webServer.use('/auth', authRoutes);
-webServer.use(protectedRoutes);
-webServer.use(  '/', express.static( config.server.clientPath) );
-webServer.use(  '/test',    express.static( config.server.testPath ), onGet );
+webServer.use( express.json() );
+webServer.use( '/auth', authRoutes );
+webServer.use( protectedRoutes );
+webServer.use( '/', express.static( config.server.clientPath) );
+webServer.use( '/test',    express.static( config.server.testPath ), onGet );
 
 // Use nocache middleware to avoid caching
 //webServer.use(nocache);
 
 
 // Start the server !
-webServer.listen(config.server.webServerPort, function(){
+webServer.listen( config.server.webServerPort, function() {
   const url = `${config.server.webServerProtocol}://${config.server.webServerName}:${config.server.webServerPort}`;
   console.log( `WebServer running at ${url}!` );
   console.log( ` Access with user: ${url}?name:'${config.client.host.name}'` );
@@ -164,5 +164,5 @@ function getServerIp() {
     return( ( v.family == 'IPv4' ) && ( v.internal == false ) );
   });
 
-  return( valueList.length? valueList[0].address : '0.0.0.0' );
+  return( valueList.length? valueList[0].address: '0.0.0.0' );
 }
