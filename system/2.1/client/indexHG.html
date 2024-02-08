@@ -108,10 +108,10 @@ Date: 10.07.2020
 
   <script>
     async function logOut() {
-      const response = await fetch("/auth/logout", { method: "GET" });
+      const response = await fetch( '/auth/logout', { method: 'GET' });
 
-      if (response.status === 204) {
-        window.location.replace("/");
+      if( response.status === 204 ) {
+        window.location.replace( '/' );
       }
     }
     // Logout button
