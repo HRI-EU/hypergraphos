@@ -34,8 +34,8 @@ const ls = function( dir ) {
   if( dir ) {
     console.log( 'Current directory content' );
     console.log( '-------------------------' );
-    fs.readdirSync( dir ).forEach(file => {
-      console.log(file);
+    fs.readdirSync( dir ).forEach( file => {
+      console.log( file );
     });
     console.log( '-------------------------' );
   }
