@@ -35,6 +35,6 @@ const config = {
     "maxHistoryLength": 30
   },
   "server": {
-    "ip": "172.26.3.117"
+    "ip": "192.168.1.59"
   }
 };

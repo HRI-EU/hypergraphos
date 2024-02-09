@@ -13,7 +13,7 @@ Date: 10.07.2020
 const sqlite3 = require( 'sqlite3' ).verbose();
 const bcrypt = require( 'bcrypt' );
 
-const DBSOURCE = "smile.db"
+const DBSOURCE = "HGUsers.db"
 
 let db = new sqlite3.Database( DBSOURCE, (err)=> {
   if( err ) {
@@ -21,7 +21,7 @@ let db = new sqlite3.Database( DBSOURCE, (err)=> {
     console.error( err.message );
     throw err;
   } else {
-    console.log('Connected to the SQLite database.')
+    console.log( 'Connected to the SQLite database.' );
     db.run(
       `CREATE TABLE user (
        id INTEGER PRIMARY KEY AUTOINCREMENT,

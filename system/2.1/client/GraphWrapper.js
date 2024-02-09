@@ -178,7 +178,7 @@ class GraphWrapper {
 																																	do: (o)=> o.d.cmd.redo() },
 					]},
 					{ separator: '-' },
-					{ label: 'Log Out',		  do: this.em.fire.onLogOut() },
+					{ label: 'Log Out',		  do: this.em.fire.onLogOut },
 				]},
 			'nodeContextMenu':
 				{ layout: 'vertical', itemList: [
