@@ -324,40 +324,42 @@ class SystemMonitorViewer extends EditorBase {
     }
     // Set editor content
     const element = document.getElementById( this.editorDivId );
-    element.innerHTML = `<div style="width=100%;height = 100%">
-                            <button type='button' style="width=100%" onclick='saveAllEditorContent()'>Save All</button>
-                            <button id='sysMonitorRefresh' type='button' style="width=100%">Update</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <button id='browserReload' type='button' style="width=100%">Browser Reload</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <button type='button' style="width=100%" onclick='m.e.openSelectionWindow()'>Show Selection Editor</button>
-                            <button type='button' style="width=100%" onclick='m.e.openModelWindow()'>Show Model Editor</button>&nbsp;&nbsp;&nbsp;
-                            <button type='button' style="width=100%" onclick='m.e.toogleShowWindows()'>Toogle Show Windows</button>
-                            <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( +1 )'>&lt;-Screen</button>
-                            <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( +0.5 )'>&lt;-|</button>
-                            <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( +0.05 )'>&lt;</button>
-                            <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( -0.05 )'>&gt;</button>
-                            <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( -0.5 )'>!-&gt;</button>
-                            <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( -1 )'>Screen-&gt;</button>
-                          </div>
-                          <div id='windowList'></div>`;
-    const refreshButton = document.querySelector( '#sysMonitorRefresh' );
-    refreshButton.onclick = ()=> this.loadEditorContent( nodeData );
-    const browserReloadButton = document.querySelector( '#browserReload' );
-    browserReloadButton.onclick = ()=> window.location.reload( true );
-    const wList = document.querySelector( '#windowList' );
-    const oeList = m.e.getEditorIdList();
-    let source = '<table style="color: aquamarine;font-size: smaller;">';
-    for( const id of oeList ) {
-      const bi = m.e.getEditorBasicInfo( id );
-      let screen = bi.screenDirection;
-      if( bi.screenIndex != 0 ) {
-        screen = screen+`[${Math.abs(bi.screenIndex)}]`;
+    if( element ) {
+      element.innerHTML = `<div style="width=100%;height = 100%">
+                              <button type='button' style="width=100%" onclick='saveAllEditorContent()'>Save All</button>
+                              <button id='sysMonitorRefresh' type='button' style="width=100%">Update</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              <button id='browserReload' type='button' style="width=100%">Browser Reload</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              <button type='button' style="width=100%" onclick='m.e.openSelectionWindow()'>Show Selection Editor</button>
+                              <button type='button' style="width=100%" onclick='m.e.openModelWindow()'>Show Model Editor</button>&nbsp;&nbsp;&nbsp;
+                              <button type='button' style="width=100%" onclick='m.e.toogleShowWindows()'>Toogle Show Windows</button>
+                              <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( +1 )'>&lt;-Screen</button>
+                              <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( +0.5 )'>&lt;-|</button>
+                              <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( +0.05 )'>&lt;</button>
+                              <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( -0.05 )'>&gt;</button>
+                              <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( -0.5 )'>!-&gt;</button>
+                              <button type='button' style="width=100%" onclick='m.e.moveAllWindowTo( -1 )'>Screen-&gt;</button>
+                            </div>
+                            <div id='windowList'></div>`;
+      const refreshButton = document.querySelector( '#sysMonitorRefresh' );
+      refreshButton.onclick = ()=> this.loadEditorContent( nodeData );
+      const browserReloadButton = document.querySelector( '#browserReload' );
+      browserReloadButton.onclick = ()=> window.location.reload( true );
+      const wList = document.querySelector( '#windowList' );
+      const oeList = m.e.getEditorIdList();
+      let source = '<table style="color: aquamarine;font-size: smaller;">';
+      for( const id of oeList ) {
+        const bi = m.e.getEditorBasicInfo( id );
+        let screen = bi.screenDirection;
+        if( bi.screenIndex != 0 ) {
+          screen = screen+`[${Math.abs(bi.screenIndex)}]`;
+        }
+        // Add item
+        const item = `<tr><td>[${bi.id}]<td>${bi.title}<td>URL: ${bi.url}<td>${screen}</tr>`;
+        source = source+item;
       }
-      // Add item
-      const item = `<tr><td>[${bi.id}]<td>${bi.title}<td>URL: ${bi.url}<td>${screen}</tr>`;
-      source = source+item;
+      wList.innerHTML = source;
+      this.editorSaved( this.id );
     }
-    wList.innerHTML = source;
-    this.editorSaved( this.id );
   }
   saveEditorContent( onSaved ) {
     this.editorSaved();

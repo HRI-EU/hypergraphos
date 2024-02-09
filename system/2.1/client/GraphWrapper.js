@@ -1687,23 +1687,14 @@ class GraphWrapper {
 			});
 		});
 		
-		// Allow to navigate out from a graph and go to parent graph (Alt+click)
-		diagram.addDiagramListener( 'BackgroundSingleClicked', ()=> {
-			if( diagram.lastInput.alt ) {
-				this.em.fire.onShowPreviousGraph();
-			}
-		});
-		// Allow to navigate into a sub graph of a node (Alt+click)
-		diagram.addDiagramListener( 'ObjectSingleClicked', ()=> {
-			if( diagram.lastInput.alt ) {
-				const data = this.getFirstSelectedNodeData();
-				if( data && ( data.isDir == true ) ) {
-					this.em.fire.onLoadGraph( data );
-				} else {
-					const mousePos = this.diagram.lastInput.viewPoint;
-					this.em.fire.onLoadFile( data, mousePos.x, mousePos.y );
-				}
-			}
+		// // Allow to navigate out from a graph and go to parent graph (Alt+click)
+		// diagram.addDiagramListener( 'BackgroundSingleClicked', ()=> {
+		// 	if( diagram.lastInput.alt ) {
+		// 		this.em.fire.onShowPreviousGraph();
+		// 	}
+		// });
+		diagram.addDiagramListener( 'BackgroundDoubleClicked', ()=> {
+			this.em.fire.onShowPreviousGraph();
 		});
 		// Allow to hide/show all windows
 		diagram.addDiagramListener( 'BackgroundSingleClicked', ()=> {
@@ -1720,6 +1711,27 @@ class GraphWrapper {
 				m.e.toogleShowWindows();
 			}
 		});
+		diagram.addDiagramListener( 'ObjectDoubleClicked', ()=> {
+			const data = this.getFirstSelectedNodeData();
+			if( data && ( data.isDir == true ) ) {
+				this.em.fire.onLoadGraph( data );
+			} else {
+				const mousePos = this.diagram.lastInput.viewPoint;
+				this.em.fire.onLoadFile( data, mousePos.x, mousePos.y );
+			}
+		});
+		// // Allow to navigate into a sub graph of a node (Alt+click)
+		// diagram.addDiagramListener( 'ObjectSingleClicked', ()=> {
+		// 	if( diagram.lastInput.alt ) {
+		// 		const data = this.getFirstSelectedNodeData();
+		// 		if( data && ( data.isDir == true ) ) {
+		// 			this.em.fire.onLoadGraph( data );
+		// 		} else {
+		// 			const mousePos = this.diagram.lastInput.viewPoint;
+		// 			this.em.fire.onLoadFile( data, mousePos.x, mousePos.y );
+		// 		}
+		// 	}
+		// });
 
 		diagram.addDiagramListener( 'InitialLayoutCompleted', (diagramEvent)=> {
 			this.em.fire.onFirstLayoutCompleted();
