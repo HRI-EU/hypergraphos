@@ -13,7 +13,7 @@ Date: 10.07.2020
 const sqlite3 = require( 'sqlite3' ).verbose();
 const bcrypt = require( 'bcrypt' );
 
-const DBSOURCE = "HGUsers.db"
+const DBSOURCE = 'HGUsers.db';
 
 let db = new sqlite3.Database( DBSOURCE, (err)=> {
   if( err ) {
