@@ -5,13 +5,15 @@
 const config = {
   "client": {
     "host": {
-      "name": "Antonello",
+      "name": "Frank",
       "fileServerURL": "/fileServer",
       "fileServerSystemURL": "/fileServer/System",
       "fileStatusURL": "/fileStatus",
-      "statusURL": "/fileServer/Users/Antonello_status.json"
+      "statusURL": "/fileServer/Users/Frank_status.json"
     },
-    "remoteHost": {},
+    "remoteHost": {
+      "NUC": "192.168.178.25:7575"
+    },
     "htmlDiv": {
       "mainDiv": "mainDiv",
       "graphDiv": "diagram",
@@ -23,7 +25,7 @@ const config = {
     "graph": {
       "isDoubleClickCreateNodeEnabled": false,
       "allowDeleteKey": false,
-      "colorSchema": "dark",
+      "colorSchema": "light",
       "zoomFactor": 1.25,
       "defaultDSL": "DefaultDSL",
       "rootGraphURL": "/fileServer/graphRoot.json",
@@ -36,7 +38,7 @@ const config = {
       "maxHistoryLength": 30
     },
     "server": {
-      "ip": "192.168.1.59"
+      "ip": "192.168.178.20"
     }
   },
   "server": {
@@ -59,15 +61,15 @@ const config = {
       "key": "server.key",
       "cert": "server.cert"
     },
-    "ip": "192.168.1.59"
+    "ip": "192.168.178.20"
   },
   "host": {
     "uid": -1,
     "gid": -1,
-    "username": "RE900104",
-    "homedir": "C:\\Users\\re900104",
+    "username": "Frank Joublin",
+    "homedir": "C:\\Users\\frank",
     "shell": null,
-    "hostname": "EHRIEXPS-67-DL",
+    "hostname": "Main-PC",
     "platform": "win32",
     "platformOS": "Windows",
     "platformType": "windows"
