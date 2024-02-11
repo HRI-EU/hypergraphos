@@ -184,24 +184,31 @@ class GraphWrapper {
 				{ layout: 'vertical', itemList: [
 					{ label: 'Zoom it',     do: this.doZoomToFitSlectedNode.bind(this,5) },
 					{ separator: '-' },
-					{ label: 'Duplicate',   if: (o)=> {	const location = o.d.cmt.mouseDownPoint;
-																							return( o.d.cmd.canCopySelection() ); },
-																	do: (o)=> { const location = o.d.cmt.mouseDownPoint;
-																							o.d.cmd.copySelection();
-																							o.d.cmd.pasteSelection( location ); } },
-					{ label: 'Clone',       if: (o)=> this.canEditClone(),
-																	do: (o)=> this.doEditClone() },
-					{ label: 'Cut',         if: (o)=> o.d.cmd.canCutSelection(),
-																	do: (o)=> o.d.cmd.cutSelection() },
-					{ label: 'Copy',        if: (o)=> o.d.cmd.canCopySelection(),
-																	do: (o)=> o.d.cmd.copySelection() },
-					{ label: 'Paste',       if: (o)=> { // TODO: check, I do not define location
-																							// but, it seems that with location, paste become unavailable
-																							o.d.cmd.canPasteSelection( location ); },
-																	do: (o)=> { const location = o.d.cmt.mouseDownPoint;
-																							o.d.cmd.pasteSelection( location ); } },
-					{ label: 'Delete',      if: (o)=> o.d.cmd.canDeleteSelection(),
-																	do: (o)=> o.d.cmd.deleteSelection() },
+					{ label: 'Edit',       layout: 'vertical', subMenu: [
+						{ label: 'Duplicate',   if: (o)=> {	const location = o.d.cmt.mouseDownPoint;
+																								return( o.d.cmd.canCopySelection() ); },
+																		do: (o)=> { const location = o.d.cmt.mouseDownPoint;
+																								o.d.cmd.copySelection();
+																								o.d.cmd.pasteSelection( location ); } },
+						{ label: 'Clone',       if: (o)=> this.canEditClone(),
+																		do: (o)=> this.doEditClone() },
+						{ label: 'Cut',         if: (o)=> o.d.cmd.canCutSelection(),
+																		do: (o)=> o.d.cmd.cutSelection() },
+						{ label: 'Copy',        if: (o)=> o.d.cmd.canCopySelection(),
+																		do: (o)=> o.d.cmd.copySelection() },
+						{ label: 'Paste',       if: (o)=> { // TODO: check, I do not define location
+																								// but, it seems that with location, paste become unavailable
+																								o.d.cmd.canPasteSelection( location ); },
+																		do: (o)=> { const location = o.d.cmt.mouseDownPoint;
+																								o.d.cmd.pasteSelection( location ); } },
+						{ label: 'Delete',      if: (o)=> o.d.cmd.canDeleteSelection(),
+																		do: (o)=> o.d.cmd.deleteSelection() },
+						{ separator: '-' },
+						{ label: 'Copy Size',   if: (o)=> o.d.cmd.canCopySelection(),
+																		do: (o)=> this.doCopySize() },
+						{ label: 'Paset Size',  if: (o)=> this.copiedSize,
+																		do: (o)=> this.doPasteSize() },
+				  ]},
 					{ separator: '-' },
 					{ label: 'Set From Palette',	do: (o)=> this._resetSelectionFromPalette() },
 					{ separator: '-' },
@@ -255,6 +262,7 @@ class GraphWrapper {
 		// Initialize instance variables
 		this.clearInstance();
 
+		this.copiedSize = null;
 		this.isDeleteEnabled = false;
 		this.isDoubleClickCreateNodeEnabled = true;
 		this.isRootGraph = true;
@@ -872,6 +880,22 @@ class GraphWrapper {
 		const cmd = this.diagram.commandHandler;
 		if( cmd.canDeleteSelection() ) {
 			cmd.deleteSelection();
+		}
+	}
+	doCopySize() {
+		// If a single node is selected => clone it
+		const data = this.getFirstSelectedNodeData();
+		if( data ) {
+			this.copiedSize = data.size;
+		}
+	}
+	doPasteSize() {
+		if( this.copiedSize ) {
+			const selection = this.getSelection();
+			selection.each( (node) => { 
+				const data = node.data;
+				setNodeDataField( data, 'size', this.copiedSize );
+			});
 		}
 	}
 	canUngroupSelectedNodes() {
