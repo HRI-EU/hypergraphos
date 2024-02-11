@@ -818,11 +818,17 @@ class GraphWrapper {
 		return( result );
 	}
 	doZoomToFitSlectedNode( factor ) {
-		this.doZoomToFit();
-		const isViewSet = this.setViewCenteredOnSelectedNode();
-		if( isViewSet ) {
-			this.doZoomToFactor( factor );
+		const seleciton = this.getSelection();
+		const node = seleciton.first();
+		if( node ) {
+			this.diagram.zoomToRect( node.actualBounds, go.Diagram.Uniform );
+			this.diagram.scale = this.diagram.scale/4;
 		}
+		// this.doZoomToFit();
+		// const isViewSet = this.setViewCenteredOnSelectedNode();
+		// if( isViewSet ) {
+		// 	this.doZoomToFactor( factor );
+		// }
 	}
 	doZoomToFit() {
 		// Go to new view 
