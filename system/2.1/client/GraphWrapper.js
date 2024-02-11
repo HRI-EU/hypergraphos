@@ -204,13 +204,16 @@ class GraphWrapper {
 						{ label: 'Delete',      if: (o)=> o.d.cmd.canDeleteSelection(),
 																		do: (o)=> o.d.cmd.deleteSelection() },
 						{ separator: '-' },
-						{ label: 'Copy Size',   if: (o)=> o.d.cmd.canCopySelection(),
+						{ label: 'Copy Size',   if: (o)=> !this.isSelectionEmpty(),
 																		do: (o)=> this.doCopySize() },
-						{ label: 'Paset Size',  if: (o)=> this.copiedSize,
+						{ label: 'Paset Size',  if: (o)=> this.copiedSize && !this.isSelectionEmpty(),
 																		do: (o)=> this.doPasteSize() },
 				  ]},
 					{ separator: '-' },
-					{ label: 'Set From Palette',	do: (o)=> this._resetSelectionFromPalette() },
+					{ label: 'Set From Palette',	if: (o)=> !this.isSelectionEmpty(),
+																				do: (o)=> this._resetSelectionFromPalette() },
+					{ label: 'Prompt URL',				if: (o)=> !this.isSelectionEmpty(),
+																				do: (o)=> this.doPromptURL() },
 					{ separator: '-' },
 					{ label: 'Group',       if: (o)=> o.d.cmd.canGroupSelection(),
 																	do: (o)=> o.d.cmd.groupSelection() },
@@ -704,6 +707,9 @@ class GraphWrapper {
 		}
 		return( result );
 	}
+	isSelectionEmpty() {
+		return( this.getSelectionCount() == 0 );
+	}
 	getJSONSelection() {
 		const list = this._getFilteredSelection( 4 );
 		let jsonSelection = '';
@@ -824,11 +830,6 @@ class GraphWrapper {
 			this.diagram.zoomToRect( node.actualBounds, go.Diagram.Uniform );
 			this.diagram.scale = this.diagram.scale/4;
 		}
-		// this.doZoomToFit();
-		// const isViewSet = this.setViewCenteredOnSelectedNode();
-		// if( isViewSet ) {
-		// 	this.doZoomToFactor( factor );
-		// }
 	}
 	doZoomToFit() {
 		// Go to new view 
@@ -889,7 +890,7 @@ class GraphWrapper {
 		}
 	}
 	doCopySize() {
-		// If a single node is selected => clone it
+		// If a single node is selected => copy size
 		const data = this.getFirstSelectedNodeData();
 		if( data ) {
 			this.copiedSize = data.size;
@@ -902,6 +903,18 @@ class GraphWrapper {
 				const data = node.data;
 				setNodeDataField( data, 'size', this.copiedSize );
 			});
+		}
+	}
+	doPromptURL() {
+		// If a single node is selected => prompt for URL
+		const data = this.getFirstSelectedNodeData();
+		if( data && data.fileURL != undefined ) {
+			const setURL = ( newURL )=> {
+				if( newURL != null ) {
+					setNodeDataField( data, 'fileURL', newURL );
+				}
+			};
+			winPrompt( 'URL', data.fileURL, setURL );
 		}
 	}
 	canUngroupSelectedNodes() {
