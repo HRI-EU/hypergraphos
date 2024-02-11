@@ -109,7 +109,7 @@ class GraphWrapper {
 		this.contextMenu.add({
       'diagramContextMenu': 
 				{	layout: 'vertical', itemList: [
-					{ label: 'Properties',					do: ( o )=> winAlert( this.getDiagramInfo( this.diagram.model ), false )},
+					{ label: 'Properties',					do: (o)=> winAlert( this.getDiagramInfo( this.diagram.model ), false )},
 					{ label: 'View',       layout: 'vertical',	subMenu: [
 						{ label: 'Zoom to Fit',			  do: this.doZoomToFit.bind(this) },
 						{ separator: '-' },

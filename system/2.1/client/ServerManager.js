@@ -189,17 +189,14 @@ function getNewFileServerURL( extension, onDone ) {
     setFileIndexStatus( (s)=> s.fileServer = fsInfo );
     
     // Generate next file/path
-    const host = ''; document.location.origin;
+    const host = ''; // document.location.origin;
     const newFilePath = `${host}${config.host.fileServerURL}${newPath}/${newFile}`;
+
     // Update fileIndex file
     try {
       const source = JSON.stringify( m.fileInfo );
       _saveFile( fileIndexURL, source );
-    } catch (error) {
-      if( onDone ) {
-        onDone( '' );
-      }
-    }
+    } catch (error) {}
 
     // Return new file path
     if( onDone ) {
