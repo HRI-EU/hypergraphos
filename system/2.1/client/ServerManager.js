@@ -143,55 +143,72 @@ function getNewGraphFileServerURL( extension ) {
   const url = g.getNextGraphFileServerURL( extension );
   return( url );
 }
-function getNewFileServerURL( extension ) {
-  extension = ( extension? extension: 'bin' );
-  // Path creation function
-  const getPath = function( pathV ) {
-    let result = '';
-    for( let i = 0; i < pathV.length; i=i+2 ) {
-      // TODO: check, why am I taking i, i+2???? should not be i, i+1
-      result = result+'/'+pathV.substring( i, i+2 );
-    }
-    return( result );
-  }
-  // Get current fileServer info
-  let fsInfo = m.fileInfo.fileServer;
-
-  // Set FileName
-  let isNextPathNeeded = false;
-  if( fsInfo.currFile >= fsInfo.maxFileIndex ) {
-    isNextPathNeeded = true;
-    fsInfo.currFile = 0;
-  } else {
-    ++fsInfo.currFile;
-  }
-  const fileName = ( fsInfo.currFile < 10? '0'+fsInfo.currFile: fsInfo.currFile );
-  let newFile = fileName+'.'+extension;
-
-  // Set PathName
-  if( isNextPathNeeded ) {
-    fsInfo.currPath++;
-  }
-  let pathV = fsInfo.currPath.toString();
-  let pathVlen = pathV.length;
-  if( pathVlen % 2 == 1 ) {
-    pathV = pathV.substring( 0, pathVlen-1 )+'0'+pathV.substring( pathVlen-1 );
-  }
-  const newPath = getPath( pathV );
-  setFileIndexStatus( (s)=> s.fileServer = fsInfo );
+function getNewFileServerURL( extension, onDone ) {
+  const fileIndexURL = `${config.host.fileServerSystemURL}/fileIndex.json`;
   
-  // Generate next file/path
-  const host = ''; document.location.origin;
-  const newFilePath = `${host}${config.host.fileServerURL}${newPath}/${newFile}`;
-  // Update fileIndex file
-  const url = `${config.host.fileServerSystemURL}/fileIndex.json`;
-  try {
-    const source = JSON.stringify( m.fileInfo );
-    _saveFile( url, source );
-  } catch (error) {
-    return( null );
-  }
-  return( newFilePath );
+  const computeFileIndex = ( source )=> {
+    extension = ( extension? extension: 'bin' );
+    // Path creation function
+    const getPath = function( pathV ) {
+      let result = '';
+      for( let i = 0; i < pathV.length; i=i+2 ) {
+        // TODO: check, why am I taking i, i+2???? should not be i, i+1
+        result = result+'/'+pathV.substring( i, i+2 );
+      }
+      return( result );
+    }
+
+    // Get current fileServer info
+    let fsInfo = m.fileInfo.fileServer; // Default value
+    try {
+      const obj = JSON.parse( source );
+      fsInfo = obj.fileServer;
+    } catch( e ) {}
+
+    // Set FileName
+    let isNextPathNeeded = false;
+    if( fsInfo.currFile >= fsInfo.maxFileIndex ) {
+      isNextPathNeeded = true;
+      fsInfo.currFile = 0;
+    } else {
+      ++fsInfo.currFile;
+    }
+    const fileName = ( fsInfo.currFile < 10? '0'+fsInfo.currFile: fsInfo.currFile );
+    let newFile = fileName+'.'+extension;
+
+    // Set PathName
+    if( isNextPathNeeded ) {
+      fsInfo.currPath++;
+    }
+    let pathV = fsInfo.currPath.toString();
+    let pathVlen = pathV.length;
+    if( pathVlen % 2 == 1 ) {
+      pathV = pathV.substring( 0, pathVlen-1 )+'0'+pathV.substring( pathVlen-1 );
+    }
+    const newPath = getPath( pathV );
+    setFileIndexStatus( (s)=> s.fileServer = fsInfo );
+    
+    // Generate next file/path
+    const host = ''; document.location.origin;
+    const newFilePath = `${host}${config.host.fileServerURL}${newPath}/${newFile}`;
+    // Update fileIndex file
+    try {
+      const source = JSON.stringify( m.fileInfo );
+      _saveFile( fileIndexURL, source );
+    } catch (error) {
+      if( onDone ) {
+        onDone( '' );
+      }
+    }
+
+    // Return new file path
+    if( onDone ) {
+      onDone( newFilePath );
+    }
+  };
+
+  // Load latest version of fileIndex
+  _openFile( fileIndexURL, computeFileIndex );
 }
 function loadScriptList( urlList, onLoad, isAvoidCache ) {
   if( !Array.isArray( urlList ) ) {
