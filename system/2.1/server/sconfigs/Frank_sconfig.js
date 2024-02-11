@@ -8,7 +8,6 @@ function userSetup( config ) {
     config.client.host.name = 'Frank';
     config.client.host.statusURL = '/fileServer/Users/Frank_status.json';
     config.client.graph.allowDeleteKey = false;
-    config.client.graph.isDoubleClickCreateNodeEnabled = false;
     // List of remote host
     config.client.remoteHost['NUC'] = '192.168.178.25:7575';
   } else if( config.host.hostname == 'hyper-graph' ) {
@@ -17,7 +16,6 @@ function userSetup( config ) {
     config.client.host.name = 'Frank';
     config.client.host.statusURL = '/fileServer/Users/Frank_status.json';
     config.client.graph.allowDeleteKey = true;
-    config.client.graph.isDoubleClickCreateNodeEnabled = false;
     // config.server.dataRoot = '../../fileSystem/MDDToolsDataRoot';
     // config.server.tempRoot = '../../fileSystem/MDDToolsTempRoot';
     config.server.dataRoot = '../../../../DevAll/MDDToolsDataRoot';
@@ -30,7 +28,6 @@ function userSetup( config ) {
     config.client.host.name = 'Frank';
     config.client.host.statusURL = '/fileServer/Users/Frank_status.json';
     config.client.graph.allowDeleteKey = false;
-    config.client.graph.isDoubleClickCreateNodeEnabled = false;
   } else if( config.host.username == "HGMigration" ) {
     config.server.dataRoot = '../../../../../../DevAll//MDDToolsDataRoot';
     config.server.deployRoot = '../../../../../../DevAll//MDDToolsDeployRoot';
@@ -38,7 +35,6 @@ function userSetup( config ) {
     config.client.host.name = 'Frank';
     config.client.host.statusURL = '/fileServer/Users/Frank_status.json';
     config.client.graph.allowDeleteKey = true;
-    config.client.graph.isDoubleClickCreateNodeEnabled = false;
   }
 }
 module.exports = userSetup;

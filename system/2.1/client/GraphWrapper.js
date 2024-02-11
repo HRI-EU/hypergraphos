@@ -267,7 +267,6 @@ class GraphWrapper {
 
 		this.copiedSize = null;
 		this.isDeleteEnabled = false;
-		this.isDoubleClickCreateNodeEnabled = true;
 		this.isRootGraph = true;
 		this.isHistoryEmpty = true;
 		this.systemNodeDataFieldList = [
@@ -497,15 +496,6 @@ class GraphWrapper {
 		//
 		this.diagram.isDeleteEnabled = isDeleteEnabled;
 		// End FIX
-	}
-	setAllowDoubleCliceCreateNode( status ) {
-		status = ( status == undefined? true: status );
-		this.isDoubleClickCreateNodeEnabled = status;
-
-		// update diagram event
-		if( !this.isDoubleClickCreateNodeEnabled ) {
-			this.diagram.toolManager.clickCreatingTool = null
-		}
 	}
 	getGraphImage() {
 		let image = null;
@@ -1583,8 +1573,10 @@ class GraphWrapper {
 		diagram.toolManager.mouseWheelBehavior = go.ToolManager.WheelZoom;
 		// Disable port gravity (snap to port)
 		diagram.toolManager.linkingTool.portGravity = 0;
-		// enable undo & redo
+		// Enable undo & redo
 		diagram.undoManager.isEnabled = true;
+		// Disable creation of nodes on double click
+		diagram.toolManager.clickCreatingTool = null
 
 		// Define grid
 		const mainColor = {

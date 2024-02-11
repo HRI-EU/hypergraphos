@@ -7,7 +7,6 @@ function userSetup( config ) {
     config.client.host.name = 'Cristian';
     config.client.host.statusURL = '/fileServer/Users/Cristian_status.json';
     config.client.graph.allowDeleteKey = true;
-    config.client.graph.isDoubleClickCreateNodeEnabled = false;
   }
 }
 module.exports = userSetup;

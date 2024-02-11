@@ -21,7 +21,6 @@ function userSetup( config ) {
     config.client.graph.colorSchema = 'dark';
     config.client.host.statusURL = '/fileServer/Users/Antonello_status.json';
     config.client.graph.allowDeleteKey = false;
-    config.client.graph.isDoubleClickCreateNodeEnabled = false;
   }
 }
 module.exports = userSetup;

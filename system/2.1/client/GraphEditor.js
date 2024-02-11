@@ -34,9 +34,7 @@ class GraphEditor extends EditorBase {
     if( config.graph.allowDeleteKey != undefined) {
       this.editor.setAllowDeleteKey( config.graph.allowDeleteKey );
     }
-    if( config.graph.isDoubleClickCreateNodeEnabled != undefined ) {
-      this.editor.setAllowDoubleCliceCreateNode( config.graph.isDoubleClickCreateNodeEnabled );
-    }
+
     // Pause tracking editor changes
     this.setPauseChange( true );
     // Saving events

@@ -5,14 +5,14 @@
 const config = {
   "client": {
     "host": {
-      "name": "Frank",
+      "name": "Antonello",
       "fileServerURL": "/fileServer",
       "fileServerSystemURL": "/fileServer/System",
       "fileStatusURL": "/fileStatus",
-      "statusURL": "/fileServer/Users/Frank_status.json"
+      "statusURL": "/fileServer/Users/Antonello_status.json"
     },
     "remoteHost": {
-      "NUC": "192.168.178.25:7575"
+      "NUC": "192.168.1.11:7575"
     },
     "htmlDiv": {
       "mainDiv": "mainDiv",
@@ -23,10 +23,9 @@ const config = {
       "linkPaletteDiv": "linkPalette"
     },
     "graph": {
-      "isDoubleClickCreateNodeEnabled": false,
       "allowDeleteKey": false,
-      "colorSchema": "light",
-      "zoomFactor": 1.25,
+      "colorSchema": "dark",
+      "zoomFactor": 1.05,
       "defaultDSL": "DefaultDSL",
       "rootGraphURL": "/fileServer/graphRoot.json",
       "rootGraphNodeData": {
@@ -38,7 +37,7 @@ const config = {
       "maxHistoryLength": 30
     },
     "server": {
-      "ip": "192.168.178.20"
+      "ip": "192.168.1.12"
     }
   },
   "server": {
@@ -50,7 +49,7 @@ const config = {
     "libPath": "../client/lib",
     "scriptPath": "../script",
     "testPath": "../test",
-    "scriptPlatform": "win32",
+    "scriptPlatform": "linux",
     "webServerProtocol": "http",
     "webServerName": "localhost",
     "webServerPort": 80,
@@ -61,18 +60,18 @@ const config = {
       "key": "server.key",
       "cert": "server.cert"
     },
-    "ip": "192.168.178.20"
+    "ip": "192.168.1.12"
   },
   "host": {
-    "uid": -1,
-    "gid": -1,
-    "username": "Frank Joublin",
-    "homedir": "C:\\Users\\frank",
-    "shell": null,
-    "hostname": "Main-PC",
-    "platform": "win32",
-    "platformOS": "Windows",
-    "platformType": "windows"
+    "uid": 501,
+    "gid": 20,
+    "username": "antonelloceravola",
+    "homedir": "/Users/antonelloceravola",
+    "shell": "/bin/zsh",
+    "hostname": "Antonellos-Mini",
+    "platform": "darwin",
+    "platformOS": "MacOS",
+    "platformType": "linux"
   }
 };
 
