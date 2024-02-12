@@ -206,13 +206,13 @@ class GraphWrapper {
 						{ separator: '-' },
 						{ label: 'Copy Size',   if: (o)=> !this.isSelectionEmpty(),
 																		do: (o)=> this.doCopySize() },
-						{ label: 'Paset Size',  if: (o)=> this.copiedSize && !this.isSelectionEmpty(),
+						{ label: 'Paste Size',  if: (o)=> this.copiedSize && !this.isSelectionEmpty(),
 																		do: (o)=> this.doPasteSize() },
 				  ]},
 					{ separator: '-' },
 					{ label: 'Set From Palette',	if: (o)=> !this.isSelectionEmpty(),
 																				do: (o)=> this._resetSelectionFromPalette() },
-					{ label: 'Prompt URL',				if: (o)=> !this.isSelectionEmpty(),
+					{ label: 'Prompt URL',				if: (o)=> this.canPromptURL(),
 																				do: (o)=> this.doPromptURL() },
 					{ separator: '-' },
 					{ label: 'Group',       if: (o)=> o.d.cmd.canGroupSelection(),
@@ -894,6 +894,10 @@ class GraphWrapper {
 				setNodeDataField( data, 'size', this.copiedSize );
 			});
 		}
+	}
+	canPromptURL() {
+		const data = this.getFirstSelectedNodeData();
+		return( data && data.fileURL != undefined );
 	}
 	doPromptURL() {
 		// If a single node is selected => prompt for URL
