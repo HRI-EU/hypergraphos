@@ -25,7 +25,6 @@ const config = {
     "linkPaletteDiv": "linkPalette"
   },
   "graph": {
-    "isDoubleClickCreateNodeEnabled": true,
     "allowDeleteKey": false,
     "colorSchema": "dark",
     "zoomFactor": 1.05,

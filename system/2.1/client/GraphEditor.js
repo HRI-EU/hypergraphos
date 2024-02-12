@@ -34,9 +34,7 @@ class GraphEditor extends EditorBase {
     if( config.graph.allowDeleteKey != undefined) {
       this.editor.setAllowDeleteKey( config.graph.allowDeleteKey );
     }
-    if( config.graph.isDoubleClickCreateNodeEnabled != undefined ) {
-      this.editor.setAllowDoubleCliceCreateNode( config.graph.isDoubleClickCreateNodeEnabled );
-    }
+
     // Pause tracking editor changes
     this.setPauseChange( true );
     // Saving events
@@ -86,9 +84,10 @@ class GraphEditor extends EditorBase {
         //const newNodeData = this.editor.getNodeData( nodeData.key, true );
         const newNodeData = getNodeData( nodeData.key, true );
         // Give a new url in case fileURL is empty
-        this._verifyFileURL( newNodeData );
-        // Open node window
-        m.e.openWindowFromNodeData( newNodeData, x, y );
+        this._verifyFileURL( newNodeData, ()=> {
+          // Open node window
+          m.e.openWindowFromNodeData( newNodeData, x, y );
+        });
       },
       onClone: ( nodeData )=> {
         if( nodeData.fileURL ) {
@@ -109,16 +108,16 @@ class GraphEditor extends EditorBase {
               newNodeData.fileURL = newURL;
             } else {
               // Set a new fileURL
-              this._verifyFileURL( newNodeData );
-
-              // Clone opened windows
-              const newURL = newNodeData.fileURL;
-              m.e.cloneGraphWindow( oldURL, newURL );
-  
-              // Temporarly save the content
-              newNodeData.fileContent = source;
-              // Save node content to the server
-              saveNodeContent( newNodeData );
+              this._verifyFileURL( newNodeData, ()=> {
+                // Clone opened windows
+                const newURL = newNodeData.fileURL;
+                m.e.cloneGraphWindow( oldURL, newURL );
+    
+                // Temporarly save the content
+                newNodeData.fileContent = source;
+                // Save node content to the server
+                saveNodeContent( newNodeData );
+              });
             }
           };
 
@@ -188,9 +187,10 @@ class GraphEditor extends EditorBase {
     //const newNodeData = this.editor.getNodeData( nodeData.key, true );
     const newNodeData = this.editor._getDataCopy( nodeData );
     // Give a new url in case fileURL is empty
-    this._verifyFileURL( newNodeData );
-    // Navigate to node
-    this.navigateToGraph( newNodeData, onLoaded );
+    this._verifyFileURL( newNodeData, ()=> {
+      // Navigate to node
+      this.navigateToGraph( newNodeData, onLoaded );
+    });
   }
   navigateToGraph( newNodeData, onLoaded, isBackFromHistory ) {
     isBackFromHistory = ( isBackFromHistory == undefined? false: isBackFromHistory );
@@ -386,29 +386,25 @@ class GraphEditor extends EditorBase {
       onGraphSaved();
     }
   }
-  _verifyFileURL_old( nodeData ) {
-    if( nodeData && !nodeData.isLink && ( nodeData.isDir || nodeData.isFile ) ) {
-      if( ( nodeData.fileURL != undefined ) && ( nodeData.fileURL == '' ) ) {
-        const ext = getExtByFileType( nodeData.fileType );
-        const url = getNewFileServerURL( ext );
-        nodeData.fileURL = url;
-        // NOTE: the setNodeDataField trigger the editorChange event
-        //this.editor.setNodeDataField( nodeData.key, 'fileURL', url );
-        setNodeDataField( nodeData.key, 'fileURL', url );
-      }
-    }
-  }
-  _verifyFileURL( nodeData ) {
+  _verifyFileURL( nodeData, onDone ) {
+    let isFileServer = false;
     if( nodeData && !nodeData.isLink && ( nodeData.isDir || nodeData.isFile ) ) {
       if( nodeData.fileURL != undefined ) {
         if( ( nodeData.fileURL == '' ) || ( nodeData.fileURL == '/fileServer/' ) ) {
+          // NOTE: file server case!!!
+          isFileServer = true;
           // Initialize fileServer URL if is not complete
           const ext = getExtByFileType( nodeData.fileType );
-          const url = getNewFileServerURL( ext );
-          nodeData.fileURL = url;
-          // NOTE: the setNodeDataField trigger the editorChange event
-          //this.editor.setNodeDataField( nodeData.key, 'fileURL', url );
-          setNodeDataField( nodeData.key, 'fileURL', url );
+          getNewFileServerURL( ext, ( newURL )=> {
+            nodeData.fileURL = newURL;
+            // NOTE: the setNodeDataField trigger the editorChange event
+            //this.editor.setNodeDataField( nodeData.key, 'fileURL', url );
+            setNodeDataField( nodeData.key, 'fileURL', newURL );
+
+            if( onDone ) {
+              onDone();
+            }
+          });
         } else if( nodeData.fileURL == 'graph://fileServer/' ) {
           // Initialize graphServer URL if is not complete
           const ext = getExtByFileType( nodeData.fileType );
@@ -420,6 +416,10 @@ class GraphEditor extends EditorBase {
         }
         // Otherwise the URL should be already set and valid
       }
+    }
+
+    if( !isFileServer && onDone ) {
+      onDone();
     }
   }
   updateGraphTemplate() {

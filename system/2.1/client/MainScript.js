@@ -119,10 +119,49 @@ function winConfirm( msg, yesCallback, noCallback, isCenter )
   const yesEl = document.getElementById( 'winConfirm_yes' );
   const noEl = document.getElementById( 'winConfirm_no' );
   if( yesEl ) {
-    yesEl.onclick = ()=> { if( yesCallback ) yesCallback(); win.close(); };
+    yesEl.onclick = ()=> { win.close(); if( yesCallback ) yesCallback(); };
   }
   if( noEl ) {
-    noEl.onclick = ()=> { if( noCallback ) noCallback(); win.close(); };
+    noEl.onclick = ()=> { win.close(); if( noCallback ) noCallback(); };
+  }
+}
+function winPrompt( msg, value, onClose ) {
+  let result = null;
+  value = ( value == undefined? '': value );
+  const closeCallback = ()=> {
+    if( onClose ) {
+      onClose( result );
+    }
+  }
+
+  const win = new WinBox( 'Alert', {
+    modal: true,
+    autosize: true,
+    background: 'Crimson',
+    onclose: closeCallback,
+    html: `<div style="margine: 0px;">`+
+            `<pre>`+
+              `&nbsp;${msg}&nbsp;<input type="text" id="winPrompt_input" name="winPrompt_input" value="${value}" size="50">&nbsp;<br><br>`+
+            `</pre>`+
+            `<pre style="text-align: center;">`+
+              `<button id="winConfirm_cancel" type="button">Cancel</button>&nbsp`+
+              `<button id="winConfirm_ok" type="button">Ok</button>`+
+            `</pre>`+
+          `</div>`,
+  });
+
+  // Register buttons callback
+  const okEl = document.getElementById( 'winConfirm_ok' );
+  const cancelEl = document.getElementById( 'winConfirm_cancel' );
+  if( okEl ) {
+    okEl.onclick = ()=> { 
+      const inEl = document.getElementById( 'winPrompt_input' );
+      result = ( inEl? inEl.value: '' );
+      win.close();
+    };
+  }
+  if( cancelEl ) {
+    cancelEl.onclick = ()=> win.close();
   }
 }
 

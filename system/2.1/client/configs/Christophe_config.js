@@ -19,7 +19,6 @@ const config = {
     "linePaletteDiv": "linkPalette"
   },
   "graph": {
-    "isDoubleClickCreateNodeEnabled": false,
     "allowDeleteKey": true,
     "colorSchema": "light",
     "defaultDSL": "DefaultDSL",

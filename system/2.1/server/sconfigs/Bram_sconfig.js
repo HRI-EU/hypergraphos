@@ -6,7 +6,6 @@ function userSetup( config ) {
     config.client.host.name = 'Bram';
     config.client.host.statusURL = '/fileServer/Users/Bram_status.json';
     config.client.graph.allowDeleteKey = false;
-    config.client.graph.isDoubleClickCreateNodeEnabled = false;
   }
 }
 module.exports = userSetup;

@@ -109,8 +109,10 @@ class GraphWrapper {
 		this.contextMenu.add({
       'diagramContextMenu': 
 				{	layout: 'vertical', itemList: [
-					{ label: 'Properties',					do: ( o )=> winAlert( this.getDiagramInfo( this.diagram.model ), false )},
+					{ label: 'Properties',					do: (o)=> winAlert( this.getDiagramInfo( this.diagram.model ), false )},
 					{ label: 'View',       layout: 'vertical',	subMenu: [
+						{ label: 'Zoom to Fit',			  do: this.doZoomToFit.bind(this) },
+						{ separator: '-' },
 						{ label: 'Toggle Visible Palette', 	if: (o)=> ( this.fullPaletteId? true: false ),
 																								do: (o)=> { const htmlObj = document.querySelector( `#${this.fullPaletteId}` );
 																														const v = htmlObj.style.visibility;
@@ -122,8 +124,6 @@ class GraphWrapper {
 																														htmlObj.style.top = Math.min( browserHeight-100, Math.max( 0, htmlObj.offsetTop ) );
 																													}},
 						{ label: 'Toggle Visible Grid', do: (o)=> this.diagram.grid.visible = !this.diagram.grid.visible },
-						{ separator: '-' },
-						{ label: 'Zoom to Fit',			  do: this.doZoomToFit.bind(this) },
 						{ separator: '-' },
 						{ label: 'Add Bookmark',		  do: this.addBookmark.bind(this) },
 					]},
@@ -178,32 +178,42 @@ class GraphWrapper {
 																																	do: (o)=> o.d.cmd.redo() },
 					]},
 					{ separator: '-' },
-					{ label: 'Log Out',		  do: this.em.fire.onLogOut() },
+					{ label: 'Log Out',		  do: this.em.fire.onLogOut },
 				]},
 			'nodeContextMenu':
 				{ layout: 'vertical', itemList: [
 					{ label: 'Zoom it',     do: this.doZoomToFitSlectedNode.bind(this,5) },
 					{ separator: '-' },
-					{ label: 'Duplicate',   if: (o)=> {	const location = o.d.cmt.mouseDownPoint;
-																							return( o.d.cmd.canCopySelection() ); },
-																	do: (o)=> { const location = o.d.cmt.mouseDownPoint;
-																							o.d.cmd.copySelection();
-																							o.d.cmd.pasteSelection( location ); } },
-					{ label: 'Clone',       if: (o)=> this.canEditClone(),
-																	do: (o)=> this.doEditClone() },
-					{ label: 'Cut',         if: (o)=> o.d.cmd.canCutSelection(),
-																	do: (o)=> o.d.cmd.cutSelection() },
-					{ label: 'Copy',        if: (o)=> o.d.cmd.canCopySelection(),
-																	do: (o)=> o.d.cmd.copySelection() },
-					{ label: 'Paste',       if: (o)=> { // TODO: check, I do not define location
-																							// but, it seems that with location, paste become unavailable
-																							o.d.cmd.canPasteSelection( location ); },
-																	do: (o)=> { const location = o.d.cmt.mouseDownPoint;
-																							o.d.cmd.pasteSelection( location ); } },
-					{ label: 'Delete',      if: (o)=> o.d.cmd.canDeleteSelection(),
-																	do: (o)=> o.d.cmd.deleteSelection() },
+					{ label: 'Edit',       layout: 'vertical', subMenu: [
+						{ label: 'Duplicate',   if: (o)=> {	const location = o.d.cmt.mouseDownPoint;
+																								return( o.d.cmd.canCopySelection() ); },
+																		do: (o)=> { const location = o.d.cmt.mouseDownPoint;
+																								o.d.cmd.copySelection();
+																								o.d.cmd.pasteSelection( location ); } },
+						{ label: 'Clone',       if: (o)=> this.canEditClone(),
+																		do: (o)=> this.doEditClone() },
+						{ label: 'Cut',         if: (o)=> o.d.cmd.canCutSelection(),
+																		do: (o)=> o.d.cmd.cutSelection() },
+						{ label: 'Copy',        if: (o)=> o.d.cmd.canCopySelection(),
+																		do: (o)=> o.d.cmd.copySelection() },
+						{ label: 'Paste',       if: (o)=> { // TODO: check, I do not define location
+																								// but, it seems that with location, paste become unavailable
+																								o.d.cmd.canPasteSelection( location ); },
+																		do: (o)=> { const location = o.d.cmt.mouseDownPoint;
+																								o.d.cmd.pasteSelection( location ); } },
+						{ label: 'Delete',      if: (o)=> o.d.cmd.canDeleteSelection(),
+																		do: (o)=> o.d.cmd.deleteSelection() },
+						{ separator: '-' },
+						{ label: 'Copy Size',   if: (o)=> !this.isSelectionEmpty(),
+																		do: (o)=> this.doCopySize() },
+						{ label: 'Paste Size',  if: (o)=> this.copiedSize && !this.isSelectionEmpty(),
+																		do: (o)=> this.doPasteSize() },
+				  ]},
 					{ separator: '-' },
-					{ label: 'Set From Palette',	do: (o)=> this._resetSelectionFromPalette() },
+					{ label: 'Set From Palette',	if: (o)=> !this.isSelectionEmpty(),
+																				do: (o)=> this._resetSelectionFromPalette() },
+					{ label: 'Prompt URL',				if: (o)=> this.canPromptURL(),
+																				do: (o)=> this.doPromptURL() },
 					{ separator: '-' },
 					{ label: 'Group',       if: (o)=> o.d.cmd.canGroupSelection(),
 																	do: (o)=> o.d.cmd.groupSelection() },
@@ -255,8 +265,8 @@ class GraphWrapper {
 		// Initialize instance variables
 		this.clearInstance();
 
+		this.copiedSize = null;
 		this.isDeleteEnabled = false;
-		this.isDoubleClickCreateNodeEnabled = true;
 		this.isRootGraph = true;
 		this.isHistoryEmpty = true;
 		this.systemNodeDataFieldList = [
@@ -487,15 +497,6 @@ class GraphWrapper {
 		this.diagram.isDeleteEnabled = isDeleteEnabled;
 		// End FIX
 	}
-	setAllowDoubleCliceCreateNode( status ) {
-		status = ( status == undefined? true: status );
-		this.isDoubleClickCreateNodeEnabled = status;
-
-		// update diagram event
-		if( !this.isDoubleClickCreateNodeEnabled ) {
-			this.diagram.toolManager.clickCreatingTool = null
-		}
-	}
 	getGraphImage() {
 		let image = null;
 		if( this.diagram ) {
@@ -696,6 +697,9 @@ class GraphWrapper {
 		}
 		return( result );
 	}
+	isSelectionEmpty() {
+		return( this.getSelectionCount() == 0 );
+	}
 	getJSONSelection() {
 		const list = this._getFilteredSelection( 4 );
 		let jsonSelection = '';
@@ -810,10 +814,11 @@ class GraphWrapper {
 		return( result );
 	}
 	doZoomToFitSlectedNode( factor ) {
-		this.doZoomToFit();
-		const isViewSet = this.setViewCenteredOnSelectedNode();
-		if( isViewSet ) {
-			this.doZoomToFactor( factor );
+		const seleciton = this.getSelection();
+		const node = seleciton.first();
+		if( node ) {
+			this.diagram.zoomToRect( node.actualBounds, go.Diagram.Uniform );
+			this.diagram.scale = this.diagram.scale/4;
 		}
 	}
 	doZoomToFit() {
@@ -872,6 +877,38 @@ class GraphWrapper {
 		const cmd = this.diagram.commandHandler;
 		if( cmd.canDeleteSelection() ) {
 			cmd.deleteSelection();
+		}
+	}
+	doCopySize() {
+		// If a single node is selected => copy size
+		const data = this.getFirstSelectedNodeData();
+		if( data ) {
+			this.copiedSize = data.size;
+		}
+	}
+	doPasteSize() {
+		if( this.copiedSize ) {
+			const selection = this.getSelection();
+			selection.each( (node) => { 
+				const data = node.data;
+				setNodeDataField( data, 'size', this.copiedSize );
+			});
+		}
+	}
+	canPromptURL() {
+		const data = this.getFirstSelectedNodeData();
+		return( data && data.fileURL != undefined );
+	}
+	doPromptURL() {
+		// If a single node is selected => prompt for URL
+		const data = this.getFirstSelectedNodeData();
+		if( data && data.fileURL != undefined ) {
+			const setURL = ( newURL )=> {
+				if( newURL != null ) {
+					setNodeDataField( data, 'fileURL', newURL );
+				}
+			};
+			winPrompt( 'URL', data.fileURL, setURL );
 		}
 	}
 	canUngroupSelectedNodes() {
@@ -1540,8 +1577,10 @@ class GraphWrapper {
 		diagram.toolManager.mouseWheelBehavior = go.ToolManager.WheelZoom;
 		// Disable port gravity (snap to port)
 		diagram.toolManager.linkingTool.portGravity = 0;
-		// enable undo & redo
+		// Enable undo & redo
 		diagram.undoManager.isEnabled = true;
+		// Disable creation of nodes on double click
+		diagram.toolManager.clickCreatingTool = null
 
 		// Define grid
 		const mainColor = {
@@ -1687,23 +1726,14 @@ class GraphWrapper {
 			});
 		});
 		
-		// Allow to navigate out from a graph and go to parent graph (Alt+click)
-		diagram.addDiagramListener( 'BackgroundSingleClicked', ()=> {
-			if( diagram.lastInput.alt ) {
-				this.em.fire.onShowPreviousGraph();
-			}
-		});
-		// Allow to navigate into a sub graph of a node (Alt+click)
-		diagram.addDiagramListener( 'ObjectSingleClicked', ()=> {
-			if( diagram.lastInput.alt ) {
-				const data = this.getFirstSelectedNodeData();
-				if( data && ( data.isDir == true ) ) {
-					this.em.fire.onLoadGraph( data );
-				} else {
-					const mousePos = this.diagram.lastInput.viewPoint;
-					this.em.fire.onLoadFile( data, mousePos.x, mousePos.y );
-				}
-			}
+		// // Allow to navigate out from a graph and go to parent graph (Alt+click)
+		// diagram.addDiagramListener( 'BackgroundSingleClicked', ()=> {
+		// 	if( diagram.lastInput.alt ) {
+		// 		this.em.fire.onShowPreviousGraph();
+		// 	}
+		// });
+		diagram.addDiagramListener( 'BackgroundDoubleClicked', ()=> {
+			this.em.fire.onShowPreviousGraph();
 		});
 		// Allow to hide/show all windows
 		diagram.addDiagramListener( 'BackgroundSingleClicked', ()=> {
@@ -1720,6 +1750,27 @@ class GraphWrapper {
 				m.e.toogleShowWindows();
 			}
 		});
+		diagram.addDiagramListener( 'ObjectDoubleClicked', ()=> {
+			const data = this.getFirstSelectedNodeData();
+			if( data && ( data.isDir == true ) ) {
+				this.em.fire.onLoadGraph( data );
+			} else {
+				const mousePos = this.diagram.lastInput.viewPoint;
+				this.em.fire.onLoadFile( data, mousePos.x, mousePos.y );
+			}
+		});
+		// // Allow to navigate into a sub graph of a node (Alt+click)
+		// diagram.addDiagramListener( 'ObjectSingleClicked', ()=> {
+		// 	if( diagram.lastInput.alt ) {
+		// 		const data = this.getFirstSelectedNodeData();
+		// 		if( data && ( data.isDir == true ) ) {
+		// 			this.em.fire.onLoadGraph( data );
+		// 		} else {
+		// 			const mousePos = this.diagram.lastInput.viewPoint;
+		// 			this.em.fire.onLoadFile( data, mousePos.x, mousePos.y );
+		// 		}
+		// 	}
+		// });
 
 		diagram.addDiagramListener( 'InitialLayoutCompleted', (diagramEvent)=> {
 			this.em.fire.onFirstLayoutCompleted();
