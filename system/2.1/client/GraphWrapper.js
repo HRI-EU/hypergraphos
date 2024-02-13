@@ -512,7 +512,9 @@ class GraphWrapper {
 	getDependencyList() {
 		const result = {
 			files: {},
-			dsl: {},
+			dsl: {
+				NoDSL: { name: 'NoDSL', node: 0, link: 0 },
+			},
 		};
 
 		// Update DSL info
@@ -520,11 +522,15 @@ class GraphWrapper {
 
 		// Update Node info
 		const nodeList = this.diagram.model.nodeDataArray;
-		nodeList.forEach( (n)=> { 
-			const idx = n.category.indexOf( '_' );
-			const dslName = n.category.substring( 0, idx )+'DSL';
-			if( result.dsl[dslName] ) {
-				result.dsl[dslName].node++;
+		nodeList.forEach( (n)=> {
+			if( n.category != undefined ) {
+				const idx = n.category.indexOf( '_' );
+				const dslName = n.category.substring( 0, idx )+'DSL';
+				if( result.dsl[dslName] ) {
+					result.dsl[dslName].node++;
+				}
+			} else {
+				result.dsl.NoDSL.node++;
 			}
 			if( n.fileURL ) { 
 				result.files[n.key] = n.fileURL;
@@ -532,10 +538,14 @@ class GraphWrapper {
 		});
 		const linkList = this.diagram.model.linkDataArray;
 		linkList.forEach( (l)=> { 
-			const idx = l.category.indexOf( '_' );
-			const dslName = l.category.substring( 0, idx )+'DSL';
-			if( result.dsl[dslName] ) {
-				result.dsl[dslName].link++;
+			if( l.category != undefined ) {
+				const idx = l.category.indexOf( '_' );
+				const dslName = l.category.substring( 0, idx )+'DSL';
+				if( result.dsl[dslName] ) {
+					result.dsl[dslName].link++;
+				}
+			} else {
+				result.dsl.NoDSL.link++;
 			}
 		});
 
