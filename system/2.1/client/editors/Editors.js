@@ -45,8 +45,7 @@ class BookmarkViewer extends EditorBase {
     // Update current nodeData
     this.nodeData = nodeData;
     // Update window title with:
-    this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${nodeData.fileType}]`;
-    this.setTitle( this.title );
+    this.setTitle( this.nodeData );
     // Update pin
     m.e.showWindowPin( this.id );
     // Update list of bookmarks from status
@@ -316,8 +315,7 @@ class SystemMonitorViewer extends EditorBase {
     // Update current nodeData
     this.nodeData = nodeData;
     // Update window title with:
-    this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${nodeData.fileType}]`;
-    this.setTitle( this.title );
+    this.setTitle( this.nodeData );
     // Update pin
     if( nodeData.fileURL ) {
       m.e.showWindowPin( this.id );
@@ -395,8 +393,7 @@ class GraphTemplateViewer extends EditorBase {
     // Update current nodeData
     this.nodeData = nodeData;
     // Update window title with:
-    this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${nodeData.fileType}]`;
-    this.setTitle( this.title );
+    this.setTitle( this.nodeData );
     // Template List (loaded later from a file)
     let templateList = {};
     // Set editor content
@@ -487,8 +484,7 @@ class DSLViewer extends EditorBase {
     // Update current nodeData
     this.nodeData = nodeData;
     // Update window title with:
-    this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${nodeData.fileType}]`;
-    this.setTitle( this.title );
+    this.setTitle( this.nodeData );
     // Get DSL list
     const ei = m.e.getEditorInfo( config.htmlDiv.graphDiv );
     const graphEditor = ei.editor;
@@ -559,12 +555,15 @@ class FindViewer extends EditorBase {
     // Load graph editor
     const graphEditor = m.e.getEditor( config.htmlDiv.graphDiv );
     const fieldNameList = '    '+graphEditor.getDSLFieldNameList().join( '&#013;    ' );
-    const hint = 'Examples:&#013;     d.field == "1"&#013;     == "1"&#013;     "1"&#013;Field names are:&#013;'+fieldNameList;
+    const hint = 'Examples:&#013;     '+
+                 'd.field == "1"&#013;     '+
+                 '== "1"&#013;     '+
+                 '"1"&#013;Field names are:&#013;'+fieldNameList;
+
     // Update current nodeData
     this.nodeData = nodeData;
     // Update window title with:
-    this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${nodeData.fileType}]`;
-    this.setTitle( this.title );
+    this.setTitle( this.nodeData );
     // Set editor content
     const element = document.getElementById( this.editorDivId );
     element.innerHTML = `<div class="search" style="width:100%;position:absolute;background-color:inherit">
@@ -693,8 +692,7 @@ class ImageEditor extends EditorBase {
     // Update current nodeData
     this.nodeData = nodeData;
     // Update window title with:
-    this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${nodeData.fileType}]`;
-    this.setTitle( this.title );
+    this.setTitle( this.nodeData );
     // Update pin
     if( nodeData.fileURL ) {
       m.e.showWindowPin( this.id );
@@ -760,8 +758,7 @@ class HChatEditor extends EditorBase {
     // Update current nodeData
     this.nodeData = nodeData;
     // Set window title
-    this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${this.fileType}]`;
-    this.setTitle( this.title );
+    this.setTitle( this.nodeData );
     
     // Set editor content
     loadNodeContent( nodeData, (source)=> {
@@ -864,20 +861,26 @@ class TextEditor extends EditorBase {
     // Update current nodeData
     this.nodeData = nodeData;
     // Set window title
-    this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${this.fileType}]`;
-    this.setTitle( this.title );
+    this.setTitle( this.nodeData );
     // Update pin
     if( nodeData.fileURL && !nodeData.fileURL.startsWith( 'graph://' ) ) {
       m.e.showWindowPin( this.id, 'visible' );
     }
     // Set editor content
-    loadNodeContent( nodeData, (source)=> {
-      this.editor.setEditorSource( source );
-      this.doLoadLastUpdateTime( nodeData, ()=> {
-        // After loading update time, clear pause change
-        this.setPauseChange( false );
+    if( this.nodeData.isFile ) {
+      loadNodeContent( nodeData, (source)=> {
+        this.editor.setEditorSource( source );
+        this.doLoadLastUpdateTime( nodeData, ()=> {
+          // After loading update time, clear pause change
+          this.setPauseChange( false );
+        });
       });
-    });
+    } else if( this.nodeData.label != undefined ) {
+      const source = this.nodeData.label;
+      this.editor.setEditorSource( source );
+      // Clear pause change
+      this.setPauseChange( false );
+    }
     // Register on changes of the node if available
     if( nodeData.onNodeChanged ) {
       nodeData.onNodeChanged( this.loadEditorContent.bind(this) );
@@ -907,9 +910,15 @@ class TextEditor extends EditorBase {
       }
     };
     if( this.nodeData ) {
-      // First check destination file info from the server
-      // to avoid to overwrite a newer version of the graph
-      this.doCheckLastUpdateTime( this.nodeData, onTimeChecked );
+      if( this.nodeData.isFile ) {
+        // First check destination file info from the server
+        // to avoid to overwrite a newer version of the graph
+        this.doCheckLastUpdateTime( this.nodeData, onTimeChecked );
+      } else if( this.nodeData.label != undefined ) {
+        const source = this.editor.getEditorSource();
+        setNodeDataField( this.nodeData, 'label', source );
+        onEditorSaved();
+      }
     } else {
       onEditorSaved();
     }
@@ -962,8 +971,7 @@ class HTMLExploreEditor extends EditorBase {
     // Update current nodeData
     this.nodeData = nodeData;
     // Set window title
-    this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${this.fileType}]`;
-    this.setTitle( this.title );
+    this.setTitle( this.nodeData );
     // Update pin
     if( nodeData.fileURL && !nodeData.fileURL.startsWith( 'graph://' ) ) {
       m.e.showWindowPin( this.id );
@@ -1044,8 +1052,7 @@ class WebViewer extends EditorBase {
     // Update current nodeData
     this.nodeData = nodeData;
     // Update window title with:
-    this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${nodeData.fileType}]`;
-    this.setTitle( this.title );
+    this.setTitle( this.nodeData );
     // Update pin
     if( nodeData.fileURL ) {
       m.e.showWindowPin( this.id );
@@ -1128,8 +1135,7 @@ class WebViewer2 extends EditorBase {
     // Update current nodeData
     this.nodeData = nodeData;
     // Update window title with:
-    this.title = ( nodeData.label? nodeData.label: nodeData.key )+` [${nodeData.fileType}]`;
-    this.setTitle( this.title );
+    this.setTitle( this.nodeData );
     // Update pin
     if( nodeData.fileURL ) {
       m.e.showWindowPin( this.id );

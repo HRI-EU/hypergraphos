@@ -182,6 +182,7 @@ class EditorManager extends EditorChangeManager {
     id = id || this._getDOMUniqueId( nodeData );
     position = ( position == undefined? [100, 100, 400, 350]: position );
     isPinned = ( isPinned == undefined? false: isPinned );
+
     // If editor already open => put window on top
     if( this.isEditorOpen( id, nodeData ) ) {
       // Check if window is in a virtual screeen
@@ -194,10 +195,13 @@ class EditorManager extends EditorChangeManager {
       this.putWindowOnTop( id );
       return;
     }
-    // If node is not file or dir => nothing to do
-    if( !nodeData.isFile && !nodeData.isDir ) {
+
+    // If node is not file or dir or has not a label => nothing to do
+    if( !nodeData.isFile && !nodeData.isDir &&
+        ( nodeData.label == undefined ) ) {
       return;
     }
+
     // Find an editor for name or type
     let editorInfo = null;
     if( name ) {

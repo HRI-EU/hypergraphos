@@ -221,14 +221,14 @@ class GraphWrapper {
 																	do: (o)=> o.d.cmd.ungroupSelection() },
 					{ label: 'Ungroup Nodes',if: (o)=> !o.d.cmd.canUngroupSelection() && this.canUngroupSelectedNodes(),
 																	do: (o)=> this.doUngroupSelectedNodes() },
-					{ separator: '-',         if: (o)=> this._canOpenFile() || this._canOpenSubGraph() },
-					{ label: 'Open File',   if: (o)=> this._canOpenFile(),
+					{ separator: '-',         if: (o)=> this.canOpenFile() || this.canOpenSubGraph() },
+					{ label: 'Open File',   if: (o)=> this.canOpenFile(),
 																	do: (o)=> { const data = this.getFirstSelectedNodeData();
 																							if( data ) {
 																								const mousePos = this.diagram.lastInput.viewPoint;
 																								this.em.fire.onLoadFile( data, mousePos.x, mousePos.y );
 																							} }},
-					{ label: 'Open Sub-Graph',	if: (o)=> this._canOpenSubGraph(),
+					{ label: 'Open Sub-Graph',	if: (o)=> this.canOpenSubGraph(),
 																			do: (o)=> { const data = this.getFirstSelectedNodeData();
 																									if( data ) {
 																										this.em.fire.onLoadGraph( data );
@@ -925,6 +925,23 @@ class GraphWrapper {
 		}
 		return( result );
 	}
+	canOpenFile() {
+		let result = false;
+		const data = this.getFirstSelectedNodeData();
+		if( data ) {
+			result = ( ( data.isFile == true ) || 
+			           ( data.label != undefined ) );
+		}
+		return( result );
+	}
+	canOpenSubGraph() {
+		let result = false;
+		const data = this.getFirstSelectedNodeData();
+		if( data ) {
+			result = ( data.isDir == true );
+		}
+		return( result );
+	}
 	doUngroupSelectedNodes() {
 		const selection = this.getSelection();
 		selection.each( (node) => { 
@@ -1116,11 +1133,17 @@ class GraphWrapper {
 		return( result );
 	}
 	setNodeDataField( keyOrData, field, value ) {
-		let data = keyOrData;
-		if( typeof( keyOrData ) != 'object' ) {
-			// Get node data for the given key
-			data = this.diagram.model.findNodeDataForKey( keyOrData );
+		// let data = keyOrData;
+		// if( typeof( keyOrData ) != 'object' ) {
+		// 	// Get node data for the given key
+		// 	data = this.diagram.model.findNodeDataForKey( keyOrData );
+		// }
+		let key = keyOrData;
+		if( typeof( keyOrData ) == 'object' ) {
+			key = keyOrData.key;
 		}
+		const data = this.diagram.model.findNodeDataForKey( key );
+
 		if( data ) {
 			if( data.isSystem && ( field == 'fileContent' ) ) {
 				switch( data.isSystem ) {
@@ -1871,22 +1894,6 @@ class GraphWrapper {
 								 "\n--- DSL ---------------\n"+
 								 dslList.join( '\n' );
 		return( info );
-	}
-	_canOpenFile() {
-		let result = false;
-		const data = this.getFirstSelectedNodeData();
-		if( data ) {
-			result = ( data.isFile == true );
-		}
-		return( result );
-	}
-	_canOpenSubGraph() {
-		let result = false;
-		const data = this.getFirstSelectedNodeData();
-		if( data ) {
-			result = ( data.isDir == true );
-		}
-		return( result );
 	}
 	_onFinishDrop( e, grp ) {
 		// Upon a drop onto a Group, we try to add the selection as members of the Group.

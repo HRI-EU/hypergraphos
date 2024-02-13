@@ -414,7 +414,7 @@ function saveNodeContent( nodeData, onSaved ) {
       g.saveFile( nodeData.fileURL, source, sourceEncoding );
 
       // Check if editor open => update editor source
-      mainScript_updateEditorSource( nodeData, source );
+      mainScript_updateEditorSource( nodeData.key, source );
 
       if( onSaved ) {
         onSaved();
@@ -425,7 +425,7 @@ function saveNodeContent( nodeData, onSaved ) {
       _saveFile( nodeData.fileURL, source, onSaved, sourceEncoding );
 
       // Check if editor open => update editor source
-      mainScript_updateEditorSource( nodeData, source );
+      mainScript_updateEditorSource( nodeData.key, source );
     }
   } else if( nodeData.fileContent != undefined ) { // Check on fileContent must be third
       // TODO: this set may be done twice

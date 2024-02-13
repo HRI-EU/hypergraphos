@@ -20,8 +20,14 @@ class EditorBase extends EditorChangeManager {
 		// from the server (file modification time)
 		this.mtime = null;
   }
-  setTitle( title ) {
-    title = ( title != undefined? title: this.title );
+  //setTitle( title, fileType ) {
+  setTitle( nodeData ) {
+    const fileType = ( nodeData.fileType? nodeData.fileType: 'text/text' );
+    let title = ( nodeData.label? nodeData.label: nodeData.key );
+    title = ( title.length > 45? title.substring( 0, 45 )+'...': title )+
+            ` [${fileType}]`;
+    this.title = title;
+
     if( this.editor instanceof WinBox ) {
       this.editor.setTitle( title );
     } else if( this.editor && ( this.editor.opener == window ) ) {
