@@ -109,11 +109,11 @@ class GraphWrapper {
 		this.contextMenu.add({
       'diagramContextMenu': 
 				{	layout: 'vertical', itemList: [
-					{ label: 'Properties',					do: (o)=> winAlert( this.getDiagramInfo( this.diagram.model ), false )},
+					{ label: 'Space Property',			do: (o)=> winAlert( this.getDiagramInfo( this.diagram.model ), false )},
 					{ label: 'View',       layout: 'vertical',	subMenu: [
 						{ label: 'Zoom to Fit',			  do: this.doZoomToFit.bind(this) },
 						{ separator: '-' },
-						{ label: 'Toggle Visible Palette', 	if: (o)=> ( this.fullPaletteId? true: false ),
+						{ label: 'Toggle Show Palette', 	if: (o)=> ( this.fullPaletteId? true: false ),
 																								do: (o)=> { const htmlObj = document.querySelector( `#${this.fullPaletteId}` );
 																														const v = htmlObj.style.visibility;
 																														htmlObj.style.visibility = ( v == 'visible'? 'hidden': 'visible' ); 
@@ -123,7 +123,7 @@ class GraphWrapper {
 																														htmlObj.style.left = Math.min( browserWidth-100, Math.max( 0, htmlObj.offsetLeft ) );
 																														htmlObj.style.top = Math.min( browserHeight-100, Math.max( 0, htmlObj.offsetTop ) );
 																													}},
-						{ label: 'Toggle Visible Grid', do: (o)=> this.diagram.grid.visible = !this.diagram.grid.visible },
+						{ label: 'Toggle Show Grid', do: (o)=> this.diagram.grid.visible = !this.diagram.grid.visible },
 						{ separator: '-' },
 						{ label: 'Add Bookmark',		  do: this.addBookmark.bind(this) },
 					]},
@@ -150,27 +150,26 @@ class GraphWrapper {
 						// ]},
 					]},
 					{ separator: '-' },
-					{ label: 'Find',      					do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
-																											this.em.fire.onShowFindDialog( mousePos.x, mousePos.y );
-																										} },
-					{ label: 'Bookmarks',		  			do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
-																											this.em.fire.onShowBookmarks( mousePos.x, mousePos.y ) } },
+					{ label: 'Find',      					  do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
+																						  					this.em.fire.onShowFindDialog( mousePos.x, mousePos.y ); } },
+					{ label: 'Bookmarks',		  			  do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
+																								  			this.em.fire.onShowBookmarks( mousePos.x, mousePos.y ); } },
 					{ separator: '-' },
 					{ label: 'Tools',       layout: 'vertical', subMenu: [
-						{ label: 'Show DSL List',			do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
+						{ label: 'Show DSL List',			  do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
 																											this.em.fire.onShowDSLListDialog( mousePos.x, mousePos.y ); } },
-						{ label: 'Show Graph Template',	do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
+						{ label: 'Show Space Template',	do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
 																												this.em.fire.onShowGraphTemplateDialog( mousePos.x, mousePos.y ); } },
-						{ label: 'Show System Monitor',		do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
+						{ label: 'Show System Monitor',	do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
 																													this.em.fire.onShowSysMonitorDialog( mousePos.x, mousePos.y ); } },
-						{ label: 'Show Animator',			do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
+						{ label: 'Show Animator',			  do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
 																											this.em.fire.onShowAnimatorEditor( mousePos.x, mousePos.y ); } },
 					]},
 					{ label: 'Navigate', layout: 'vertical', if: (o)=> !config.isLocalMode, subMenu: [
-						{ label: 'Back To Previous Graph',	if: (o)=> !this.isHistoryEmpty,
+						{ label: 'Back To Prev. Space',	if: (o)=> !this.isHistoryEmpty,
 																						do: (o)=> { if( !this.isHistoryEmpty ) this.em.fire.onShowPreviousGraph(); } },
 						{ separator: '-',               if: (o)=> !this.isRootGraph },
-						{ label: 'Go To Root Graph',		if: (o)=> !this.isRootGraph,
+						{ label: 'Go To Root Space',		if: (o)=> !this.isRootGraph,
 																						do: (o)=> this.em.fire.onShowRootGraph() },
 					]},
 					{ separator: '-', if: (o)=> !config.isLocalMode },
@@ -225,22 +224,22 @@ class GraphWrapper {
 					{ separator: '-' },
 					{ label: 'Group',       if: (o)=> o.d.cmd.canGroupSelection(),
 																	do: (o)=> o.d.cmd.groupSelection() },
-					{ label: 'Ungroup',     if: (o)=> o.d.cmd.canUngroupSelection(),
+					{ label: 'Remove Group',if: (o)=> o.d.cmd.canUngroupSelection(),
 																	do: (o)=> o.d.cmd.ungroupSelection() },
 					{ label: 'Ungroup Nodes',if: (o)=> !o.d.cmd.canUngroupSelection() && this.canUngroupSelectedNodes(),
 																	do: (o)=> this.doUngroupSelectedNodes() },
-					{ separator: '-',         if: (o)=> this.canOpenFile() || this.canOpenSubGraph() },
-					{ label: 'Open File',   if: (o)=> this.canOpenFile(),
+					{ separator: '-',       if: (o)=> this.canOpenFile() || this.canOpenSubGraph() },
+					{ label: 'Open Content',if: (o)=> this.canOpenFile(),
 																	do: (o)=> { const data = this.getFirstSelectedNodeData();
 																							if( data ) {
 																								const mousePos = this.diagram.lastInput.viewPoint;
 																								this.em.fire.onLoadFile( data, mousePos.x, mousePos.y );
 																							} }},
-					{ label: 'Open Sub-Graph',	if: (o)=> this.canOpenSubGraph(),
-																			do: (o)=> { const data = this.getFirstSelectedNodeData();
-																									if( data ) {
-																										this.em.fire.onLoadGraph( data );
-																									} }},
+					{ label: 'Open Space',	if: (o)=> this.canOpenSubGraph(),
+																	do: (o)=> { const data = this.getFirstSelectedNodeData();
+																							if( data ) {
+																								this.em.fire.onLoadGraph( data );
+																							} }},
 				]},
 		});
 		this.shortcutList = [
@@ -255,9 +254,9 @@ class GraphWrapper {
 			{ key: '1', do: this.doZoomToFit.bind(this) },
 			// Zoom to Factor
 			{ key: '2', do: this.doZoomToFactor.bind(this,2) },
-			{ key: '3', do: this.doZoomToFactor.bind(this,3) },
-			{ key: '4', do: this.doZoomToFactor.bind(this,4) },
-			{ key: '5', do: this.doZoomToFactor.bind(this,4) },
+			{ key: '3', do: this.doZoomToFactor.bind(this,0.5) },
+			//{ key: '4', do: this.doZoomToFactor.bind(this,4) },
+			//{ key: '5', do: this.doZoomToFactor.bind(this,4) },
 			// Center Graph
 			{ key: 'G', do: this.setViewCenteredOnSelectedNode.bind(this) },
 		];
