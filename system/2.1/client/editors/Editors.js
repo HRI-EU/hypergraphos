@@ -297,19 +297,6 @@ class SystemMonitorViewer extends EditorBase {
       }
     };
     this.refreshMonitorTimer = setInterval( refreshFunction, 30*1000 );
-
-    // Capture CTRL+S and call save all!
-    window.addEventListener( 'keydown', function(event) {
-      if( event.ctrlKey || event.metaKey ) {
-        const key = String.fromCharCode(event.which).toLowerCase();
-        switch ( key ) {
-          case 's':
-            event.preventDefault();
-            saveAllEditorContent();
-            break;
-          }
-        }
-    });
   }
   loadEditorContent( nodeData ) {
     // Update current nodeData

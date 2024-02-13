@@ -243,8 +243,6 @@ class GraphWrapper {
 				]},
 		});
 		this.shortcutList = [
-			// Save all
-			{ key: 's', control:true, do: ()=> console.log( 'save all' ) },
 			// Zoom to Node (NOTE: with control its not yet working)
 			{ key: '2', control:true, do: this.doZoomToFitSlectedNode.bind(this,2) },
 			{ key: '3', control:true, do: this.doZoomToFitSlectedNode.bind(this,3) },
@@ -255,8 +253,6 @@ class GraphWrapper {
 			// Zoom to Factor
 			{ key: '2', do: this.doZoomToFactor.bind(this,2) },
 			{ key: '3', do: this.doZoomToFactor.bind(this,0.5) },
-			//{ key: '4', do: this.doZoomToFactor.bind(this,4) },
-			//{ key: '5', do: this.doZoomToFactor.bind(this,4) },
 			// Center Graph
 			{ key: 'G', do: this.setViewCenteredOnSelectedNode.bind(this) },
 		];

@@ -199,6 +199,19 @@ function _init() {
     m.userInfo = { name: 'UserLocal' }
   }
 
+  // Capture CTRL+S and call save all!
+  window.addEventListener( 'keydown', function(event) {
+    if( event.ctrlKey || event.metaKey ) {
+      const key = String.fromCharCode(event.which).toLowerCase();
+      switch ( key ) {
+        case 's':
+          event.preventDefault();
+          saveAllEditorContent();
+          break;
+        }
+      }
+  });
+
   // System started
   console.log( 'System Started' );
 }
