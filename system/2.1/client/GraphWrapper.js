@@ -127,14 +127,28 @@ class GraphWrapper {
 						{ separator: '-' },
 						{ label: 'Add Bookmark',		  do: this.addBookmark.bind(this) },
 					]},
-					{ separator: '-',               if: (o)=> { // NOTE: if we define a location, paste do not showup in the popup menu
-																											//const location = o.d.cmt.mouseDownPoint;
-																											return( o.d.cmd.canPasteSelection( location ) ); }},
-					{ label: 'Paste',      					if: (o)=> { // NOTE: if we define a location, paste do not showup in the popup menu
-																											//const location = o.d.cmt.mouseDownPoint;
-																											return( o.d.cmd.canPasteSelection( location ) ); },
-																					do: (o)=> { const location = o.d.cmt.mouseDownPoint;
-																												o.d.cmd.pasteSelection( location ); }},
+					// { separator: '-',               if: (o)=> { // NOTE: if we define a location, paste do not showup in the popup menu
+					// 																						//const location = o.d.cmt.mouseDownPoint;
+					// 																						return( o.d.cmd.canPasteSelection( location ) ); }},
+					{ separator: '-' },
+					{ label: 'Edit',       layout: 'vertical', subMenu: [
+						{ label: 'Paste',      					if: (o)=> { // NOTE: if we define a location, paste do not showup in the popup menu
+																												const location = o.d.cmt.mouseDownPoint;
+																												return( o.d.cmd.canPasteSelection( location ) ); },
+																						do: (o)=> { const location = o.d.cmt.mouseDownPoint;
+																													o.d.cmd.pasteSelection( location ); }},
+						{ separator: '-',         			if: (o)=> o.d.cmd.canUndo() || o.d.cmd.canRedo() },
+						{ label: 'Undo',      					if: (o)=> o.d.cmd.canUndo(),
+																						do: (o)=> o.d.cmd.undo() },
+						{ label: 'Redo',      					if: (o)=> o.d.cmd.canRedo(),
+																						do: (o)=> o.d.cmd.redo() },
+						// { layout: 'horizontal', itemList: [
+						// 	{ fontIcon: 'action-undo', hint: 'Undo (CTRL-Z)',     if: (o)=> o.d.cmd.canUndo(),
+						// 																												do: (o)=> o.d.cmd.undo() },
+						// 	{ fontIcon: 'action-redo', hint: 'Redo (CTRL-SHIFT-Z)',     if: (o)=> o.d.cmd.canRedo(),
+						// 																												do: (o)=> o.d.cmd.redo() },
+						// ]},
+					]},
 					{ separator: '-' },
 					{ label: 'Find',      					do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
 																											this.em.fire.onShowFindDialog( mousePos.x, mousePos.y );
@@ -166,17 +180,6 @@ class GraphWrapper {
 					{ label: 'Unset Read-only Mode',  if: (o)=> !config.isLocalMode && this.isReadOnly,
 																						do: (o)=> { this.isReadOnly = false;
 																												this.em.fire.onSetReadOnly( false ); } },
-					{ separator: '-',         if: (o)=> o.d.cmd.canUndo() || o.d.cmd.canRedo() },
-					/*{ label: 'Undo',      					if: (o)=> o.d.cmd.canUndo(),
-																					do: (o)=> o.d.cmd.undo() },
-					{ label: 'Redo',      					if: (o)=> o.d.cmd.canRedo(),
-																					do: (o)=> o.d.cmd.redo() },*/
-					{ layout: 'horizontal', itemList: [
-						{ fontIcon: 'action-undo', hint: 'Undo (CTRL-Z)',     if: (o)=> o.d.cmd.canUndo(),
-																																	do: (o)=> o.d.cmd.undo() },
-						{ fontIcon: 'action-redo', hint: 'Redo (CTRL-SHIFT-Z)',     if: (o)=> o.d.cmd.canRedo(),
-																																	do: (o)=> o.d.cmd.redo() },
-					]},
 					{ separator: '-' },
 					{ label: 'Log Out',		  do: this.em.fire.onLogOut },
 				]},
