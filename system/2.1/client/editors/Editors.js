@@ -1041,7 +1041,7 @@ class WebViewer extends EditorBase {
     // Update window title with:
     this.setTitle( this.nodeData );
     // Update pin
-    if( nodeData.fileURL ) {
+    if( nodeData.fileURL && !nodeData.fileURL.startsWith( 'graph://' ) ) {
       m.e.showWindowPin( this.id );
     }
     // Set editor content container
@@ -1067,29 +1067,35 @@ class WebViewer extends EditorBase {
       const scriptList = doc.getElementsByTagName( 'script' );
       for( const script of scriptList ) {
         const source = script.innerHTML;
-        // const newScript = document.createElement( 'script' );
-        // newScript.innerHTML = source;
-        // newScript.type = 'text/javascript';
-        // newScript.className = 'NodeData_IncludeScript'; // So to be removed when loading another grap
-        // document.head.append( newScript );
         loadScriptSource( source, null, true );
       }
-    } else if( nodeData.fileURL ) {
+    } else if( nodeData.fileURL && !nodeData.fileURL.startsWith( 'graph://' ) ) {
       const element = document.getElementById( this.editorDivId );
       const fileURL = ( nodeData.fileURL? nodeData.fileURL: '' );
       // NOTE:  name="${Date.now()}" is a workaround to avoid caching
       element.innerHTML = `<iframe id='${this.id}_frame' class='webViewer' src="${fileURL}?_=${Date.now()}"></iframe>`;
       // const url = new URL( nodeData.fileURL, window.location ).toString();
       // this.win.setUrl( url );
-    } else if( nodeData.fileContent != undefined ) {
-      const element = document.getElementById( this.editorDivId );
-      const frameId = `${this.id}_frame`;
-      // NOTE:  name="${Date.now()}" is a workaround to avoid caching
-      element.innerHTML = `<iframe id='${frameId}' name="${Date.now()}" class='webViewer' src='about:blank'></frame>`;
-      const frameElement = document.getElementById( frameId );
-      frameElement.contentDocument.open();
-      frameElement.contentDocument.write( nodeData.fileContent );
-      frameElement.contentDocument.close();
+    } else {//if( nodeData.fileContent != undefined ) {
+      // Case of nodeData.fileContent or fileURL = 'graph://...'
+      loadNodeContent( nodeData, (source)=> {
+        const element = document.getElementById( this.editorDivId );
+        const frameId = `${this.id}_frame`;
+        // NOTE:  name="${Date.now()}" is a workaround to avoid caching
+        element.innerHTML = `<iframe id='${frameId}' name="${Date.now()}" class='webViewer' src='about:blank'></frame>`;
+        const frameElement = document.getElementById( frameId );
+        frameElement.contentDocument.open();
+        frameElement.contentDocument.write( source );
+        frameElement.contentDocument.close();
+      });
+      // const element = document.getElementById( this.editorDivId );
+      // const frameId = `${this.id}_frame`;
+      // // NOTE:  name="${Date.now()}" is a workaround to avoid caching
+      // element.innerHTML = `<iframe id='${frameId}' name="${Date.now()}" class='webViewer' src='about:blank'></frame>`;
+      // const frameElement = document.getElementById( frameId );
+      // frameElement.contentDocument.open();
+      // frameElement.contentDocument.write( nodeData.fileContent );
+      // frameElement.contentDocument.close();
     }
   }
   saveEditorContent( onSaved ) {

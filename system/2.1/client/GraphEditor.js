@@ -105,7 +105,7 @@ class GraphEditor extends EditorBase {
 
             if( newNodeData.fileURL.startsWith( 'graph://' ) ) {
               const newURL = this.editor.cloneGraphFile( oldURL );
-              newNodeData.fileURL = newURL;
+              setNodeDataField( newNodeData, 'fileURL', newURL );
             } else {
               // Set a new fileURL
               this._verifyFileURL( newNodeData, ()=> {
