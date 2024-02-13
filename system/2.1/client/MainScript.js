@@ -371,46 +371,16 @@ function getNodeData( key, isCopy ) {
   const g = getMainGraph();
   let result = g.getNodeData( key, isCopy );
 
-  // NOTE: we should not support link nodes anymore
-  // if( result && ( result.linkToKey != undefined ) ) {
-  //   const linkedData = g.getNodeData( result.linkToKey );
-  //   if( linkedData.fileURL != undefined ) {
-  //     // Update both the copy and the node
-  //     result.fileURL = linkedData.fileURL;
-  //     //DONT DO THAT!!!: g.setNodeDataField( key, 'fileURL', result.fileURL );
-  //   }
-  //   if( linkedData.fileContent != undefined ) {
-  //     // Update both the copy and the node
-  //     result.fileContent = linkedData.fileContent;
-  //     //DONT DO THAT!!!: g.setNodeDataField( key, 'fileContent', result.fileContent );
-  //   }
-  // } else {
-  //   result = g.getNodeData( key, isCopy );
-  // }
   return( result );
 }
 function setNodeDataField( keyOrData, field, value ) {
-  const g = getMainGraph();
-  // let data = keyOrData; // default we assume key is nodeData
-  // if( typeof( keyOrData ) != 'object' ) { // if not, is a key
-  //   data = g.getNodeData( keyOrData, true );
-  // }
   let key = keyOrData;
   if( typeof( keyOrData ) == 'object' ) {
     key = keyOrData.key;
   }
   
-  // if( data && ( data.linkToKey != undefined ) ) {
-  //   // Set field to link node
-  //   g.setNodeDataField( keyOrData, field, value );
-  //   // Set also to target-link node for these fields
-  //   if( ( field == 'fileURL' ) ||
-  //       ( field == 'fileContent' ) ) {
-  //     g.setNodeDataField( data.linkToKey, field, value );
-  //   }
-  // } else {
-    g.setNodeDataField( key, field, value );
-  //}
+  const g = getMainGraph();
+  g.setNodeDataField( key, field, value );
 
   // Check if editor open => update editor source
   if( field == 'fileContent' ) {

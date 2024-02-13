@@ -1133,11 +1133,6 @@ class GraphWrapper {
 		return( result );
 	}
 	setNodeDataField( keyOrData, field, value ) {
-		// let data = keyOrData;
-		// if( typeof( keyOrData ) != 'object' ) {
-		// 	// Get node data for the given key
-		// 	data = this.diagram.model.findNodeDataForKey( keyOrData );
-		// }
 		let key = keyOrData;
 		if( typeof( keyOrData ) == 'object' ) {
 			key = keyOrData.key;
