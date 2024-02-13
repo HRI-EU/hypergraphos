@@ -211,6 +211,11 @@ class GraphWrapper {
 																		do: (o)=> this.doCopySize() },
 						{ label: 'Paste Size',  if: (o)=> this.copiedSize && !this.isSelectionEmpty(),
 																		do: (o)=> this.doPasteSize() },
+						{ separator: '-',       if: (o)=> o.d.cmd.canUndo() || o.d.cmd.canRedo() },
+						{ label: 'Undo',        if: (o)=> o.d.cmd.canUndo(),
+																		do: (o)=> o.d.cmd.undo() },
+						{ label: 'Redo',        if: (o)=> o.d.cmd.canRedo(),
+																		do: (o)=> o.d.cmd.redo() },
 				  ]},
 					{ separator: '-' },
 					{ label: 'Set From Palette',	if: (o)=> !this.isSelectionEmpty(),
@@ -236,11 +241,6 @@ class GraphWrapper {
 																									if( data ) {
 																										this.em.fire.onLoadGraph( data );
 																									} }},
-					{ separator: '-',       if: (o)=> o.d.cmd.canUndo() || o.d.cmd.canRedo() },
-					{ label: 'Undo',        if: (o)=> o.d.cmd.canUndo(),
-																	do: (o)=> o.d.cmd.undo() },
-					{ label: 'Redo',        if: (o)=> o.d.cmd.canRedo(),
-																	do: (o)=> o.d.cmd.redo() },
 				]},
 		});
 		this.shortcutList = [
