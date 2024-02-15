@@ -316,9 +316,15 @@ class ModelExplorer {
                   continue;
                 }
               }
+              linkData.fromPortName = this.getOutPortName( id, linkData.from, linkData.fromPort );
+              linkData.toPortName = this.getInPortName( id, linkData.to, linkData.toPort );;
               result.push( linkData );
             }
           } else {
+            linkDataV.forEach( (l)=> {
+              l.fromPortName = this.getOutPortName( id, l.from, l.fromPort );
+              l.toPortName = this.getInPortName( id, l.to, l.toPort );;
+            });
             result = result.concat( linkDataV );
           }
         }
@@ -354,9 +360,15 @@ class ModelExplorer {
                   continue;
                 }
               }
+              linkData.fromPortName = this.getOutPortName( id, linkData.from, linkData.fromPort );
+              linkData.toPortName = this.getInPortName( id, linkData.to, linkData.toPort );;
               result.push( linkData );
             }
           } else {
+            linkDataV.forEach( (l)=> {
+              l.fromPortName = this.getOutPortName( id, l.from, l.fromPort );
+              l.toPortName = this.getInPortName( id, l.to, l.toPort );;
+            });
             result = result.concat( linkDataV );
           }
         }
