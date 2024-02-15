@@ -442,19 +442,20 @@ class GraphEditor extends EditorBase {
             let templateURL = `${config.host.fileServerSystemURL}/graphTemplateList.json`;
             _openFile( templateURL, (source)=> {
               // Get Template Name List
-              try {
-                const templateList = JSON.parse( source );
+              const errMsg = 'Error loading/saving template list';
+              const templateList = MainScript_JSONParse( source, errMsg );
+              if( templateList != null ) {
                 // Check if template not present or needs to be renamed
                 if( ( !templateList[this.nodeData.fileURL] ) ||
                     ( templateList[this.nodeData.fileURL] != this.title ) ) {
                   // Insert new or update name
                   templateList[this.nodeData.fileURL] = this.title;
                   // Save updated template list
-                  const templateSource = JSON.stringify( templateList, null, 2 );
-                  _saveFile( templateURL, templateSource );
+                  const templateSource = MainScript_JSONStringify( templateList, null, 2, errMsg );
+                  if( templateSource != null ) {
+                    _saveFile( templateURL, templateSource );
+                  }
                 }
-              } catch (error) {
-                alert( 'Error loading template list' );
               }
             });
           }

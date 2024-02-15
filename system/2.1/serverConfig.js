@@ -14,6 +14,7 @@ Date: 10.07.2020
 const rootGraphURL = '/fileServer/graphRoot.json';
 // System configuration
 const config = {
+  isDebugOn: false,
   // Client Configuration Info
   client: {
     host: {

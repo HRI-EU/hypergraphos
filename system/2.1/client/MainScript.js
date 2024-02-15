@@ -165,6 +165,40 @@ function winPrompt( msg, value, onClose ) {
   }
 }
 
+function MainScript_JSONParse( str, msg ) {
+  try {
+    return( JSON.parse( str ) );
+  } catch( e ) {
+    if( config.isDebugOn ) {
+      throw( e );
+    }
+    alert( msg? msg: e.message );
+    return( null );
+  }
+}
+function MainScript_JSONStringify( str, replacer, space, msg ) {
+  try {
+    return( JSON.stringify( str, replacer, space ) );
+  } catch( e ) {
+    if( config.isDebugOn ) {
+      throw( e );
+    }
+    alert( msg? msg: e.message );
+    return( null );
+  }
+}
+function MainScript_Eval( str, msg ) {
+  try {
+    eval( str );
+  } catch( e ) {
+    if( config.isDebugOn ) {
+      throw( e );
+    }
+    alert( msg? msg: e.message );
+    return( null );
+  }
+}
+
 function _init() {
   m.mddStatus = document.getElementById( 'mdd-status' );
   // Set reziable control buttons

@@ -2,6 +2,7 @@ function userSetup( config ) {
   if( ( config.host.hostname == 'Main-PC' ) &&
             ( config.host.username == 'Frank Joublin' ) ) {
             // C:\Users\frank\Dropbox\DevAll\MDDToolsDataRoot
+    config.isDebugOn = true;
     config.server.dataRoot = '../../../../../../Dropbox/DevAll/MDDToolsDataRoot';
     config.server.deployRoot = '../../../../../../Dropbox/DevAll/MDDToolsDeployRoot';
     config.server.tempRoot = '../../../../../../Dropbox/DevAll/MDDToolsTempRoot';
@@ -13,6 +14,7 @@ function userSetup( config ) {
   } else if( config.host.hostname == 'hyper-graph' ) {
     // config.client.host.name = 'hyper-graph';
     // config.client.host.statusURL = '/fileServer/Users/hyper-graph_status.json';
+    config.isDebugOn = true;
     config.client.host.name = 'Frank';
     config.client.host.statusURL = '/fileServer/Users/Frank_status.json';
     config.client.graph.allowDeleteKey = true;
@@ -22,6 +24,7 @@ function userSetup( config ) {
     config.server.deployRoot = '../../../../DevAll/MDDToolsDeployRoot';
     config.server.tempRoot = '../../../../DevAll/MDDToolsTempRoot';
   } else if( config.host.username == "RE900106" ) {
+    config.isDebugOn = true;
     config.server.dataRoot = '../../../../../../Dropbox/DevAll/MDDToolsDataRoot';
     config.server.deployRoot = '../../../../../../Dropbox/DevAll/MDDToolsDeployRoot';
     config.server.tempRoot = '../../../../../../Dropbox/DevAll/MDDToolsTempRoot';
@@ -29,6 +32,7 @@ function userSetup( config ) {
     config.client.host.statusURL = '/fileServer/Users/Frank_status.json';
     config.client.graph.allowDeleteKey = false;
   } else if( config.host.username == "HGMigration" ) {
+    config.isDebugOn = true;
     config.server.dataRoot = '../../../../../../DevAll//MDDToolsDataRoot';
     config.server.deployRoot = '../../../../../../DevAll//MDDToolsDeployRoot';
     config.server.tempRoot = '../../../../../../DevAll//MDDToolsTempRoot';

@@ -627,9 +627,7 @@ class GraphWrapper {
 		let objModel = null;
 		if( source ) {
 			if( typeof( source ) == 'string' ) {
-				try {
-					objModel = JSON.parse( source );
-				} catch( error ) {}
+				objModel = MainScript_JSONParse( source, 'Error setting graph source' );
 			} else {
 				// In this case we expect an object
 				objModel = source;
@@ -710,15 +708,12 @@ class GraphWrapper {
 	}
 	getJSONSelection() {
 		const list = this._getFilteredSelection( 4 );
-		let jsonSelection = '';
-		try {
-		  jsonSelection = JSON.stringify( list, null, 2 );	
-		} catch( error ) {}
-		return( jsonSelection );
+		let jsonSelection = MainScript_JSONStringify( list, null, 2, 'Error in get selection' );
+		return( jsonSelection != null? jsonSelection: '' );
 	}
 	setJSONSelection( jsonSelection ) {
-		try {
-			const objSelection = JSON.parse( jsonSelection );
+		const objSelection = MainScript_JSONParse( jsonSelection, 'Error in set selection' );
+		if( objSelection != null ) {
 			const originalKeyList = objSelection.originalKey;
 			if( originalKeyList ) {
 				for( let i = 0; i < originalKeyList.length; ++i ) {
@@ -733,7 +728,7 @@ class GraphWrapper {
 					}
 				}
 			}
-		} catch( e ) { /* We enter here if selection have syntax errors */}
+		}
 	}
 	selectNodeByKey( key ) {
 		this.diagram.select( this.diagram.findPartForKey( key ) );
@@ -979,11 +974,7 @@ class GraphWrapper {
 		const fieldNameList = Array.from( this.dslNodeFieldNameList );
 		let templateNode = {};
 		const templateNodeStr = 'templateNode = {'+fieldNameList.join( ':"",' )+':""}';
-		try {
-			eval( templateNodeStr );
-		} catch( e ) {
-      alert( 'Error in search expression\n'+e );
-		}
+		MainScript_Eval( templateNodeStr, 'Error in search expression\n'+e );
 
 		// Define here the search condition
 		let conditionFn = null;
@@ -1066,7 +1057,10 @@ class GraphWrapper {
 						result.push( dataClean );
 					}
 				} catch( error ) {
-					// error in user function => skip it
+					if( config.isDebugOn ) {
+						throw( e );
+					}
+					alert( 'Error in evaluating condition function' );
 				}
 			}
 		}
