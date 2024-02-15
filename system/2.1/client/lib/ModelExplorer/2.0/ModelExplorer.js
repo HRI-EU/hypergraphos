@@ -495,6 +495,9 @@ class ModelExplorer {
         case 'false':
           value = false;
           break;
+        case '':
+          value = null;
+          break;
         default:
           // Check if the value is a number
           if( !isNaN( value ) ) {
