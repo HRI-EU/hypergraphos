@@ -36,19 +36,19 @@ function generatorsConfig( language, config ) {
     case 'html':
       // Template Block definition
       // Format: <!--[# Begin NewBlock #]-->
-      // Focus:  ------------------------
-      config.blockLineExp = new RegExp( /\s*\<\!\-\-\[(#.+#)\]/ );
+      // Focus:      --------------------
+      config.blockLineExp = new RegExp( /\s*\[(#.+#)\]/ );
       // Parameter block definition
       // Format: <!--[# Begin NewBlock #][LinePattern,$]-->
       // Focus:                         ----------------
       config.blockParamExp = new RegExp( /.*\]\[(.+)\]/ );
       // Template arguments begin string
-      // Format: <!--:This text -()-> m.text-->
-      // Focus:  -----
-      config.blockTArgBeginExp = '<!--:';
-      // Template arguments end string
-      // Format: <!--:This text -()-> m.text-->
-      // Focus:                             ---
+      // Format: <!--//:This text -()-> m.text-->
+      // Focus:      ---
+      config.blockTArgBeginExp = '//:';
+      // Template arguments end string (optional in template)
+      // Format: <!--//:This text -()-> m.text-->
+      // Focus:                               ---
       config.blockTArgEndExp = '-->';
       break;
     case 'css':
@@ -65,7 +65,7 @@ function generatorsConfig( language, config ) {
       // Format: /*:This text -()-> m.text*/
       // Focus:  ---
       config.blockTArgBeginExp = '/*:';
-      // Template arguments end string
+      // Template arguments end string (optional in template)
       // Format: /*:This text -()-> m.text*/
       // Focus:                           --
       config.blockTArgEndExp = '*/';
@@ -80,7 +80,7 @@ function generatorsConfig( language, config ) {
       // Focus:                       ----------------
       config.blockParamExp = new RegExp( /.*\]\[(.+)\]/ );
       // Template arguments begin string
-      // Format: //:This text -()-> m.text
+      // Format: :This text -()-> m.text
       // Focus:  ---
       config.blockTArgBeginExp = ':';
       break;

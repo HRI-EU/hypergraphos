@@ -201,7 +201,10 @@ class LinePatternGenerator extends BasicGenerator {
           }
           const out = this._generateLinePattern( [ template[templateIndex] ], data );
           output.push( out[0] );
+        } else {
+          output.push( [ item ] );
         }
+
         // Cycle over template in case data has more row than template row
         if( templateIndex < template.length-1 ) {
           ++templateIndex;

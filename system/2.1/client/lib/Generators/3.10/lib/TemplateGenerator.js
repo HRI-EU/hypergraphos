@@ -187,6 +187,15 @@ class TemplateGenerator {
     return( result );
   }
   process( m ) {
+    // Current line indentation
+    let lineIndentCount = 0;
+    // Indent lines array
+    const indentArray = (stringArr)=> {
+      for( let i = 0; i < stringArr.length; ++i ) {
+        stringArr[i] = ' '.repeat( lineIndentCount )+stringArr[i];
+      }
+    }
+
     while( !this.bufferInfo.isEOT ) {
       // Load the next line, looking for Template Tags
       let line = this._getNextBufferLineStr();
@@ -197,7 +206,7 @@ class TemplateGenerator {
           // Get matched part
           const startBlockName = lineMatch[1];
           // Get indentation
-          const lineIndentCount = this._getLineIndentation( line );
+          lineIndentCount = this._getLineIndentation( line );
           // Search for tags parameters: //[# Begin Block #][Param,%]
           let patternGenerator = tgGeneratorList['LinePattern'];
           const paramMatch = line.match( this.conf.blockParamExp );
@@ -236,11 +245,6 @@ class TemplateGenerator {
           } else if( startBlockName.startsWith( this.conf.insertTag ) ) {
             // Case "Insert"
             if( m[funcName] ) {
-              const indentArray = (stringArr)=> {
-                for( let i = 0; i < stringArr.length; ++i ) {
-                  stringArr[i] = ' '.repeat( lineIndentCount )+stringArr[i];
-                }
-              }
               let data = m[funcName]();
               if( ( data != undefined ) && ( data.length > 0 ) ) {
                 // If data is defined => we apply the pattern
@@ -270,6 +274,18 @@ class TemplateGenerator {
             if( m[funcName] ) {
               const data = m[funcName]();
               if( data != undefined ) {
+                // Indent data lines
+                if( lineIndentCount ) {
+                  if( Array.isArray( data[0] ) ) {
+                    // Case of data = [ ['line1', 'line2, ...], ['line11', 'line22', ...], ...]
+                    for( const dataBlock of data ) {
+                      indentArray( dataBlock );
+                    }
+                  } else {
+                    // Case of data = ['line1', 'line2, ...]
+                    indentArray( data );
+                  }
+                }
                 patternGenerator.doReplace( b, data );
                 b.generate();
               } else if( this.property.isKeepBlockOnNoData ) {
@@ -475,12 +491,16 @@ class TemplateGenerator {
         // '//:' have to be detected on the fisrt after a '// label'
         // in order be considered for this 'label' generator scope only
         //if( isFirstLine && trimline.startsWith( '//:' ) ) {
-        if( isFirstLine && trimline.startsWith( this.conf.blockTArgBeginExp ) ) {
+        const startIdx = line.indexOf( this.conf.blockTArgBeginExp );
+        //if( isFirstLine && trimline.startsWith( this.conf.blockTArgBeginExp ) ) {
+        if( isFirstLine && ( startIdx != -1 )) {
           if( blockInfo ) {
             //const idx = line.indexOf( '//:' );
             const tArgBeginLen = this.conf.blockTArgBeginExp.length;
-            const idx = line.indexOf( this.conf.blockTArgBeginExp );
-            const indentation = ' '.repeat( idx );  // Preserve indentation
+            //const idx = line.indexOf( this.conf.blockTArgBeginExp );
+            const indCount = this._getLineIndentation( line );
+            //const indentation = ' '.repeat( idx );  // Preserve indentation
+            const indentation = ' '.repeat( indCount );  // Preserve indentation
 
             let endIdx = line.length;
             if( this.conf.blockTArgEndExp ) {
@@ -489,7 +509,7 @@ class TemplateGenerator {
                 endIdx = tempEndIdx;
               }
             }
-            const paramLine = line.substring( idx+tArgBeginLen, endIdx ); // tArgBeginLen is length of '//:'
+            const paramLine = line.substring( startIdx+tArgBeginLen, endIdx ); // tArgBeginLen is length of '//:'
             blockInfo.paramList.push( indentation+paramLine );
           }
         } else if( ( searchStr && ( line.indexOf( searchStr ) !== -1 ) ) ||

@@ -1,3 +1,15 @@
+/*
+=============================================================================
+Licensed Materials - Property of Frank Joublin and Antonio Ceravola.
+(C) Copyright Frank Joublin and Antonio Ceravola. 2021, All Rights Reserved.
+France Government Users Restricted Rights - Use, duplication or disclosure
+restricted by GSA ADP Schedule Contract with Frank Joublin and Antonio Ceravola.
+=============================================================================
+Module: DataFlow Engine
+Date: 10.07.2020
+=============================================================================
+*/
+
 // TODO: this class should not use any function of
 // the system, sicne it should be possible to
 // execute models on server side.
