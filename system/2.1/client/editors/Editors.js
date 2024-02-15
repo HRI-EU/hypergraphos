@@ -420,7 +420,7 @@ class GraphTemplateViewer extends EditorBase {
               const updateSource = ()=> e.setEditorSource( sourceTemplate );
               const g = getMainGraph();
               if( !g.isModelEmpty() ) {
-                winConfirm( 'Are you shure to replace current WorkSpace content?', 
+                winConfirm( 'Are you sure to replace current WorkSpace content?', 
                             updateSource, null, true );
               } else {
                 updateSource();

@@ -475,19 +475,21 @@ class ModelExplorer {
     return( result );
   }
   _evalValue( value ) {
-    switch( value ) {
-      case 'true':
-        value = true;
-        break;
-      case 'false':
-        value = false;
-        break;
-      default:
-        // Check if the value is a number
-        if( !isNaN( value ) ) {
-          value = parseFloat( value );
-        }
-        break;
+    if( value != null ) {
+      switch( value ) {
+        case 'true':
+          value = true;
+          break;
+        case 'false':
+          value = false;
+          break;
+        default:
+          // Check if the value is a number
+          if( !isNaN( value ) ) {
+            value = parseFloat( value );
+          }
+          break;
+      }
     }
     return( value );
   }

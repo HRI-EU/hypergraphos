@@ -705,16 +705,19 @@ class DataFlowEngine {
     * - computeBarrier = 'in1,in2' => only 'in1' & 'in2' belong to the barrier
     * - computeBarrier = '' or undefined => no doCompute event generated
     */
-    let computeBarrier = this.me.getProperty(this.modelId, nodeData, 'computeBarrier', null);
-    if (computeBarrier) {
-      if (computeBarrier.trim() == '*') {
+    let computeBarrier = this.me.getProperty(this.modelId, nodeData, 'computeBarrier', null );
+    if ( computeBarrier == null ) {
+      computeBarrier = ( nodeData.computeBarrier != undefined? nodeData.computeBarrier: null );
+    }
+
+    if( computeBarrier != null ) {
+      if ( computeBarrier.trim() == '*' ) {
         computeBarrier = this.getInputNameList(nodeData);
       } else {
         computeBarrier = computeBarrier.split(',').map(item => item.trim(item));
       }
-    } else {
-      computeBarrier = ( nodeData.computeBarrier != undefined? nodeData.computeBarrier: null );
     }
+
     return (computeBarrier);
   }
   _updateInput(nodeData, name, value, inCondition) {
