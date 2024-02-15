@@ -713,7 +713,7 @@ class DataFlowEngine {
         computeBarrier = computeBarrier.split(',').map(item => item.trim(item));
       }
     } else {
-      computeBarrier = null;
+      computeBarrier = ( nodeData.computeBarrier != undefined? nodeData.computeBarrier: null );
     }
     return (computeBarrier);
   }
