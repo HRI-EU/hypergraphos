@@ -285,38 +285,41 @@ function getNewFileServerURL( extension, onDone ) {
     }
 
     // Get current fileServer info
-    let fsInfo = m.fileInfo.fileServer; // Default value
+    let fs = m.fileInfo.fileServer; // Default value
     const obj = MainScript_JSONParse( source );
     if( obj ) {
-      fsInfo = obj.fileServer;
+      fs = obj.fileServer;
     }
 
     // Set FileName
     let isNextPathNeeded = false;
-    if( fsInfo.currFile >= fsInfo.maxFileIndex ) {
+    if( fs.currFile >= fs.maxFileIndex ) {
       isNextPathNeeded = true;
-      fsInfo.currFile = 0;
+      fs.currFile = 0;
     } else {
-      ++fsInfo.currFile;
+      ++fs.currFile;
     }
-    const fileName = ( fsInfo.currFile < 10? '0'+fsInfo.currFile: fsInfo.currFile );
+    const fileName = ( fs.currFile < 10? '0'+fs.currFile: fs.currFile );
     let newFile = fileName+'.'+extension;
 
     // Set PathName
     if( isNextPathNeeded ) {
-      fsInfo.currPath++;
+      fs.currPath++;
     }
-    let pathV = fsInfo.currPath.toString();
+    let pathV = fs.currPath.toString();
     let pathVlen = pathV.length;
     if( pathVlen % 2 == 1 ) {
       pathV = pathV.substring( 0, pathVlen-1 )+'0'+pathV.substring( pathVlen-1 );
     }
     const newPath = getPath( pathV );
-    setFileIndexStatus( (s)=> s.fileServer = fsInfo );
+    setFileIndexStatus( (s)=> s.fileInfo.fileServer = fs );
     
     // Generate next file/path
     const host = ''; // document.location.origin;
     const newFilePath = `${host}${config.host.fileServerURL}${newPath}/${newFile}`;
+
+    //TODO: I maight now check if a file newFilePath exisits.
+    //      in such canse loop for the next index, until there is no file
 
     // Update fileIndex file
     const outSource = MainScript_JSONStringify( m.fileInfo, null, 0, 'Error in stringify of fileIndex' );
