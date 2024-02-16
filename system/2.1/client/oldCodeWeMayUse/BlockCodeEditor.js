@@ -32,15 +32,12 @@ class BlockCodeEditor {
       // Default document content
       source = `{"blocks": [{"type": "paragraph","data": {"text": "Type document content here..."}}]}`;
     }
-    try {
-      const objSource = JSON.parse( source );
+    const objSource = JSON.parse( source, 'Error: could not load EditorJS source' );
+    if( objSource ) {
       this.editorDiv.innerHTML = '';
       const editorParam = this._getEditorParams();
       editorParam.data = objSource;
       this.htmlEditor = new EditorJS( editorParam );
-    } catch ( error ) {
-      // Nothing to do, no source loaded in this case
-      console.log( 'Error: could not load EditorJS source' );
     }
   }
   getEditorSource( callback ) {

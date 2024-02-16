@@ -250,12 +250,12 @@ class AnimatorEditor extends EditorBase {
       const idx = lineText.lastIndexOf( '}' );
       if( idx != -1 ) {
         lineText = lineText.substring( 0, idx+1 )
-        // Parse JSON
+        // Parse JSON to check if its an animator step
         try {
           // Parse object at current line
           result = JSON.parse( lineText );
         } catch( e ) {
-          // Skip line
+          // Skip line!
         }
       }
     }
@@ -389,8 +389,8 @@ class GraphTemplateViewer extends EditorBase {
     const templateEl = document.querySelector( '#templateList' );
     const showTemplates = (sourceTemplateList)=> {
       // Generate Template Name List
-      try {
-        templateList = JSON.parse( sourceTemplateList );
+      templateList = JSON.parse( sourceTemplateList, 'Error showing templates. Chacek templateList file' );
+      if( templateList ) {
         let source = '';
         const templateURLList = Object.keys( templateList );
         for( const templateURL of templateURLList ) {
@@ -432,8 +432,6 @@ class GraphTemplateViewer extends EditorBase {
         for( const item of itemElementList ) {
           item.onclick = ()=> applyTemplate( item.innerText, item.getAttribute( 'templateURL' ) );
         }
-      } catch (error) {
-        alert( 'Error showing templates. Chacek templateList file' );
       }
     }
     // Load Templates

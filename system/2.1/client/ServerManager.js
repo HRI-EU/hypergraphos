@@ -150,7 +150,6 @@ function winPrompt( msg, value, onClose ) {
     cancelEl.onclick = ()=> win.close();
   }
 }
-
 function MainScript_JSONParse( str, msg ) {
   try {
     return( JSON.parse( str ) );
