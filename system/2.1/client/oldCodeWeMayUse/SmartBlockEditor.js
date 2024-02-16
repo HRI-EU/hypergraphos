@@ -55,16 +55,6 @@ class SmartBlockEditor {
       source = this.defaultSource;
     }
     try {
-      // Clean div content
-      //this.editorDiv.remove();
-      // Create a new div for connecting the SmartBlock editor
-      //this.editorDivId = this.originalEditorDivId+(SmartBlockEditor_divIndex++);
-      //const newDiv = document.createElement( 'div' );
-      //newDiv.id = this.editorDivId;
-      //newDiv.className = 'editorDiv';
-      //const parentDiv = this.editorDiv.parentElement;
-      //parentDiv.appendChild = newDiv;
-
       // Create the SmartBlock editor
       const sbInfo = {
         html: source,
