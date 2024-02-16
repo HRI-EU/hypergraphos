@@ -114,15 +114,7 @@ class GraphWrapper {
 						{ label: 'Zoom to Fit',			  do: this.doZoomToFit.bind(this) },
 						{ separator: '-' },
 						{ label: 'Toggle Show Palette', 	if: (o)=> ( this.fullPaletteId? true: false ),
-																								do: (o)=> { const htmlObj = document.querySelector( `#${this.fullPaletteId}` );
-																														const v = htmlObj.style.visibility;
-																														htmlObj.style.visibility = ( v == 'visible'? 'hidden': 'visible' ); 
-																													  // Position palette in browser view
-																														const browserWidth = window.innerWidth;
-																														const browserHeight = window.innerHeight;
-																														htmlObj.style.left = Math.min( browserWidth-100, Math.max( 0, htmlObj.offsetLeft ) );
-																														htmlObj.style.top = Math.min( browserHeight-100, Math.max( 0, htmlObj.offsetTop ) );
-																													}},
+																								do: (o)=> this.doShowPalette() },
 						{ label: 'Toggle Show Grid', do: (o)=> this.diagram.grid.visible = !this.diagram.grid.visible },
 						{ separator: '-' },
 						{ label: 'Add Bookmark',		  do: this.addBookmark.bind(this) },
@@ -255,6 +247,7 @@ class GraphWrapper {
 			{ key: '3', do: this.doZoomToFactor.bind(this,0.5) },
 			// Center Graph
 			{ key: 'G', do: this.setViewCenteredOnSelectedNode.bind(this) },
+			{ key: 'P', do: this.doShowPalette.bind(this) },
 		];
 
 		this.diagram.contextMenu = this.contextMenu.getMenu( 'diagramContextMenu' );
@@ -912,6 +905,18 @@ class GraphWrapper {
 				}
 			};
 			winPrompt( 'URL', data.fileURL, setURL );
+		}
+	}
+	doShowPalette() {
+		if( this.fullPaletteId ) {
+			const htmlObj = document.querySelector( `#${this.fullPaletteId}` );
+			const v = htmlObj.style.visibility;
+			htmlObj.style.visibility = ( v == 'visible'? 'hidden': 'visible' ); 
+			// Position palette in browser view
+			const browserWidth = window.innerWidth;
+			const browserHeight = window.innerHeight;
+			htmlObj.style.left = Math.min( browserWidth-100, Math.max( 0, htmlObj.offsetLeft ) );
+			htmlObj.style.top = Math.min( browserHeight-100, Math.max( 0, htmlObj.offsetTop ) );
 		}
 	}
 	canUngroupSelectedNodes() {

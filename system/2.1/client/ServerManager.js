@@ -34,6 +34,7 @@ const codeFileType = {
   "C++":            {color: "mediumseagreen", fileType: "text/c_cpp",                     ext: "cpp"},
   "H++":            {color: "mediumseagreen", fileType: "text/c_cpp",                     ext: "hpp"},
   "C#":             {color: "seagreen",       fileType: "text/c_cpp",                     ext: "cs"},
+  "C-Make":         {color: "CornflowerBlue", fileType: "text/x-cmake" },
   "Binary":         {color: "white",          fileType: "application/octet-stream",       ext: "bin"},
   "Shell":          {color: "gray",           fileType: "application/x-shellscript",      ext: "sh"},
   "Rich Text":      {color: "aquamarine",     fileType: "application/explore",            ext: "html"},
