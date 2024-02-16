@@ -66,6 +66,136 @@ let urlParams = { name: 'DefaultUser' };
 // Unique timeId for the session
 const sessionTimeId = new Date().getTime();
 
+// WinBox alert dialog
+function winAlert( msg, isCenter ) 
+{
+  isCenter = ( isCenter == undefined? true: isCenter );
+  new WinBox( 'Alert', {
+    modal: true,
+    autosize: true,
+    background: 'Crimson',
+    html: `<div style="margine: 0px;">`+
+            `<pre style="${isCenter? 'text-align: center;':''}">`+
+              msg+
+            `</pre>`+
+          `</div>`,
+  });
+}
+// Override standard alert function
+alert = winAlert;
+// WinBox yes/no dialog
+function winConfirm( msg, yesCallback, noCallback, isCenter ) 
+{
+  isCenter = ( isCenter == undefined? true: isCenter );
+  const win = new WinBox( 'Alert', {
+    modal: true,
+    autosize: true,
+    background: 'Crimson',
+    onclose: noCallback,
+    html: `<div style="margine: 0px;">`+
+            `<pre style="${isCenter? 'text-align: center;':''}">`+
+            `  ${msg}<br><br>`+
+            `<button id="winConfirm_no" type="button">Cancel</button>&nbsp`+
+            `<button id="winConfirm_yes" type="button">Ok</button>`+
+            `</pre>`+
+          `</div>`,
+  });
+
+  // Register buttons callback
+  const yesEl = document.getElementById( 'winConfirm_yes' );
+  const noEl = document.getElementById( 'winConfirm_no' );
+  if( yesEl ) {
+    yesEl.onclick = ()=> { win.close(); if( yesCallback ) yesCallback(); };
+  }
+  if( noEl ) {
+    noEl.onclick = ()=> { win.close(); if( noCallback ) noCallback(); };
+  }
+}
+function winPrompt( msg, value, onClose ) {
+  let result = null;
+  value = ( value == undefined? '': value );
+  const closeCallback = ()=> {
+    if( onClose ) {
+      onClose( result );
+    }
+  }
+
+  const win = new WinBox( 'Alert', {
+    modal: true,
+    autosize: true,
+    background: 'Crimson',
+    onclose: closeCallback,
+    html: `<div style="margine: 0px;">`+
+            `<pre>`+
+              `&nbsp;${msg}&nbsp;<input type="text" id="winPrompt_input" name="winPrompt_input" value="${value}" size="50">&nbsp;<br><br>`+
+            `</pre>`+
+            `<pre style="text-align: center;">`+
+              `<button id="winConfirm_cancel" type="button">Cancel</button>&nbsp`+
+              `<button id="winConfirm_ok" type="button">Ok</button>`+
+            `</pre>`+
+          `</div>`,
+  });
+
+  // Register buttons callback
+  const okEl = document.getElementById( 'winConfirm_ok' );
+  const cancelEl = document.getElementById( 'winConfirm_cancel' );
+  if( okEl ) {
+    okEl.onclick = ()=> { 
+      const inEl = document.getElementById( 'winPrompt_input' );
+      result = ( inEl? inEl.value: '' );
+      win.close();
+    };
+  }
+  if( cancelEl ) {
+    cancelEl.onclick = ()=> win.close();
+  }
+}
+
+function MainScript_JSONParse( str, msg ) {
+  try {
+    return( JSON.parse( str ) );
+  } catch( e ) {
+    if( config.isDebugOn ) {
+      throw( e );
+    }
+    if( msg ) {
+      alert( msg );
+    }
+    console.log( e );
+    return( null );
+  }
+}
+function MainScript_JSONStringify( str, replacer, space, msg ) {
+  try {
+    return( JSON.stringify( str, replacer, space ) );
+  } catch( e ) {
+    if( config.isDebugOn ) {
+      throw( e );
+    }
+    if( msg ) {
+      alert( msg );
+    }
+    console.log( e );
+    return( null );
+  }
+}
+function MainScript_Eval( str, msg ) {
+  try {
+    eval( str );
+  } catch( e ) {
+    if( config.isDebugOn ) {
+      throw( e );
+    }
+    if( msg ) {
+      alert( msg );
+    }
+    console.log( e );
+    return( null );
+  }
+  return( true );
+}
+
+
 function loadSystem() {
   /*
     // Get params value
@@ -92,18 +222,15 @@ function loadSystem() {
   const urlStrParams = decodeURI( document.location.search.substring( 1 ) );
   // Get url params values
   urlParams = {};
-  try {
-    eval( `urlParams = {${urlStrParams}}` );
-  } catch (error) {
-    alert( 'Error in url parameters\n'+error );
-  }
+  MainScript_Eval( `urlParams = {${urlStrParams}}`, 'Error in URL parameters' );
   console.log( urlParams );
   
   if( !urlParams.name ) {
     let cookie = { name: 'UserLocal' };
-    try {
-      cookie = JSON.parse(document.cookie);
-    } catch( e ) {}
+    docCookie = MainScript_JSONParse( document.cookie );
+    if( docCookie ) {
+      cookie = docCookie;
+    }
     urlParams.name = cookie.name;
   } else {
     try {
@@ -160,10 +287,10 @@ function getNewFileServerURL( extension, onDone ) {
 
     // Get current fileServer info
     let fsInfo = m.fileInfo.fileServer; // Default value
-    try {
-      const obj = JSON.parse( source );
+    const obj = MainScript_JSONParse( source );
+    if( obj ) {
       fsInfo = obj.fileServer;
-    } catch( e ) {}
+    }
 
     // Set FileName
     let isNextPathNeeded = false;
@@ -193,10 +320,10 @@ function getNewFileServerURL( extension, onDone ) {
     const newFilePath = `${host}${config.host.fileServerURL}${newPath}/${newFile}`;
 
     // Update fileIndex file
-    try {
-      const source = JSON.stringify( m.fileInfo );
-      _saveFile( fileIndexURL, source );
-    } catch (error) {}
+    const outSource = MainScript_JSONStringify( m.fileInfo, null, 0, 'Error in stringify of fileIndex' );
+    if( outSource ) {
+      _saveFile( fileIndexURL, outSource );
+    }
 
     // Return new file path
     if( onDone ) {
@@ -450,9 +577,10 @@ function getNodeInfoFromServer( nodeData, onInfo ) {
   const onLoaded = ( source ) => {
     //console.log( `File status for "${nodeData.fileURL}": ${source}` );
     let fileInfo = {};
-    try {
-      fileInfo = JSON.parse( source );
-    } catch( error ) {
+    const objFileInfo = JSON.parse( source );
+    if( objFileInfo ) {
+      fileInfo = objFileInfo;
+    } else {
       const label = ( nodeData.label? nodeData.label: nodeData.category )+`[${nodeData.key}]`;
       alert( 'Error loading file info for node: '+label+'\n'+error );
     }
@@ -573,12 +701,11 @@ function _saveFile( url, source, onSaveDone, sourceEncoding ) {
     });
     console.log( 'Saving: '+url );
     const fileInfo = { url, source, sourceEncoding, };
-    try {
-      request.send( JSON.stringify( fileInfo ) );
-    } catch( e ) {
+    const reply = MainScript_JSONStringify( fileInfo );
+    if( reply ) {
+      request.send( reply );
+    } else {
       console.log( e );
-      // TODO: I am not sure in this case is good to call the callback!!!
-      debugger;
       if( onSaveDone ) {
         onSaveDone();
       }

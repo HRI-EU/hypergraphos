@@ -91,7 +91,7 @@ async function sendLoginPayload( data ) {
     return( response );
     //return result;
   } catch( error ) {
-    console.error( 'Error:', error );
+    console.error( 'Error: ', error );
   }
 }
 async function sendRegisterPayload( data ) {
@@ -107,7 +107,7 @@ async function sendRegisterPayload( data ) {
     return response;
     //return result;
   } catch( error ) {
-    console.error( 'Error:', error );
+    console.error( 'Error: ', error );
   }
 }
 function hide( elem ) {

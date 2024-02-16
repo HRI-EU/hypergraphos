@@ -172,7 +172,10 @@ function MainScript_JSONParse( str, msg ) {
     if( config.isDebugOn ) {
       throw( e );
     }
-    alert( msg? msg: e.message );
+    if( msg ) {
+      alert( msg );
+    }
+    console.log( e );
     return( null );
   }
 }
@@ -183,7 +186,10 @@ function MainScript_JSONStringify( str, replacer, space, msg ) {
     if( config.isDebugOn ) {
       throw( e );
     }
-    alert( msg? msg: e.message );
+    if( msg ) {
+      alert( msg );
+    }
+    console.log( e );
     return( null );
   }
 }
@@ -194,9 +200,13 @@ function MainScript_Eval( str, msg ) {
     if( config.isDebugOn ) {
       throw( e );
     }
-    alert( msg? msg: e.message );
+    if( msg ) {
+      alert( msg );
+    }
+    console.log( e );
     return( null );
   }
+  return( true );
 }
 
 function _init() {

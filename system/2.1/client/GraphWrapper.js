@@ -1162,9 +1162,10 @@ class GraphWrapper {
 				this.diagram.startTransaction( 'Set Data Propery' );
 				if( field == 'fileContent' && ( typeof( value ) != 'string' ) ) {
 					// Force value to be a string in case is not (number, boolean,...)
-					try {
-						value = JSON.stringify( value );
-					} catch( e ) {}
+					const strValue = MainScript_JSONStringify( value );
+					if( strValue ) {
+						value = strValue;
+					}
 				}
 				this.diagram.model.setDataProperty( data, field, value );
 				this.diagram.commitTransaction( 'Set Data Propery' );
@@ -1218,14 +1219,17 @@ class GraphWrapper {
 		}
 		switch( data.isSystem ) {
 			case '$GraphModel$':
-				try {
-					const strModel = this.getJSONModel();
-					const objModel = JSON.parse( strModel );
-					data.fileContent = JSON.stringify( objModel, null, 2 );
-					data.onNodeChanged = (f)=> { 
-						this.onNodeGraphModelChanged = { nodeData: data, callback: f };
-					};
-				} catch (error) {}
+				const strModel = this.getJSONModel();
+				const objModel = MainScript_JSONParse( strModel, 'Error parsing graph model' );
+				if( objModel ) {
+					const strModel = MainScript_JSONStringify( objModel, null, 2, 'Error in stringify graph model' );
+					if( strModel ) {
+						data.fileContent = strModel;
+						data.onNodeChanged = (f)=> { 
+							this.onNodeGraphModelChanged = { nodeData: data, callback: f };
+						};
+					}
+				}
 				break;
 			case '$GraphSelection$':
 				data.fileContent = this.getJSONSelection();
