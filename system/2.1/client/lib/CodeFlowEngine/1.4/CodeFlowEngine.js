@@ -294,8 +294,8 @@ function CodeFlowEngine_startGeneration( nodeData ) {
           }
         }
         if( nodeData.fileContent ) {
-          const getPort = (name)=>{ return( inOutValue[name] ); };
-          const setPort = (name, value)=>{ inOutValue[name] = value; };
+          const getInput = (name)=>{ return( inOutValue[name] ); };
+          const setOutput = (name, value)=>{ inOutValue[name] = value; };
           eval( nodeData.fileContent );
           if( nodeData.out_ ) {
             for( const output of nodeData.out_ ) {
