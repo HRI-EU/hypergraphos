@@ -109,15 +109,18 @@ class GraphWrapper {
 		this.contextMenu.add({
       'diagramContextMenu': 
 				{	layout: 'vertical', itemList: [
-					{ label: 'Space Property',			do: (o)=> winAlert( this.getDiagramInfo( this.diagram.model ), false )},
+					{ label: 'Space Property',			 			do: (o)=> winAlert( this.getDiagramInfo( this.diagram.model ), false )},
 					{ label: 'View',       layout: 'vertical',	subMenu: [
-						{ label: 'Zoom to Fit',			  do: this.doZoomToFit.bind(this) },
+						{ label: 'Zoom to Fit (1)',	   			do: this.doZoomToFit.bind(this) },
+						{ label: 'Zoom In (2)',	       			do: this.doZoomToFactor.bind(this,2) },
+						{ label: 'Zoom Out (3)',	     			do: this.doZoomToFactor.bind(this,0.5) },
 						{ separator: '-' },
-						{ label: 'Toggle Show Palette', 	if: (o)=> ( this.fullPaletteId? true: false ),
-																								do: (o)=> this.doShowPalette() },
-						{ label: 'Toggle Show Grid', do: (o)=> this.diagram.grid.visible = !this.diagram.grid.visible },
+						{ label: 'Toggle Show Palette (P)',	if: (o)=> ( this.fullPaletteId? true: false ),
+																					 			do: this.doShowPalette.bind(this) },
+						{ label: 'Toggle Show Grid (D)',		do: this.doShowGrid.bind(this) },
+						{ label: 'Toggle Show Editors (^+Click)',	do: m.e.toogleShowWindows },
 						{ separator: '-' },
-						{ label: 'Add Bookmark',		  do: this.addBookmark.bind(this) },
+						{ label: 'Add Bookmark (ALT+B)',	  do: this.addBookmark.bind(this) },
 					]},
 					// { separator: '-',               if: (o)=> { // NOTE: if we define a location, paste do not showup in the popup menu
 					// 																						//const location = o.d.cmt.mouseDownPoint;
@@ -128,7 +131,7 @@ class GraphWrapper {
 																												const location = o.d.cmt.mouseDownPoint;
 																												return( o.d.cmd.canPasteSelection( location ) ); },
 																						do: (o)=> { const location = o.d.cmt.mouseDownPoint;
-																													o.d.cmd.pasteSelection( location ); }},
+																												o.d.cmd.pasteSelection( location ); }},
 						{ separator: '-',         			if: (o)=> o.d.cmd.canUndo() || o.d.cmd.canRedo() },
 						{ label: 'Undo',      					if: (o)=> o.d.cmd.canUndo(),
 																						do: (o)=> o.d.cmd.undo() },
@@ -142,10 +145,8 @@ class GraphWrapper {
 						// ]},
 					]},
 					{ separator: '-' },
-					{ label: 'Find',      					  do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
-																						  					this.em.fire.onShowFindDialog( mousePos.x, mousePos.y ); } },
-					{ label: 'Bookmarks',		  			  do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
-																								  			this.em.fire.onShowBookmarks( mousePos.x, mousePos.y ); } },
+					{ label: 'Find (F)',   					  do: this.doShowFind.bind(this) },
+					{ label: 'Bookmarks (B)',  			  do: this.doShowBookmarks.bind(this) },
 					{ separator: '-' },
 					{ label: 'Tools',       layout: 'vertical', subMenu: [
 						{ label: 'Show DSL List',			  do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
@@ -245,9 +246,16 @@ class GraphWrapper {
 			// Zoom to Factor
 			{ key: '2', do: this.doZoomToFactor.bind(this,2) },
 			{ key: '3', do: this.doZoomToFactor.bind(this,0.5) },
-			// Center Graph
-			{ key: 'G', do: this.setViewCenteredOnSelectedNode.bind(this) },
+			// Grid
+			{ key: 'D', do: this.doShowGrid.bind(this) },
+			// Toogle View
+			{ key: 'X', do: this.setViewCenteredOnSelectedNode.bind(this) },
 			{ key: 'P', do: this.doShowPalette.bind(this) },
+			// Bookmarks
+			{ key: 'B', do: this.doShowBookmarks.bind(this) },
+			{ key: 'B', alt:true, do: this.addBookmark.bind(this) },
+			// Find
+			{ key: 'F', do: this.doShowFind.bind(this) },
 		];
 
 		this.diagram.contextMenu = this.contextMenu.getMenu( 'diagramContextMenu' );
@@ -890,6 +898,17 @@ class GraphWrapper {
 				setNodeDataField( data, 'size', this.copiedSize );
 			});
 		}
+	}
+	doShowGrid() {
+		this.diagram.grid.visible = !this.diagram.grid.visible;
+	}
+	doShowBookmarks() {
+		const mousePos = this.diagram.lastInput.viewPoint;
+		this.em.fire.onShowBookmarks( mousePos.x, mousePos.y );
+	}
+	doShowFind() {
+		const mousePos = this.diagram.lastInput.viewPoint;
+		this.em.fire.onShowFindDialog( mousePos.x, mousePos.y );
 	}
 	canPromptURL() {
 		const data = this.getFirstSelectedNodeData();
