@@ -117,26 +117,26 @@ class GraphWrapper {
 						{ separator: '-' },
 						{ label: 'Toggle Show Palette (P)',	if: (o)=> ( this.fullPaletteId? true: false ),
 																					 			do: this.doShowPalette.bind(this) },
-						{ label: 'Toggle Show Grid (D)',		do: this.doShowGrid.bind(this) },
+						{ label: 'Toggle Show Grid (G)',		do: this.doShowGrid.bind(this) },
 						{ label: 'Toggle Show Editors (^+Click)',	do: m.e.toogleShowWindows },
 						{ separator: '-' },
 						{ label: 'Add Bookmark (ALT+B)',	  do: this.addBookmark.bind(this) },
 					]},
-					// { separator: '-',               if: (o)=> { // NOTE: if we define a location, paste do not showup in the popup menu
-					// 																						//const location = o.d.cmt.mouseDownPoint;
-					// 																						return( o.d.cmd.canPasteSelection( location ) ); }},
+					// { separator: '-',               		if: (o)=> { // NOTE: if we define a location, paste do not showup in the popup menu
+					// 																								//const location = o.d.cmt.mouseDownPoint;
+					// 																								return( o.d.cmd.canPasteSelection( location ) ); }},
 					{ separator: '-' },
 					{ label: 'Edit',       layout: 'vertical', subMenu: [
-						{ label: 'Paste',      					if: (o)=> { // NOTE: if we define a location, paste do not showup in the popup menu
-																												const location = o.d.cmt.mouseDownPoint;
-																												return( o.d.cmd.canPasteSelection( location ) ); },
-																						do: (o)=> { const location = o.d.cmt.mouseDownPoint;
-																												o.d.cmd.pasteSelection( location ); }},
-						{ separator: '-',         			if: (o)=> o.d.cmd.canUndo() || o.d.cmd.canRedo() },
-						{ label: 'Undo',      					if: (o)=> o.d.cmd.canUndo(),
-																						do: (o)=> o.d.cmd.undo() },
-						{ label: 'Redo',      					if: (o)=> o.d.cmd.canRedo(),
-																						do: (o)=> o.d.cmd.redo() },
+						{ label: 'Paste',      							if: (o)=> { // NOTE: if we define a location, paste do not showup in the popup menu
+																														const location = o.d.cmt.mouseDownPoint;
+																														return( o.d.cmd.canPasteSelection( location ) ); },
+																								do: (o)=> { const location = o.d.cmt.mouseDownPoint;
+																														o.d.cmd.pasteSelection( location ); }},
+						{ separator: '-',         					if: (o)=> o.d.cmd.canUndo() || o.d.cmd.canRedo() },
+						{ label: 'Undo',      							if: (o)=> o.d.cmd.canUndo(),
+																								do: (o)=> o.d.cmd.undo() },
+						{ label: 'Redo',      							if: (o)=> o.d.cmd.canRedo(),
+																								do: (o)=> o.d.cmd.redo() },
 						// { layout: 'horizontal', itemList: [
 						// 	{ fontIcon: 'action-undo', hint: 'Undo (CTRL-Z)',     if: (o)=> o.d.cmd.canUndo(),
 						// 																												do: (o)=> o.d.cmd.undo() },
@@ -145,18 +145,14 @@ class GraphWrapper {
 						// ]},
 					]},
 					{ separator: '-' },
-					{ label: 'Find (F)',   					  do: this.doShowFind.bind(this) },
-					{ label: 'Bookmarks (B)',  			  do: this.doShowBookmarks.bind(this) },
+					{ label: 'Find (F)',   					  		do: this.doShowFind.bind(this) },
+					{ label: 'Bookmarks (B)',  			  		do: this.doShowBookmarks.bind(this) },
 					{ separator: '-' },
 					{ label: 'Tools',       layout: 'vertical', subMenu: [
-						{ label: 'Show DSL List',			  do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
-																											this.em.fire.onShowDSLListDialog( mousePos.x, mousePos.y ); } },
-						{ label: 'Show Space Template',	do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
-																												this.em.fire.onShowGraphTemplateDialog( mousePos.x, mousePos.y ); } },
-						{ label: 'Show System Monitor',	do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
-																													this.em.fire.onShowSysMonitorDialog( mousePos.x, mousePos.y ); } },
-						{ label: 'Show Animator',			  do: (o)=> { const mousePos = this.diagram.lastInput.viewPoint;
-																											this.em.fire.onShowAnimatorEditor( mousePos.x, mousePos.y ); } },
+						{ label: 'Show DSL List (D)',	  		do: this.doShowDSLList.bind(this) },
+						{ label: 'Show Space Template (T)',	do: this.doShowSpaceTemplate.bind(this) },
+						{ label: 'Show System Monitor (M)',	do: this.doShowSystemMonitor.bind(this) },
+						{ label: 'Show Animator (A)',	 		  do: this.doShowAnimator.bind(this) },
 					]},
 					{ label: 'Navigate', layout: 'vertical', if: (o)=> !config.isLocalMode, subMenu: [
 						{ label: 'Back To Prev. Space',	if: (o)=> !this.isHistoryEmpty,
@@ -211,51 +207,43 @@ class GraphWrapper {
 				  ]},
 					{ separator: '-' },
 					{ label: 'Set From Palette',	if: (o)=> !this.isSelectionEmpty(),
-																				do: (o)=> this._resetSelectionFromPalette() },
-					{ label: 'Prompt URL',				if: (o)=> this.canPromptURL(),
-																				do: (o)=> this.doPromptURL() },
+																				do: this._resetSelectionFromPalette.bind(this) },
+					{ label: 'Prompt URL',				if: this.canPromptURL.bind(this),
+																				do: this.doPromptURL.bind(this) },
 					{ separator: '-' },
 					{ label: 'Group',       if: (o)=> o.d.cmd.canGroupSelection(),
 																	do: (o)=> o.d.cmd.groupSelection() },
 					{ label: 'Remove Group',if: (o)=> o.d.cmd.canUngroupSelection(),
 																	do: (o)=> o.d.cmd.ungroupSelection() },
 					{ label: 'Ungroup Nodes',if: (o)=> !o.d.cmd.canUngroupSelection() && this.canUngroupSelectedNodes(),
-																	do: (o)=> this.doUngroupSelectedNodes() },
+																	do: this.doUngroupSelectedNodes.bind(this) },
 					{ separator: '-',       if: (o)=> this.canOpenFile() || this.canOpenSubGraph() },
 					{ label: 'Open Content',if: (o)=> this.canOpenFile(),
-																	do: (o)=> { const data = this.getFirstSelectedNodeData();
-																							if( data ) {
-																								const mousePos = this.diagram.lastInput.viewPoint;
-																								this.em.fire.onLoadFile( data, mousePos.x, mousePos.y );
-																							} }},
+																	do: this.doOpenContent.bind(this) },
 					{ label: 'Open Space',	if: (o)=> this.canOpenSubGraph(),
-																	do: (o)=> { const data = this.getFirstSelectedNodeData();
-																							if( data ) {
-																								this.em.fire.onLoadGraph( data );
-																							} }},
+																	do: this.doOpenSpace.bind(this) },
 				]},
 		});
 		this.shortcutList = [
-			// Zoom to Node (NOTE: with control its not yet working)
-			{ key: '2', control:true, do: this.doZoomToFitSlectedNode.bind(this,2) },
-			{ key: '3', control:true, do: this.doZoomToFitSlectedNode.bind(this,3) },
-			{ key: '4', control:true, do: this.doZoomToFitSlectedNode.bind(this,4) },
-			{ key: '5', control:true, do: this.doZoomToFitSlectedNode.bind(this,5) },
 			// Zoom to Fit
 			{ key: '1', do: this.doZoomToFit.bind(this) },
 			// Zoom to Factor
 			{ key: '2', do: this.doZoomToFactor.bind(this,2) },
 			{ key: '3', do: this.doZoomToFactor.bind(this,0.5) },
 			// Grid
-			{ key: 'D', do: this.doShowGrid.bind(this) },
+			{ key: 'G', do: this.doShowGrid.bind(this) },
 			// Toogle View
 			{ key: 'X', do: this.setViewCenteredOnSelectedNode.bind(this) },
 			{ key: 'P', do: this.doShowPalette.bind(this) },
 			// Bookmarks
 			{ key: 'B', do: this.doShowBookmarks.bind(this) },
 			{ key: 'B', alt:true, do: this.addBookmark.bind(this) },
-			// Find
+			// Find & Tools
 			{ key: 'F', do: this.doShowFind.bind(this) },
+			{ key: 'D', do: this.doShowDSLList.bind(this) },
+			{ key: 'T', do: this.doShowSpaceTemplate.bind(this) },
+			{ key: 'M', do: this.doShowSystemMonitor.bind(this) },
+			{ key: 'A', do: this.doShowAnimator.bind(this) },
 		];
 
 		this.diagram.contextMenu = this.contextMenu.getMenu( 'diagramContextMenu' );
@@ -909,6 +897,35 @@ class GraphWrapper {
 	doShowFind() {
 		const mousePos = this.diagram.lastInput.viewPoint;
 		this.em.fire.onShowFindDialog( mousePos.x, mousePos.y );
+	}
+	doShowDSLList() {
+		const mousePos = this.diagram.lastInput.viewPoint;
+		this.em.fire.onShowDSLListDialog( mousePos.x, mousePos.y );
+	}
+	doShowSpaceTemplate() {
+		const mousePos = this.diagram.lastInput.viewPoint;
+		this.em.fire.onShowGraphTemplateDialog( mousePos.x, mousePos.y );
+	}
+	doShowSystemMonitor() {
+		const mousePos = this.diagram.lastInput.viewPoint;
+		this.em.fire.onShowSysMonitorDialog( mousePos.x, mousePos.y );
+	}
+	doShowAnimator() {
+		const mousePos = this.diagram.lastInput.viewPoint;
+		this.em.fire.onShowAnimatorEditor( mousePos.x, mousePos.y );
+	}
+	doOpenContent() {
+		const data = this.getFirstSelectedNodeData();
+		if( data ) {
+			const mousePos = this.diagram.lastInput.viewPoint;
+			this.em.fire.onLoadFile( data, mousePos.x, mousePos.y );
+		}
+	}
+	doOpenSpace() {
+		const data = this.getFirstSelectedNodeData();
+		if( data ) {
+			this.em.fire.onLoadGraph( data );
+		}
 	}
 	canPromptURL() {
 		const data = this.getFirstSelectedNodeData();
