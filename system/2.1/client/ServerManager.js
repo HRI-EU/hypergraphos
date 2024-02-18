@@ -186,8 +186,9 @@ function MainScript_Eval( str, msg ) {
     if( config.isDebugOn ) {
       throw( e );
     }
+    msg = ( msg? msg: '' )+e.message+'\n'+e.stack;
     if( msg ) {
-      alert( msg );
+      alert( msg, false );
     }
     console.log( e );
     return( null );

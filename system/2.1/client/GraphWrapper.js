@@ -194,7 +194,7 @@ class GraphWrapper {
 																								o.d.cmd.pasteSelection( location ); } },
 						{ label: 'Delete',      if: (o)=> o.d.cmd.canDeleteSelection(),
 																		do: (o)=> o.d.cmd.deleteSelection() },
-						{ separator: '-',       if: (o)=> o.d.cmd.canUndo() || o.d.cmd.canRedo() },
+						{ separator: '-',       if: (o)=> !this.isSelectionEmpty() },
 						{ label: 'Copy Position/Size',if: (o)=> !this.isSelectionEmpty(),
 																		do: (o)=> this.doCopyPositionSize() },
 						{ label: 'Paste X', 		if: (o)=> this.copiedPosition && !this.isSelectionEmpty(),
@@ -1345,7 +1345,7 @@ class GraphWrapper {
 		return( data );
 	}
 	filterObjectData( d, level ) {
-		level = ( level != undefined? level: 2 );
+		level = ( level != undefined? level: 4 );
 		let result = {};
 
 		const getObjectClassName = ( obj )=> {
