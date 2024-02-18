@@ -194,16 +194,25 @@ class GraphWrapper {
 																								o.d.cmd.pasteSelection( location ); } },
 						{ label: 'Delete',      if: (o)=> o.d.cmd.canDeleteSelection(),
 																		do: (o)=> o.d.cmd.deleteSelection() },
-						{ separator: '-' },
-						{ label: 'Copy Size',   if: (o)=> !this.isSelectionEmpty(),
-																		do: (o)=> this.doCopySize() },
+						{ separator: '-',       if: (o)=> o.d.cmd.canUndo() || o.d.cmd.canRedo() },
+						{ label: 'Copy Position/Size',if: (o)=> !this.isSelectionEmpty(),
+																		do: (o)=> this.doCopyPositionSize() },
+						{ label: 'Paste X', 		if: (o)=> this.copiedPosition && !this.isSelectionEmpty(),
+																		do: (o)=> this.doPasteX() },
+						{ label: 'Paste Y',			if: (o)=> this.copiedPosition && !this.isSelectionEmpty(),
+																		do: (o)=> this.doPasteY() },
 						{ label: 'Paste Size',  if: (o)=> this.copiedSize && !this.isSelectionEmpty(),
 																		do: (o)=> this.doPasteSize() },
+						{ label: 'Paste Widht', if: (o)=> this.copiedSize && !this.isSelectionEmpty(),
+																		do: (o)=> this.doPasteWidth() },
+						{ label: 'Paste Height',if: (o)=> this.copiedSize && !this.isSelectionEmpty(),
+																		do: (o)=> this.doPasteHeight() },
 						{ separator: '-',       if: (o)=> o.d.cmd.canUndo() || o.d.cmd.canRedo() },
 						{ label: 'Undo',        if: (o)=> o.d.cmd.canUndo(),
 																		do: (o)=> o.d.cmd.undo() },
 						{ label: 'Redo',        if: (o)=> o.d.cmd.canRedo(),
 																		do: (o)=> o.d.cmd.redo() },
+
 				  ]},
 					{ separator: '-' },
 					{ label: 'Set From Palette',	if: (o)=> !this.isSelectionEmpty(),
@@ -252,6 +261,7 @@ class GraphWrapper {
 		// Initialize instance variables
 		this.clearInstance();
 
+		this.copiedPosition = null;
 		this.copiedSize = null;
 		this.isDeleteEnabled = false;
 		this.isRootGraph = true;
@@ -871,11 +881,36 @@ class GraphWrapper {
 			cmd.deleteSelection();
 		}
 	}
-	doCopySize() {
+	doCopyPositionSize() {
 		// If a single node is selected => copy size
 		const data = this.getFirstSelectedNodeData();
 		if( data ) {
+			this.copiedPosition = data.location;
 			this.copiedSize = data.size;
+		}
+	}
+	doPasteX() {
+		if( this.copiedPosition ) {
+			const selection = this.getSelection();
+			selection.each( (node) => { 
+				const data = node.data;
+				const [copyX, copyY] = this.copiedPosition.split( ' ' );
+				const [currX, currY] = data.location.split( ' ' );
+				const newLocation = `${copyX} ${currY}`;
+				setNodeDataField( data, 'location', newLocation );
+			});
+		}
+	}
+	doPasteY() {
+		if( this.copiedPosition ) {
+			const selection = this.getSelection();
+			selection.each( (node) => { 
+				const data = node.data;
+				const [copyX, copyY] = this.copiedPosition.split( ' ' );
+				const [currX, currY] = data.location.split( ' ' );
+				const newLocation = `${currX} ${copyY}`;
+				setNodeDataField( data, 'location', newLocation );
+			});
 		}
 	}
 	doPasteSize() {
@@ -884,6 +919,30 @@ class GraphWrapper {
 			selection.each( (node) => { 
 				const data = node.data;
 				setNodeDataField( data, 'size', this.copiedSize );
+			});
+		}
+	}
+	doPasteWidth() {
+		if( this.copiedSize ) {
+			const selection = this.getSelection();
+			selection.each( (node) => { 
+				const data = node.data;
+				const [copydWidth, copyHeight] = this.copiedSize.split( ' ' );
+				const [currWidth, currHeight] = data.size.split( ' ' );
+				const newSize = `${copydWidth} ${currHeight}`;
+				setNodeDataField( data, 'size', newSize );
+			});
+		}
+	}
+	doPasteHeight() {
+		if( this.copiedSize ) {
+			const selection = this.getSelection();
+			selection.each( (node) => { 
+				const data = node.data;
+				const [copydWidth, copyHeight] = this.copiedSize.split( ' ' );
+				const [currWidth, currHeight] = data.size.split( ' ' );
+				const newSize = `${currWidth} ${copyHeight}`;
+				setNodeDataField( data, 'size', newSize );
 			});
 		}
 	}
