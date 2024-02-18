@@ -160,8 +160,12 @@ Date: 10.07.2020
 
               // If a single node is selected => clone it
               const data = g.getFirstSelectedNodeData();
-              if( data && ( data.label != undefined ) ) {
-                setNodeDataField( data, 'label', text );
+              if( data ) {
+                if( text.startsWith( '#' ) && ( data.color != undefined ) ) {
+                  setNodeDataField( data, 'color', text );
+                } else if( data.label != undefined ) {
+                  setNodeDataField( data, 'label', text );
+                }
               }
             });
           }
