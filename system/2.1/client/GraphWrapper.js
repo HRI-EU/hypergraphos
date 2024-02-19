@@ -1074,7 +1074,7 @@ class GraphWrapper {
 		const fieldNameList = Array.from( this.dslNodeFieldNameList );
 		let templateNode = {};
 		const templateNodeStr = 'templateNode = {'+fieldNameList.join( ':"",' )+':""}';
-		MainScript_Eval( templateNodeStr, 'Error in search expression\n'+e );
+		MainScript_Eval( templateNodeStr, 'Error in search expression\n' );
 
 		// Define here the search condition
 		let conditionFn = null;
