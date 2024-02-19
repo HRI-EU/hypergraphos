@@ -1036,6 +1036,10 @@ class GraphWrapper {
 			}
 			return( result );
 		};
+		const getSafeName = function( name ) {
+			const protectNames = [ 'nodeData', 'name', 'value' ];
+			return( protectNames.includes( name )? '_': '' )+name;
+		}
 
 		const data = this.getFirstSelectedNodeData();
 		if( data && data.isFile ) {
@@ -1070,17 +1074,17 @@ class GraphWrapper {
 					}
 					if( inputNameList.length ) {
 						content.push( ' --- You may get inputs' );
-						inputNameList.forEach( i=> content.push( `  graphData.dfe.getInput( nodeData, '${i}', null );` ) );
+						inputNameList.forEach( i=> content.push( `  const ${getSafeName(i)} = graphData.dfe.getInput( nodeData, '${i}', null );` ) );
 					}
 					if( propertyNameList.length ) {
 						content.push( ' --- You may get properties' );
-						propertyNameList.forEach( p=> content.push( `  graphData.dfe.getProperty( nodeData, '${p}', null );` ) );
+						propertyNameList.forEach( p=> content.push( `  const ${getSafeName(p)} = graphData.dfe.getProperty( nodeData, '${p}', null );` ) );
 					}
 					content.push( ' --- You may set properties' );
 					content.push( `  graphData.dfe.setProperty( nodeData, '<Name>', null );` )
 					content.push( ' --- You may set/get states' );
 					content.push( `  graphData.dfe.set( nodeData, '<Name>', null );` )
-					content.push( `  graphData.dfe.get( nodeData, '<Name>', null );` )
+					content.push( `  const <Name> = graphData.dfe.get( nodeData, '<Name>', null );` )
 					content.push( '*/' );
 					break;
 			}
