@@ -1062,11 +1062,15 @@ class GraphWrapper {
 					content.push( '' );
 					content.push( '/*' );
 					if( outputNameList.length ) {
-						content.push( '  --- Remember to fire' );
+						content.push( ' --- Remember to fire' );
 						outputNameList.forEach( o=> {
 							const outValue = ( o.startsWith( 'on' )? '': ', outValue' );
 							content.push( `  graphData.dfe.fireOutput( nodeData, '${o}'${outValue} );` ) 
 						});
+					}
+					if( inputNameList.length ) {
+						content.push( ' --- You may get inputs' );
+						inputNameList.forEach( i=> content.push( `  graphData.dfe.getInput( nodeData, '${i}', null );` ) );
 					}
 					if( propertyNameList.length ) {
 						content.push( ' --- You may get properties' );
