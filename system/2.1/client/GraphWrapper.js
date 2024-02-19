@@ -114,6 +114,7 @@ class GraphWrapper {
 						{ label: 'Zoom to Fit (1)',	   			do: this.doZoomToFit.bind(this) },
 						{ label: 'Zoom In (2)',	       			do: this.doZoomToFactor.bind(this,2) },
 						{ label: 'Zoom Out (3)',	     			do: this.doZoomToFactor.bind(this,0.5) },
+						{ label: 'Center Space on Selection (X)',do: this.setViewCenteredOnSelectedNode.bind(this) },
 						{ separator: '-' },
 						{ label: 'Toggle Show Palette (P)',	if: (o)=> ( this.fullPaletteId? true: false ),
 																					 			do: this.doShowPalette.bind(this) },
