@@ -256,10 +256,8 @@ function CodeFlowEngine_startGeneration( nodeData ) {
           funcName = 'Define_Property';
           m[funcName] = ()=> objData;
         }
+        // Get node template
         loadNodeContent( nodeData, (templateSource)=> {
-          // Get node template
-          //const templateSource = nodeData.fileContent;
-          //const templateLen = templateSource.length;
           // Get the output to be generated
           const outputName = property;
           // Create the template generator
