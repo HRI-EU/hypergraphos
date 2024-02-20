@@ -22,6 +22,9 @@ class EditorManager extends EditorChangeManager {
     this.isStatusOnUpdate = false;
     this.isMoveAllWindowRunning = false;
 
+    // Default window position vector
+    this.defaultPos = [ 100, 100, 500, 450 ];
+
     // Store Selection or Model window nodeData
     this.selctionOrModelNodeData = null;
 
@@ -169,7 +172,8 @@ class EditorManager extends EditorChangeManager {
     }
   }
   openWindowFromNodeData( nodeData, x, y ) {
-    let position = ( x != undefined && y != undefined? [x, y, 400, 350]: undefined );
+    let position = ( x != undefined && y != undefined? 
+                    [x, y, this.defaultPos[2], this.defaultPos[3]]: undefined );
     const id = this._getDOMUniqueId( nodeData );
     this.openWindow( id, null, nodeData, position );
     // Show save button for system nodes
@@ -180,7 +184,7 @@ class EditorManager extends EditorChangeManager {
   }
   openWindow( id, name, nodeData, position, isPinned ) {
     id = id || this._getDOMUniqueId( nodeData );
-    position = ( position == undefined? [100, 100, 400, 350]: position );
+    position = ( position == undefined? this.defaultPos: position );
     isPinned = ( isPinned == undefined? false: isPinned );
 
     // If editor already open => put window on top

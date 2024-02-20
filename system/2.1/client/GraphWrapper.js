@@ -217,8 +217,10 @@ class GraphWrapper {
 				  ]},
 					{ separator: '-' },
 					{ label: 'Content',       layout: 'vertical', subMenu: [
-						{ label: 'Append Interface Code', if: this.canGenerateCodeNode.bind(this),
-																							do: this.doGenerateCodeNode.bind(this) },
+						{ label: 'Append Interface Code', if: this.canGenerateNodeContent.bind(this),
+																							do: this.doGenerateNodeContent.bind(this) },
+						{ label: 'AI Generator',          if: this.canGenerateNodeContent.bind(this),
+																							do: this.doAIGenerator.bind(this) },
 					]},
 					{ separator: '-' },
 					{ label: 'Set From Palette',	if: (o)=> !this.isSelectionEmpty(),
@@ -1020,88 +1022,20 @@ class GraphWrapper {
 			htmlObj.style.top = Math.min( browserHeight-100, Math.max( 0, htmlObj.offsetTop ) );
 		}
 	}
-	canGenerateCodeNode() {
+	canGenerateNodeContent() {
 		const data = this.getFirstSelectedNodeData();
-		return( data && data.isFile );
+		return( NCG_canGenerateNodeContent( data ) );
 	}
-	doGenerateCodeNode() {
-		const pushPortNameList = function( data, portName, excludeList ) {
-			const result = [];
-			if( data[portName] ) {
-				data[portName].forEach( p=> {
-					if( !excludeList || !excludeList.includes( p.name ) ) {
-						result.push( p.name ) 
-					}
-				});
-			}
-			return( result );
-		};
-		const getSafeName = function( name ) {
-			const protectNames = [ 'nodeData', 'name', 'value' ];
-			return( protectNames.includes( name )? '_': '' )+name;
-		}
-
+	doGenerateNodeContent() {
 		const data = this.getFirstSelectedNodeData();
 		if( data && data.isFile ) {
-			const content = [];
-			switch( data.fileType ) {
-				case 'text/javascript':
-					// Get input list
-					const inputNameList = pushPortNameList( data, 'in_' );
-					const outputNameList = pushPortNameList( data, 'out_' );
-					const propertyNameList = pushPortNameList( data, 'props_', ['computeBarrier'] );
-
-					let nextLine = '';
-					for( let i = 0; i < inputNameList.length; ++i ) {
-						const name = inputNameList[i];
-						content.push( `${nextLine}if( name == '${name}' ) {` );
-						content.push( '' );
-						if( i != inputNameList.length ) {
-							nextLine = '} else ';
-						}
-					}
-					content.push( `${nextLine}if( name == 'doCompute' ) {` );
-					content.push( '' );
-					content.push( '}' );
-					content.push( '' );
-					content.push( '/*' );
-					if( outputNameList.length ) {
-						content.push( ' --- Remember to fire' );
-						outputNameList.forEach( o=> {
-							const outValue = ( o.startsWith( 'on' )? '': ', outValue' );
-							content.push( `  graphData.dfe.fireOutput( nodeData, '${o}'${outValue} );` ) 
-						});
-					}
-					if( inputNameList.length ) {
-						content.push( ' --- You may get inputs' );
-						inputNameList.forEach( i=> content.push( `  const ${getSafeName(i)} = graphData.dfe.getInput( nodeData, '${i}', null );` ) );
-					}
-					if( propertyNameList.length ) {
-						content.push( ' --- You may get properties' );
-						propertyNameList.forEach( p=> content.push( `  const ${getSafeName(p)} = graphData.dfe.getProperty( nodeData, '${p}', null );` ) );
-					}
-					content.push( ' --- You may set properties' );
-					content.push( `  graphData.dfe.setProperty( nodeData, '<Name>', null );` )
-					content.push( ' --- You may set/get states' );
-					content.push( `  graphData.dfe.set( nodeData, '<Name>', null );` )
-					content.push( `  const <Name> = graphData.dfe.get( nodeData, '<Name>', null );` )
-					content.push( '*/' );
-					break;
-			}
-
-			if( content.length ) {
-				loadNodeContent( data, ( source )=>{
-					if( source ) {
-						source = source+'\n'+content.join( '\n' );
-					} else {
-						source = content.join( '\n' );
-					}
-
-					// Set content for save function
-					data.fileContent = source;
-					saveNodeContent( data );
-				});
-			}
+			NCG_doGenerateNodeContent( data );
+		}
+	}
+	doAIGenerator() {
+		const data = this.getFirstSelectedNodeData();
+		if( data && data.isFile ) {
+			NCG_doAIGenerator( data );
 		}
 	}
 	canUngroupSelectedNodes() {
