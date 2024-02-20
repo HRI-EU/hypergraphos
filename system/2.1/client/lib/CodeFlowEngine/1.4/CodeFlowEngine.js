@@ -256,27 +256,28 @@ function CodeFlowEngine_startGeneration( nodeData ) {
           funcName = 'Define_Property';
           m[funcName] = ()=> objData;
         }
-        // Get node template
-        const templateSource = nodeData.fileContent;
-        const templateLen = templateSource.length;
-        // Get the output to be generated
-        const outputName = property;
-        // Create the template generator
-        const tg = new TemplateGenerator( templateSource );
-        const beginTag = `[# Begin ${outputName} #]`;
-        const endTag = `[# End ${outputName} #]`;
-        // Get output template and trim to first line indentation (true)
-        const block = tg.extractNextLineBlock( true, beginTag, endTag );
-        //const blockSrc = block.getTemplate();
-        // Set template language
-        const [format, language] = nodeData.fileType.split( '/' );
-        block.setLanguage( language );
-        block.setProperty( 'isKeepBlockOnNoData', true );
-        // Execute code generation
-        block.process( m );
-        // Get output
-        value = block.getOutput();
-        //debug();
+        loadNodeContent( nodeData, (templateSource)=> {
+          // Get node template
+          //const templateSource = nodeData.fileContent;
+          //const templateLen = templateSource.length;
+          // Get the output to be generated
+          const outputName = property;
+          // Create the template generator
+          const tg = new TemplateGenerator( templateSource );
+          const beginTag = `[# Begin ${outputName} #]`;
+          const endTag = `[# End ${outputName} #]`;
+          // Get output template and trim to first line indentation (true)
+          const block = tg.extractNextLineBlock( true, beginTag, endTag );
+          //const blockSrc = block.getTemplate();
+          // Set template language
+          const [format, language] = nodeData.fileType.split( '/' );
+          block.setLanguage( language );
+          block.setProperty( 'isKeepBlockOnNoData', true );
+          // Execute code generation
+          block.process( m );
+          // Get output
+          value = block.getOutput();
+        });
         break;
       case 'CodeFlow_Operator':
         let inOutValue = {};
