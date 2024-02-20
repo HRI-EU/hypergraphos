@@ -174,7 +174,12 @@ class GraphWrapper {
 				]},
 			'nodeContextMenu':
 				{ layout: 'vertical', itemList: [
-					{ label: 'Zoom it',     do: this.doZoomToFitSlectedNode.bind(this,5) },
+					{ label: 'Open Content',	if: (o)=> this.canOpenFile(),
+																		do: this.doOpenContent.bind(this) },
+					{ label: 'Open Space',		if: (o)=> this.canOpenSubGraph(),
+																		do: this.doOpenSpace.bind(this) },
+					{ separator: '-',       	if: (o)=> this.canOpenFile() || this.canOpenSubGraph() },
+					{ label: 'Zoom it',     	do: this.doZoomToFitSlectedNode.bind(this,5) },
 					{ separator: '-' },
 					{ label: 'Edit',       layout: 'vertical', subMenu: [
 						{ label: 'Duplicate',   if: (o)=> {	const location = o.d.cmt.mouseDownPoint;
@@ -234,11 +239,6 @@ class GraphWrapper {
 																	do: (o)=> o.d.cmd.ungroupSelection() },
 					{ label: 'Ungroup Nodes',if: (o)=> !o.d.cmd.canUngroupSelection() && this.canUngroupSelectedNodes(),
 																	do: this.doUngroupSelectedNodes.bind(this) },
-					{ separator: '-',       if: (o)=> this.canOpenFile() || this.canOpenSubGraph() },
-					{ label: 'Open Content',if: (o)=> this.canOpenFile(),
-																	do: this.doOpenContent.bind(this) },
-					{ label: 'Open Space',	if: (o)=> this.canOpenSubGraph(),
-																	do: this.doOpenSpace.bind(this) },
 				]},
 		});
 		this.shortcutList = [
@@ -1057,7 +1057,7 @@ class GraphWrapper {
 		const data = this.getFirstSelectedNodeData();
 		if( data ) {
 			result = ( ( data.isFile == true ) || 
-			           ( data.label != undefined ) );
+			           ( ( data.isDir == undefined ) && ( data.label != undefined ) ) );
 		}
 		return( result );
 	}
