@@ -93,24 +93,49 @@ function NCG_doGenerateNodeContent( data ) {
   }
 }
 function NCG_doAIGenerator( data ) {
-  const [ format, language ] = data.fileType.split( '/' );
+  let [ format, language ] = data.fileType.split( '/' );
 
-  // Find generate prompt comment
   let regex = null;
   switch( language ) {
+    case 'c_cpp':
+      language = 'c++';
     case 'javascript':
     case 'c':
-    case 'c_cpp':
     case 'css':
-      regex = /\/\*\s+Generate:\s(?<prompt>[.\s\w\d]+)\*\//gm;
+      // Find generate prompt comment, in the form:
+      //-------------------------------------
+      //  /* Generate:
+      //  a function that adds two numbers */
+      //-------------------------------------
+      regex = /\/\*\s+Generate:\s([\s\S]+?)\*\//gm;
       break;
     case 'html':
     case 'xml':
-      regex = /'''\s+Generate:\s(?<prompt>[.\s\w\d]+)'''/gm;
+      // Find generate prompt comment, in the form:
+      //-------------------------------------
+      //  <!-- Generate:
+      //  a function that adds two numbers -->
+      //-------------------------------------
+      regex = /<!--\s+Generate:\s([\s\S]+?)-->/gm;
       break;
     case 'python':
+      // Find generate prompt comment, in the form:
+      //-------------------------------------
+      //  ''' Generate:
+      //  a function that adds two numbers '''
+      //-------------------------------------
+      regex = /'''\s+Generate:\s([\s\S]+?)'''/gm;
       break;
     case 'x-shellscript':
+      // Find generate prompt comment, in the form:
+      //-------------------------------------
+      //  # Generate:
+      //  # a function that adds two numbers
+      //
+      //
+      //  # NOTE: previous 2 empty line are necessary
+      //-------------------------------------
+      regex = /#\s+Generate:\s([\s\S]+?)\n\n/gm;
       break;
   }
 
