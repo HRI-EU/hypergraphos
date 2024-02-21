@@ -94,11 +94,30 @@ function NCG_doGenerateNodeContent( data ) {
 }
 function NCG_doAIGenerator( data ) {
   const [ format, language ] = data.fileType.split( '/' );
+
+  // Find generate prompt comment
+  let regex = null;
+  switch( language ) {
+    case 'javascript':
+    case 'c':
+    case 'c_cpp':
+    case 'css':
+      regex = /\/\*\s+Generate:\s(?<prompt>[.\s\w\d]+)\*\//gm;
+      break;
+    case 'html':
+    case 'xml':
+      regex = /'''\s+Generate:\s(?<prompt>[.\s\w\d]+)'''/gm;
+      break;
+    case 'python':
+      break;
+    case 'x-shellscript':
+      break;
+  }
+
   loadNodeContent( data, ( source )=>{
     if( source ) {
       let outSource = null;
-      // Find generate prompt comment
-      const regex = /\/\*\s+Generate:\s(?<prompt>[.\s\w\d]+)\*\//gm;
+      // Regex result
       let m = null;
       while ( ( m = regex.exec( source ) ) !== null ) {
         // This is necessary to avoid infinite loops with zero-width matches
@@ -106,7 +125,7 @@ function NCG_doAIGenerator( data ) {
           regex.lastIndex++;
         }
         
-        const startIndex = m.index;
+        const startIndex = m.index; // Start index of full comment
         const comment = m[0]; // Full comment
         let prompt = m[1];  // Prompt part of the comment
         if( prompt ) {
@@ -117,7 +136,7 @@ function NCG_doAIGenerator( data ) {
                    `'''\n`+
                    `Generate only and only the ${language} code, without any other text`;
           
-          //const response = '\nfunction f() {}';
+          //const response = 'function f(a) { return( ++a ) }'; // Example of response
           // Ask chatGPT
           const chatGPT  = new ChatGPT();
           const history = [{ role: 'user', content: prompt }];
