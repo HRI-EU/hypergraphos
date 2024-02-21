@@ -1030,13 +1030,15 @@ class GraphWrapper {
 	doGenerateNodeContent() {
 		const data = this.getFirstSelectedNodeData();
 		if( data && data.isFile ) {
-			NCG_doGenerateNodeContent( data );
+			const outData = this._getDataCopy( data );
+			NCG_doGenerateNodeContent( outData );
 		}
 	}
 	doAIGenerator() {
 		const data = this.getFirstSelectedNodeData();
 		if( data && data.isFile ) {
-			NCG_doAIGenerator( data );
+			const outData = this._getDataCopy( data );
+			NCG_doAIGenerator( outData );
 		}
 	}
 	canUngroupSelectedNodes() {

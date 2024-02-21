@@ -13,6 +13,8 @@ Date: 10.07.2020
 const NCG_supportedCategory = [ 
   'DataFlow_Component',
   'DataFlow_ComponentOpen',
+  'Hierarchy_CodeInGraph',
+  'Hierarchy_CodeInFile',
 ];
 
 function NCG_canGenerateNodeContent( data ) {
@@ -91,7 +93,53 @@ function NCG_doGenerateNodeContent( data ) {
   }
 }
 function NCG_doAIGenerator( data ) {
+  const [ format, language ] = data.fileType.split( '/' );
+  loadNodeContent( data, ( source )=>{
+    if( source ) {
+      let outSource = null;
+      // Find generate prompt comment
+      const regex = /\/\*\s+Generate:\s(?<prompt>[.\s\w\d]+)\*\//gm;
+      let m = null;
+      while ( ( m = regex.exec( source ) ) !== null ) {
+        // This is necessary to avoid infinite loops with zero-width matches
+        if( m.index === regex.lastIndex ) {
+          regex.lastIndex++;
+        }
+        
+        const startIndex = m.index;
+        const comment = m[0]; // Full comment
+        let prompt = m[1];  // Prompt part of the comment
+        if( prompt ) {
+          prompt = `You are a great ${language} source code developer.\n`+
+                   `Please generate the code related to the following specification`+
+                   `'''\n`+
+                   prompt+
+                   `'''\n`+
+                   `Generate only and only the ${language} code, without any other text`;
+          
+          //const response = '\nfunction f() {}';
+          // Ask chatGPT
+          const chatGPT  = new ChatGPT();
+          const history = [{ role: 'user', content: prompt }];
+          chatGPT.getResponse( history, (response)=>{
+            hasGenerated = true;
+            const outComment = comment.replace( 'Generate:', 'Generated!' );
 
+            const endIdx = startIndex+comment.length;
+            outSource = source.substring( 0, startIndex )+
+                        outComment+'\n'+response+
+                        source.substring( endIdx );
+            
+            if( outSource ) {
+              // Set content for save function
+              data.fileContent = outSource;
+              saveNodeContent( data );
+            }
+          });
+        }
+      }
+    }
+  });
 }
 
 function NCG__pushPortNameList( data, portName, excludeList ) {
