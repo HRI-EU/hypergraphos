@@ -671,13 +671,14 @@ class GraphWrapper {
 			} else {
 				this.graphFileServer = [];
 			}
-			// Set graphData (defined in ServerManager.js)
-			graphData = {};
 
 			if( onDone ) {
 				onDone();
 			}
 		};
+
+		// Set graphData (defined in ServerManager.js)
+		graphData = {};
 
 		// Here, if there are DSL to load
 		// - then we load all DSL and only after we load the model/window (by finalizeLoading)
