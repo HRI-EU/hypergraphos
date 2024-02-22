@@ -141,6 +141,15 @@ function NCG_doAIGenerator( data ) {
       //regex = /#\s*Generate:\s*([\s\S]+?)\n\n/gm;  // multiple, 'g' in regexp
       regex = /#\s*Generate:\s*([\s\S]+?)\n\n/m;  // single, without 'g'
       break;
+    case 'text':
+      // Find generate prompt comment, in the form:
+      //-------------------------------------
+      //  (% Generate:
+      //   a function that adds two numbers %)
+      //-------------------------------------
+      //regex = /\(%\s*Generate:\s*([\s\S]+?)%\)/gm;  // multiple, 'g' in regexp
+      regex = /\(%\s*Generate:\s*([\s\S]+?)%\)/m;  // single, without 'g'
+      break;
   }
 
   loadNodeContent( data, ( source )=>{
