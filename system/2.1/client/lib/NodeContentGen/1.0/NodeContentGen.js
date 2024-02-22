@@ -107,8 +107,8 @@ function NCG_doAIGenerator( data ) {
       //  /* Generate:
       //  a function that adds two numbers */
       //-------------------------------------
-      //regex = /\/\*\s*Generate:\s([\s\S]+?)\*\//gm; // multiple, 'g' in regexp
-      regex = /\/\*\s*Generate:\s([\s\S]+?)\*\//m;  // single, without 'g'
+      //regex = /\/\*\s*Generate:\s*([\s\S]+?)\*\//gm; // multiple, 'g' in regexp
+      regex = /\/\*\s*Generate:\s*([\s\S]+?)\*\//m;  // single, without 'g'
       break;
     case 'html':
     case 'xml':
@@ -117,8 +117,8 @@ function NCG_doAIGenerator( data ) {
       //  <!-- Generate:
       //  a function that adds two numbers -->
       //-------------------------------------
-      //regex = /<!--\s*Generate:\s([\s\S]+?)-->/gm;  // multiple, 'g' in regexp
-      regex = /<!--\s*Generate:\s([\s\S]+?)-->/m;  // single, without 'g'
+      //regex = /<!--\s*Generate:\s*([\s\S]+?)-->/gm;  // multiple, 'g' in regexp
+      regex = /<!--\s*Generate:\s*([\s\S]+?)-->/m;  // single, without 'g'
       break;
     case 'python':
       // Find generate prompt comment, in the form:
@@ -127,7 +127,7 @@ function NCG_doAIGenerator( data ) {
       //  a function that adds two numbers '''
       //-------------------------------------
       //regex = /'''\s*Generate:\s([\s\S]+?)'''/gm;  // multiple, 'g' in regexp
-      regex = /'''\s*Generate:\s([\s\S]+?)'''/m;  // single, without 'g'
+      regex = /'''\s*Generate:\s*([\s\S]+?)'''/m;  // single, without 'g'
       break;
     case 'x-shellscript':
       // Find generate prompt comment, in the form:
@@ -138,8 +138,8 @@ function NCG_doAIGenerator( data ) {
       //
       //  # NOTE: previous 2 empty line are necessary
       //-------------------------------------
-      //regex = /#\s*Generate:\s([\s\S]+?)\n\n/gm;  // multiple, 'g' in regexp
-      regex = /#\s*Generate:\s([\s\S]+?)\n\n/m;  // single, without 'g'
+      //regex = /#\s*Generate:\s*([\s\S]+?)\n\n/gm;  // multiple, 'g' in regexp
+      regex = /#\s*Generate:\s*([\s\S]+?)\n\n/m;  // single, without 'g'
       break;
   }
 
