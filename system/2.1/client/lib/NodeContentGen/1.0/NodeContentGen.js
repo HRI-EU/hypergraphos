@@ -107,7 +107,8 @@ function NCG_doAIGenerator( data ) {
       //  /* Generate:
       //  a function that adds two numbers */
       //-------------------------------------
-      regex = /\/\*\s+Generate:\s([\s\S]+?)\*\//gm;
+      //regex = /\/\*\s+Generate:\s([\s\S]+?)\*\//gm; // multiple 'g' in regexp
+      regex = /\/\*\s+Generate:\s([\s\S]+?)\*\//m;  // single, without 'g'
       break;
     case 'html':
     case 'xml':
@@ -116,7 +117,8 @@ function NCG_doAIGenerator( data ) {
       //  <!-- Generate:
       //  a function that adds two numbers -->
       //-------------------------------------
-      regex = /<!--\s+Generate:\s([\s\S]+?)-->/gm;
+      //regex = /<!--\s+Generate:\s([\s\S]+?)-->/gm;  // multiple 'g' in regexp
+      regex = /<!--\s+Generate:\s([\s\S]+?)-->/m;  // single, without 'g'
       break;
     case 'python':
       // Find generate prompt comment, in the form:
@@ -124,7 +126,8 @@ function NCG_doAIGenerator( data ) {
       //  ''' Generate:
       //  a function that adds two numbers '''
       //-------------------------------------
-      regex = /'''\s+Generate:\s([\s\S]+?)'''/gm;
+      //regex = /'''\s+Generate:\s([\s\S]+?)'''/gm;  // multiple 'g' in regexp
+      regex = /'''\s+Generate:\s([\s\S]+?)'''/m;  // single, without 'g'
       break;
     case 'x-shellscript':
       // Find generate prompt comment, in the form:
@@ -135,7 +138,8 @@ function NCG_doAIGenerator( data ) {
       //
       //  # NOTE: previous 2 empty line are necessary
       //-------------------------------------
-      regex = /#\s+Generate:\s([\s\S]+?)\n\n/gm;
+      //regex = /#\s+Generate:\s([\s\S]+?)\n\n/gm;  // multiple 'g' in regexp
+      regex = /#\s+Generate:\s([\s\S]+?)\n\n/m;  // single, without 'g'
       break;
   }
 
@@ -144,7 +148,8 @@ function NCG_doAIGenerator( data ) {
       let outSource = null;
       // Regex result
       let m = null;
-      while ( ( m = regex.exec( source ) ) !== null ) {
+      //while( ( m = regex.exec( source ) ) !== null ) {  // multiple 'g' in regexp
+      if( ( m = regex.exec( source ) ) !== null ) {  // single, without 'g'
         // This is necessary to avoid infinite loops with zero-width matches
         if( m.index === regex.lastIndex ) {
           regex.lastIndex++;
