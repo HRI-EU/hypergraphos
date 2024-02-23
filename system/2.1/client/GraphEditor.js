@@ -540,6 +540,7 @@ class GraphEditor extends EditorBase {
         const pValue = getRefValue( nodeData, nameInfo.value );
         if( !pValue.isRef && ( typeof( pValue.nodeData ) == 'object' ) ) {
           setNodeDataField( pValue.nodeData.key, pValue.name, graphName );
+          setNodeDataField( pValue.nodeData.key, 'isLabelEditable', false );
         } else {
           // Set only the graph name in 'Name' property in props_
           setNodeDataField( nameInfo, 'value', graphName );

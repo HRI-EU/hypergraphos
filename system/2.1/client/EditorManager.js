@@ -202,7 +202,8 @@ class EditorManager extends EditorChangeManager {
 
     // If node is not file or dir or has not a label => nothing to do
     if( !nodeData.isFile && !nodeData.isDir &&
-        ( nodeData.label == undefined ) ) {
+        ( ( nodeData.label == undefined ) || 
+          ( nodeData.isLabelEditable == false ) ) ) {
       return;
     }
 

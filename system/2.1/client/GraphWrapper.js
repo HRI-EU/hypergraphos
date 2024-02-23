@@ -1066,7 +1066,8 @@ class GraphWrapper {
 		const data = this.getFirstSelectedNodeData();
 		if( data ) {
 			result = ( ( data.isFile == true ) || 
-			           ( ( data.isDir == undefined ) && ( data.label != undefined ) ) );
+			           ( ( data.isDir == undefined ) && 
+								   ( ( data.label != undefined ) && ( data.isLabelEditable ) ) ) );
 		}
 		return( result );
 	}
