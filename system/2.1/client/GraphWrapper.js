@@ -226,8 +226,10 @@ class GraphWrapper {
 					{ label: 'Content',       layout: 'vertical', subMenu: [
 						{ label: 'Append Interface Code', if: this.canGenerateNodeContent.bind(this),
 																							do: this.doGenerateNodeContent.bind(this) },
-						{ label: 'AI Generator',          if: this.canGenerateNodeContent.bind(this),
-																							do: this.doAIGenerator.bind(this) },
+						{ label: 'AI Generator (GPT-4)',  if: this.canGenerateNodeContent.bind(this),
+																							do: this.doAIGenerator.bind(this,1) },
+						{ label: 'AI Generator (GPT-3.5)',if: this.canGenerateNodeContent.bind(this),
+																							do: this.doAIGenerator.bind(this,2) },
 					]},
 					{ separator: '-' },
 					{ label: 'Set From Palette',	if: (o)=> !this.isSelectionEmpty(),
@@ -1036,11 +1038,13 @@ class GraphWrapper {
 			NCG_doGenerateNodeContent( outData );
 		}
 	}
-	doAIGenerator() {
+	doAIGenerator( modelIndex ) {
 		const data = this.getFirstSelectedNodeData();
 		if( data && data.isFile ) {
+			const model = ['gpt-4-turbo-preview','gpt-3.5-turbo-0125'];
+
 			const outData = this._getDataCopy( data );
-			NCG_doAIGenerator( outData );
+			NCG_doAIGenerator( outData, model );
 		}
 	}
 	canUngroupSelectedNodes() {

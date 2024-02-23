@@ -92,7 +92,7 @@ function NCG_doGenerateNodeContent( data ) {
     }
   }
 }
-function NCG_doAIGenerator( data ) {
+function NCG_doAIGenerator( data, model ) {
   const fileType = data.fileType;
   let [ format, language ] = data.fileType.split( '/' );
 
@@ -183,6 +183,9 @@ function NCG_doAIGenerator( data ) {
           //const response = 'function f(a) { return( ++a ) }'; // Example of response
           // Ask chatGPT
           const chatGPT  = new ChatGPT();
+          if( model ) {
+            chatGPT.setParamList( { model } );
+          }
           const history = [{ role: 'user', content: prompt }];
           chatGPT.getResponse( history, (response)=> {
 
