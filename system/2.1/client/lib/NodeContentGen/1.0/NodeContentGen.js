@@ -93,11 +93,12 @@ function NCG_doGenerateNodeContent( data ) {
   }
 }
 function NCG_doAIGenerator( data ) {
+  const fileType = data.fileType;
   let [ format, language ] = data.fileType.split( '/' );
 
   let regex = null;
-  switch( language ) {
-    case 'c_cpp':
+  switch( data.fileType ) {
+    case 'text/c_cpp':
       language = 'c++';
     case 'javascript':
     case 'c':
@@ -110,8 +111,8 @@ function NCG_doAIGenerator( data ) {
       //regex = /\/\*\s*Generate:\s*([\s\S]+?)\*\//gm; // multiple, 'g' in regexp
       regex = /\/\*\s*Generate:\s*([\s\S]+?)\*\//m;  // single, without 'g'
       break;
-    case 'html':
-    case 'xml':
+    case 'text/html':
+    case 'text/xml':
       // Find generate prompt comment, in the form:
       //-------------------------------------
       //  <!-- Generate:
@@ -120,7 +121,7 @@ function NCG_doAIGenerator( data ) {
       //regex = /<!--\s*Generate:\s*([\s\S]+?)-->/gm;  // multiple, 'g' in regexp
       regex = /<!--\s*Generate:\s*([\s\S]+?)-->/m;  // single, without 'g'
       break;
-    case 'python':
+    case 'text/python':
       // Find generate prompt comment, in the form:
       //-------------------------------------
       //  ''' Generate:
@@ -129,7 +130,7 @@ function NCG_doAIGenerator( data ) {
       //regex = /'''\s*Generate:\s([\s\S]+?)'''/gm;  // multiple, 'g' in regexp
       regex = /'''\s*Generate:\s*([\s\S]+?)'''/m;  // single, without 'g'
       break;
-    case 'x-shellscript':
+    case 'text/x-shellscript':
       // Find generate prompt comment, in the form:
       //-------------------------------------
       //  # Generate:
@@ -141,7 +142,8 @@ function NCG_doAIGenerator( data ) {
       //regex = /#\s*Generate:\s*([\s\S]+?)\n\n/gm;  // multiple, 'g' in regexp
       regex = /#\s*Generate:\s*([\s\S]+?)\n\n/m;  // single, without 'g'
       break;
-    case 'text':
+    case 'text/text':
+    case 'application/explore':
       // Find generate prompt comment, in the form:
       //-------------------------------------
       //  (% Generate:
@@ -168,18 +170,35 @@ function NCG_doAIGenerator( data ) {
         const comment = m[0]; // Full comment
         let prompt = m[1];  // Prompt part of the comment
         if( prompt ) {
-          prompt = `You are a great ${language} source code developer.\n`+
-                   `Please generate the code related to the following specification`+
-                   `'''\n`+
-                   prompt+
-                   `'''\n`+
-                   `Generate only and only the ${language} code, without any other text`;
+            if( ( fileType != 'text/text' ) && 
+                ( fileType != 'application/explore' ) ) {
+              prompt = `You are a great ${language} source code developer.\n`+
+                      `Please generate the code related to the following specification`+
+                      `'''\n`+
+                      prompt+
+                      `'''\n`+
+                      `Generate only and only the ${language} code, without any other text`;
+            }
           
           //const response = 'function f(a) { return( ++a ) }'; // Example of response
           // Ask chatGPT
           const chatGPT  = new ChatGPT();
           const history = [{ role: 'user', content: prompt }];
-          chatGPT.getResponse( history, (response)=>{
+          chatGPT.getResponse( history, (response)=> {
+
+            // Resolve characters for explorer editor
+            if( fileType == 'application/explore' ) {
+              const escapeHTML = function(text) {
+                return text
+                  .replace( /&/g, "&amp;" )
+                  .replace( /</g, "&lt;" )
+                  .replace( />/g, "&gt;" )
+                  .replace( /"/g, "&quot;" )
+                  .replace( /'/g, "&#39;" );
+              };
+              response = escapeHTML( response );
+            }
+
             hasGenerated = true;
             const outComment = comment.replace( 'Generate:', 'Generated!' );
 
