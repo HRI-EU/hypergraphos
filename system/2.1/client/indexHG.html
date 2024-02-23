@@ -169,8 +169,9 @@ Date: 10.07.2020
               // If a single node is selected => clone it
               const data = g.getFirstSelectedNodeData();
               if( data ) {
-                if( text.startsWith( '#' ) && ( data.color != undefined ) ) {
-                  setNodeDataField( data, 'color', text );
+                if( text.trim().startsWith( '#' ) && 
+                    ( ( data.color != undefined ) || ( data.category.startsWith( 'TextLabels_' ) ) ) ) {
+                  setNodeDataField( data, 'color', text.trim() );
                 } else if( data.label != undefined ) {
                   setNodeDataField( data, 'label', text );
                 }

@@ -74,7 +74,7 @@ function CodeFlowEngine_startGeneration( nodeData ) {
    ************************/
   // Detect starting nodes for code generation
   const categoryList = ['Hierarchy_CodeInGraph','Hierarchy_CodeInFile'];
-  const startNodeList = me.getNodeListByFieldNameList( 'main', 'category', categoryList, filterOutDisabledNodes );
+  const startNodeList = me.getNodeListByFieldNameList( 'main', 'category', categoryList );
   for( const startNode of startNodeList ) {
     generateStartNode( startNode );
   }
