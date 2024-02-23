@@ -163,12 +163,14 @@ class GraphWrapper {
 																						do: (o)=> this.em.fire.onShowRootGraph() },
 					]},
 					{ separator: '-', if: (o)=> !config.isLocalMode },
-					{ label: 'Set Read-only Mode',    if: (o)=> !config.isLocalMode && !this.isReadOnly,
-																						do: (o)=> { this.isReadOnly = true;
-																												this.em.fire.onSetReadOnly( true ); } },
-					{ label: 'Unset Read-only Mode',  if: (o)=> !config.isLocalMode && this.isReadOnly,
-																						do: (o)=> { this.isReadOnly = false;
-																												this.em.fire.onSetReadOnly( false ); } },
+					{ label: 'Toggle Read-Only',	if: (o)=> !config.isLocalMode,
+																		    do: this.doToggleleReadOnly.bind(this) },
+					// { label: 'Set Read-only Mode',    if: (o)=> !config.isLocalMode && !this.isReadOnly,
+					// 																	do: (o)=> { this.isReadOnly = true;
+					// 																							this.em.fire.onSetReadOnly( true ); } },
+					// { label: 'Unset Read-only Mode',  if: (o)=> !config.isLocalMode && this.isReadOnly,
+					// 																	do: (o)=> { this.isReadOnly = false;
+					// 																							this.em.fire.onSetReadOnly( false ); } },
 					{ separator: '-' },
 					{ label: 'Log Out',		  do: this.em.fire.onLogOut },
 				]},
@@ -1415,6 +1417,11 @@ class GraphWrapper {
 		return( result );
 	}
 	doSetReadOnly( status ) {
+		this.isReadOnly = status;
+		this.em.fire.onSetReadOnly( status );
+	}
+	doToggleleReadOnly() {
+		const status = !this.isReadOnly;
 		this.isReadOnly = status;
 		this.em.fire.onSetReadOnly( status );
 	}
