@@ -226,9 +226,9 @@ class GraphWrapper {
 					{ label: 'Content',       layout: 'vertical', subMenu: [
 						{ label: 'Append Interface Code', if: this.canGenerateNodeContent.bind(this),
 																							do: this.doGenerateNodeContent.bind(this) },
-						{ label: 'AI Generator (GPT-4)',  if: this.canGenerateNodeContent.bind(this),
+						{ label: 'AI Assistant (GPT-4)',  if: this.canGenerateNodeContent.bind(this),
 																							do: this.doAIGenerator.bind(this,1) },
-						{ label: 'AI Generator (GPT-3.5)',if: this.canGenerateNodeContent.bind(this),
+						{ label: 'AI Assistand (GPT-3.5)',if: this.canGenerateNodeContent.bind(this),
 																							do: this.doAIGenerator.bind(this,2) },
 					]},
 					{ separator: '-' },
