@@ -8,7 +8,8 @@ const config = {
     "fileServerURL": "/fileServer",
     "fileServerSystemURL": "/fileServer/System",
     "fileStatusURL": "/fileStatus",
-    "statusURL": "/fileServer/Users/Frank_status.json"
+    "statusURL": "/fileServer/Users/Frank_status.json",
+    "messageURL": "/fileServer/Messages/"
   },
   "remoteHost": {
     "NUC": "192.168.178.25:7575"
