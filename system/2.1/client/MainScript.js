@@ -138,7 +138,28 @@ function checkMessages() {
 
   const clearMessages = function() {
     _saveFile( messageURL, '[]' );
-  }
+  };
+  const newMessage = function() {
+    winPrompt( 'Write new message:', '<ToUserName>: <Message text>', ( msg )=> {
+      if( msg ) {
+        let [ toUserName, text ] = msg.split( ':' );
+        toUserName = toUserName.trim();
+        text = text.trim();
+
+        const sendMessageURL = `${config.host.messageURL}/${toUserName}.json`;
+        // Load latest version of fileIndex
+        _openFile( sendMessageURL, ( messageStr )=> {
+          const messageList = MainScript_JSONParse( messageStr );
+          if( messageList && messageList.length ) {
+            const date = new Date().toGMTString();
+            messageList.push( { sender: userName, date, text } );
+            const newMessageStr = JSON.stringify( messageList, null, 2 );
+            _saveFile( sendMessageURL, newMessageStr );
+          }
+        });
+      }
+    });
+  };
   const messageDialog = function( msg ) 
   {
     const win = new WinBox( 'WhatsUP', {
@@ -148,21 +169,26 @@ function checkMessages() {
       html: `<div style="margine: 0px;">`+
               `<pre>`+
               `  ${msg}<br><br>`+
-              `<button id="winConfirm_clear" type="button">Clear Messages</button>&nbsp`+
-              `<button id="winConfirm_keep" type="button">Keep Messages</button>`+
+              `&nbsp;&nbsp;<button id="winConfirm_clear" type="button">Clear Messages</button>&nbsp`+
+              `<button id="winConfirm_keep" type="button">Keep Messages</button>&nbsp`+
+              `<button id="winConfirm_new" type="button">New Message</button>`+
               `</pre>`+
             `</div>`,
     });
     // Register buttons callback
     const clearEl = document.getElementById( 'winConfirm_clear' );
     const keepEl = document.getElementById( 'winConfirm_keep' );
+    const newEl = document.getElementById( 'winConfirm_new' );
     if( clearEl ) {
       clearEl.onclick = ()=> { win.close(); clearMessages(); };
     }
     if( keepEl ) {
       keepEl.onclick = ()=> win.close();
     }
-  }
+    if( newEl ) {
+      newEl.onclick = ()=> { win.close(); newMessage() };
+    }
+  };
   const showMessages = function( messageStr ) {
     const messageList = MainScript_JSONParse( messageStr );
     if( messageList && messageList.length ) {
