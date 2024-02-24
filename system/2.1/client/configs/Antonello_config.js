@@ -8,7 +8,8 @@ const config = {
     "fileServerURL": "/fileServer",
     "fileServerSystemURL": "/fileServer/System",
     "fileStatusURL": "/fileStatus",
-    "statusURL": "/fileServer/Users/Antonello_status.json"
+    "statusURL": "/fileServer/Users/Antonello_status.json",
+    "messageURL": "/fileServer/Messages/"
   },
   "remoteHost": {
     "NUC": "192.168.1.11:7575"
@@ -36,6 +37,6 @@ const config = {
     "maxHistoryLength": 30
   },
   "server": {
-    "ip": "192.168.1.12"
+    "ip": "192.168.1.14"
   }
 };

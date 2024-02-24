@@ -23,6 +23,7 @@ const config = {
       fileServerSystemURL: '/fileServer/System',
       fileStatusURL: '/fileStatus',
       statusURL: '/fileServer/Users/NoName_status.json',
+      messageURL: '/fileServer/Messages/',
     },
     remoteHost: {},
     htmlDiv: {

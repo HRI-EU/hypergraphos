@@ -129,6 +129,50 @@ function _init() {
 
   // System started
   console.log( 'System Started' );
+  
+  checkMessages();
+}
+function checkMessages() {
+  const userName = m.userInfo.name;
+  const messageURL = `${config.host.messageURL}/${userName}.json`;
+
+  const clearMessages = function() {
+    _saveFile( messageURL, '[]' );
+  }
+  const messageDialog = function( msg ) 
+  {
+    const win = new WinBox( 'WhatsUP', {
+      modal: true,
+      autosize: true,
+      background: 'Bright Blue',
+      html: `<div style="margine: 0px;">`+
+              `<pre>`+
+              `  ${msg}<br><br>`+
+              `<button id="winConfirm_clear" type="button">Clear Messages</button>&nbsp`+
+              `<button id="winConfirm_keep" type="button">Keep Messages</button>`+
+              `</pre>`+
+            `</div>`,
+    });
+    // Register buttons callback
+    const clearEl = document.getElementById( 'winConfirm_clear' );
+    const keepEl = document.getElementById( 'winConfirm_keep' );
+    if( clearEl ) {
+      clearEl.onclick = ()=> { win.close(); clearMessages(); };
+    }
+    if( keepEl ) {
+      keepEl.onclick = ()=> win.close();
+    }
+  }
+  const showMessages = function( messageStr ) {
+    const messageList = MainScript_JSONParse( messageStr );
+    if( messageList && messageList.length ) {
+      const messageSummary = JSON.stringify( messageList, null, 2 );
+      messageDialog( 'You have new messages:\n'+messageSummary );
+    }
+  };
+
+  // Load latest version of fileIndex
+  _openFile( messageURL, showMessages );
 }
 function addEditorIncludes( includeList ) {
   includeList.forEach( (i)=> editorList.push( i ) );

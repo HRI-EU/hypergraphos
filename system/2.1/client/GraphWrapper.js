@@ -63,6 +63,7 @@ class GraphWrapper {
 																		params: { dataList: 'List of selected node-data' } },
 			onGraphChanged:							{ help: 	'Inform that graph has changed' },
 			onFirstLayoutCompleted:			{ help: 	'Inform that graph has completed the first layout after load' },
+			onShowMessages:  					  { help: 	'Open messages dialog' },
 			onShowBookmarks:  					{ help: 	'Open bookmark dialog' },
 			onAddBookmark:							{ help: 	'Store the current view and graph path into a bookmark list',
 																		params: { bookmarkInfo: 'graph path/nodeData/current view' } },
@@ -150,6 +151,7 @@ class GraphWrapper {
 					{ label: 'Bookmarks (B)',  			  		do: this.doShowBookmarks.bind(this) },
 					{ separator: '-' },
 					{ label: 'Tools',       layout: 'vertical', subMenu: [
+						{ label: 'Show Messages (E)',	 		  do: this.doShowMessages.bind(this) },
 						{ label: 'Show DSL List (D)',	  		do: this.doShowDSLList.bind(this) },
 						{ label: 'Show Space Template (T)',	do: this.doShowSpaceTemplate.bind(this) },
 						{ label: 'Show System Monitor (M)',	do: this.doShowSystemMonitor.bind(this) },
@@ -256,6 +258,8 @@ class GraphWrapper {
 			// Toogle View
 			{ key: 'X', do: this.setViewCenteredOnSelectedNode.bind(this) },
 			{ key: 'P', do: this.doShowPalette.bind(this) },
+			// Messages
+			{ key: 'E', do: this.doShowMessages.bind(this) },
 			// Bookmarks
 			{ key: 'B', do: this.doShowBookmarks.bind(this) },
 			{ key: 'B', alt:true, do: this.addBookmark.bind(this) },
@@ -965,6 +969,9 @@ class GraphWrapper {
 	doShowBookmarks() {
 		const mousePos = this.diagram.lastInput.viewPoint;
 		this.em.fire.onShowBookmarks( mousePos.x, mousePos.y );
+	}
+	doShowMessages() {
+		this.em.fire.onShowMessages();
 	}
 	doShowFind() {
 		const mousePos = this.diagram.lastInput.viewPoint;

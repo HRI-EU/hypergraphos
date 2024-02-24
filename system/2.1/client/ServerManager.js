@@ -68,6 +68,21 @@ let urlParams = { name: 'DefaultUser' };
 const sessionTimeId = new Date().getTime();
 
 // WinBox alert dialog
+function winInfo( msg, isCenter ) 
+{
+  isCenter = ( isCenter == undefined? true: isCenter );
+  new WinBox( 'Info', {
+    modal: true,
+    autosize: true,
+    background: 'Jade',
+    html: `<div style="margine: 0px;">`+
+            `<pre style="${isCenter? 'text-align: center;':''}">`+
+              msg+
+            `</pre>`+
+          `</div>`,
+  });
+}
+// WinBox alert dialog
 function winAlert( msg, isCenter ) 
 {
   isCenter = ( isCenter == undefined? true: isCenter );
@@ -112,6 +127,7 @@ function winConfirm( msg, yesCallback, noCallback, isCenter )
     noEl.onclick = ()=> { win.close(); if( noCallback ) noCallback(); };
   }
 }
+// WinBox input propmpt dialog
 function winPrompt( msg, value, onClose ) {
   let result = null;
   value = ( value == undefined? '': value );
