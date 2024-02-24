@@ -130,9 +130,9 @@ function _init() {
   // System started
   console.log( 'System Started' );
   
-  checkMessages();
+  showMessages();
 }
-function checkMessages( isShowStatus ) {
+function showMessages( isShowStatus ) {
   const userName = m.userInfo.name;
   const messageURL = `${config.host.messageURL}/${userName}.json`;
 
