@@ -132,7 +132,7 @@ function _init() {
   
   checkMessages();
 }
-function checkMessages() {
+function checkMessages( isShowStatus ) {
   const userName = m.userInfo.name;
   const messageURL = `${config.host.messageURL}/${userName}.json`;
 
@@ -194,6 +194,8 @@ function checkMessages() {
     if( messageList && messageList.length ) {
       const messageSummary = JSON.stringify( messageList, null, 2 );
       messageDialog( 'You have new messages:\n'+messageSummary );
+    } if( isShowStatus ) {
+      winInfo( 'There are no new messages', true );
     }
   };
 

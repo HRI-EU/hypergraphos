@@ -136,7 +136,7 @@ class GraphEditor extends EditorBase {
         showPreviousGraph();
       },
       onShowMessages: ()=> {
-        checkMessages();
+        checkMessages( true );
       },
       onShowBookmarks: ( x, y )=> {
         const nodeData = m.specialNodeData.bookmarViewer;
