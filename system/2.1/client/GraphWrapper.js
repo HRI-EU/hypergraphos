@@ -64,6 +64,7 @@ class GraphWrapper {
 			onGraphChanged:							{ help: 	'Inform that graph has changed' },
 			onFirstLayoutCompleted:			{ help: 	'Inform that graph has completed the first layout after load' },
 			onShowMessages:  					  { help: 	'Open messages dialog' },
+			onNewMessage:  					    { help: 	'Open new messages dialog' },
 			onShowBookmarks:  					{ help: 	'Open bookmark dialog' },
 			onAddBookmark:							{ help: 	'Store the current view and graph path into a bookmark list',
 																		params: { bookmarkInfo: 'graph path/nodeData/current view' } },
@@ -152,6 +153,7 @@ class GraphWrapper {
 					{ separator: '-' },
 					{ label: 'Tools',       layout: 'vertical', subMenu: [
 						{ label: 'Show Messages (E)',	 		  do: this.doShowMessages.bind(this) },
+						{ label: 'New Message (N)',	 		    do: this.doNewMessage.bind(this) },
 						{ label: 'Show DSL List (D)',	  		do: this.doShowDSLList.bind(this) },
 						{ label: 'Show Space Template (T)',	do: this.doShowSpaceTemplate.bind(this) },
 						{ label: 'Show System Monitor (M)',	do: this.doShowSystemMonitor.bind(this) },
@@ -260,6 +262,7 @@ class GraphWrapper {
 			{ key: 'P', do: this.doShowPalette.bind(this) },
 			// Messages
 			{ key: 'E', do: this.doShowMessages.bind(this) },
+			{ key: 'N', do: this.doNewMessage.bind(this) },
 			// Bookmarks
 			{ key: 'B', do: this.doShowBookmarks.bind(this) },
 			{ key: 'B', alt:true, do: this.addBookmark.bind(this) },
@@ -972,6 +975,9 @@ class GraphWrapper {
 	}
 	doShowMessages() {
 		this.em.fire.onShowMessages();
+	}
+	doNewMessage() {
+		this.em.fire.onNewMessage();
 	}
 	doShowFind() {
 		const mousePos = this.diagram.lastInput.viewPoint;

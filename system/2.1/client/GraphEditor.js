@@ -138,6 +138,9 @@ class GraphEditor extends EditorBase {
       onShowMessages: ()=> {
         showMessages( true );
       },
+      onNewMessage: ()=> {
+        newMessage( true );
+      },
       onShowBookmarks: ( x, y )=> {
         const nodeData = m.specialNodeData.bookmarViewer;
         m.e.openWindow( null, 'BookmarkViewer', nodeData, [x, y, 470, 200 ] );

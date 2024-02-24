@@ -137,10 +137,10 @@ function winPrompt( msg, value, onClose ) {
     }
   }
 
-  const win = new WinBox( 'Alert', {
+  const win = new WinBox( 'Prompt', {
     modal: true,
     autosize: true,
-    background: 'Crimson',
+    background: 'Chocolate',
     onclose: closeCallback,
     html: `<div style="margine: 0px;">`+
             `<pre>`+

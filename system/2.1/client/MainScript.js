@@ -139,27 +139,7 @@ function showMessages( isShowStatus ) {
   const clearMessages = function() {
     _saveFile( messageURL, '[]' );
   };
-  const newMessage = function() {
-    winPrompt( 'Write new message:', '<ToUserName>: <Message text>', ( msg )=> {
-      if( msg ) {
-        let [ toUserName, text ] = msg.split( ':' );
-        toUserName = toUserName.trim();
-        text = text.trim();
-
-        const sendMessageURL = `${config.host.messageURL}/${toUserName}.json`;
-        // Load latest version of fileIndex
-        _openFile( sendMessageURL, ( messageStr )=> {
-          const messageList = MainScript_JSONParse( messageStr );
-          if( messageList && messageList.length ) {
-            const date = new Date().toGMTString();
-            messageList.push( { sender: userName, date, text } );
-            const newMessageStr = JSON.stringify( messageList, null, 2 );
-            _saveFile( sendMessageURL, newMessageStr );
-          }
-        });
-      }
-    });
-  };
+  
   const messageDialog = function( msg ) 
   {
     const win = new WinBox( 'WhatsUP', {
@@ -194,13 +174,42 @@ function showMessages( isShowStatus ) {
     if( messageList && messageList.length ) {
       const messageSummary = JSON.stringify( messageList, null, 2 );
       messageDialog( 'You have new messages:\n'+messageSummary );
-    } if( isShowStatus ) {
+    } else if( isShowStatus ) {
       winInfo( 'There are no new messages', true );
     }
   };
 
   // Load latest version of fileIndex
   _openFile( messageURL, showMessages );
+}
+function newMessage() {
+  winPrompt( 'Write new message:', '<ToUserName>: <Message Text>', ( msg )=> {
+    if( msg ) {debugger
+      const userName = m.userInfo.name;
+      let [ toUserName, text ] = msg.split( ':' );
+      toUserName = toUserName.trim();
+      if( !text || !text.trim() ) {// If no user name, message is sent to sender
+        text = toUserName;
+        toUserName = userName;
+      } else {
+        text = text.trim();
+      }        
+
+      if( text ) { // If message has a text => send it
+        const sendMessageURL = `${config.host.messageURL}/${toUserName}.json`;
+        // Load latest version of fileIndex
+        _openFile( sendMessageURL, ( messageStr )=> {
+          const messageList = MainScript_JSONParse( messageStr );
+          if( messageList ) {
+            const date = new Date().toGMTString();
+            messageList.push( { sender: userName, date, text } );
+            const newMessageStr = JSON.stringify( messageList, null, 2 );
+            _saveFile( sendMessageURL, newMessageStr );
+          }
+        });
+      }
+    }
+  });
 }
 function addEditorIncludes( includeList ) {
   includeList.forEach( (i)=> editorList.push( i ) );
