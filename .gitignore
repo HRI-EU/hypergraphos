@@ -10,3 +10,5 @@ fileSystem/MDDToolsDataRoot/System/.DS_Store
 .env
 system/stopServer.sh
 system/2.1/stopServer.sh
+system/2.1/client/configs/Frank_config.js
+system/2.1/server/Running_config.js
