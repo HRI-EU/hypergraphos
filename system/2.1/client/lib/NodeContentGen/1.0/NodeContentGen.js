@@ -100,9 +100,9 @@ function NCG_doAIGenerator( data, model ) {
   switch( data.fileType ) {
     case 'text/c_cpp':
       language = 'c++';
-    case 'javascript':
-    case 'c':
-    case 'css':
+    case 'text/javascript':
+    case 'text/c':
+    case 'text/css':
       // Find generate prompt comment, in the form:
       //-------------------------------------
       //  /* Generate:

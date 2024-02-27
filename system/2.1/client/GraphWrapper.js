@@ -1057,7 +1057,7 @@ class GraphWrapper {
 			const model = ['gpt-4-turbo-preview','gpt-3.5-turbo-0125'];
 
 			const outData = this._getDataCopy( data );
-			NCG_doAIGenerator( outData, model );
+			NCG_doAIGenerator( outData, model[modelIndex] );
 		}
 	}
 	canUngroupSelectedNodes() {
