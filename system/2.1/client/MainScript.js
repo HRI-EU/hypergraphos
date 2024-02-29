@@ -130,7 +130,9 @@ function _init() {
   // System started
   console.log( 'System Started' );
   
-  showMessages();
+  if( !config.isLocalMode ) {
+    showMessages();
+  }
 }
 function showMessages( isShowStatus ) {
   const userName = m.userInfo.name;
