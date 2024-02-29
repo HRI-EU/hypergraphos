@@ -186,7 +186,7 @@ function showMessages( isShowStatus ) {
 }
 function newMessage() {
   winPrompt( 'Write new message:', '<ToUserName>: <Message Text>', ( msg )=> {
-    if( msg ) {debugger
+    if( msg ) {
       const userName = m.userInfo.name;
       let [ toUserName, text ] = msg.split( ':' );
       toUserName = toUserName.trim();
