@@ -244,10 +244,13 @@ function loadSystem() {
   
   if( !urlParams.name ) {
     let cookie = { name: 'UserLocal' };
-    docCookie = MainScript_JSONParse( document.cookie );
-    if( docCookie ) {
-      cookie = docCookie;
-    }
+    try {
+      // This parse must stay like that (don't use _JSONParse() here)
+      docCookie = JSON.parse( document.cookie );
+      if( docCookie ) {
+        cookie = docCookie;
+      }
+    } catch( e ) {}
     urlParams.name = cookie.name;
   } else {
     try {
@@ -685,7 +688,7 @@ function _openFile( url, onLoad, noTimeStamp ) {
       const status = request.status;
       if( ( status === 0 ) || ( ( status >= 200 ) && ( status < 400 ) ) ) {
         const type = request.getResponseHeader('Content-Type');
-        if( type.indexOf( "text" ) !== 1 ) {
+        if( type && type.indexOf( "text" ) !== 1 ) {
           source = request.responseText;
           console.log( 'Loading: '+url );
         } else {
