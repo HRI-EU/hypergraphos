@@ -1173,7 +1173,17 @@ class GraphWrapper {
 				if( conditionBodyFunc.trim() ) {
 					// If condition body is not just a string, we assume is in the form:
 					// d.key == 1 && d.label == ""
-					conditionFn = new Function( 'd', `return( ${conditionBodyFunc} )` );
+					try {
+						conditionFn = new Function( 'd', `return( ${conditionBodyFunc} )` );
+					} catch (e) {
+						if( !isNaN( conditionBodyFunc ) ) {
+							conditionFn = new Function( 'd', `return( d.key == ${conditionBodyFunc} )` );
+						} else {
+							// TODO: In this case I can search if the string is included in any
+							// field of the node
+							//conditionFn = new Function( 'd', `return( ... )` );
+						}
+					}
 				}
 			}
 		} else if( typeof( conditionBodyFunc ) == 'function' ) {
