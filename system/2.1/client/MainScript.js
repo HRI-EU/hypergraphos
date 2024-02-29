@@ -130,7 +130,9 @@ function _init() {
   // System started
   console.log( 'System Started' );
   
-  showMessages();
+  if( !config.isLocalMode ) {
+    showMessages();
+  }
 }
 function showMessages( isShowStatus ) {
   const userName = m.userInfo.name;
@@ -184,7 +186,7 @@ function showMessages( isShowStatus ) {
 }
 function newMessage() {
   winPrompt( 'Write new message:', '<ToUserName>: <Message Text>', ( msg )=> {
-    if( msg ) {debugger
+    if( msg ) {
       const userName = m.userInfo.name;
       let [ toUserName, text ] = msg.split( ':' );
       toUserName = toUserName.trim();

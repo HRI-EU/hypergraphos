@@ -1800,7 +1800,6 @@ function DataFlow_BlinkLED( nodeData, name, value ) {
   }
 }
 function DataFlow_SystemEvent( nodeData, name, value ) {
-  debugger
   graphData.dfe.fireOutput( nodeData, 'onGraphLoaded' );
 }
 function DataFlow_BrowserTTS( nodeData, name, value ) {
