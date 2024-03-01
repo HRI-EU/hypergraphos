@@ -11,6 +11,8 @@ Date: 10.07.2020
 */
 
 const NCG_supportedCategory = [ 
+  'DataFlow_Data',
+  'DataFlow_Message',
   'DataFlow_Component',
   'DataFlow_Template',
   'DataFlow_ComponentOpen',
