@@ -12,6 +12,7 @@ Date: 10.07.2020
 
 const NCG_supportedCategory = [ 
   'DataFlow_Component',
+  'DataFlow_Template',
   'DataFlow_ComponentOpen',
   'Hierarchy_CodeInGraph',
   'Hierarchy_CodeInFile',
@@ -19,7 +20,7 @@ const NCG_supportedCategory = [
 
 function NCG_canGenerateNodeContent( data ) {
   let result = false;
-  if( data && data.isFile ) {
+  if( data && !data.isDir ) {
     return( NCG_supportedCategory.includes( data.category ) );
   }
   return( result );
