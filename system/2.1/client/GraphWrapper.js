@@ -1292,11 +1292,16 @@ class GraphWrapper {
 		return( result );
 	}
 	setNodeDataField( keyOrData, field, value ) {
-		let key = keyOrData;
-		if( typeof( keyOrData ) == 'object' ) {
-			key = keyOrData.key;
-		}
-		const data = this.diagram.model.findNodeDataForKey( key );
+		let data = keyOrData;
+		if( ( typeof( keyOrData ) == 'object' ) && ( keyOrData.key != undefined ) ) {
+		  // In this case data is a data object of a node
+		  data = this.diagram.model.findNodeDataForKey( keyOrData.key );
+		} else if( !isNaN( keyOrData ) ) {
+		  // In this case data is a number, the key of a node
+		  data = this.diagram.model.findNodeDataForKey( keyOrData );
+		} // In any other case it can be a data object of an item array
+		// for instance an item property of a node, or a row of an array
+		// terefore we sould keep it like it is
 
 		if( data ) {
 			if( data.isSystem && ( field == 'fileContent' ) ) {

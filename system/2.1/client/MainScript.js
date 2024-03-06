@@ -386,7 +386,10 @@ function getNodeData( key, isCopy ) {
 }
 function setNodeDataField( keyOrData, field, value ) {
   let key = keyOrData;
-  if( typeof( keyOrData ) == 'object' ) {
+  // Replace key with the key of the node in case keyOrData is a node
+  // othwerwise don't touch key value, sonce it could be an item of 
+  // an element of an array of a node (item template of GoJS node)
+  if( ( typeof( keyOrData ) == 'object' ) && ( keyOrData.key != undefined ) ) {
     key = keyOrData.key;
   }
   
