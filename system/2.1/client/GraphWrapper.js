@@ -1301,7 +1301,7 @@ class GraphWrapper {
 		  data = this.diagram.model.findNodeDataForKey( keyOrData );
 		} // In any other case it can be a data object of an item array
 		// for instance an item property of a node, or a row of an array
-		// terefore we sould keep it like it is
+		// therefore we sould keep data like it is
 
 		if( data ) {
 			if( data.isSystem && ( field == 'fileContent' ) ) {
