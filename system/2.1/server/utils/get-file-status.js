@@ -1,46 +1,32 @@
-
-/*
-=============================================================================
-Licensed Materials - Property of Frank Joublin and Antonio Ceravola.
-(C) Copyright Frank Joublin and Antonio Ceravola. 2021, All Rights Reserved.
-France Government Users Restricted Rights - Use, duplication or disclosure
-restricted by GSA ADP Schedule Contract with Frank Joublin and Antonio Ceravola.
-=============================================================================
-Module: File Status Getter
-Date: 10.07.2020
-=============================================================================
-*/
-
 const { recomputeURL } = require( './utils' );
 const fs = require( 'fs' );
-
 class GETFileStatus {
-  constructor( realPath ) {
+  constructor(realPath) {
     this.virtualPath = '/fileServer/';
     this.realPath = realPath;
   }
-  serve( request, response ) {
-    let filePath = recomputeURL( request.url, this.virtualPath, this.realPath );
+  serve(request, response) {
+    let filePath = recomputeURL(request.url, this.virtualPath, this.realPath);
     // Remove '?...' parameters (e.g. no-cache id)
-    const idx = filePath.indexOf( '?' );
-    if( idx != -1 ) {
-      filePath = filePath.substring( 0, idx );
+    const idx = filePath.indexOf('?');
+    if (idx != -1) {
+      filePath = filePath.substring(0, idx);
     }
-    filePath = this.realPath+filePath;
-    console.log( 'Request of fileInfo for:', filePath );
-    fs.stat( filePath, (err,status)=> {
-      response.writeHead( 200, { 'Content-Type': 'text/json' } );
+    filePath = this.realPath + filePath;
+    console.log('Request of fileInfo for:', filePath);
+    fs.stat(filePath, (err, status) => {
+      response.writeHead(200, { 'Content-Type': 'text/json' });
       // Return an empty object if file do not exist, stat info otherwise
       const statInfo = {};
-      if( !err ) {
+      if (!err) {
         statInfo['mtime'] = status['mtime'];
         statInfo['atime'] = status['atime'];
         statInfo['ctime'] = status['ctime'];
         statInfo['birthtime'] = status['birthtime'];
       }
-      const strStatInfo = JSON.stringify( statInfo );
+      const strStatInfo = JSON.stringify(statInfo);
       //console.log( statInfo );
-      response.end( strStatInfo );
+      response.end(strStatInfo);
     });
     /*
      Example:

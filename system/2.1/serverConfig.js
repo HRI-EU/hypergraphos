@@ -65,7 +65,9 @@ const config = {
     webServerName:     'localhost',
     webServerPort:     80,
     webSocketURL:      '', // Defined later...
-    jwtSecretKey:      'jwt_key_secret123',
+    jwtSecretKey:      'kYcFIJXnPb1QvHdRd6oshxEGOzUppgy', // This is a string used for encription
+    jwtExpiryInterval: '30d', // Expiration time for login
+    usePermissions:    true,  // Enable/disable user file permission check
     ssl: {
       enabled: false,
       key: 'server.key',

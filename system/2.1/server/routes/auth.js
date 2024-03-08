@@ -39,12 +39,12 @@ router.post( '/login', async (req, res) => {
           const token = jwt.sign( { userId: row.id }, 
                                   config.server.jwtSecretKey, 
                                   //{ expiresIn: '30m' } ); // 30 minutes
-                                  { expiresIn: '30d' } ); // 30 days
+                                  { expiresIn: config.server.jwtExpiryInterval } );
           res.cookie( 'access-token', token, {
             maxAge: 60 * 60 * 24 * 30 * 1000, //30 days
             secure: false,
             httpOnly: true
-          }).status(200).json({ token });
+          }).status(200).json({});
       })
       // const passwordMatch = await bcrypt.compare(password, user.password);
     }

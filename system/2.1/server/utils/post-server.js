@@ -1,68 +1,114 @@
-/*
-=============================================================================
-Licensed Materials - Property of Frank Joublin and Antonio Ceravola.
-(C) Copyright Frank Joublin and Antonio Ceravola. 2021, All Rights Reserved.
-France Government Users Restricted Rights - Use, duplication or disclosure
-restricted by GSA ADP Schedule Contract with Frank Joublin and Antonio Ceravola.
-=============================================================================
-Module: Post Server (Saving File Contents)
-Date: 10.07.2020
-=============================================================================
-*/
+const { recomputeURL, getPathInfo } = require('./utils');
+const fs = require('fs');
+const config = require('../Running_config');
+const { pushPathToGit } = require('../service/git-service');
+const { getUserFilePermissions, setPathsOwner } = require('./permissions');
+const db = require("../utils/database");
 
-const { recomputeURL, getPathInfo } = require( './utils' );
 
 class POSTServer {
-  constructor( realPath ) {
+  constructor(realPath) {
     this.virtualPath = '/fileServer/';
     this.virtualPathRel = 'fileServer/';
     this.realPath = realPath;
   }
-  serve( request, response, body ) {
+  serve(request, response, body) {
     try {
-      const fileInfo = JSON.parse( body );
-      if( fileInfo && fileInfo.url ) {
-        // If relative url => make it absolute
-        if( fileInfo.url.startsWith( this.virtualPathRel ) ) {
-          fileInfo.url = '/' + fileInfo.url;
+      let files = request.body.files ? request.body.files : [];
+      if (files.length == 0) {
+        if (request.body.url) {
+          files.push({ url: request.body.url, sourceEncoding: request.body.sourceEncoding, source: request.body.source });
         }
-        if( fileInfo.url.startsWith( this.virtualPath ) ) {
-          // Get updated url
-          const filePathName = recomputeURL( fileInfo.url, this.virtualPath, this.realPath );
-          const pathInfo = getPathInfo( filePathName );
-          // In case the path do not exist -> create it
-          if( !fs.existsSync( pathInfo.pathName ) ) {
-            fs.mkdirSync( pathInfo.pathName, { recursive: true } );
-            //console.log( `mkdirSync( ${pathInfo.pathName} )` );
+        if (request.body.imageSource) {
+          let imagePathName = request.body.url.substring(0, request.body.url.lastIndexOf('.')) || request.body.url;
+          files.push({ url: request.body.url + '.png', sourceEncoding: request.body.sourceEncoding, source: request.body.imageSource });
+        }
+      }
+      let paths = [];
+      // Save files
+      getUserFilePermissions(request.userId).then(permissions => {
+        if (config.server.usePermissions) {
+          let filesWithNoPermissions = files.filter(file => {
+            let filePathName = recomputeURL(file.url, this.virtualPath, this.realPath);
+            let existing = fs.existsSync(filePathName);
+            const filePermission = permissions.filter(permission => permission.file_path === filePathName);
+            if (existing && (!filePermission[0] || (filePermission[0].owner === 0 && filePermission[0].write === 0))) {   
+              return true;
+            }
+            return false;
+          });
+          if (filesWithNoPermissions.length > 0) {
+            response.status(403).json({ error: 'No write access for ' + filesWithNoPermissions.map(file => file.url).toString() });
+            return;
           }
-          // Get source
-          let source = ( fileInfo.source? fileInfo.source: '' );
-          // Save file
-          console.log( "Saving file: "+filePathName );
-          if( config.server.debugOnFileContentOn && ( pathInfo.extension == 'json' ) ) {
-            try {
-              const obj = JSON.parse( source );
-              source = JSON.stringify( obj, null, 2 );
-            } catch( e ) {
-              console.warn( 'Error parsing json file content: ' );
-              console.log( source );
+        }
+
+        files.forEach(file => {
+          if (file.url) {
+            // If relative url => make it absolute
+            if (file.url.startsWith(this.virtualPathRel)) {
+              file.url = '/' + file.url;
+            }
+            if (file.url.startsWith(this.virtualPath)) {
+              // Get updated url
+              let filePathName = recomputeURL(file.url, this.virtualPath, this.realPath);
+              let existing = fs.existsSync(filePathName);
+              let pathInfo = getPathInfo(filePathName);
+              // In case the path do not exist -> create it
+              if (!fs.existsSync(pathInfo.pathName)) {
+                existing = false;
+                fs.mkdirSync(pathInfo.pathName, { recursive: true });
+                //console.log( `mkdirSync( ${pathInfo.pathName} )` );
+              } 
+              console.log("Saving file: " + filePathName);
+              let source = file.source;
+              if (config.server.debugOnFileContentOn && pathInfo.extension == 'json') {
+                try {
+                  const obj = JSON.parse(source);
+                  source = JSON.stringify(obj, null, 2);
+                } catch (e) {
+                  console.warn('Error parsing json file content: ');
+                  console.log(source);
+                }
+              }
+              if (file.sourceEncoding == 'base64') {
+                var sourceBuffer = Buffer.from(source, 'base64');
+                fs.writeFileSync(filePathName, sourceBuffer);
+              } else {
+                fs.writeFileSync(filePathName, source, 'utf8');
+              }
+              paths.push({ path: filePathName, existing: existing });
             }
           }
-          if( fileInfo.sourceEncoding == 'base64' ) {
-            var sourceBuffer = Buffer.from( source, 'base64' );
-            fs.writeFileSync( filePathName, sourceBuffer );
-          } else {
-            fs.writeFileSync( filePathName, source, 'utf8' );
-          }
+        });
+        if (paths.length > 0) {
+          const selectSql = "select * from user where id = ?";
+          db.get(selectSql, request.userId, (err, row) => {
+            if (!err) {
+              if (row) {
+                setPathsOwner(paths, row.id);
+                pushPathToGit(paths, row.name, row.email).then(result => {
+                  response.json({ commitHash: result.update?.hash?.to });
+                });
+              } else {
+                return res.status(404).json({ error: 'User not found!' });
+              }
+            }
+          });
         }
-      } else {
-        console.log( 'Error in saving request '+request.url );
-      }
-    } catch( e ) {
-      console.warn( 'Error in receiving/managing POST request body' );
-      console.log( body );
+      })
+
+
+    } catch (e) {
+      console.warn('Error in receiving/managing POST request body');
+      console.log(body);
+      response.status(500);
     }
-    response.end( 'post received' );
+
   }
 }
+
+
+
+
 module.exports = POSTServer;

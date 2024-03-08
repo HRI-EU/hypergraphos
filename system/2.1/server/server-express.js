@@ -21,11 +21,12 @@ Date: 10.07.2020
 */
 
 const fs = require( 'fs' );
-const express = require('express');
-const nocache = require('nocache');
-const authRoutes = require('./routes/auth');
-const protectedRoutes = require('./routes/protected');
-const os = require('os');
+const express = require( 'express' );
+const nocache = require( 'nocache' );
+const authRoutes = require( './routes/auth' );
+const protectedRoutes = require( './routes/protected' );
+const bodyParser = require( 'body-parser' );
+const os = require( 'os' );
 
 const config = require( '../serverConfig.js' );
 const { exec } = require( 'child_process' );
@@ -96,7 +97,7 @@ config.client.server = { ip: config.server.ip };
 
 // Log Configuration
 const configurationStr = JSON.stringify( config, null, 2 );
-console.log( 'Runnin on configuration:' );
+console.log( 'Running on configuration:' );
 console.log( configurationStr );
 console.log( '------------------------\n' );
 
@@ -136,6 +137,7 @@ const onGet = function( request, response, next ) {
 const webServer = express();
 
 webServer.use( express.json() );
+webServer.use( bodyParser.json({limit: '10mb'}) ); // Limit for file saved from client
 webServer.use( '/auth', authRoutes );
 webServer.use( protectedRoutes );
 webServer.use( '/', express.static( config.server.clientPath) );
