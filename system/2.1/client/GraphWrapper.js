@@ -1943,11 +1943,13 @@ class GraphWrapper {
 		});
 		diagram.addDiagramListener( 'ObjectDoubleClicked', ()=> {
 			const data = this.getFirstSelectedNodeData();
-			if( data && ( data.isDir == true ) ) {
-				this.em.fire.onLoadGraph( data );
-			} else if( !data.fromPort && !data.toPort ) { // Exclude links
-				const mousePos = this.diagram.lastInput.viewPoint;
-				this.em.fire.onLoadFile( data, mousePos.x, mousePos.y );
+			if( data ) {
+				if ( data.isDir == true ) {
+					this.em.fire.onLoadGraph( data );
+				} else if( !data.fromPort && !data.toPort ) { // Exclude links
+					const mousePos = this.diagram.lastInput.viewPoint;
+					this.em.fire.onLoadFile( data, mousePos.x, mousePos.y );
+				}
 			}
 		});
 		// // Allow to navigate into a sub graph of a node (Alt+click)
