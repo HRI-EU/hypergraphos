@@ -669,7 +669,7 @@ function mainScript_updateEditorSource( key, source ) {
   const nodeData = g.getNodeData( key );
   // Get the editor from the node data
   const e = m.e.getEditor( nodeData );
-  if( e ) {
+  if( e && ( e.setEditorSource != undefined) ) {
     // Set editor content
     e.setEditorSource( source );
   }
@@ -680,7 +680,7 @@ function mainScript_updateEditorTitle( key ) {
   // Get the editor from the node data
   const eId = m.e._getDOMUniqueId( nodeData );
   const e = m.e.getEditorInfo( eId );
-  if( e ) {
+  if( e && ( e.setTitle != undefined ) ) {
     // Set editor content
     e.setTitle( nodeData );
   }
