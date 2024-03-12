@@ -8,7 +8,8 @@ const config = {
     "fileServerURL": "/fileServer",
     "fileServerSystemURL": "/fileServer/System",
     "fileStatusURL": "/fileStatus",
-    "statusURL": "/fileServer/Users/NoName_status.json"
+    "statusURL": "/fileServer/Users/NoName_status.json",
+    "messageURL": "/fileServer/Messages/"
   },
   "remoteHost": {},
   "htmlDiv": {
