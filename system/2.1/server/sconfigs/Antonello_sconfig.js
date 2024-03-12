@@ -16,9 +16,12 @@ function userSetup( config ) {
 
   } else if( config.host.username == "RE900104" ) {
     config.isDebugOn = true;
-    config.server.dataRoot = '../../../../../Dropbox/DevAll/MDDToolsDataRoot';
-    config.server.deployRoot = '../../../../../Dropbox/DevAll/MDDToolsDeployRoot';
-    config.server.tempRoot = '../../../../../Dropbox/DevAll/MDDToolsTempRoot';
+    config.server.dataRoot = '../../../../../../../HyperGraph/Dropbox/DevAll/MDDToolsDataRoot';
+    config.server.deployRoot = '../../../../../../../HyperGraph/Dropbox/DevAll/MDDToolsDeployRoot';
+    config.server.tempRoot = '../../../../../../../HyperGraph/Dropbox/DevAll/MDDToolsTempRoot';
+    // config.server.dataRoot = '../../../../../../../HyperGraph/Dropbox/DevAll/MDDToolsDataRoot';
+    // config.server.deployRoot = '../../../../../../../HyperGraph/Dropbox/DevAll/MDDToolsDeployRoot';
+    // config.server.tempRoot = '../../../../../../../HyperGraph/Dropbox/DevAll/MDDToolsTempRoot';
     config.client.host.name = 'Antonello';
     config.client.graph.colorSchema = 'dark';
     config.client.host.statusURL = '/fileServer/Users/Antonello_status.json';
