@@ -1080,7 +1080,7 @@ class GraphWrapper {
 		if( data ) {
 			result = ( ( data.isFile == true ) || 
 			           ( ( data.isDir == undefined ) && 
-								   ( ( data.label != undefined ) && ( data.isLabelEditable ) ) ) );
+					   ( ( data.label != undefined ) && ( data.isLabelEditable ) ) ) );
 		}
 		return( result );
 	}
