@@ -3,9 +3,9 @@ function userSetup( config ) {
   if( ( config.host.hostname == 'Antonellos-Mini' ) ||
       ( config.host.hostname == 'Antonellos-Mac-mini.local' ) ) {
     config.isDebugOn = true;
-    config.server.dataRoot = '../../../../../Dropbox/DevAll/MDDToolsDataRoot';
-    config.server.deployRoot = '../../../../../Dropbox/DevAll/MDDToolsDeployRoot';
-    config.server.tempRoot = '../../../../../Dropbox/DevAll/MDDToolsTempRoot';
+    config.server.dataRoot = '../../../../../../Dropbox/DevAll/MDDToolsDataRoot';
+    config.server.deployRoot = '../../../../../../Dropbox/DevAll/MDDToolsDeployRoot';
+    config.server.tempRoot = '../../../../../../Dropbox/DevAll/MDDToolsTempRoot';
     config.client.host.name = 'Antonello';
     config.client.graph.colorSchema = 'dark';
     config.client.graph.zoomFactor = 1.05;
