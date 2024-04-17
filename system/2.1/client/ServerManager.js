@@ -705,7 +705,8 @@ function _openFile( url, onLoad, noTimeStamp ) {
   }
 }
 function _saveFile( url, source, onSaveDone, sourceEncoding ) {
-  if( !m.status.isReadOnly ) {
+  const isGlobalReadOnly = getGlobalReadOnly();
+  if( !isGlobalReadOnly ) {
     const request = new XMLHttpRequest();
     request.open( 'POST', '/fileServer' );
     request.setRequestHeader( 'Content-Type', 'text/plain;charset=UTF-8' );
@@ -741,7 +742,8 @@ function _saveFile( url, source, onSaveDone, sourceEncoding ) {
   }
 }
 function saveRemoteFile( remoteServerURL, url, source, onSaveDone ) {
-  if( !m.status.isReadOnly ) {
+  const isGlobalReadOnly = getGlobalReadOnly();
+  if( !isGlobalReadOnly ) {
     const request = new XMLHttpRequest();
     request.open( 'POST', '/remoteFileServer' );
     request.setRequestHeader( 'Content-Type', 'text/plain;charset=UTF-8' );

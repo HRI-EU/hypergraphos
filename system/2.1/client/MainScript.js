@@ -234,11 +234,25 @@ function setSystemReady() {
 function setSystemReadOnly( status ) {
   status = ( status == undefined? true: status );
   m.status.isReadOnly = status;
-  m.mddStatus.style['border-style'] = ( status? 'dashed': 'solid' );
-  //console.log( '---> System READONLY', status );
+  updateGlobalReadOnly();
 }
 function getSystemReadOnly() {
   return( m.status.isReadOnly );
+}
+function setGraphReadOnly( status ) {
+  status = ( status == undefined? true: status );
+  m.status.isGraphReadOnly = status;
+  updateGlobalReadOnly();
+}
+function getGraphReadOnly() {
+  return( m.status.isGraphReadOnly );
+}
+function updateGlobalReadOnly() {
+  const status = ( m.status.isGraphReadOnly || m.status.isReadOnly );
+  m.mddStatus.style['border-style'] = ( status? 'dashed': 'solid' );
+}
+function getGlobalReadOnly() {
+  return( m.status.isGraphReadOnly || m.status.isReadOnly );
 }
 function setSystemError() {
   m.mddStatus.className = 'error';
@@ -249,13 +263,15 @@ function setSystemLoading() {
   //console.log( '---> System LOADING' );
 }
 function setSystemNeedSave() {
-  if( !m.status.isReadOnly ) {
+  const isSystemReadOnly = getSystemReadOnly();
+  if( !isSystemReadOnly ) {
     m.mddStatus.className = 'warning';
     //console.log( '---> System WARNING' );
   }
 }
 function setSystemSaved() {
-  if( !m.status.isReadOnly ) {
+  const isSystemReadOnly = getSystemReadOnly();
+  if( !isSystemReadOnly ) {
     m.mddStatus.className = 'saved';
     //console.log( '---> System SAVED' );
   }

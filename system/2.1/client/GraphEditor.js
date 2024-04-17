@@ -131,6 +131,8 @@ class GraphEditor extends EditorBase {
       },
       onSetReadOnly: ( status )=> {
         setSystemReadOnly( status );
+        setGraphReadOnly( status );
+        this.editor.doSetGraphReadOnly( status );
       },
       onShowPreviousGraph: ()=> {
         showPreviousGraph();
@@ -253,7 +255,7 @@ class GraphEditor extends EditorBase {
       // generating change event after loading
       setTimeout( ()=> this.isContentJustLoaded = false, 50 );
       // Update readonly status
-      this.editor.doSetReadOnly( getSystemReadOnly() );
+      this.editor.doSetGraphReadOnly( getGlobalReadOnly() );
 
       // call event listeners
       const listenerCallList = this.listenerList['onLoad'];
@@ -520,7 +522,7 @@ class GraphEditor extends EditorBase {
       }
 
       // Set readonly state
-      setSystemReadOnly( isGraphReadOnly );
+      setGraphReadOnly( isGraphReadOnly );
     }
 	}
   _processGraphInfo( nodeData ) {
