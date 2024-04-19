@@ -30,7 +30,6 @@ class GraphWrapper {
 		this.graphFileServerURLPrefix = 'graph://fileServer/';
 		this.graphFileServer = [];
 
-		this.isReadOnly = false;
 		// Path of the loaded graph
 		this.graphPath = '';
 
@@ -169,11 +168,11 @@ class GraphWrapper {
 					{ separator: '-', if: (o)=> !config.isLocalMode },
 					{ label: 'Toggle Read-Only',	if: (o)=> !config.isLocalMode,
 																		    do: this.doToggleleReadOnly.bind(this) },
-					// { label: 'Set Read-only Mode',    if: (o)=> !config.isLocalMode && !this.isReadOnly,
-					// 																	do: (o)=> { this.isReadOnly = true;
+					// { label: 'Set Read-only Mode',    if: (o)=> !config.isLocalMode && !this.isGraphReadOnly(),
+					// 																	do: (o)=> { this.doSetGraphReadOnly( true );
 					// 																							this.em.fire.onSetReadOnly( true ); } },
-					// { label: 'Unset Read-only Mode',  if: (o)=> !config.isLocalMode && this.isReadOnly,
-					// 																	do: (o)=> { this.isReadOnly = false;
+					// { label: 'Unset Read-only Mode',  if: (o)=> !config.isLocalMode && this.isGraphReadOnly(),
+					// 																	do: (o)=> { this.doSetGraphReadOnly( false );
 					// 																							this.em.fire.onSetReadOnly( false ); } },
 					{ separator: '-' },
 					{ label: 'Log Out',		  do: this.em.fire.onLogOut },
@@ -1450,11 +1449,14 @@ class GraphWrapper {
 		return( result );
 	}
 	doSetGraphReadOnly( status ) {
-		this.isReadOnly = status;
+		this.diagram.isReadOnly = status;
+	}
+	isGraphReadOnly() {
+	  return( this.diagram.isReadOnly );
 	}
 	doToggleleReadOnly() {
-		const status = !this.isReadOnly;
-		this.isReadOnly = status;
+		const status = !this.isGraphReadOnly();
+		doSetGraphReadOnly( status );
 		this.em.fire.onSetReadOnly( status );
 	}
 	//------------------------------------------
