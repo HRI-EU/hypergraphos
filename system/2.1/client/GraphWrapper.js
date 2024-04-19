@@ -1456,7 +1456,7 @@ class GraphWrapper {
 	}
 	doToggleleReadOnly() {
 		const status = !this.isGraphReadOnly();
-		doSetGraphReadOnly( status );
+		this.doSetGraphReadOnly( status );
 		this.em.fire.onSetReadOnly( status );
 	}
 	//------------------------------------------
