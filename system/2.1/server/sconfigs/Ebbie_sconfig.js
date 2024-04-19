@@ -1,5 +1,5 @@
 function userSetup( config ) {
-  if( config.host.username == "RE900575" ) {
+  if( config.host.username == "iebubech" ) {
     config.server.dataRoot = '../../../../../../Dropbox/DevAll/MDDToolsDataRoot';
     config.server.deployRoot = '../../../../../../Dropbox/DevAll/MDDToolsDeployRoot';
     config.server.tempRoot = '../../../../../../Dropbox/DevAll/MDDToolsTempRoot';
