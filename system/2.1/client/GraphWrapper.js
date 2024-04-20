@@ -1773,7 +1773,7 @@ class GraphWrapper {
 		// Define grid
 		const mainColor = {
 			dark: {
-				backgroundColor: 'rgb(60, 60, 60)',
+				backgroundColor: 'rgb(102, 102, 102)',//'rgb(60, 60, 60)',
 				lineColor1: 'rgb(70, 70, 70)',
 				lineColor2: 'rgb(80, 80, 80)',
 			},
