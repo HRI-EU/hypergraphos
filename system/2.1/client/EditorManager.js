@@ -467,7 +467,7 @@ class EditorManager extends EditorChangeManager {
       //console.log( i, winInfo.wId, 'z-order', minZ+i, 'class', winInfo.we.className );
       const header = winInfo.we.getElementsByClassName( 'resizerHeader' )[0];
       if( header ) {
-        header.style.background = 'DimGray';
+        header.style.background = '#4b4b4b';
       }
     }
     // Set highest z value to id window
