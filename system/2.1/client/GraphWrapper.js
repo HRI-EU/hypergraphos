@@ -173,7 +173,7 @@ class GraphWrapper {
 					{ label: 'Log Out',		  do: this.em.fire.onLogOut },
 				]},
 			'nodeContextMenu':
-				{ layout: 'vertical', itemList: [
+				{ layout: 'vertical', background: '#d8f6fffa', itemList: [
 					{ label: 'Open Content',	if: (o)=> this.canOpenFile(),
 																		do: this.doOpenContent.bind(this) },
 					{ label: 'Open Space',		if: (o)=> this.canOpenSubGraph(),
