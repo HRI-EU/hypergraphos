@@ -76,8 +76,8 @@ class GraphWrapper {
 			onClone:                    { help:   'Clone the duplicated node',
 		                                params: { nodeData: 'data of the target clone' } },
 			onShowRootGraph: 						{ help: 	'Load system root graph' },
-			onSetReadOnly:   						{ help: 	'Set read-only navigation (never save changes to server)',
-																		params: { status: 'true/false' } },
+			onToggleSystemReadOnly:			{ help: 	'Toggle system read-only (enable/disable saving changes to server)' },
+			onToggleWorkspaceReadOnly:	{ help: 	'Toggle workspace read-only (enable/disable changes on workspaces)' },
 			onShowParentGraph:					{ help: 	'Load parent graph in canvas' },
 			onShowPreviousGraph:  			{ help: 	'Load previous graph in canvas' },
 			onShowFindDialog:						{ help: 	'Open dialog for searching in the current graph',
@@ -166,14 +166,9 @@ class GraphWrapper {
 																						do: (o)=> this.em.fire.onShowRootGraph() },
 					]},
 					{ separator: '-', if: (o)=> !config.isLocalMode },
-					{ label: 'Toggle Read-Only',	if: (o)=> !config.isLocalMode,
-																		    do: this.doToggleleReadOnly.bind(this) },
-					// { label: 'Set Read-only Mode',    if: (o)=> !config.isLocalMode && !this.isGraphReadOnly(),
-					// 																	do: (o)=> { this.doSetGraphReadOnly( true );
-					// 																							this.em.fire.onSetReadOnly( true ); } },
-					// { label: 'Unset Read-only Mode',  if: (o)=> !config.isLocalMode && this.isGraphReadOnly(),
-					// 																	do: (o)=> { this.doSetGraphReadOnly( false );
-					// 																							this.em.fire.onSetReadOnly( false ); } },
+					{ label: 'Toggle System Read-Only',	   if: (o)=> !config.isLocalMode,
+																		             do: this.doToggleleSystemReadOnly.bind(this) },
+					{ label: 'Toggle WorkSpace Read-Only', do: this.doToggleleWorkspaceReadOnly.bind(this) },
 					{ separator: '-' },
 					{ label: 'Log Out',		  do: this.em.fire.onLogOut },
 				]},
@@ -1448,16 +1443,17 @@ class GraphWrapper {
 		}
 		return( result );
 	}
-	doSetGraphReadOnly( status ) {
+	setGraphReadOnly( status ) {
 		this.diagram.isReadOnly = status;
 	}
 	isGraphReadOnly() {
 	  return( this.diagram.isReadOnly );
 	}
-	doToggleleReadOnly() {
-		const status = !this.isGraphReadOnly();
-		this.doSetGraphReadOnly( status );
-		this.em.fire.onSetReadOnly( status );
+	doToggleleSystemReadOnly() {
+		this.em.fire.onToggleSystemReadOnly();
+	}
+	doToggleleWorkspaceReadOnly() {
+		this.em.fire.onToggleWorkspaceReadOnly();
 	}
 	//------------------------------------------
 	// Private Functions

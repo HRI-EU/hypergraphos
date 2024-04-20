@@ -239,20 +239,26 @@ function setSystemReadOnly( status ) {
 function getSystemReadOnly() {
   return( m.status.isReadOnly );
 }
-function setGraphReadOnly( status ) {
+function setWorkspaceReadOnly( status ) {
   status = ( status == undefined? true: status );
-  m.status.isGraphReadOnly = status;
+  m.status.isWorkspaceReadOnly = status;
   updateGlobalReadOnly();
 }
-function getGraphReadOnly() {
-  return( m.status.isGraphReadOnly );
+function getWorkspaceReadOnly() {
+  return( m.status.isWorkspaceReadOnly );
+}
+function updateLocalReadOnly( status ) {
+  status = ( status != undefined? status: true );
+  m.mddStatus.style['border-style'] = ( status? 'dashed': 'solid' );
+  m.mddStatus.style['border-width'] = ( m.status.isReadOnly? '100px': '' );
 }
 function updateGlobalReadOnly() {
-  const status = ( m.status.isGraphReadOnly || m.status.isReadOnly );
+  const status = getGlobalReadOnly();
   m.mddStatus.style['border-style'] = ( status? 'dashed': 'solid' );
+  m.mddStatus.style['border-width'] = ( m.status.isReadOnly? '100px': '' );
 }
 function getGlobalReadOnly() {
-  return( m.status.isGraphReadOnly || m.status.isReadOnly );
+  return( m.status.isWorkspaceReadOnly || m.status.isReadOnly );
 }
 function setSystemError() {
   m.mddStatus.className = 'error';

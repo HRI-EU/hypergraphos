@@ -129,10 +129,14 @@ class GraphEditor extends EditorBase {
         const newNodeData = config.graph.rootGraphNodeData;
         this.navigateToGraph( newNodeData );
       },
-      onSetReadOnly: ( status )=> {
+      onToggleSystemReadOnly: ()=> {
+        const status = !getSystemReadOnly();
         setSystemReadOnly( status );
-        setGraphReadOnly( status );
-        this.editor.doSetGraphReadOnly( status );
+      },
+      onToggleWorkspaceReadOnly: ()=> {
+        const status = !this.editor.isGraphReadOnly();
+		    this.editor.setGraphReadOnly( status );
+        setWorkspaceReadOnly( status );
       },
       onShowPreviousGraph: ()=> {
         showPreviousGraph();
@@ -254,8 +258,9 @@ class GraphEditor extends EditorBase {
       // NOTE: we set this with timeout because the GoJS graph keep
       // generating change event after loading
       setTimeout( ()=> this.isContentJustLoaded = false, 50 );
-      // Update readonly status
-      this.editor.doSetGraphReadOnly( getGlobalReadOnly() );
+
+      // // Update readonly status
+      // this.editor.doSetWorkspaceReadOnly( getGlobalReadOnly() );
 
       // call event listeners
       const listenerCallList = this.listenerList['onLoad'];
@@ -522,7 +527,14 @@ class GraphEditor extends EditorBase {
       }
 
       // Set readonly state
-      setGraphReadOnly( isGraphReadOnly );
+      const isWorkspaceReadOnly = getWorkspaceReadOnly();
+      if( isWorkspaceReadOnly ) {
+        this.editor.setGraphReadOnly( true );
+      } else {
+        // Here the graph is readonly if user is not in Authors of GraphInfo
+        this.editor.setGraphReadOnly( isGraphReadOnly );
+        updateLocalReadOnly( isGraphReadOnly );
+      }
     }
 	}
   _processGraphInfo( nodeData ) {
