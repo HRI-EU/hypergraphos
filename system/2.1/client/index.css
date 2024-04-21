@@ -38,7 +38,7 @@ html{
  #mdd-status.error {
   border-color: rgba(255, 0, 0, 0.6);
  }
- #mdd-status.warning {
+ #mdd-status.unsaved {
   border-color: rgba(255, 221, 0, 0.6);
  }
  #mdd-status.saved {
@@ -119,7 +119,7 @@ html{
   width: 100%;
   height: 20px;
   min-height: 20px; 
-  background:dimgray;
+  background:#4b4b4b;
   color:Silver;
   text-align:center;
   border-bottom-style: solid;

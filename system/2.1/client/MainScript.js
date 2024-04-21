@@ -228,7 +228,12 @@ function popFromHistory() {
   return( prevNodeData );
 }
 function setSystemReady() {
-  m.mddStatus.className = 'default';
+  const isSystemReadOnly = getSystemReadOnly();
+  if( isSystemReadOnly ) {
+    m.mddStatus.className = 'unsaved';
+  } else {
+    m.mddStatus.className = 'default';
+  }
   //console.log( '---> System READY' );
 }
 function setSystemReadOnly( status ) {
@@ -250,12 +255,20 @@ function getWorkspaceReadOnly() {
 function updateLocalReadOnly( status ) {
   status = ( status != undefined? status: true );
   m.mddStatus.style['border-style'] = ( status? 'dashed': 'solid' );
-  m.mddStatus.style['border-width'] = ( m.status.isReadOnly? '100px': '' );
+
+  const isSystemReadOnly = getSystemReadOnly();
+  if( isSystemReadOnly ) {
+    m.mddStatus.className = 'unsaved';
+  }
 }
 function updateGlobalReadOnly() {
-  const status = getGlobalReadOnly();
-  m.mddStatus.style['border-style'] = ( status? 'dashed': 'solid' );
-  m.mddStatus.style['border-width'] = ( m.status.isReadOnly? '100px': '' );
+  const isWorkspaceReadOnly = getWorkspaceReadOnly();
+  m.mddStatus.style['border-style'] = ( isWorkspaceReadOnly? 'dashed': 'solid' );
+
+  const isSystemReadOnly = getSystemReadOnly();
+  if( isSystemReadOnly ) {
+    m.mddStatus.className = 'unsaved';
+  }
 }
 function getGlobalReadOnly() {
   return( m.status.isWorkspaceReadOnly || m.status.isReadOnly );
@@ -271,8 +284,8 @@ function setSystemLoading() {
 function setSystemNeedSave() {
   const isSystemReadOnly = getSystemReadOnly();
   if( !isSystemReadOnly ) {
-    m.mddStatus.className = 'warning';
-    //console.log( '---> System WARNING' );
+    m.mddStatus.className = 'unsaved';
+    //console.log( '---> System UNSAVED' );
   }
 }
 function setSystemSaved() {
