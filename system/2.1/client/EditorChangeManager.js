@@ -23,7 +23,8 @@ class EditorChangeManager {
     this.isPauseChage = status;
   }
   editorHasChanged() {
-    if( !this.isPauseChage ) {
+    const isGlobalReadOnly = getGlobalReadOnly();
+    if( !this.isPauseChage && !isGlobalReadOnly ) {
       if( EditorChangeManager.unsavedEditor[this.id] == undefined ) {
         EditorChangeManager.unsavedEditor[this.id] = 0;
       }
