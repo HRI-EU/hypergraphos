@@ -172,12 +172,13 @@ class EditorManager extends EditorChangeManager {
       this.selctionOrModelNodeData = nodeData;
     }
 
-    this.openWindow( id, null, nodeData, position );
+    const editorInfo = this.openWindow( id, null, nodeData, position );
     // Show save button for system nodes
     if( nodeData.isSystem ) {
       const ei = this.getEditorInfo( id );
       ei.showSaveButton();
     }
+    return( editorInfo );
   }
   openWindow( id, name, nodeData, position, isPinned ) {
     id = id || this._getDOMUniqueId( nodeData );
@@ -250,6 +251,7 @@ class EditorManager extends EditorChangeManager {
     } else {
       console.log( 'Could not open window. Type or Name not found for '+id );
     }
+    return( editorInfo );
   }
   newDOMWindow( id, name, parentDivId, onPositionChanged, position ) {
     // Define editor id

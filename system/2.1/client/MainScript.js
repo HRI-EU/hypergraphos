@@ -234,6 +234,7 @@ function setSystemReady() {
   } else {
     m.mddStatus.className = 'default';
   }
+  updateGlobalReadOnly();
   //console.log( '---> System READY' );
 }
 function setSystemReadOnly( status ) {
@@ -252,27 +253,12 @@ function setWorkspaceReadOnly( status ) {
 function getWorkspaceReadOnly() {
   return( m.status.isWorkspaceReadOnly );
 }
-function updateLocalReadOnly( status ) {
-  status = ( status != undefined? status: true );
-  m.mddStatus.style['border-style'] = ( status? 'dashed': 'solid' );
-
-  const isSystemReadOnly = getSystemReadOnly();
-  if( isSystemReadOnly ) {
-    m.mddStatus.className = 'unsaved';
-  } else {
-    setSystemReady();
-  }
-}
 function updateGlobalReadOnly() {
+  const g = getMainGraph();
+  const isGraphReadOnly = g.isGraphReadOnly();
   const isWorkspaceReadOnly = getWorkspaceReadOnly();
-  m.mddStatus.style['border-style'] = ( isWorkspaceReadOnly? 'dashed': 'solid' );
-
-  const isSystemReadOnly = getSystemReadOnly();
-  if( isSystemReadOnly ) {
-    m.mddStatus.className = 'unsaved';
-  } else {
-    setSystemReady();
-  }
+  m.mddStatus.style['border-style'] = ( isWorkspaceReadOnly || isGraphReadOnly? 
+                                        'dashed': 'solid' );
 }
 function getGlobalReadOnly() {
   return( m.status.isWorkspaceReadOnly || m.status.isReadOnly );

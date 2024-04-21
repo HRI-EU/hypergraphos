@@ -86,7 +86,12 @@ class GraphEditor extends EditorBase {
         // Give a new url in case fileURL is empty
         this._verifyFileURL( newNodeData, ()=> {
           // Open node window
-          m.e.openWindowFromNodeData( newNodeData, x, y );
+          const editorInfo = m.e.openWindowFromNodeData( newNodeData, x, y );
+          if( this.editor.isGraphReadOnly() ) {
+            if( editorInfo.editor && editorInfo.editor.setReadOnly ) {
+              editorInfo.editor.setReadOnly( true );
+            }
+          }
         });
       },
       onClone: ( nodeData )=> {
@@ -533,8 +538,8 @@ class GraphEditor extends EditorBase {
       } else {
         // Here the graph is readonly if user is not in Authors of GraphInfo
         this.editor.setGraphReadOnly( isGraphReadOnly );
-        updateLocalReadOnly( isGraphReadOnly );
       }
+      updateGlobalReadOnly();
     }
 	}
   _processGraphInfo( nodeData ) {
