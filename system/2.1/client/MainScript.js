@@ -259,6 +259,8 @@ function updateLocalReadOnly( status ) {
   const isSystemReadOnly = getSystemReadOnly();
   if( isSystemReadOnly ) {
     m.mddStatus.className = 'unsaved';
+  } else {
+    setSystemReady();
   }
 }
 function updateGlobalReadOnly() {
@@ -268,6 +270,8 @@ function updateGlobalReadOnly() {
   const isSystemReadOnly = getSystemReadOnly();
   if( isSystemReadOnly ) {
     m.mddStatus.className = 'unsaved';
+  } else {
+    setSystemReady();
   }
 }
 function getGlobalReadOnly() {
