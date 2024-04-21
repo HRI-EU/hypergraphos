@@ -311,7 +311,7 @@ function setStatus( setFunction ) {
   if( setFunction ) {
     setFunction( m.status );
     if( !m.isJustStarted ) {
-      m.e.editorHasChanged( m.e.id );
+      m.e.editorHasChanged( m.e.id, true );
     }
   }
 }
@@ -542,6 +542,9 @@ function getNodeDataOutPortContent( nodeData, outPort ) {
   return( result );
 }
 function saveStatus( onSaved ) {
+  // If system is not readonly => we force save for status file
+  const isForceSave = !getSystemReadOnly();
+
   const url = config.host.statusURL;
   m.e.updateSessionStatus();
   let strStatus = null;
@@ -555,7 +558,9 @@ function saveStatus( onSaved ) {
       if( onSaved ) {
         onSaved();
       }
-    });
+    },
+    undefined,
+    isForceSave );
   }
 }
 function saveAllEditorContent() {

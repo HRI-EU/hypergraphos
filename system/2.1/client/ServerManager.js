@@ -704,9 +704,9 @@ function _openFile( url, onLoad, noTimeStamp ) {
     }
   }
 }
-function _saveFile( url, source, onSaveDone, sourceEncoding ) {
+function _saveFile( url, source, onSaveDone, sourceEncoding, isForceSave ) {
   const isGlobalReadOnly = getGlobalReadOnly();
-  if( !isGlobalReadOnly ) {
+  if( !isGlobalReadOnly || isForceSave ) {
     const request = new XMLHttpRequest();
     request.open( 'POST', '/fileServer' );
     request.setRequestHeader( 'Content-Type', 'text/plain;charset=UTF-8' );
