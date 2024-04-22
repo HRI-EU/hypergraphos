@@ -240,7 +240,8 @@ function setSystemReady() {
 function setSystemReadOnly( status ) {
   status = ( status == undefined? true: status );
   m.status.isReadOnly = status;
-  updateGlobalReadOnly();
+  //updateGlobalReadOnly();
+  setSystemReady();
 }
 function getSystemReadOnly() {
   return( m.status.isReadOnly );
