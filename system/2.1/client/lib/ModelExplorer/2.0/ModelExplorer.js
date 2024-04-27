@@ -116,7 +116,7 @@ class ModelExplorer {
         }
       }
     }
-    if( index != undefined ) {
+    if( ( index != undefined ) && result ) {
       result = ( result[index]? result[index]: result[0] );
     }
     return( result );
