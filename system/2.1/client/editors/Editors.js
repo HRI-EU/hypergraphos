@@ -552,15 +552,17 @@ class FindViewer extends EditorBase {
     // Set editor content
     const element = document.getElementById( this.editorDivId );
     element.innerHTML = `<div class="search" style="width:100%;position:absolute;background-color:inherit">
-                          Search :&nbsp<input id='searchField' list='searchEntries' style='width:85%' title='${hint}'>
+                          Search :&nbsp<input id='searchField' list='searchEntries' style='width:75%' title='${hint}'>
                           <datalist id='searchEntries'>
                             <option value="d.key == '3'">
                             <option value="d.key >= '3'">
                           </datalist>
+                          <button id="findSelectAll" type="button">Sel.All</button>
                         </div>
                         <div id='searchResult' style="margin-top: 25px;" ></div>`;
     const inputField = document.querySelector( '#searchField' );
     const searchResult = document.querySelector( '#searchResult' );
+    const selectAllButton = document.querySelector( '#findSelectAll' );
     const doFindNavigate = (fkey, fi)=> {
       if( fkey == 'PageDown' ) {
         // This stop at end of list
@@ -648,6 +650,13 @@ class FindViewer extends EditorBase {
       }
     }
     inputField.onkeyup = doSearch;
+
+    const selectAll = ()=> {
+      const keyList = [];
+      this.foundInfo.foundList.forEach( (d)=> keyList.push( d.key ) );
+      selectNodesByKey( keyList );
+    }
+    selectAllButton.onclick = selectAll;
   }
   saveEditorContent( onSaved ) {
     if( onSaved ) {
