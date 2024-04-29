@@ -1072,9 +1072,10 @@ class GraphWrapper {
 		let result = false;
 		const data = this.getFirstSelectedNodeData();
 		if( data ) {
-			result = ( ( data.isFile == true ) || 
-			           ( ( data.isDir == undefined ) && 
-					   ( ( data.label != undefined ) && ( data.isLabelEditable ) ) ) );
+			result = ( ( !data.isDir ) &&
+								 ( ( data.isFile == true ) || 
+			             ( ( data.label != undefined ) && ( data.isLabelEditable ) )
+								 ) );
 		}
 		return( result );
 	}
