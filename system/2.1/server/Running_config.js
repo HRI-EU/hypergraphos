@@ -6,15 +6,15 @@ const config = {
   "isDebugOn": true,
   "client": {
     "host": {
-      "name": "Antonello",
+      "name": "Frank",
       "fileServerURL": "/fileServer",
       "fileServerSystemURL": "/fileServer/System",
       "fileStatusURL": "/fileStatus",
-      "statusURL": "/fileServer/Users/Antonello_status.json",
+      "statusURL": "/fileServer/Users/Frank_status.json",
       "messageURL": "/fileServer/Messages/"
     },
     "remoteHost": {
-      "NUC": "192.168.1.11:7575"
+      "NUC": "192.168.178.25:7575"
     },
     "htmlDiv": {
       "mainDiv": "mainDiv",
@@ -26,8 +26,8 @@ const config = {
     },
     "graph": {
       "allowDeleteKey": false,
-      "colorSchema": "dark",
-      "zoomFactor": 1.05,
+      "colorSchema": "light",
+      "zoomFactor": 1.25,
       "defaultDSL": "DefaultDSL",
       "rootGraphURL": "/fileServer/graphRoot.json",
       "rootGraphNodeData": {
@@ -39,7 +39,7 @@ const config = {
       "maxHistoryLength": 30
     },
     "server": {
-      "ip": "192.168.1.14"
+      "ip": "192.168.178.20"
     }
   },
   "server": {
@@ -51,29 +51,31 @@ const config = {
     "libPath": "../client/lib",
     "scriptPath": "../script",
     "testPath": "../test",
-    "scriptPlatform": "linux",
+    "scriptPlatform": "win32",
     "webServerProtocol": "http",
     "webServerName": "localhost",
     "webServerPort": 80,
     "webSocketURL": "ws://localhost",
-    "jwtSecretKey": "jwt_key_secret123",
+    "jwtSecretKey": "kYcFIJXnPb1QvHdRd6oshxEGOzUppgy",
+    "jwtExpiryInterval": "30d",
+    "usePermissions": true,
     "ssl": {
       "enabled": false,
       "key": "server.key",
       "cert": "server.cert"
     },
-    "ip": "192.168.1.14"
+    "ip": "192.168.178.20"
   },
   "host": {
-    "uid": 501,
-    "gid": 20,
-    "username": "antonelloceravola",
-    "homedir": "/Users/antonelloceravola",
-    "shell": "/bin/zsh",
-    "hostname": "Antonellos-Mini",
-    "platform": "darwin",
-    "platformOS": "MacOS",
-    "platformType": "linux"
+    "uid": -1,
+    "gid": -1,
+    "username": "Frank Joublin",
+    "homedir": "C:\\Users\\frank",
+    "shell": null,
+    "hostname": "Main-PC",
+    "platform": "win32",
+    "platformOS": "Windows",
+    "platformType": "windows"
   }
 };
 
