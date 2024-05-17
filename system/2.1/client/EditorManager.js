@@ -123,14 +123,6 @@ class EditorManager extends EditorChangeManager {
     const e = this.getEditor( config.htmlDiv.graphDiv );
     const nodeData = e.findNodeData( 'isSystem', '$GraphSelection$' );
     if( nodeData ) {
-      // Close Model window before opening Selection
-      const ei = this.getEditorInfo( this.selctionOrModelNodeData );
-      if( ei ) {
-        this.closeEditor( true, ei.id );
-      }
-      // Store nodeData so to make Selection and Model exclusive
-      this.selctionOrModelNodeData = nodeData;
-
       e.updateSystemNode( nodeData );
       // Get a copy of the node data
       //const newNodeData = e.getNodeData( nodeData.key, true );
@@ -149,14 +141,6 @@ class EditorManager extends EditorChangeManager {
     const e = this.getEditor( config.htmlDiv.graphDiv );
     const nodeData = e.findNodeData( 'isSystem', '$GraphModel$' );
     if( nodeData ) {
-      // Close Selection window before opening Model
-      const ei = this.getEditorInfo( this.selctionOrModelNodeData );
-      if( ei ) {
-        this.closeEditor( true, ei.id );
-      }
-      // Store nodeData so to make Selection and Model exclusive
-      this.selctionOrModelNodeData = nodeData;
-
       e.updateSystemNode( nodeData );
       // Get a copy of the node data
       //const newNodeData = e.getNodeData( nodeData.key, true );
@@ -175,12 +159,26 @@ class EditorManager extends EditorChangeManager {
     let position = ( x != undefined && y != undefined? 
                     [x, y, this.defaultPos[2], this.defaultPos[3]]: undefined );
     const id = this._getDOMUniqueId( nodeData );
-    this.openWindow( id, null, nodeData, position );
+
+    // Here we avoid to open both selection and model
+    if( ( nodeData.isSystem == '$GraphSelection$' ) ||
+        ( nodeData.isSystem == '$GraphModel$' ) ) {
+      // Close Model window before opening Selection
+      const ei = this.getEditorInfo( this.selctionOrModelNodeData );
+      if( ei ) {
+        this.closeEditor( true, ei.id );
+      }
+      // Store nodeData so to make Selection and Model exclusive
+      this.selctionOrModelNodeData = nodeData;
+    }
+
+    const editorInfo = this.openWindow( id, null, nodeData, position );
     // Show save button for system nodes
     if( nodeData.isSystem ) {
       const ei = this.getEditorInfo( id );
       ei.showSaveButton();
     }
+    return( editorInfo );
   }
   openWindow( id, name, nodeData, position, isPinned ) {
     id = id || this._getDOMUniqueId( nodeData );
@@ -253,6 +251,7 @@ class EditorManager extends EditorChangeManager {
     } else {
       console.log( 'Could not open window. Type or Name not found for '+id );
     }
+    return( editorInfo );
   }
   newDOMWindow( id, name, parentDivId, onPositionChanged, position ) {
     // Define editor id
@@ -470,7 +469,7 @@ class EditorManager extends EditorChangeManager {
       //console.log( i, winInfo.wId, 'z-order', minZ+i, 'class', winInfo.we.className );
       const header = winInfo.we.getElementsByClassName( 'resizerHeader' )[0];
       if( header ) {
-        header.style.background = 'DimGray';
+        header.style.background = '#4b4b4b';
       }
     }
     // Set highest z value to id window

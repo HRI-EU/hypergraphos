@@ -86,7 +86,12 @@ class GraphEditor extends EditorBase {
         // Give a new url in case fileURL is empty
         this._verifyFileURL( newNodeData, ()=> {
           // Open node window
-          m.e.openWindowFromNodeData( newNodeData, x, y );
+          const editorInfo = m.e.openWindowFromNodeData( newNodeData, x, y );
+          if( this.editor.isGraphReadOnly() ) {
+            if( editorInfo.editor && editorInfo.editor.setReadOnly ) {
+              editorInfo.editor.setReadOnly( true );
+            }
+          }
         });
       },
       onClone: ( nodeData )=> {
@@ -129,8 +134,14 @@ class GraphEditor extends EditorBase {
         const newNodeData = config.graph.rootGraphNodeData;
         this.navigateToGraph( newNodeData );
       },
-      onSetReadOnly: ( status )=> {
+      onToggleSystemReadOnly: ()=> {
+        const status = !getSystemReadOnly();
         setSystemReadOnly( status );
+      },
+      onToggleWorkspaceReadOnly: ()=> {
+        const status = !this.editor.isGraphReadOnly();
+		    this.editor.setGraphReadOnly( status );
+        setWorkspaceReadOnly( status );
       },
       onShowPreviousGraph: ()=> {
         showPreviousGraph();
@@ -252,8 +263,9 @@ class GraphEditor extends EditorBase {
       // NOTE: we set this with timeout because the GoJS graph keep
       // generating change event after loading
       setTimeout( ()=> this.isContentJustLoaded = false, 50 );
-      // Update readonly status
-      this.editor.doSetReadOnly( getSystemReadOnly() );
+
+      // // Update readonly status
+      // this.editor.doSetWorkspaceReadOnly( getGlobalReadOnly() );
 
       // call event listeners
       const listenerCallList = this.listenerList['onLoad'];
@@ -520,7 +532,14 @@ class GraphEditor extends EditorBase {
       }
 
       // Set readonly state
-      setSystemReadOnly( isGraphReadOnly );
+      const isWorkspaceReadOnly = getWorkspaceReadOnly();
+      if( isWorkspaceReadOnly ) {
+        this.editor.setGraphReadOnly( true );
+      } else {
+        // Here the graph is readonly if user is not in Authors of GraphInfo
+        this.editor.setGraphReadOnly( isGraphReadOnly );
+      }
+      updateGlobalReadOnly();
     }
 	}
   _processGraphInfo( nodeData ) {

@@ -22,8 +22,15 @@ class EditorChangeManager {
   setPauseChange( status ) {
     this.isPauseChage = status;
   }
-  editorHasChanged() {
-    if( !this.isPauseChage ) {
+  editorHasChanged( isAllowChange ) {
+    const isSystemReadOnly = getSystemReadOnly();
+    const isGlobalReadOnly = getGlobalReadOnly();
+    // We allow changes to be triggered if:
+    // - We are not in PauseChange
+    // - We are not in a global read only (where either graph or system are readOnly)
+    // - or we are asked to allow change by isAllowChange and system is not readOnly
+    if( ( !this.isPauseChage && !isGlobalReadOnly ) ||
+        ( isAllowChange && !isSystemReadOnly ) ) {
       if( EditorChangeManager.unsavedEditor[this.id] == undefined ) {
         EditorChangeManager.unsavedEditor[this.id] = 0;
       }

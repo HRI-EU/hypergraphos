@@ -96,7 +96,7 @@ class ModelExplorer {
     // TODO: maybe we should remove the index parameter
     //       and take the first one [0]
     id = this._getId( id );
-    let result = [];
+    let result = null;
     let nodeList = this.model[id].objModel.nodeDataArray;
 
     if( !id ) {
@@ -109,11 +109,14 @@ class ModelExplorer {
           result = nodeData;
           break;
         } else {
+          if( !result ) {
+            result = [];
+          }
           result.push( nodeData );
         }
       }
     }
-    if( index != undefined ) {
+    if( ( index != undefined ) && result ) {
       result = ( result[index]? result[index]: result[0] );
     }
     return( result );

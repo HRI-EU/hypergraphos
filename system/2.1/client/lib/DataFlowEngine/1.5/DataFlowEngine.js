@@ -764,6 +764,8 @@ class DataFlowEngine {
             isNewInput = inCondition(name, value, isNewInput);
           }
           isCompute &&= isNewInput;
+        } else {
+          isCompute = false;
         }
       }
 

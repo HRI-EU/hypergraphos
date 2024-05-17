@@ -198,7 +198,7 @@ class HChat {
   addMessage( sender, receiver, messageText ) {
     const senderInfo = this.userList[sender];
     const receiverInfo = this.userList[receiver];
-	  const senderColor = senderInfo.color;
+	  const senderColor = ( senderInfo.color? senderInfo.color: 'Lavander' );
 
     // Update last message
     this.lastMessageInfo = { sender, receiver, text: messageText };

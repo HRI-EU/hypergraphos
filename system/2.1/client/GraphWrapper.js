@@ -30,7 +30,6 @@ class GraphWrapper {
 		this.graphFileServerURLPrefix = 'graph://fileServer/';
 		this.graphFileServer = [];
 
-		this.isReadOnly = false;
 		// Path of the loaded graph
 		this.graphPath = '';
 
@@ -77,8 +76,8 @@ class GraphWrapper {
 			onClone:                    { help:   'Clone the duplicated node',
 		                                params: { nodeData: 'data of the target clone' } },
 			onShowRootGraph: 						{ help: 	'Load system root graph' },
-			onSetReadOnly:   						{ help: 	'Set read-only navigation (never save changes to server)',
-																		params: { status: 'true/false' } },
+			onToggleSystemReadOnly:			{ help: 	'Toggle system read-only (enable/disable saving changes to server)' },
+			onToggleWorkspaceReadOnly:	{ help: 	'Toggle workspace read-only (enable/disable changes on workspaces)' },
 			onShowParentGraph:					{ help: 	'Load parent graph in canvas' },
 			onShowPreviousGraph:  			{ help: 	'Load previous graph in canvas' },
 			onShowFindDialog:						{ help: 	'Open dialog for searching in the current graph',
@@ -116,7 +115,7 @@ class GraphWrapper {
 						{ label: 'Zoom to Fit (1)',	   			do: this.doZoomToFit.bind(this) },
 						{ label: 'Zoom In (2)',	       			do: this.doZoomToFactor.bind(this,2) },
 						{ label: 'Zoom Out (3)',	     			do: this.doZoomToFactor.bind(this,0.5) },
-						{ label: 'Center Space on Selection (X)',do: this.setViewCenteredOnSelectedNode.bind(this) },
+						{ label: 'Center Space on Selection (X or Space)',do: this.setViewCenteredOnSelectedNode.bind(this) },
 						{ separator: '-' },
 						{ label: 'Toggle Show Palette (P)',	if: (o)=> ( this.fullPaletteId? true: false ),
 																					 			do: this.doShowPalette.bind(this) },
@@ -167,19 +166,14 @@ class GraphWrapper {
 																						do: (o)=> this.em.fire.onShowRootGraph() },
 					]},
 					{ separator: '-', if: (o)=> !config.isLocalMode },
-					{ label: 'Toggle Read-Only',	if: (o)=> !config.isLocalMode,
-																		    do: this.doToggleleReadOnly.bind(this) },
-					// { label: 'Set Read-only Mode',    if: (o)=> !config.isLocalMode && !this.isReadOnly,
-					// 																	do: (o)=> { this.isReadOnly = true;
-					// 																							this.em.fire.onSetReadOnly( true ); } },
-					// { label: 'Unset Read-only Mode',  if: (o)=> !config.isLocalMode && this.isReadOnly,
-					// 																	do: (o)=> { this.isReadOnly = false;
-					// 																							this.em.fire.onSetReadOnly( false ); } },
+					{ label: 'Toggle System Read-Only',	   if: (o)=> !config.isLocalMode,
+																		             do: this.doToggleleSystemReadOnly.bind(this) },
+					{ label: 'Toggle WorkSpace Read-Only', do: this.doToggleleWorkspaceReadOnly.bind(this) },
 					{ separator: '-' },
 					{ label: 'Log Out',		  do: this.em.fire.onLogOut },
 				]},
 			'nodeContextMenu':
-				{ layout: 'vertical', itemList: [
+				{ layout: 'vertical', background: '#d8f6fffa', itemList: [
 					{ label: 'Open Content',	if: (o)=> this.canOpenFile(),
 																		do: this.doOpenContent.bind(this) },
 					{ label: 'Open Space',		if: (o)=> this.canOpenSubGraph(),
@@ -1078,9 +1072,10 @@ class GraphWrapper {
 		let result = false;
 		const data = this.getFirstSelectedNodeData();
 		if( data ) {
-			result = ( ( data.isFile == true ) || 
-			           ( ( data.isDir == undefined ) && 
-								   ( ( data.label != undefined ) && ( data.isLabelEditable ) ) ) );
+			result = ( ( !data.isDir ) &&
+								 ( ( data.isFile == true ) || 
+			             ( ( data.label != undefined ) && ( data.isLabelEditable ) )
+								 ) );
 		}
 		return( result );
 	}
@@ -1449,14 +1444,17 @@ class GraphWrapper {
 		}
 		return( result );
 	}
-	doSetReadOnly( status ) {
-		this.isReadOnly = status;
-		this.em.fire.onSetReadOnly( status );
+	setGraphReadOnly( status ) {
+		this.diagram.isReadOnly = status;
 	}
-	doToggleleReadOnly() {
-		const status = !this.isReadOnly;
-		this.isReadOnly = status;
-		this.em.fire.onSetReadOnly( status );
+	isGraphReadOnly() {
+	  return( this.diagram.isReadOnly );
+	}
+	doToggleleSystemReadOnly() {
+		this.em.fire.onToggleSystemReadOnly();
+	}
+	doToggleleWorkspaceReadOnly() {
+		this.em.fire.onToggleWorkspaceReadOnly();
 	}
 	//------------------------------------------
 	// Private Functions
@@ -1776,7 +1774,7 @@ class GraphWrapper {
 		// Define grid
 		const mainColor = {
 			dark: {
-				backgroundColor: 'rgb(60, 60, 60)',
+				backgroundColor: 'rgb(102, 102, 102)',//'rgb(60, 60, 60)',
 				lineColor1: 'rgb(70, 70, 70)',
 				lineColor2: 'rgb(80, 80, 80)',
 			},

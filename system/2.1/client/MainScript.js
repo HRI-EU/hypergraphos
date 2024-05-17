@@ -228,17 +228,41 @@ function popFromHistory() {
   return( prevNodeData );
 }
 function setSystemReady() {
-  m.mddStatus.className = 'default';
+  const isSystemReadOnly = getSystemReadOnly();
+  if( isSystemReadOnly ) {
+    m.mddStatus.className = 'unsaved';
+  } else {
+    m.mddStatus.className = 'default';
+  }
+  updateGlobalReadOnly();
   //console.log( '---> System READY' );
 }
 function setSystemReadOnly( status ) {
   status = ( status == undefined? true: status );
   m.status.isReadOnly = status;
-  m.mddStatus.style['border-style'] = ( status? 'dashed': 'solid' );
-  //console.log( '---> System READONLY', status );
+  //updateGlobalReadOnly();
+  setSystemReady();
 }
 function getSystemReadOnly() {
   return( m.status.isReadOnly );
+}
+function setWorkspaceReadOnly( status ) {
+  status = ( status == undefined? true: status );
+  m.status.isWorkspaceReadOnly = status;
+  updateGlobalReadOnly();
+}
+function getWorkspaceReadOnly() {
+  return( m.status.isWorkspaceReadOnly );
+}
+function updateGlobalReadOnly() {
+  const g = getMainGraph();
+  const isGraphReadOnly = g.isGraphReadOnly();
+  const isWorkspaceReadOnly = getWorkspaceReadOnly();
+  m.mddStatus.style['border-style'] = ( isWorkspaceReadOnly || isGraphReadOnly? 
+                                        'dashed': 'solid' );
+}
+function getGlobalReadOnly() {
+  return( m.status.isWorkspaceReadOnly || m.status.isReadOnly );
 }
 function setSystemError() {
   m.mddStatus.className = 'error';
@@ -249,13 +273,15 @@ function setSystemLoading() {
   //console.log( '---> System LOADING' );
 }
 function setSystemNeedSave() {
-  if( !m.status.isReadOnly ) {
-    m.mddStatus.className = 'warning';
-    //console.log( '---> System WARNING' );
+  const isSystemReadOnly = getSystemReadOnly();
+  if( !isSystemReadOnly ) {
+    m.mddStatus.className = 'unsaved';
+    //console.log( '---> System UNSAVED' );
   }
 }
 function setSystemSaved() {
-  if( !m.status.isReadOnly ) {
+  const isSystemReadOnly = getSystemReadOnly();
+  if( !isSystemReadOnly ) {
     m.mddStatus.className = 'saved';
     //console.log( '---> System SAVED' );
   }
@@ -272,7 +298,7 @@ function setStatus( setFunction ) {
   if( setFunction ) {
     setFunction( m.status );
     if( !m.isJustStarted ) {
-      m.e.editorHasChanged( m.e.id );
+      m.e.editorHasChanged( m.e.id, true );
     }
   }
 }
@@ -503,6 +529,9 @@ function getNodeDataOutPortContent( nodeData, outPort ) {
   return( result );
 }
 function saveStatus( onSaved ) {
+  // If system is not readonly => we force save for status file
+  const isForceSave = !getSystemReadOnly();
+
   const url = config.host.statusURL;
   m.e.updateSessionStatus();
   let strStatus = null;
@@ -516,7 +545,9 @@ function saveStatus( onSaved ) {
       if( onSaved ) {
         onSaved();
       }
-    });
+    },
+    undefined,
+    isForceSave );
   }
 }
 function saveAllEditorContent() {

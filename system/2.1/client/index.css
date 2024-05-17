@@ -27,17 +27,18 @@ html{
   box-sizing: border-box;
   border: 10px;
   border-style: solid;
-  border-color: rgba(125, 125, 125, 0.6);
+  /* border-color: rgba(125, 125, 125, 0.6); */
+  border-color: rgba(60, 60, 60, 0.6);
   z-index: 100;
   pointer-events: none;
  }
  #mdd-status.default {
-  border-color: rgba(125, 125, 125, 0.6);
+  border-color: rgba(60, 60, 60, 0.6);
  }
  #mdd-status.error {
   border-color: rgba(255, 0, 0, 0.6);
  }
- #mdd-status.warning {
+ #mdd-status.unsaved {
   border-color: rgba(255, 221, 0, 0.6);
  }
  #mdd-status.saved {
@@ -46,7 +47,7 @@ html{
  }
  @keyframes saved {
    from { border-color: rgba(123, 255, 0, 0.6); }
-   to { border-color: rgba(125, 125, 125, 0.6); }
+   to { border-color: rgba(60, 60, 60, 0.6); }
  }
  #mdd-status.loading {
   border-color: rgba(30, 144, 255, 0.6);
@@ -118,7 +119,7 @@ html{
   width: 100%;
   height: 20px;
   min-height: 20px; 
-  background:dimgray;
+  background:#4b4b4b;
   color:Silver;
   text-align:center;
   border-bottom-style: solid;

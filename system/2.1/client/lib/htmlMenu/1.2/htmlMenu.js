@@ -245,6 +245,11 @@ class HTMLMenu {
       this._createMenu( menuInfo, parentEl, null, name );
       // Add menu to class instance
       this.menuList[name] = menuInfo;
+
+      // Set optional color
+      if( menuInfo.background ) {
+        menuInfo.element.style.background = menuInfo.background;
+      }
     }
   }
   _createMenu( menuItem, parentEl, parent, name ) {
