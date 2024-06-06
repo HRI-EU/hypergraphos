@@ -8,7 +8,8 @@ const config = {
     "fileServerURL": "/fileServer",
     "fileServerSystemURL": "/fileServer/System",
     "fileStatusURL": "/fileStatus",
-    "statusURL": "/fileServer/Users/Bram_status.json"
+    "statusURL": "/fileServer/Users/Bram_status.json",
+    "messageURL": "/fileServer/Messages/"
   },
   "remoteHost": {},
   "htmlDiv": {
@@ -34,6 +35,6 @@ const config = {
     "maxHistoryLength": 30
   },
   "server": {
-    "ip": "172.26.2.102"
+    "ip": "172.26.3.102"
   }
 };
