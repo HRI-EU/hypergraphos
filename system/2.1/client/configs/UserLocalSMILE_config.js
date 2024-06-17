@@ -90,7 +90,7 @@ function getCurrentLocalGraph() {
       25600.390690842545,
       642.5897221496843
     ],
-    "isGridOn": true
+    "isGridOn": false
   },
   "graphFileServer": [
     "var nodeData, name, value;\n\nconst color = {\n  active: 'Gold',\n  inactive: 'LightSeaGreen',\n};\nconst isActive = graphData.dfe.get( nodeData, 'isActive', false );\n\nconst getIfActive = function( aNodeData ) {\n  const isActive = graphData.dfe.get( aNodeData, 'isActive', false );\n  return( isActive? aNodeData: null ); \n};\nconst setActive = function( aNodeData, state ) {\n  graphData.dfe.set( aNodeData, 'isActive', state );\n  setNodeDataField( aNodeData.key, 'color', ( state? color.active: color.inactive ) );\n}\n\nif( name == 'in') {\n  // Nothing to do\n} else {\n  const nodeList = graphData.dfe.getInputNodeDataList( nodeData, 'in' );\n  \n  if( nodeList && nodeList.length ) {\n    let activeParent = null;\n    nodeList.find( (nd)=> activeParent = getIfActive( nd ) );\n    \n    if( activeParent ) {\n      // Set parent inactive\n      setActive( activeParent, false );\n      // Set this node active\n      setActive( nodeData, true );\n      // Execute actions\n      DataFlow_Dispatch( nodeData, 'in' );\n    }\n  } else { // If in have no connection ==> This node become active\n    // Set this node active\n    setActive( nodeData, true );\n  }\n}",
