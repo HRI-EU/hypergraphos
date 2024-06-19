@@ -154,10 +154,17 @@ class HChat {
     return( result );
   }
   addUser( userName, imageURL, userColor, isSender, isReceiver ) {
-    isSender = ( isSender == undefined? true: isSender );
-    isReceiver = ( isReceiver == undefined? true: isReceiver );
-    const color = ( userColor || this._generateRandomColor() );
-    this.userList[userName] = { imageURL, isSender, isReceiver, color };
+    if( this.userList[userName] == undefined ) {
+      // If user is not yet created ==> create it
+      isSender = ( isSender == undefined? true: isSender );
+      isReceiver = ( isReceiver == undefined? true: isReceiver );
+      const color = ( userColor || this._generateRandomColor() );
+      this.userList[userName] = { imageURL, isSender, isReceiver, color };
+    } else {
+      // Avoid to create an existing user again
+      isSender = false;
+      isReceiver = false;
+    }
 
     // Populate dropdown
     if( isSender ) {

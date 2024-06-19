@@ -11,38 +11,54 @@ function KanbanDSL_setupDSL( g ) {
 }
 function KanbanDSL_getDSL( g ) {
 
-  // There are only three note colors by default, blue, red, and yellow but you could add more here:
-  const noteColors = ['#009CCC', '#CC293D', '#FFD700'];
+  // Ticket Colors:
+  const noteColors = ['#009CCC', '#CC293D', '#FFD700', '#8BAD0D', 
+                      '#C386F1', '#D4896A', '#85937A', '#80FF00',
+                      '#666666', '#FFFF00', '#000080', '#FF0000'];
   function getNoteColor(num) {
     return noteColors[Math.min(num, noteColors.length - 1)];
   }
   const dsl_KanbanCard = ()=> {
     return( $(go.Node, "Horizontal",
       new go.Binding("location", "location", go.Point.parse).makeTwoWay(go.Point.stringify),
-      $(go.Shape, "Rectangle", {
-        fill: '#009CCC', strokeWidth: 1, stroke: '#009CCC',
-        width: 6, stretch: go.GraphObject.Vertical, alignment: go.Spot.Left,
-        // if a user clicks the colored portion of a node, cycle through colors
-        click: (e, obj) => {
-          myDiagram.startTransaction("Update node color");
-          let newColor = parseInt(obj.part.data.color) + 1;
-          if (newColor > noteColors.length - 1) newColor = 0;
-          myDiagram.model.setDataProperty(obj.part.data, "color", newColor);
-          myDiagram.commitTransaction("Update node color");
-        }
-      },
+      $(go.Shape, "Rectangle", 
+        {
+          fill: getNoteColor(0),
+          strokeWidth: 1,
+          stroke: getNoteColor(0),
+          width: 6,
+          stretch: go.GraphObject.Vertical,
+          alignment: go.Spot.Left,
+          // if a user clicks the colored portion of a node, cycle through colors
+          click: (e, obj) => {
+            const diagram = g.diagram;
+            if( diagram ) {
+              diagram.startTransaction("Update node color");
+              let newColor = parseInt(obj.part.data.color) + 1;
+              if (newColor > noteColors.length - 1) newColor = 0;
+              diagram.model.setDataProperty(obj.part.data, "color", newColor);
+              diagram.commitTransaction("Update node color");
+            }
+          }
+        },
         new go.Binding("fill", "color", getNoteColor),
         new go.Binding("stroke", "color", getNoteColor)
       ),
       $(go.Panel, "Auto",
         $(go.Shape, "Rectangle", { fill: "white", stroke: '#CCCCCC' }),
         $(go.Panel, "Table",
-          { width: 130, minSize: new go.Size(NaN, 50) },
+          { 
+            width: 135,
+            minSize: new go.Size(NaN, 50)
+          },
           $(go.TextBlock,
             {
               name: 'TEXT',
-              margin: 6, font: '11px Lato, sans-serif', editable: true,
-              stroke: "#000", maxSize: new go.Size(130, NaN),
+              margin: new go.Margin( 6, 3, 6, 3 ),//6,
+              font: '6px Lato, sans-serif', 
+              editable: true,
+              stroke: "#000", 
+              maxSize: new go.Size(130, NaN),
               formatting: go.TextBlock.FormatNone,
               alignment: go.Spot.TopLeft
             },
@@ -210,7 +226,7 @@ function KanbanDSL_getDSL( g ) {
       { 
         category: 'KanbanDSL_KanbanCard',
         label: 'Task Description', 
-        color: '1', 
+        color: 1, 
       },
     ],
     templateLinkList: [],

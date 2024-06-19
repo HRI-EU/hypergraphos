@@ -6,16 +6,14 @@ const config = {
   "isDebugOn": true,
   "client": {
     "host": {
-      "name": "Frank",
+      "name": "Antonello",
       "fileServerURL": "/fileServer",
       "fileServerSystemURL": "/fileServer/System",
       "fileStatusURL": "/fileStatus",
-      "statusURL": "/fileServer/Users/Frank_status.json",
+      "statusURL": "/fileServer/Users/Antonello_status.json",
       "messageURL": "/fileServer/Messages/"
     },
-    "remoteHost": {
-      "NUC": "192.168.178.25:7575"
-    },
+    "remoteHost": {},
     "htmlDiv": {
       "mainDiv": "mainDiv",
       "graphDiv": "diagram",
@@ -26,7 +24,7 @@ const config = {
     },
     "graph": {
       "allowDeleteKey": false,
-      "colorSchema": "light",
+      "colorSchema": "dark",
       "zoomFactor": 1.25,
       "defaultDSL": "DefaultDSL",
       "rootGraphURL": "/fileServer/graphRoot.json",
@@ -39,14 +37,14 @@ const config = {
       "maxHistoryLength": 30
     },
     "server": {
-      "ip": "192.168.178.20"
+      "ip": "172.26.3.117"
     }
   },
   "server": {
     "debugOnFileContentOn": true,
-    "dataRoot": "../../../../../../Dropbox/DevAll/MDDToolsDataRoot",
-    "deployRoot": "../../../../../../Dropbox/DevAll/MDDToolsDeployRoot",
-    "tempRoot": "../../../../../../Dropbox/DevAll/MDDToolsTempRoot",
+    "dataRoot": "../../../../../../../HyperGraph/Dropbox/DevAll/MDDToolsDataRoot",
+    "deployRoot": "../../../../../../../HyperGraph/Dropbox/DevAll/MDDToolsDeployRoot",
+    "tempRoot": "../../../../../../../HyperGraph/Dropbox/DevAll/MDDToolsTempRoot",
     "clientPath": "../client",
     "libPath": "../client/lib",
     "scriptPath": "../script",
@@ -64,15 +62,15 @@ const config = {
       "key": "server.key",
       "cert": "server.cert"
     },
-    "ip": "192.168.178.20"
+    "ip": "172.26.3.117"
   },
   "host": {
     "uid": -1,
     "gid": -1,
-    "username": "Frank Joublin",
-    "homedir": "C:\\Users\\frank",
+    "username": "RE900104",
+    "homedir": "C:\\Users\\re900104",
     "shell": null,
-    "hostname": "Main-PC",
+    "hostname": "EHRIEXPS-67-DL",
     "platform": "win32",
     "platformOS": "Windows",
     "platformType": "windows"

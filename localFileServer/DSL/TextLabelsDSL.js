@@ -33,6 +33,7 @@ function TextLabelsDSL_getDSL( g ) {
         category: 'TextLabels_Size0',
         alignment: "0 0.5 0 0",
         alignmentFocus: "0 0.5 0 0",
+        isLabelEditable: true,
         size: "100 30",
       },
       {
@@ -40,6 +41,7 @@ function TextLabelsDSL_getDSL( g ) {
         category: 'TextLabels_Size1',
         alignment: "0 0.5 0 0",
         alignmentFocus: "0 0.5 0 0",
+        isLabelEditable: true,
         size: "150 30",
      },
       {
@@ -47,6 +49,7 @@ function TextLabelsDSL_getDSL( g ) {
         category: 'TextLabels_Size2',
         alignment: "0 0.5 0 0",
         alignmentFocus: "0 0.5 0 0",
+        isLabelEditable: true,
         size: "150 30",
       },
       {
@@ -54,6 +57,7 @@ function TextLabelsDSL_getDSL( g ) {
         category: 'TextLabels_Size3',
         alignment: "0 0.5 0 0",
         alignmentFocus: "0 0.5 0 0",
+        isLabelEditable: true,
         size: "150 30",
       },
       {
@@ -61,6 +65,7 @@ function TextLabelsDSL_getDSL( g ) {
         category: 'TextLabels_Size4',
         alignment: "0 0.5 0 0",
         alignmentFocus: "0 0.5 0 0",
+        isLabelEditable: true,
         size: "250 30",
       },
       {
@@ -68,6 +73,7 @@ function TextLabelsDSL_getDSL( g ) {
         category: 'TextLabels_Size5',
         alignment: "0 0.5 0 0",
         alignmentFocus: "0 0.5 0 0",
+        isLabelEditable: true,
         size: "350 30",
       },
       {
@@ -75,6 +81,7 @@ function TextLabelsDSL_getDSL( g ) {
         category: 'TextLabels_Size6',
         alignment: "0 0.5 0 0",
         alignmentFocus: "0 0.5 0 0",
+        isLabelEditable: true,
         size: "740 240",
       },
     ],

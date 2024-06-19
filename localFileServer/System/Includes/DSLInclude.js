@@ -501,6 +501,15 @@
     return geo;
   });
 
+  // Links (from: https://gojs.net/latest/samples/arrowheads.html)
+  go.Shape.defineArrowheadGeometry("Feather", "m 0,0 l 3,4 -3,4");
+  go.Shape.defineArrowheadGeometry("BackwardFeather", "m 3,0 l -3,4 3,4");
+  go.Shape.defineArrowheadGeometry("DoubleFeathers", "m 0,0 l 3,4 -3,4 m 3,-8 l 3,4 -3,4");
+  go.Shape.defineArrowheadGeometry("BackwardDoubleFeathers", "m 3,0 l -3,4 3,4 m 3,-8 l -3,4 3,4");
+  go.Shape.defineArrowheadGeometry("TripleFeathers", "m 0,0 l 3,4 -3,4 m 3,-8 l 3,4 -3,4 m 3,-8 l 3,4 -3,4");
+  go.Shape.defineArrowheadGeometry("BackwardTripleFeathers", "m 3,0 l -3,4 3,4 m 3,-8 l -3,4 3,4 m 3,-8 l -3,4 3,4");
+
+
   //-------------------------
   // Define DSL API function
   //-------------------------
@@ -677,8 +686,14 @@
       const data = node.data;
       diagram.startTransaction("change figure");
       // TODO: set value or type or else depending on node category
-      diagram.model.setDataProperty( data.props_[rowIndex], target, menuItemText );
-      diagram.model.setDataProperty( data.props_[rowIndex], 'valueChanged', 'true' );
+      switch( data.category ) {
+        case 'DSLCompose_Shape':
+          diagram.model.setDataProperty( data, 'label', menuItemText );
+          break;
+        default:
+          diagram.model.setDataProperty( data.props_[rowIndex], target, menuItemText );
+          diagram.model.setDataProperty( data.props_[rowIndex], 'valueChanged', 'true' );
+      }
       diagram.commitTransaction("change figure");
     }
   }
@@ -736,7 +751,6 @@
       ]},
     'basicNodeMenu': 
       { layout: 'vertical', itemList: [
-//        { fontIcon: 'menu', hint: 'Options', layout: 'vertical', subMenu: [
           { fontIcon: 'contrast', hint: 'Shape', layout: 'horizontal', subMenu: [
             { fontIcon: 'ban', hint: 'Circle' },
             { fontIcon: 'browser', hint: 'Rectangle' },
@@ -1091,13 +1105,13 @@ console.log( 'Button Status: '+obj.data.checked );`;
     param.maxSize = ( param.maxSize? param.maxSize: new go.Size(NaN, NaN));
     param.portId = ( param.portId? param.portId: "" );
     // NODE INPUT CONNECTIVITY
-    param.fromSpot = ( param.fromSpot? param.fromSpot: go.Spot.Bottom );
+    param.fromSpot = ( param.fromSpot? param.fromSpot: go.Spot.Right );
     param.isFromLinkable = ( param.isFromLinkable !== undefined? param.isFromLinkable: true );
     param.isFromLinkableSelfNode = ( param.isFromLinkableSelfNode !== undefined? param.isFromLinkableSelfNode: false );
     param.isFromLinkableDuplicates = ( param.isFromLinkableDuplicates !== undefined? param.isFromLinkableDuplicates: false );
     param.fromMaxLinks = ( param.fromMaxLinks !== undefined? param.fromMaxLinks: Infinity );
     // NODE OUTPUT CONNECTIVITY
-    param.toSpot = ( param.toSpot? param.toSpot: go.Spot.Top );
+    param.toSpot = ( param.toSpot? param.toSpot: go.Spot.Left );
     param.isToLinkable = ( param.isToLinkable !== undefined? param.isToLinkable: true );
     param.isToLinkableSelfNode = ( param.isToLinkableSelfNode !== undefined? param.isToLinkableSelfNode: false );
     param.isToLinkableDuplicates = ( param.isToLinkableDuplicates !== undefined? param.isToLinkableDuplicates: false );
@@ -1113,7 +1127,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
     param.labelVerticalAlignment = ( param.labelVerticalAlignment? param.labelVerticalAlignment: "center" );
     param.labelHorizontalAlignment = ( param.labelHorizontalAlignment? param.labelHorizontalAlignment: "center" );
     // NODE ICON
-    param.hasIcon = ( param.hasIcon !== undefined? param.hasIcon: true );
+    param.hasIcon = ( param.hasIcon !== undefined? param.hasIcon: false );
     param.iconURL = ( param.iconURL? param.iconURL: '' ); //'fileServer/pictures/ChatGPT_logo.svg.webp';
     param.iconWidth = ( param.iconWidth? param.iconWidth: 0 );
     param.iconHeight = ( param.iconHeight? param.iconHeight: 0 );
@@ -1204,9 +1218,9 @@ console.log( 'Button Status: '+obj.data.checked );`;
         if( fileContent ) {
           try {
             eval( fileContent );
-          } catch( e ) {
+          } catch( error ) {
             const label = ( nodeData.label? nodeData.label: nodeData.category )+`[${nodeData.key}]`;
-            alert( 'Error in executing node: '+label+'\n'+e )
+            alert( 'Error in executing node: '+label+'\n'+error.message+'\n'+error.stack, false );
           }
         }
       };
@@ -1258,7 +1272,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
         },
         new go.Binding("text", "value").makeTwoWay(),
         new go.Binding("contextMenu", "valueMenu", function(m) { return param.g.contextMenu.getMenu(m); }),
-        new go.Binding("editable", "isEditable").makeTwoWay(),
+        new go.Binding("editable", "isValueEditable"),
         new go.Binding("font", "font").makeTwoWay(),
         new go.Binding("stroke", "valueChanged", function(v) { return (v? 'red': param.valueStroke )}).makeTwoWay(function(v) { return ( v == 'red' ) } ),
         {
@@ -1291,7 +1305,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
         },
         new go.Binding("text", "unit").makeTwoWay(),
         new go.Binding("contextMenu", "unitMenu", function(m) { return param.g.contextMenu.getMenu(m); }),
-        new go.Binding("editable", "isEditable").makeTwoWay(),
+        new go.Binding("editable", "isUnitEditable"),
         new go.Binding("font", "font").makeTwoWay(),
         {
           // this tooltip Adornment is shared by all inputs
@@ -1477,6 +1491,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
                     fromLinkable: false, 
                     toLinkable: false,
                   },
+                  new go.Binding("editable", "isKeyEditable"),
                   new go.Binding("text", "name").makeTwoWay(),
                   {
                     // this tooltip Adornment is shared by all inputs
@@ -1557,7 +1572,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
             $(go.Shape, "Rectangle",
               {
                 figure: "RightPointSquarePort",
-                stroke: "black", 
+                stroke: param.portStroke, 
                 strokeWidth: 1,
                 fill: "white",
                 minSize: new go.Size(20, 15),
@@ -1576,7 +1591,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
                 }
               },
               new go.Binding("visible", "visible"),
-              new go.Binding("stroke", "fontColor")
+              new go.Binding("stroke", "fontColor").makeTwoWay()
             ),
             $(go.TextBlock,
               { 
@@ -1589,8 +1604,9 @@ console.log( 'Button Status: '+obj.data.checked );`;
                 font: param.portFont,
                 overflow: go.TextBlock.OverflowEllipsis,
               },
+              new go.Binding("editable", "isEditable"),
               new go.Binding("visible", "visible"),
-              new go.Binding("stroke", "fontColor"),
+              new go.Binding("stroke", "fontColor").makeTwoWay(),
               //new go.Binding("text", "portId", function(v) { return v.trim(); }).makeTwoWay(function(t) { return t.trim(); }),
               new go.Binding("text", "name", function(v) { return v.trim(); }).makeTwoWay(function(t) { return t.trim(); }),
               {
@@ -1665,7 +1681,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
             $(go.Shape, "Rectangle",
               {
                 figure: "RightPointSquarePort",
-                stroke: "black", 
+                stroke: param.portStroke, 
                 strokeWidth: 1,
                 fill: "white",
                 minSize: new go.Size(20, 15),
@@ -1683,7 +1699,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
                   item.diagram.skipsUndoManager = oldskips;
                 }
               },
-              new go.Binding("stroke", "fontColor")
+              new go.Binding("stroke", "fontColor").makeTwoWay()
             ),
             $(go.TextBlock,
               { 
@@ -1696,7 +1712,8 @@ console.log( 'Button Status: '+obj.data.checked );`;
                 font: param.portFont,
                 overflow: go.TextBlock.OverflowEllipsis,
               },
-              new go.Binding("stroke", "fontColor"),
+              new go.Binding("editable", "isEditable"),
+              new go.Binding("stroke", "fontColor").makeTwoWay(),
               //new go.Binding("text", "portId", function(v) { return v.trim(); }).makeTwoWay(function(t) { return t.trim(); }),
               new go.Binding("text", "name", function(v) { return v.trim(); }).makeTwoWay(function(t) { return t.trim(); }),
               {
@@ -1954,6 +1971,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
           margin: 2,  // make some extra space for the shape around the text
           isMultiline: true,  // don't allow newlines in text
           editable: param.isTagEditable,  // allow in-place editing by user
+          formatting: go.TextBlock.FormatNone,
           contextMenu: param.tagMenu,
         },
         wrapTagBinding,
@@ -1977,6 +1995,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
           margin: 5,  // make some extra space for the shape around the text
           isMultiline: false,  // don't allow newlines in text
           editable: param.isTypeEditable,  // allow in-place editing by user
+          formatting: go.TextBlock.FormatNone,
           contextMenu: param.typeMenu,
          },
         typeBinding
@@ -2094,6 +2113,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
             formatting: go.TextBlock.FormatNone,
           },
           textExtra,
+          new go.Binding("editable", "isLabelEditable"),
           new go.Binding("stroke", "fontColor"),
           new go.Binding("alignment","alignment",go.Spot.parse).makeTwoWay(go.Spot.stringify),
           new go.Binding("alignmentFocus","alignmentFocus",go.Spot.parse).makeTwoWay(go.Spot.stringify),

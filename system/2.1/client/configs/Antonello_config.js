@@ -11,9 +11,7 @@ const config = {
     "statusURL": "/fileServer/Users/Antonello_status.json",
     "messageURL": "/fileServer/Messages/"
   },
-  "remoteHost": {
-    "NUC": "192.168.1.11:7575"
-  },
+  "remoteHost": {},
   "htmlDiv": {
     "mainDiv": "mainDiv",
     "graphDiv": "diagram",
@@ -25,7 +23,7 @@ const config = {
   "graph": {
     "allowDeleteKey": false,
     "colorSchema": "dark",
-    "zoomFactor": 1.05,
+    "zoomFactor": 1.25,
     "defaultDSL": "DefaultDSL",
     "rootGraphURL": "/fileServer/graphRoot.json",
     "rootGraphNodeData": {
@@ -37,6 +35,6 @@ const config = {
     "maxHistoryLength": 30
   },
   "server": {
-    "ip": "192.168.1.14"
+    "ip": "172.26.3.117"
   }
 };

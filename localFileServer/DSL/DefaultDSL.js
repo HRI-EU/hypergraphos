@@ -6,15 +6,18 @@ function DefaultDSL_getDSL( g ) {
     // Define DSL templates
     templateNodeList: [
       { category: 'Default', template: ()=>{
-        return( $(go.Node, "Auto",  // the Shape automatically fits around the TextBlock
-          $(go.Shape, "RoundedRectangle",  // use this kind of figure for the Shape
-            // bind Shape.fill to Node.data.color
-            new go.Binding("fill", "color")),
-          $(go.TextBlock,
-            { margin: 3 },  // some room around the text
-            // bind TextBlock.text to Node.data.key
-            new go.Binding("text", "key"))
-        ));
+        return( 
+          $(go.Node, "Auto",  // the Shape automatically fits around the TextBlock
+            new go.Binding("location", "location",go.Point.parse).makeTwoWay(go.Point.stringify),
+            $(go.Shape, "RoundedRectangle",  // use this kind of figure for the Shape
+              // bind Shape.fill to Node.data.color
+              new go.Binding("fill", "color")),
+            $(go.TextBlock,
+              { margin: 3 },  // some room around the text
+              // bind TextBlock.text to Node.data.key
+              new go.Binding("text", "key"))
+          )
+        );
       }},
     ],
     dataNodeList:[

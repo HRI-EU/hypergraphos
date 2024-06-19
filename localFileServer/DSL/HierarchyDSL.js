@@ -71,6 +71,7 @@ function HierarchyDSL_getDSL( g ) {
   const dsl_BasicGroup = ( param )=> {
     return $(go.Group, "Vertical",
       { defaultStretch: go.GraphObject.Horizontal,
+        
         ungroupable: true,  // enable Ctrl-Shift-G to ungroup a selected Group
         mouseDrop: (e)=> { g._onFinishDrop( e, null ); },
         mouseDragEnter: ( e, grp, prev )=> { 
@@ -82,7 +83,17 @@ function HierarchyDSL_getDSL( g ) {
           }
         },
       },
-      new go.Binding("location", "location",go.Point.parse).makeTwoWay(go.Point.stringify),
+      new go.Binding("location", "location", function( location ) {
+        const values = location.split( ' ' );
+        // TODO, the 10 comes from the grid size --> move this constant into a config file
+        const x = Math.round( parseFloat( values[0]/10 )*10 );
+        const y = Math.round( parseFloat( values[1]/10 )*10 );
+        return( new go.Point( x, y ) );
+      }).makeTwoWay( function( point ) {
+        const x = Math.round( point.x/10 )*10;
+        const y = Math.round( point.y/10 )*10;
+        return( `${x} ${y}` );
+      }),
       $(go.Panel, "Auto",
         {
         },
@@ -526,7 +537,7 @@ function HierarchyDSL_getDSL( g ) {
         category: 'Hierarchy_Project',
         'fileType': 'application/html',
         'isFile': true,
-        'fileURL': './MultiChatUI2.html',
+        'fileURL': 'lib/multiChatHG/2.0/MultiChatUI2.html',
       },
       {
         label: 'Project',

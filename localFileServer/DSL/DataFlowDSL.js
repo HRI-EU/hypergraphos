@@ -9,18 +9,16 @@ function DataFlowDSL_includeList() {
 }
 function DataFlowDSL_setupDSL() {
   if( !graphData.chatGPT ) {
-    loadScript( 'lib/ChatGPT/1.1/ChatGPT.js', ()=>{
-        graphData.chatGPT = new ChatGPT();
-        console.log( 'Instanciate ChatGPT' );
-      });
+    graphData.chatGPT = new ChatGPT();
+    console.log( 'Instanciate ChatGPT' );
   }
 }
 function DataFlowDSL_getDSL( g ) {
   let diagram = (g.diagram? g.diagram: g.nodePalette);
-  const cm = g.contextMenu;
-  cm.add( menuDSL, 'figureMenu' );
 
-  const figureContextMenu = cm.getMenu( 'figureMenu' );
+  const cm = g.contextMenu;
+  cm.add( menuDSL, 'fileTypeMenu' );
+  const fileTypeContextMenu = cm.getMenu( 'fileTypeMenu' );
   //-----------------------
   // Define specific shapes
   //-----------------------
@@ -93,7 +91,8 @@ function DataFlowDSL_getDSL( g ) {
       { category: 'DataFlow_BreakPoint',       template: dsl_Component, param: { g, figure: 'Circle',           fill: 'Red',     hasInputs: true, canAddInput: false, hasOutputs: false, canAddOutput: false, isInputEditable: false, isOutputEditable: false, hasProperties: false, hasValue: false, hasUnit: false, canAddProperties: false, isPropertiesDynamic: true, hasTag: false, hasType: false, isFromLinkable: false, isToLinkable: false, hasFunctionButtons: false, minSize: new go.Size(80, 80), buttonMinSize: new go.Size(40, 20), isResizable:false, labelStroke: 'White'} },
       { category: 'DataFlow_BlinkLED',         template: dsl_Component, param: { g, figure: 'Circle',           hasInputs: true, canAddInput: false, hasOutputs: false, canAddOutput: false, isInputEditable: false, isOutputEditable: false, hasProperties: false, hasValue: false, hasUnit: false, canAddProperties: false, isPropertiesDynamic: true, hasTag: false, hasType: false, isFromLinkable: false, isToLinkable: false, hasFunctionButtons: false, minSize: new go.Size(80, 80), buttonMinSize: new go.Size(40, 20), isResizable:false, labelStroke: 'White'} },
 
-      { category: 'DataFlow_Data',             template: dsl_Component, param: { g, figure: 'RoundedRectangle', fill: 'LightGreen', hasInputs: true,  canAddInput: false, isInputEditable: true, hasOutputs: true, canAddOutput: true, isOutputEditable: true, hasProperties: true, hasValue: true, hasUnit: false, canAddProperties: false, isPropertiesDynamic: true, hasTag: false, hasType: true, isFromLinkable: false, isToLinkable: false, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconWidth: 50, iconHeight: 50,hasFunctionButtons: false, minSize: new go.Size(140, 80),isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
+      { category: 'DataFlow_Data',             template: dsl_Component, param: { g, figure: 'RoundedRectangle', fill: 'LightGreen', hasInputs: true,  canAddInput: false, isInputEditable: true, hasOutputs: true, canAddOutput: true, isOutputEditable: true, hasProperties: true, hasValue: true, hasUnit: false, canAddProperties: false, isPropertiesDynamic: true, hasTag: false, hasType: true, isFromLinkable: false, isToLinkable: false, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconWidth: 50, iconHeight: 50,hasFunctionButtons: false, minSize: new go.Size(140, 80),isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true, typeMenu: fileTypeContextMenu} },
+      { category: 'DataFlow_DataJSON',         template: dsl_Component, param: { g, figure: 'RoundedRectangle', fill: 'LightGreen', hasInputs: true,  canAddInput: false, isInputEditable: true, hasOutputs: true, canAddOutput: true, isOutputEditable: true, hasProperties: true, hasValue: true, hasUnit: false, canAddProperties: false, isPropertiesDynamic: true, hasTag: false, hasType: true, isFromLinkable: false, isToLinkable: false, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconWidth: 50, iconHeight: 50,hasFunctionButtons: false, minSize: new go.Size(140, 80),isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
       { category: 'DataFlow_DataSend',         template: dsl_Component, param: { g, figure: 'RoundedRectangle', fill: 'LightGreen', hasInputs: true,  canAddInput: false, isInputEditable: true, hasOutputs: true, canAddOutput: true, isOutputEditable: true, hasProperties: true, hasValue: true, hasUnit: false, canAddProperties: false, isPropertiesDynamic: true, hasTag: false, hasType: true, isFromLinkable: false, isToLinkable: false, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/Text_Data.png', iconWidth: 50, iconHeight: 50,hasFunctionButtons: true, minSize: new go.Size(150, 80), buttonMinSize: new go.Size(40, 20), buttonInternalCallback: dataSend,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
       { category: 'DataFlow_DataGate',         template: dsl_Component, param: { g, figure: 'RoundedRectangle', fill: 'LightGreen', hasInputs: true,  canAddInput: false, isInputEditable: true, hasOutputs: true, canAddOutput: true, isOutputEditable: true, hasProperties: true, hasValue: true, hasUnit: false, canAddProperties: false, isPropertiesDynamic: true, hasTag: false, hasType: true, isFromLinkable: false, isToLinkable: false, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/Text_Data.png', iconWidth: 50, iconHeight: 50,hasFunctionButtons: true, minSize: new go.Size(150, 80), buttonMinSize: new go.Size(40, 20), buttonInternalCallback: dataGate,isCheckBoxes: true, isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
 
@@ -101,9 +100,14 @@ function DataFlowDSL_getDSL( g ) {
       { category: 'DataFlow_JSON2Text',        template: dsl_Component, param: { g, figure: 'Rectangle',        hasInputs: true,  canAddInput: false, hasOutputs: true, canAddOutput: false, hasProperties: true, hasValue: true, hasUnit: true, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/JSON_Text.png', iconWidth: 50, iconHeight: 50,minSize: new go.Size(240, 80), isInputLinkableSelfNode: true, isOutputLinkableSelfNode: true,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true, isResizable:false, isLabelEditable: false} },
       { category: 'DataFlow_Text2JSON',        template: dsl_Component, param: { g, figure: 'Rectangle',        hasInputs: true,  canAddInput: false, hasOutputs: true, canAddOutput: false, hasProperties: true, hasValue: true, hasUnit: true, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/Text_JSON.png', iconWidth: 50, iconHeight: 50,minSize: new go.Size(240, 80), isInputLinkableSelfNode: true, isOutputLinkableSelfNode: true,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true, isResizable:false, isLabelEditable: false} },
       { category: 'DataFlow_ChatJSONSplitter', template: dsl_Component, param: { g, figure: 'Rectangle',        hasInputs: true,  canAddInput: false, hasOutputs: true, canAddOutput: false, hasProperties: true, hasValue: true, hasUnit: true, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/ChatJSON_Splitter.png', iconWidth: 50, iconHeight: 50,minSize: new go.Size(240, 80), isInputLinkableSelfNode: true, isOutputLinkableSelfNode: true,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true, isResizable:false, isLabelEditable: false} },
-      { category: 'DataFlow_Template',         template: dsl_Component, param: { g, figure: 'Rectangle',        hasInputs: true,  canAddInput: true, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasProperties: true, hasValue: true, hasUnit: false, canAddProperties: true, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/Prompt_Template.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: true, isOutputLinkableSelfNode: true,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true, inputMaxLinks:1 } },
+      { category: 'DataFlow_Template',         template: dsl_Component, param: { g, figure: 'Rectangle',        fill: 'Moccasin'         , hasInputs: true,  canAddInput: true, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasProperties: true, hasValue: true, hasUnit: false, canAddProperties: true, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/Prompt_Template.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: true, isOutputLinkableSelfNode: true,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true, inputMaxLinks:1, typeMenu: fileTypeContextMenu } },
+      { category: 'DataFlow_ParseGPTObject',   template: dsl_Component, param: { g, figure: 'Rectangle',        fill: 'Moccasin'         , hasInputs: true,  canAddInput: false, hasOutputs: true, canAddOutput: false, isInputEditable: false, isOutputEditable: false, hasProperties: true, hasValue: true, hasUnit: false, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/ParseObject.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: true, isOutputLinkableSelfNode: true,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true, inputMaxLinks:1, typeMenu: fileTypeContextMenu } },
       { category: 'DataFlow_Chat',             template: dsl_Component, param: { g, figure: 'Rectangle',        hasInputs: true,  canAddInput: false, hasOutputs: true, canAddOutput: false, hasProperties: true, hasValue: true, hasUnit: false, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/Chat_History.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: true, isOutputLinkableSelfNode: true,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
-      { category: 'DataFlow_Component',        template: dsl_Component, param: { g, figure: 'Rectangle',        hasInputs: true,  canAddInput: true, hasOutputs: true, canAddOutput: true, hasProperties: true, hasValue: true, hasUnit: true, canAddProperties: true, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: true, isOutputLinkableSelfNode: true,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
+      { category: 'DataFlow_Component',        template: dsl_Component, param: { g, figure: 'Rectangle',        fill: 'SandyBrown'       , hasInputs: true,  canAddInput: true, hasOutputs: true, canAddOutput: true, hasProperties: true, hasValue: true, hasUnit: true, canAddProperties: true, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: false, iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: true, isOutputLinkableSelfNode: true,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
+      { category: 'DataFlow_ComponentOpen',    template: dsl_Component, param: { g, figure: 'Rectangle',        fill: 'SandyBrown'       , hasInputs: true,  canAddInput: true, hasOutputs: true, canAddOutput: true, hasProperties: true, hasValue: true, hasUnit: true, canAddProperties: true, isPropertiesDynamic: false, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: false, iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: true, isOutputLinkableSelfNode: true,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
+      { category: 'DataFlow_CodeInProp',       template: dsl_Component, param: { g, figure: 'Rectangle',        fill: 'SandyBrown'       , hasInputs: true,  canAddInput: true, hasOutputs: true, canAddOutput: true, hasProperties: true, hasValue: true, hasUnit: false, canAddProperties: true, isPropertiesDynamic: false, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/CodeInProp.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: true, isOutputLinkableSelfNode: true,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
+      // { category: 'DataFlow_CodeInLabel',      template: dsl_Component, param: { g, figure: 'Rectangle',        fill: 'SandyBrown'       , hasInputs: true,  canAddInput: true, hasOutputs: true, canAddOutput: true, hasProperties: true, hasValue: true, hasUnit: false, canAddProperties: true, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/CodeInLabel.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: true, isOutputLinkableSelfNode: true,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
+      { category: 'DataFlow_CondInLabel',      template: dsl_Component, param: { g, figure: 'Rectangle',        fill: 'SandyBrown'       , hasInputs: true,  canAddInput: true, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasProperties: false, hasValue: true, hasUnit: false, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/CondInLabel.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: true, isOutputLinkableSelfNode: true,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
       { category: 'DataFlow_StateMachine',     template: dsl_Component, param: { g, figure: 'CircleRectangle',  hasInputs: true,  canAddInput: true, hasOutputs: true, canAddOutput: true, hasProperties: false, canAddProperties: false, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/StateMachine.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(80, 80), isInputLinkableSelfNode: true, isOutputLinkableSelfNode: true,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
       { category: 'DataFlow_BrowserTTS',       template: dsl_Component, param: { g, figure: 'Rectangle',        hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasProperties: true, hasValue: true, hasUnit: false, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/TTS.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: false, isOutputLinkableSelfNode: false,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
       { category: 'DataFlow_ROSServer',        template: dsl_Component, param: { g, figure: 'Rectangle',        hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasProperties: true, hasValue: true, hasUnit: false, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/ROSConnect.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: false, isOutputLinkableSelfNode: false,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
@@ -112,8 +116,12 @@ function DataFlowDSL_getDSL( g ) {
       { category: 'DataFlow_ROSAction',        template: dsl_Component, param: { g, figure: 'Rectangle',        hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasProperties: true, hasValue: true, hasUnit: false, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/ROSAction.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: false, isOutputLinkableSelfNode: false,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
       { category: 'DataFlow_InputSelector',    template: dsl_Component, param: { g, figure: 'Rectangle',        hasInputs: true,  canAddInput: true, isInputEditable: true, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasProperties: true, hasValue: true, hasUnit: false, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/InputSelector.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: false, isOutputLinkableSelfNode: false,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
       { category: 'DataFlow_OutputSelector',   template: dsl_Component, param: { g, figure: 'Rectangle',        hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: true, isOutputEditable: true, hasProperties: true, hasValue: true, hasUnit: false, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/OutputSelector.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: false, isOutputLinkableSelfNode: false,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
-      { category: 'DataFlow_AsyncCall',        template: dsl_Component, param: { g, figure: 'Rectangle',        hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasProperties: true, hasValue: true, hasUnit: true, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/AsyncCall.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: false, isOutputLinkableSelfNode: false,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
-      { category: 'DataFlow_Watchdog',         template: dsl_Component, param: { g, figure: 'Rectangle',        hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasProperties: true, hasValue: true, hasUnit: true, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/Watchdog.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: false, isOutputLinkableSelfNode: false,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
+      { category: 'DataFlow_ForEach',          template: dsl_Component, param: { g, figure: 'Rectangle',        fill: 'aqua '            , hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasProperties: false, hasValue: true, hasUnit: true, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/ForEach.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: false, isOutputLinkableSelfNode: false,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
+      { category: 'DataFlow_Loop',             template: dsl_Component, param: { g, figure: 'Rectangle',        fill: 'aqua '            , hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasProperties: false, hasValue: true, hasUnit: true, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/Loop.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: false, isOutputLinkableSelfNode: false,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
+      { category: 'DataFlow_BasicStats',       template: dsl_Component, param: { g, figure: 'Rectangle',        fill: 'PapayaWhip'       , hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasProperties: false, hasValue: true, hasUnit: true, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/BasicStats.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: false, isOutputLinkableSelfNode: false,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
+      { category: 'DataFlow_AsyncCall',        template: dsl_Component, param: { g, figure: 'Rectangle',        fill: 'Peru'             , hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasProperties: true, hasValue: true, hasUnit: true, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/AsyncCall.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: false, isOutputLinkableSelfNode: false,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
+      { category: 'DataFlow_StopWatch',        template: dsl_Component, param: { g, figure: 'Rectangle',        fill: 'Peru'             , hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasProperties: false, hasValue: true, hasUnit: true, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/StopWatch.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: false, isOutputLinkableSelfNode: false,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
+      { category: 'DataFlow_Watchdog',         template: dsl_Component, param: { g, figure: 'Rectangle',        fill: 'Peru'             , hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasProperties: true, hasValue: true, hasUnit: true, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/Watchdog.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: false, isOutputLinkableSelfNode: false,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
       { category: 'DataFlow_FireValue',        template: dsl_Component, param: { g, figure: 'Rectangle',        hasInputs: true,  canAddInput: true, isInputEditable: true, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasProperties: false, hasValue: true, hasUnit: false, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/FireValue.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: false, isOutputLinkableSelfNode: false,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
       { category: 'DataFlow_SetOut',           template: dsl_Component, param: { g, figure: 'Rectangle',        hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasProperties: true, hasValue: true, hasUnit: false, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/SetOut.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: false, isOutputLinkableSelfNode: false,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
       { category: 'DataFlow_PassOnTrigger',    template: dsl_Component, param: { g, figure: 'Rectangle',        hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasProperties: true, hasValue: true, hasUnit: false, canAddProperties: false, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconURL: '/fileServer/pictures/PassOnTrigger.png', iconWidth: 50, iconHeight: 50, minSize: new go.Size(240, 80), isInputLinkableSelfNode: false, isOutputLinkableSelfNode: false,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
@@ -126,12 +134,13 @@ function DataFlowDSL_getDSL( g ) {
       { category: 'DataFlow_TrigComponent',    template: dsl_Component, param: { g, figure: 'Rectangle',        fill: 'DarkSeaGreen', hasInputs: true,  canAddInput: true, hasOutputs: true, canAddOutput: true, hasProperties: true, hasValue: true, hasUnit: true, canAddProperties: true, isPropertiesDynamic: true, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: true, iconWidth: 50, iconHeight: 50, hasFunctionButtons: true, minSize: new go.Size(240, 80), buttonMinSize: new go.Size(40, 20), isInputLinkableSelfNode: true, isOutputLinkableSelfNode: true,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
       
       { category: 'DataFlow_Merge',            template: dsl_Component, param: { g, portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,  isOutputEditable: false,                       hasValue: false, hasUnit: false,  figure: 'Rectangle',hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: true, canAddOutput: false, isResizable: false, isLabelEditable: false, maxSize: new go.Size(10, NaN),  } },
-      { category: 'DataFlow_Dispatch',         template: dsl_Component, param: { g, portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: false, hasUnit: false,  figure: 'Rectangle', hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: false, canAddOutput: true, isResizable: false, isLabelEditable: false, maxSize: new go.Size(10, NaN),  } },
-      { category: 'DataFlow_ArrayWrap',        template: dsl_Component, param: { g, portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: false, hasUnit: false,  figure: 'RightPointSquare',hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: true, isInputEditable: true, canAddOutput: false, isOutputEditable: true, isResizable: false, isLabelEditable: false, maxSize: new go.Size(20, NaN),  } },
-      { category: 'DataFlow_ArrayUnwrap',      template: dsl_Component, param: { g, portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: false, hasUnit: false,  figure: 'LeftPointSquare', hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: false, isInputEditable: false, canAddOutput: true, isOutputEditable: true, isResizable: false, isLabelEditable: false, maxSize: new go.Size(20, NaN),  } },
-      { category: 'DataFlow_ObjectWrap',       template: dsl_Component, param: { g, portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: false, hasUnit: false,  figure: 'RightPointSquare',hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: true, isInputEditable: true, canAddOutput: false, isOutputEditable: true, isResizable: false, isLabelEditable: false, maxSize: new go.Size(20, NaN),  } },
-      { category: 'DataFlow_ObjectUnwrap',     template: dsl_Component, param: { g, portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: false, hasUnit: false,  figure: 'LeftPointSquare', hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: false, isInputEditable: false, canAddOutput: true, isOutputEditable: true, isResizable: false, isLabelEditable: false, maxSize: new go.Size(20, NaN),  } },
-      { category: 'DataFlow_Message',          template: dsl_Component, param: { g, figure: 'RoundedRectangle', fill: 'LightYellow', hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasTag: false, hasType:false, hasProperties: false, minSize: new go.Size(30,30), labelTextAlign: "left", isFromLinkable: false, isToLinkable: false, stroke: "transparent", labelFont: "45px sans-serif", isLabelWrap: true } },
+      { category: 'DataFlow_Dispatch',         template: dsl_Component, param: { g, portId: '', fill: 'LightBlue', label: '⬇️', isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: false, hasUnit: false,  figure: 'Rectangle', hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: false, canAddOutput: true, isResizable: false, isLabelEditable: false, minSize: new go.Size(40, 60),  } },
+      { category: 'DataFlow_DispatchBack',     template: dsl_Component, param: { g, portId: '', fill: 'LightBlue', label: '⬆️', isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: false, hasUnit: false,  figure: 'Rectangle', hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: false, canAddOutput: true, isResizable: false, isLabelEditable: false, minSize: new go.Size(40, 60),  } },
+      { category: 'DataFlow_DataWrap',         template: dsl_Component, param: { g, portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: false, hasUnit: false,  figure: 'RightPointSquare',hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: true, isInputEditable: true, canAddOutput: false, isOutputEditable: false, isResizable: false, isLabelEditable: false, minSize: new go.Size(NaN, 50), maxSize: new go.Size(70, NaN)  } },
+      { category: 'DataFlow_DataUnwrap',       template: dsl_Component, param: { g, portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: false, hasUnit: false,  figure: 'LeftPointSquare', hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: false, isInputEditable: false, canAddOutput: true, isOutputEditable: true, isResizable: false, isLabelEditable: false, maxSize: new go.Size(20, NaN),  } },
+      // { category: 'DataFlow_ObjectWrap',       template: dsl_Component, param: { g, portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: false, hasUnit: false,  figure: 'RightPointSquare',hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: true, isInputEditable: true, canAddOutput: false, isOutputEditable: true, isResizable: false, isLabelEditable: false, maxSize: new go.Size(20, NaN),  } },
+      // { category: 'DataFlow_ObjectUnwrap',     template: dsl_Component, param: { g, portId: '',        isFromLinkable: false, isToLinkable: false, hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: false, hasUnit: false,  figure: 'LeftPointSquare', hasInputs: true,  hasOutputs: true,  hasFunctionButtons: false, hasProperties: false, canAddInput: false, isInputEditable: false, canAddOutput: true, isOutputEditable: true, isResizable: false, isLabelEditable: false, maxSize: new go.Size(20, NaN),  } },
+      { category: 'DataFlow_Message',          template: dsl_Component, param: { g, figure: 'RoundedRectangle', fill: 'LightYellow', hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasTag: false, hasType:false, hasProperties: false, minSize: new go.Size(30,30), labelTextAlign: "left", isFromLinkable: false, isToLinkable: false, stroke: "transparent", labelFont: "45px sans-serif", isLabelWrap: true, isLabelEditable: false } },
       { category: 'DataFlow_TunnelIn',         template: dsl_Component, param: { g, figure: 'HalfCircleLeft',   hasInputs: true,  canAddInput: false, hasOutputs: false, canAddOutput: false, hasProperties: false, canAddProperties: false, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: false, minSize: new go.Size(80, 80), isInputLinkableSelfNode: true, isOutputLinkableSelfNode: true,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
       { category: 'DataFlow_TunnelOut',        template: dsl_Component, param: { g, figure: 'HalfCircleRight',  hasInputs: false,  canAddInput: false, hasOutputs: true, canAddOutput: false, hasProperties: false, canAddProperties: false, isFromLinkable: false, isToLinkable: false, hasTag: false, hasType: true, type: '@fileTypeName',isTypeEditable: false, hasIcon: false, minSize: new go.Size(80, 80), isInputLinkableSelfNode: true, isOutputLinkableSelfNode: true,isInputLinkableDuplicates:true,isOutputLinkableDuplicates:true} },
     ],
@@ -237,7 +246,7 @@ function DataFlowDSL_getDSL( g ) {
       },
       {
         label: 'Data',
-        category: 'DataFlow_Data',
+        category: 'DataFlow_DataJSON',
         size: '140 80',
         in_: [
           { portId: '1in', name:'in', tooltip: 'this input expects a JSON object or array' },
@@ -424,7 +433,6 @@ function DataFlowDSL_getDSL( g ) {
         label: 'AI template',
         category: 'DataFlow_Template',
         size: '240 80',
-        color: 'Moccasin',
         in_: [
           { portId: '1in', name:'in1' },
           { portId: '2in', name:'in2' },
@@ -435,11 +443,33 @@ function DataFlowDSL_getDSL( g ) {
         props_: [
           { name: 'computeBarrier', value: '*' },
           { name: 'matcher', value: '{[^}]+}' },
+          { name: 'matcherBraceLen', value: '1' },
+          { name: 'skipComments', value: 'false' },
         ], 
         isFile: true,
         fileContent: 'This is a template example\nThe list of input values: [<in1>, <in2>]\nHere the value of in1 is: <in1>\nWhile the value of in2 is: <in2>\nThe template ends here\nThe full text will be generated in the output\nwhen all inputs are present',
-        fileTypeName: 'Template',
+        fileType: 'text/text',
+        fileTypeName: 'Text',
         doCompute: 'DataFlow_Template',
+      },
+      {
+        label: 'AI Parser',
+        category: 'DataFlow_ParseGPTObject',
+        size: '240 80',
+        in_: [
+          { portId: '1in', name:'in', 'tooltip':'This input get the text generated by a GPT' },
+        ],
+        out_: [
+          { portId: '1out', name:'out', 'tooltip':'This output return a parsed object as defined in the properties' },
+        ], 
+        props_: [
+          { name: 'dataFormat', value: 'json', 'tooltip':'Format of the object created by GPT: e.g. json, html, ...' },
+          { name: 'outFormat', value: 'array', 'tooltip':'array or element' },
+        ], 
+        isFile: true,
+        fileType: 'text/javascript',
+        fileTypeName: 'Parse AI Object',
+        doCompute: 'DataFlow_ParseGPTObject',
       },
       {
         label: 'AI Chat',
@@ -461,7 +491,7 @@ function DataFlowDSL_getDSL( g ) {
         ], 
         props_: [
           { name: 'userList', value: '- { name: all, url: ~/allUsers.png }\n- { name: user1, url: ~/Male1.png }\n- { name: Female1, url: /fileServer/pictures/Monalisa.png }', tooltip: 'List of names/pictures for senders/receivers' },
-          { name: 'hasInputField', value: false, tooltip: 'true to have an input field' },
+          { name: 'hasInputField', value: true, tooltip: 'true to have an input field' },
           { name: 'messageGap', value: '15px', tooltip: 'distance between messages, default = 15px' },
           { name: 'iconHeight', value: '40px', tooltip: 'message icon height, default = 40px' },
           { name: 'backgroundColor', value: '#C1D0F6', tooltip: 'chat background color, default = #C1D0F6' },
@@ -513,7 +543,6 @@ function DataFlowDSL_getDSL( g ) {
         label: 'AI component',
         category: 'DataFlow_Component',
         size: '240 80',
-        color: 'LightSeaGreen',
         in_: [
           { portId: '1in', name:'in' },
         ],
@@ -527,7 +556,76 @@ function DataFlowDSL_getDSL( g ) {
         fileContent: 'var nodeData, name, value;\n',
         fileTypeName: 'Component',
         fileType: 'text/javascript',
-        iconURL: ''   
+      },
+      {
+        label: 'AI component',
+        category: 'DataFlow_ComponentOpen',
+        size: '240 80',
+        in_: [
+          { portId: '1in', name:'in' },
+        ],
+        out_: [
+          { portId: '1out', name:'out' },
+        ], 
+        props_: [
+          { name: 'computeBarrier', value: '*' },
+        ], 
+        fileContent: 'var nodeData, name, value;\n',
+        fileTypeName: 'Component',
+        fileType: 'text/javascript',
+      },
+      {
+        label: 'Code In Prop',
+        category: 'DataFlow_CodeInProp',
+        size: '240 80',
+        in_: [
+          { portId: '1in', name:'in' },
+        ],
+        out_: [
+          { portId: '1out', name:'out' },
+        ], 
+        props_: [
+          { name: 'computeBarrier', value: '*' },
+          { name: 'code', value: '' },
+        ], 
+        doCompute: 'DataFlow_CodeIn',
+        fileTypeName: 'Code In Prop',
+        fileType: 'text/javascript',
+      },
+      {
+        label: 'Code Here',
+        category: 'DataFlow_CodeInLabel',
+        size: '240 80',
+        in_: [
+          { portId: '1in', name:'in' },
+        ],
+        out_: [
+          { portId: '1out', name:'out' },
+        ], 
+        props_: [
+          { name: 'computeBarrier', value: '*' },
+        ], 
+        doCompute: 'DataFlow_CodeIn',
+        fileTypeName: 'Code In Label',
+        fileType: 'text/javascript',
+      },
+      {
+        label: 'Condition Here',
+        category: 'DataFlow_CondInLabel',
+        size: '240 80',
+        in_: [
+          { portId: '1in', name:'in' },
+        ],
+        out_: [
+          { portId: '1out', name:'onTrue' },
+          { portId: '2out', name:'onFalse' },
+        ], 
+        props_: [
+          { name: 'computeBarrier', value: '*' },
+        ], 
+        doCompute: 'DataFlow_CondInLabel',
+        fileTypeName: 'Condition In Label',
+        fileType: 'text/javascript',
       },
       {
         label: 'TTS',
@@ -565,9 +663,7 @@ function DataFlowDSL_getDSL( g ) {
         doCompute: 'DataFlow_Merge',
       },
       {
-        label: '',
         category: 'DataFlow_Dispatch',
-        color: 'Moccasin', 
         props_: [        ],
         in_: [ 
           { portId:'1in', name:'in' },
@@ -579,10 +675,23 @@ function DataFlowDSL_getDSL( g ) {
         doCompute: 'DataFlow_Dispatch',
       },
       {
+        category: 'DataFlow_DispatchBack',
+        props_: [        ],
+        in_: [ 
+          { portId:'1in', name:'in' },
+        ],
+        out_: [ 
+          { portId:'1out', name:'out1' },
+          { portId:'2out', name:'out2' },
+        ],
+        doCompute: 'DataFlow_DispatchBack',
+      },
+      {
         label: 'Label',
         category: 'DataFlow_Message',
         alignment: "0 0.5 0 0",
         alignmentFocus: "0 0.5 0 0",
+        isLabelEditable: true,
         size: "370 60",
         in_: [ 
           { portId:'1in', name:'in' },
@@ -593,36 +702,63 @@ function DataFlowDSL_getDSL( g ) {
         doCompute: 'DataFlow_Message',
       },
       {
-        label: '',
-        category: 'DataFlow_ArrayWrap',
+        label: '&',
+        category: 'DataFlow_DataWrap',
         color: 'seagreen', 
         in_: [ 
-          { portId:'0in', name:'[]', isEditable: false },
-          { portId:'1in', name:'0' },
-          { portId:'2in', name:'1' },
+          { portId:'0in', name:'0' },
+          { portId:'1in', name:'1' },
         ],
         out_: [ 
-          { portId:'1out', name:'[]', tooltip: '[] for array or {} for object' },
+          { portId:'1out', name:'[]', tooltip: 'array' },
         ],
         doCompute: 'DataFlow_ArrayWrap',
+        computeBarrier: '*',
       },
       {
-        label: '',
-        category: 'DataFlow_ObjectWrap',
+        label: '&',
+        category: 'DataFlow_DataWrap',
         color: 'seagreen', 
         in_: [ 
-          { portId:'0in', name:'{}', isEditable: false },
           { portId:'1in', name:'in1' },
           { portId:'2in', name:'in2' },
         ],
         out_: [ 
-          { portId:'1out', name:'{}', tooltip: '[] for array or {} for object' },
+          { portId:'1out', name:'{}', tooltip: 'object' },
         ],
         doCompute: 'DataFlow_ObjectWrap',
+        computeBarrier: '*',
       },
       {
-        label: '',
-        category: 'DataFlow_ArrayUnwrap',
+        label: '⪢',
+        category: 'DataFlow_DataWrap',
+        color: 'seagreen', 
+        in_: [ 
+          { portId:'1in', name:'in1' },
+          { portId:'2in', name:'in2' },
+        ],
+        out_: [ 
+          { portId:'1out', name:'[]', tooltip: 'array' },
+        ],
+        doCompute: 'DataFlow_ArrayMerge',
+        computeBarrier: '*',
+      },
+      {
+        label: '⪢',
+        category: 'DataFlow_DataWrap',
+        color: 'seagreen', 
+        in_: [ 
+          { portId:'1in', name:'in1' },
+          { portId:'2in', name:'in2' },
+        ],
+        out_: [ 
+          { portId:'1out', name:'{}', tooltip: 'object' },
+        ],
+        doCompute: 'DataFlow_ObjectMerge',
+        computeBarrier: '*',
+      },
+      {
+        category: 'DataFlow_DataUnwrap',
         color: 'seagreen', 
         in_: [ 
           { portId:'1in', name:'[]' },
@@ -634,8 +770,7 @@ function DataFlowDSL_getDSL( g ) {
         doCompute: 'DataFlow_ArrayUnwrap',
       },
       {
-        label: '',
-        category: 'DataFlow_ObjectUnwrap',
+        category: 'DataFlow_DataUnwrap',
         color: 'seagreen', 
         in_: [ 
           { portId:'1in', name:'{}' },
@@ -875,10 +1010,113 @@ function DataFlowDSL_getDSL( g ) {
         doCompute: 'DataFlow_FireValue',
       },
       {
+        label: 'ForEach',
+        category: 'DataFlow_ForEach',
+        size: '240 80',
+        in_: [
+          {
+            portId: '1in', name:'object',
+            tooltip: 'This input expects a JSON object/array.',
+          },
+          {
+            portId: '2in', name:'doInit',
+            tooltip: 'This input expects an event\nto restart the loop from the first item.',
+          },
+          {
+            portId: '3in', name:'doNext',
+            tooltip: 'This input expects an event to get the next element from the object.',
+          }
+        ],
+        out_: [
+          {
+            portId: '1out', name:'key',
+            tooltip: 'This output returns current key/index in the object/array',
+          },
+          {
+            portId: '2out', name:'item',
+            tooltip: 'This output returns the value of the current key/index',
+          },
+          {
+            portId: '3out', name:'onEnd',
+            tooltip: 'This output returns an event when doNext\nreaches the end of the object/array',
+          }
+        ],
+        fileTypeName: 'ForEach',
+        fileType: 'text/javascript',
+        doCompute: 'DataFlow_ForEach',
+      },
+      {
+        label: 'Loop',
+        category: 'DataFlow_Loop',
+        size: '240 80',
+        in_: [
+          {
+            portId: '1in', name:'fromIndex',
+            tooltip: 'This input expects a number. Initial index.',
+          },
+          {
+            portId: '2in', name:'toIndex',
+            tooltip: 'This input expects a number. Final index (not included in loop).',
+          },
+          {
+            portId: '3in', name:'doInit',
+            tooltip: 'This input expects an event\nto restart the loop from the first index.',
+          },
+          {
+            portId: '4in', name:'doNext',
+            tooltip: 'This input expects an event to get the next index.',
+          }
+        ],
+        out_: [
+          {
+            portId: '1out', name:'index',
+            tooltip: 'This output returns current index.',
+          },
+          {
+            portId: '2out', name:'onEnd',
+            tooltip: 'This output returns an event when doNext\nreaches toIndex',
+          }
+        ],
+        fileTypeName: 'Loop',
+        fileType: 'text/javascript',
+        doCompute: 'DataFlow_Loop',
+      },
+      {
+        label: 'Basic Stats',
+        category: 'DataFlow_BasicStats',
+        size: '240 80',
+        in_: [
+          {
+            portId: '1in', name:'in',
+            tooltip: 'This input expects a JSON array with numbers inside.',
+          }
+        ],
+        out_: [
+          {
+            portId: '1out', name:'min',
+            tooltip: 'This output returns the mininmum value in array',
+          },
+          {
+            portId: '2out', name:'mean',
+            tooltip: 'This output returns the mean value in array',
+          },
+          {
+            portId: '3out', name:'std',
+            tooltip: 'This output returns the standard deviation in array',
+          },
+          {
+            portId: '4out', name:'max',
+            tooltip: 'This output returns the maximum value in array',
+          }
+        ],
+        fileTypeName: 'Basic Stats',
+        fileType: 'text/javascript',
+        doCompute: 'DataFlow_BasicStats',
+      },
+      {
         label: 'Delayed Out',
         category: 'DataFlow_AsyncCall',
         size: '240 80',
-        color: 'Peru',
         in_: [
           {
             portId: '1in', name:'in',
@@ -904,10 +1142,37 @@ function DataFlowDSL_getDSL( g ) {
         doCompute: 'DataFlow_AsyncCall',
       },
       {
+        label: 'StopWatch',
+        category: 'DataFlow_StopWatch',
+        size: '240 80',
+        in_: [
+          {
+            portId: '1in', name:'start',
+            tooltip: 'This input expects an event to start the watch.',
+          },
+          {
+            portId: '2in', name:'stop',
+            tooltip: 'This input expects an event to stop the watch.',
+          }
+        ],
+        out_: [
+          {
+            portId: '1out', name:'time',
+            tooltip: 'This output returns the measured time in [s]\nbetween start and stop events',
+          },
+          {
+            portId: '2out', name:'timeString',
+            tooltip: 'This output returns the time as a string in [s] and [ms]',
+          }
+        ],
+        fileTypeName: 'StopWatch',
+        fileType: 'text/javascript',
+        doCompute: 'DataFlow_StopWatch',
+      },
+      {
         label: 'Watchdog',
         category: 'DataFlow_Watchdog',
         size: '240 80',
-        color: 'Peru',
         in_: [
           {
             portId: '1in', name:'in',
@@ -1555,7 +1820,9 @@ function DataFlow_Chat( nodeData, name, value ) {
       hc.clear();
       hc.setHistory( value );
     } else if( name == 'selectSender' ) {
-      hc.selectSender( value );
+      if( value ) {
+        hc.selectSender( value );
+      }
     } else if( name == 'message' ) {
       hc.addMessage( value.sender, value.receiver, value.text );
       const history = hc.getHistory( true );
@@ -1571,7 +1838,7 @@ function DataFlow_Chat( nodeData, name, value ) {
 }
 function DataFlow_Message( nodeData, name, value ) {
 
-  if( value != undefined ) {
+  if( value !== undefined ) {
     if( typeof( value ) == 'string' ) {
       setNodeDataField( nodeData, 'label', value );
     } else {
@@ -1592,11 +1859,11 @@ function DataFlow_Message( nodeData, name, value ) {
   graphData.dfe.fireOutput( nodeData, 'out', value );
 }
 function DataFlow_Template( nodeData, name, value ) {
-  function applyTemplate( matcher, templateStr, values, isKeepUnmatchedValues ) {
+  function applyTemplate( matcher, matcherBraceLen, templateStr, values, isKeepUnmatchedValues ) {
     let result = '';
     // Function to get key->value replacement
     const getKeyValue = ( matchStr )=> {
-      const name = matchStr.substring( 1, matchStr.length-1 );
+      const name = matchStr.substring( matcherBraceLen, matchStr.length-matcherBraceLen );
       if ( name in values) {
         const v = values[name];
         if( typeof( v ) == 'string' ) {
@@ -1622,6 +1889,8 @@ function DataFlow_Template( nodeData, name, value ) {
   }
   if( name == 'doCompute' ) {
     const matcher = graphData.dfe.getProperty( nodeData, 'matcher', '<[^>]+>' );
+    const matcherBraceLen = graphData.dfe.getProperty( nodeData, 'matcherBraceLen', 1 );
+    const skipComments = graphData.dfe.getProperty( nodeData, 'skipComments', false );
     let tagList = graphData.dfe.getInputList( nodeData );
     // const inputNameList = graphData.dfe.getInputNameList( nodeData );
     // for( const inName of inputNameList ) {
@@ -1631,9 +1900,14 @@ function DataFlow_Template( nodeData, name, value ) {
     tagList = Object.assign( tagList, propertyList );
     
     // True if all inputs arrived
-    const templateStr = nodeData.fileContent;
+    let templateStr = nodeData.fileContent;
     if( templateStr ) {
-      const value = applyTemplate( matcher, templateStr, tagList );
+      if( skipComments ) {
+        // Remove comments in the form: (% comment %)
+        templateStr = templateStr.replaceAll( /\(%[\s\S]+?%\)\s*/gm, '' );
+        //templateStr = templateStr.replaceAll( /\(%[^]+?%\)/gm, '' );
+      }
+      const value = applyTemplate( matcher, matcherBraceLen, templateStr, tagList );
       graphData.dfe.fireOutput( nodeData, 'out', value );
     }
   }
@@ -1666,6 +1940,18 @@ function DataFlow_Dispatch( nodeData, name, value ) {
     }
   }
 }
+function DataFlow_DispatchBack( nodeData, name, value ) {
+  const outputNameList = graphData.dfe.getOutputNameList( nodeData ).reverse();
+
+  for( const outName of outputNameList ) {
+    if( graphData.dfe.isOutputConnected( nodeData, outName ) ) {
+      graphData.dfe.fireOutput( nodeData, outName, value );
+    } else {
+      // If output is not connected, try fireByRef
+      graphData.dfe.fireByRef( nodeData, outName, value );
+    }
+  }
+}
 function DataFlow_DataGate( nodeData, name, value ) {
   if( nodeData.buttons_[0].checked || name == 'reset' ) {
     DataFlow_Data( nodeData, name, value );
@@ -1682,19 +1968,22 @@ function DataFlow_Data( nodeData, name, value ) {
   let strValue = nodeData.fileContent;
     
   // value is undefined for pure event 
-  if( value == undefined ) {
-    switch( nodeData.fileType ) {
-      case 'text/text':
-        outValue = strValue;
-        break;
-        default: //'text/json'
-        try {
-          outValue = JSON.parse( strValue );
-        } catch (error) {
-          outValue = {};
-        }
-        break;
-    }
+  if( value === undefined ) {
+    outValue = strValue;
+    try {
+      outValue = JSON.parse( strValue );
+    } catch (error) {}
+    // switch( nodeData.fileType ) {
+    //   case 'text/text':
+    //     outValue = strValue;
+    //     break;
+    //   default: //'text/json'
+    //     outValue = strValue;
+    //     try {
+    //       outValue = JSON.parse( strValue );
+    //     } catch (error) {}
+    //     break;
+    // }
   } else {
     if( typeof( value ) == 'object' ) {
       strValue = JSON.stringify( value, null, 2 );
@@ -1705,7 +1994,7 @@ function DataFlow_Data( nodeData, name, value ) {
       case 'text/text':
         outValue = strValue;
         break;
-        default: //'text/json'
+      default: //'text/json'
         if( typeof( value ) == 'object' ) {
           outValue = value;
         } else {
@@ -1766,9 +2055,11 @@ function DataFlow_StateMachine( nodeData, name, value ) {
         // Execute actions
         DataFlow_Dispatch( nodeData, 'in' );
       }
-    } else { // If in have no connection ==> This node become active
+    } else { // If in have no connection (start node) ==> This node become active
       // Set this node active
       setActive( nodeData, true );
+      // Execute actions
+      DataFlow_Dispatch( nodeData, 'in' );
     }
   }
 }
@@ -1800,6 +2091,7 @@ function DataFlow_BlinkLED( nodeData, name, value ) {
   }
 }
 function DataFlow_SystemEvent( nodeData, name, value ) {
+  debugger
   graphData.dfe.fireOutput( nodeData, 'onGraphLoaded' );
 }
 function DataFlow_BrowserTTS( nodeData, name, value ) {
@@ -2291,57 +2583,47 @@ function DataFlow_TunnelOut( nodeData, name, value ) {
   graphData.dfe.fireOutput( nodeData, 'out', value );
 }
 function DataFlow_ArrayWrap( nodeData, name, value ) {
-  const inNameList = graphData.dfe.getInputNameList( nodeData );
-
-  if( name == '[]' ) {
-    const outNameList = graphData.dfe.getOutputNameList( nodeData );
-      
-    const outValue = ( outNameList && outNameList[0] == '[]'? []: {} );
+  if( name == 'doCompute' ) {
+    const outValue = [];
+    const inNameList = graphData.dfe.getInputNameList( nodeData );
     for( const inName of inNameList ) {
-      if( inName != '[]' ) {
-        outValue[inName] = value[inName];
-      }
+      const value = graphData.dfe.getInput( nodeData, inName, null );
+      outValue[inName] = value;
     }
-    graphData.dfe.fireOutput( nodeData, outNameList[0], outValue );
-  } else {
-    const inputStat = graphData.dfe.get( nodeData, 'inputStat', {} );
-    
-    inputStat[name] = true;
-    let isObjectReady = true;
+    graphData.dfe.fireOutput( nodeData, '[]', outValue );
+  }
+}
+function DataFlow_ObjectWrap( nodeData, name, value ) {
+  if( name == 'doCompute' ) {
+    const outValue = {};
+    const inNameList = graphData.dfe.getInputNameList( nodeData );
     for( const inName of inNameList ) {
-      if( inName == '[]' ) {
-        continue;
-      } else if( !inputStat[inName] ) {
-        isObjectReady = false;
-        break;
-      }
+      const value = graphData.dfe.getInput( nodeData, inName, null );
+      outValue[inName] = value;
     }
-    
-    if( isObjectReady ) {
-      graphData.dfe.set( nodeData, 'inputStat', {} );
-      const outNameList = graphData.dfe.getOutputNameList( nodeData );
-      
-      //const outValue = ( outNameList[0] == '[]'? []: {} );
-      let outValue = null;
-      const in0 = graphData.dfe.getInput( nodeData, '[]', null );
-      if( in0 != null ) {
-        if( outNameList[0] == '[]' ) {
-          outValue = in0;
-        } else {
-          outValue = {};
-          in0.forEach( (e,i)=> outValue[i] = in0[i] );
-        }
-      } else {
-        outValue = ( outNameList[0] == '[]'? []: {} );
-      }
-      // End
-      for( const inName of inNameList ) {
-        if( inName != '[]' ) {
-          outValue[inName] = graphData.dfe.getInput( nodeData, inName, null );
-        } 
-      }
-      graphData.dfe.fireOutput( nodeData, outNameList[0], outValue );
+    graphData.dfe.fireOutput( nodeData, '{}', outValue );
+  }
+}
+function DataFlow_ArrayMerge( nodeData, name, value ) {
+  if( name == 'doCompute' ) {
+    const outValue = [];
+    const inNameList = graphData.dfe.getInputNameList( nodeData );
+    for( const inName of inNameList ) {
+      const value = graphData.dfe.getInput( nodeData, inName, null );
+      outValue = outValue.concat( value );
     }
+    graphData.dfe.fireOutput( nodeData, '[]', outValue );
+  }
+}
+function DataFlow_ObjectMerge( nodeData, name, value ) {
+  if( name == 'doCompute' ) {
+    const outValue = {};
+    const inNameList = graphData.dfe.getInputNameList( nodeData );
+    for( const inName of inNameList ) {
+      const value = graphData.dfe.getInput( nodeData, inName, null );
+      Object.assign( outValue, value );
+    }
+    graphData.dfe.fireOutput( nodeData, '{}', outValue );
   }
 }
 function DataFlow_ArrayUnwrap( nodeData, name, value ) {
@@ -2352,61 +2634,204 @@ function DataFlow_ArrayUnwrap( nodeData, name, value ) {
     graphData.dfe.fireOutput( nodeData, outName, outValue );
   }
 }
-function DataFlow_ObjectWrap( nodeData, name, value ) {
-  const inNameList = graphData.dfe.getInputNameList( nodeData );
+function DataFlow_ObjectUnwrap( nodeData, name, value ) {
+  DataFlow_ArrayUnwrap( nodeData, name, value );
+}
+function DataFlow_StopWatch( nodeData, name, value ) {
+  if( name == 'start' ) {
+    const startT = performance.now();
+    graphData.dfe.set( nodeData, 'startT', startT );
+  } else if( name == 'stop' ) {
+    const endT = performance.now();
+    const startT = graphData.dfe.get( nodeData, 'startT', 0 );
+    const elapse = (endT-startT)/1000;
+    const s = Math.trunc(elapse);
+    const ms = Math.trunc((elapse - s)*1000);
+    const outValue = `${s}s ${ms}ms`;
+    graphData.dfe.fireOutput( nodeData, 'time', elapse );
+    graphData.dfe.fireOutput( nodeData, 'timeString', outValue );
+  }
+}
+function DataFlow_BasicStats( nodeData, name, value ) {
+  if( name == 'in' ) {
+    let min = Infinity;
+    let max = -Infinity;
+    let std = 0;
+    let mean = 0;
+    let sum = 0;
+    let sum2 = 0;
+    let len = value.length;
+    value.forEach( v=> {
+      if( v > max ) max = v;
+      if( v < min ) min = v;
+      sum += v;
+    });
+    mean = sum/len;
+    value.forEach( v=> {
+      sum2 += Math.pow( v-mean, 2 );
+    });
+    std = Math.sqrt( sum2/len );
+    graphData.dfe.fireOutput( nodeData, 'min', min );
+    graphData.dfe.fireOutput( nodeData, 'mean', mean );
+    graphData.dfe.fireOutput( nodeData, 'std', std );
+    graphData.dfe.fireOutput( nodeData, 'max', max );
+  }
+}
+function DataFlow_ForEach( nodeData, name, value ) {
 
-  if( name == '{}' ) {
-    const outNameList = graphData.dfe.getOutputNameList( nodeData );
-      
-    const outValue = ( outNameList[0] == '[]'? []: {} );
-    for( const inName of inNameList ) {
-      if( inName != '{}' ) {
-        outValue[inName] = value[inName];
-      }
+  if( name == 'doInit' ) {
+    const object = graphData.dfe.getInput( nodeData, 'object', [] );
+    const array = Object.keys( object );
+    graphData.dfe.set( nodeData, 'array', array );
+    if( array && array.length ) {
+      const index = 0;
+      graphData.dfe.set( nodeData, 'index', index );
+      const key = array[index];
+      graphData.dfe.fireOutput( nodeData, 'key', key );
+      const outValue = object[key];
+      graphData.dfe.fireOutput( nodeData, 'item', outValue );
     }
-    graphData.dfe.fireOutput( nodeData, outNameList[0], outValue );
-  } else {
-    const inputStat = graphData.dfe.get( nodeData, 'inputStat', {} );
-    
-    inputStat[name] = true;
-    let isObjectReady = true;
-    for( const inName of inNameList ) {
-      if( inName == '{}' ) {
-        continue;
-      } else if( !inputStat[inName] ) {
-        isObjectReady = false;
-        break;
-      }
-    }
-    
-    if( isObjectReady ) {
-      graphData.dfe.set( nodeData, 'inputStat', {} );
-      const outNameList = graphData.dfe.getOutputNameList( nodeData );
-      
-      //const outValue = ( outNameList[0] == '[]'? []: {} );
-      let outValue = null;
-      const in0 = graphData.dfe.getInput( nodeData, '[]', null );
-      if( in0 != null ) {
-        if( outNameList[0] == '{}' ) {
-          outValue = in0;
-        } else {
-          outValue = [];
-          const keyList = Object.keys( in0 );
-          keyList.forEach( (e)=> outValue.push( in0[e] ) );
-        }
-      } else {
-        outValue = ( outNameList[0] == '[]'? []: {} );
-      }
-      // End
-      for( const inName of inNameList ) {
-        if( inName != '{}' ) {
-          outValue[inName] = graphData.dfe.getInput( nodeData, inName, null );
-        } 
-      }
-      graphData.dfe.fireOutput( nodeData, outNameList[0], outValue );
+  } else if( name == 'doNext' ) {
+    const object = graphData.dfe.getInput( nodeData, 'object', [] );
+    const array = graphData.dfe.get( nodeData, 'array', [] );
+    const index = graphData.dfe.get( nodeData, 'index', 0 ) + 1;
+    if( index < array.length ) {
+      graphData.dfe.set( nodeData, 'index', index );
+      const key = array[index];
+      graphData.dfe.fireOutput( nodeData, 'key', key );
+      const outValue = object[key];
+      graphData.dfe.fireOutput( nodeData, 'item', outValue );
+    } else {
+      graphData.dfe.fireOutput( nodeData, 'onEnd' );
     }
   }
 }
-function DataFlow_ObjectUnwrap( nodeData, name, value ) {
-  DataFlow_ArrayUnwrap( nodeData, name, value );
+function DataFlow_Loop( nodeData, name, value ) {
+  if( name == 'doInit' ) {
+    const fromIndex = graphData.dfe.getInput( nodeData, 'fromIndex', 0 );
+    const index = fromIndex;
+    graphData.dfe.set( nodeData, 'index', index );
+    const outValue = index;
+    graphData.dfe.fireOutput( nodeData, 'index', outValue );
+  } else if( name == 'doNext' ) {
+    const toIndex = graphData.dfe.getInput( nodeData, 'toIndex', 0 );
+    const index = graphData.dfe.get( nodeData, 'index' ) + 1;
+    if( index < toIndex ) {
+      graphData.dfe.set( nodeData, 'index', index );
+      graphData.dfe.fireOutput( nodeData, 'index', index );
+    } else {
+      graphData.dfe.fireOutput( nodeData, 'onEnd' );
+    }
+  }
+}
+function DataFlow_CodeIn( nodeData, name, value ) {
+  if( name == 'doCompute' ) {
+    let _evalCode = [];
+    // Generate input variables with input values
+    const inputNameList = graphData.dfe.getInputNameList( nodeData );
+    inputNameList.forEach( n=> _evalCode.push( `let ${n} = graphData.dfe.getInput( nodeData, '${n}', '' );` ) );
+    // Generate output variables for holding values to be fired (if not null)
+    const outputNameList = graphData.dfe.getOutputNameList( nodeData );
+    outputNameList.forEach( n=> {
+      if( !inputNameList.includes( n ) ) { // Avoid redeclaration of output variables with same name as input
+        _evalCode.push( `let ${n} = null;` ) 
+      }
+    });
+
+    // First try to get code from property
+    let _code = graphData.dfe.getProperty( nodeData, 'code', null );
+    if( !_code ) {
+      // If code is not in property, get it from label
+      _code = nodeData.label;
+    }
+    _evalCode.push( _code );
+
+    // Generate all fire output calls
+    outputNameList.forEach( n=> _evalCode.push( `if( ${n} != null ) graphData.dfe.fireOutput( nodeData, '${n}', ${n} );` ) );
+
+    try {
+      // Run the code
+      eval( _evalCode.join( '\n' ) );
+    } catch( e ) {}
+  }
+}
+function DataFlow_CondInLabel( nodeData, name, value ) {
+  if( name == 'doCompute' ) {
+    let _evalCode = [];
+
+    // Generate input variables with input values
+    const inputNameList = graphData.dfe.getInputNameList( nodeData );
+    inputNameList.forEach( n=> _evalCode.push( `let ${n} = graphData.dfe.getInput( nodeData, '${n}', '' );` ) );
+    // Generate output variables for holding values to be fired (if not null)
+    const outputNameList = graphData.dfe.getOutputNameList( nodeData );
+    outputNameList.forEach( n=> {
+      if( !inputNameList.includes( n ) ) { // Avoid redeclaration of output variables with same name as input
+        _evalCode.push( `let ${n} = null;` ) 
+      }
+    });
+
+    // Result of condition evalution
+    let _value = false;
+
+    // If code is not in property, get it from label
+    _code = nodeData.label;
+    _evalCode.push( `_value = (${_code});` );
+
+    try {
+      // Run the code
+      eval( _evalCode.join( '\n' ) );
+    } catch( e ) {}
+    
+    // Fire output 
+    if( _value ) {
+      graphData.dfe.fireOutput( nodeData, 'onTrue' );
+    } else {
+      graphData.dfe.fireOutput( nodeData, 'onFalse' );
+    }
+  }
+}
+function DataFlow_ParseGPTObject( nodeData, name, value ) {
+  if (name == 'in') {
+  
+    const dataFormat = graphData.dfe.getProperty( nodeData, 'dataFormat', 'json' );
+    const outFormat = graphData.dfe.getProperty( nodeData, 'outFormat', 'array' );
+  
+    //const regex = /\`\`\`\s*json([\s\S]*?)\`\`\`/g; // Use global flag to match all occurrences
+    const regex = new RegExp("\\`\\`\\`\\s*" + dataFormat + "([\\s\\S]*?)\\`\\`\\`", "g");
+    let matches, outValue = [];
+    while ((matches = regex.exec(value)) !== null) {
+      // This is necessary to avoid infinite loops with zero-width matches
+      if (matches.index === regex.lastIndex) {
+        regex.lastIndex++;
+      }
+  
+      // The match is in the second group (index 1)
+      if (matches[1]) {
+        // Remove any trailing comment
+        const jsonStr = matches[1].replaceAll( /\s*\/\/.*/g, '' );
+        try {
+          // Parse each match as JSON and push to outValue array
+          outValue.push(JSON.parse(jsonStr));
+        } catch (e) {
+          // If parsing fails, push the raw string
+          outValue.push(jsonStr);
+        }
+      }
+    }
+  
+    // If no matches were found, try parsing the entire value as JSON
+    if (outValue.length === 0) {
+      try {
+        outValue = [JSON.parse(value)]; // Wrap in array to maintain array output
+      } catch (e) {
+        // If parsing fails, leave outValue as an empty array or push the raw value as a single element array
+        outValue = [value]; // Optional: Decide based on requirements
+      }
+    }
+    if( outFormat == 'array' ) {
+      graphData.dfe.fireOutput(nodeData, 'out', outValue );
+    } else {
+      graphData.dfe.fireOutput(nodeData, 'out', outValue[0] );
+    }
+  }
 }

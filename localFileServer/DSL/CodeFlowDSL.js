@@ -208,7 +208,7 @@ function CodeFlowDSL_getDSL( g ) {
       { category: 'CodeFlow_FeatureOnOff',    template: dsl_Component, param: { portId: 'Feature', isFromLinkable: true,  isToLinkable: true,  hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: false, hasUnit: false,  figure: 'Rectangle',       hasInputs: false, hasOutputs: false, hasFunctionButtons: true,  hasProperties: false, buttonInternalCallback: featureOnOff, isCheckBoxes: true, hasProperties: false, labelStroke: 'white',     fromSpot: go.Spot.Center, toSpot:go.Spot.Center, buttonStroke: 'white', labelTextAlign: 'left',} },
       { category: 'CodeFlow_Feature',         template: dsl_Component, param: { portId: 'Feature', isFromLinkable: true,  isToLinkable: true,  hasTag: false,  hasType: false, isTypeEditable: false,                        hasValue: false, hasUnit: false,  figure: 'Rectangle',       hasInputs: false, hasOutputs: false, hasFunctionButtons: false, hasProperties: false, labelStroke: 'white',     fromSpot: go.Spot.Right, toSpot:go.Spot.Left, buttonStroke: 'white', labelTextAlign: 'left',} },
       { category: 'CodeFlow_Bus',             template: dsl_BasicNode, param: { portId: 'Bus',     isFromLinkable: true,  isToLinkable: true,  hasTag: false,  hasType: false,  isTypeEditable: false, hasValue: false, hasUnit: false,  figure: 'ellipse',            minSize: new go.Size(40,40), labelTextAlign: 'center',                  labelStroke: 'black',  } },
-      { category: 'CodeFlow_Message',         template: dsl_Component, param: { g, figure: 'RoundedRectangle', fill: 'LightYellow', hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: false, hasTag: false, hasType:false, hasProperties: false, minSize: new go.Size(30,30), labelTextAlign: "left", isFromLinkable: false, isToLinkable: false, stroke: "transparent", labelFont: "45px sans-serif", isLabelWrap: true } },
+      { category: 'CodeFlow_Message',         template: dsl_Component, param: { g, figure: 'RoundedRectangle', fill: 'LightYellow', hasInputs: true,  canAddInput: false, isInputEditable: false, hasOutputs: true, canAddOutput: false, isOutputEditable: false, hasTag: false, hasType:false, hasProperties: false, minSize: new go.Size(30,30), labelTextAlign: "left", isFromLinkable: false, isToLinkable: false, stroke: "transparent", labelFont: "45px sans-serif", isLabelWrap: true, isLabelEditable: false } },
     ],
     dataNodeList: [
       {
@@ -416,7 +416,10 @@ function CodeFlowDSL_getDSL( g ) {
         in_: [ 
           { portId:'1in', name:'in' },
         ],
-        'doCompute': 'DataFlow_Message',
+        out_: [ 
+          { portId:'1out', name:'out' },
+        ],
+        'doCompute': 'CodeFlow_Message',
       },
     ],
     templateLinkList: [
