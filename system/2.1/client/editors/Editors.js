@@ -948,6 +948,11 @@ class HTMLExploreEditor extends EditorBase {
       this.isJustStarted = false;
     });
 
+    // Check readonly
+    if( nodeData.isContentReadOnly ) {
+      this.editor.setReadOnly( true );
+    }
+
     //this.onNeedSave( ... ) // Show star in title...
     this.onDoSave( ()=> {
       console.log( 'Saving text editor: '+this.nodeData.key );
