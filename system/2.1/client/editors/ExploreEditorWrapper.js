@@ -21,14 +21,21 @@ class ExploreEditorWrapper {
     // Instantiate Editor
     const editorParams = this._getEditorParams();
     this.explorerEditor = ExploreEditor.create( this.editorDiv, editorParams );
+    this.isReadOnly = false;
 
     // Change handler
     this.onSourceChangedCallback = null;
   }
   isReadOnly() {
-    return( false );
+    return( this.isReadOnly );
   }
   setReadOnly( status ) {
+    this.isReadOnly = status;
+    if( this.isReadOnly ) {
+      this.explorerEditor.disabled();
+    } else {
+      this.explorerEditor.enabled();
+    }
     // Check how to set read only
   }
   setEditorSource( source ) {
