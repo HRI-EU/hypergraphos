@@ -100,13 +100,17 @@ class HChat {
     }
   }
   getHistory( isFull ) {
+    // ifFull == true --> return the full history
+    // isFull == false --> return the history except the last message
     const result = [];
-    for( const m of document.querySelectorAll(`#${this.divId} .hchat-text`) ) {
+    //for( const m of document.querySelectorAll(`#${this.divId} .hchat-text`) ) {
+    const msgElList = document.querySelectorAll(`#${this.divId} .hchat-text`);
+    const toLen = ( isFull? msgElList.length: msgElList.length-1 );
+    for( let i = 0; i < toLen; ++i  ) {
+      const m = msgElList[i];
       const sender = m.getAttribute( 'sender' );
-      if( ( !sender.startsWith( '_' ) && !isFull ) || isFull ) {
-        const receiver = m.getAttribute( 'receiver' );
-        result.push( { text: m.innerText, sender, receiver } );
-      }
+      const receiver = m.getAttribute( 'receiver' );
+      result.push( { text: m.innerText, sender, receiver } );
     }
     return( result );
   }
