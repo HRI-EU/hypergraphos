@@ -49,13 +49,18 @@ class ACEWrapper {
     const currFold = this.aceEditor.session.getAllFolds().map( fold => fold.range );
     // Get current cursor position
     const cursorPos = this.aceEditor.getCursorPosition();
+    // Get current selection
+    const selRange = this.aceEditor.selection.getRange();
+
     // Set editor source
     this.aceEditor.setValue( source, cursorPos, -1 );
+
     // Restore current folding status
     currFold.forEach( range => this.aceEditor.session.addFold( '...', range ) );
+    // Restore current seleciton
+    this.aceEditor.selection.setRange( selRange );
     // Restore current cursor position
     this.aceEditor.moveCursorTo( cursorPos.row, cursorPos.column );
-    this.aceEditor.clearSelection();
   }
   getEditorSource() {
     return( this.aceEditor.getValue() );
