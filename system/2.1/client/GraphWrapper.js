@@ -184,7 +184,7 @@ class GraphWrapper {
 					{ label: 'Edit',       layout: 'vertical', subMenu: [
 						{ label: 'Duplicate',   if: (o)=> {	const location = o.d.cmt.mouseDownPoint;
 																								return( o.d.cmd.canCopySelection() && 
-																								        !this.isGraphReadOnly ); },
+																								        !this.isGraphReadOnly() ); },
 																		do: (o)=> { const location = o.d.cmt.mouseDownPoint;
 																								o.d.cmd.copySelection();
 																								o.d.cmd.pasteSelection( location ); } },
@@ -874,7 +874,7 @@ class GraphWrapper {
 		const selCount = this.getSelectionCount();
 		const data = this.getFirstSelectedNodeData();
 		return( data && 
-						!this.isGraphReadOnly &&
+						!this.isGraphReadOnly() &&
 						(( data.isFile || data.isDir ) && data.fileURL ) &&
 						( selCount == 1 ) );
 	}
