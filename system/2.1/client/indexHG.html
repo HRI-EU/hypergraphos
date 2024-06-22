@@ -155,6 +155,70 @@ Date: 10.07.2020
             console.log(`… file[${i}].name = ${file.name}`);
             console.log(`… file[${i}].type = ${file.type}`);
             console.log(`… file[${i}].kind = ${file.kind}`);
+            if( file.type.match( '^image/') ) {
+              const reader = new FileReader();
+
+              reader.onload = (el)=> {
+                const fileContent = el.target.result;
+                // Get main graph
+                const g = getMainGraph();
+                const nodeData = g.getDSLData( 'Pictures_Basic' );
+                if( nodeData ) {
+                  nodeData.label = file.name;
+                  nodeData.fileType = file.type;
+                  const location = g.getDocXYFromView( e.x, e.y );
+
+                  g.addNode( nodeData, location.x, location.y );
+                  if( e.shiftKey ) {
+                    const graphURL = g.getGraphPath();
+                    const idx = graphURL.lastIndexOf( '.' );
+                    const fileURL = `${graphURL.substring( 0, idx )}_Data/${nodeData.key}_${file.name}`;
+                    const dataContent = fileContent.replace( /^data:image\/\w+;base64,/, '' );
+                    saveBase64Data( fileURL, dataContent, ()=>{
+                      setNodeDataField( nodeData, 'fileURL', fileURL );
+                    });
+                  } else {
+                    nodeData.fileContent = fileContent;
+                  }
+                } else {
+                  alert( 'Warning: drop ignored because I could not find PictureDSL' );
+                }
+              };
+
+              reader.readAsDataURL( file );
+            } else if( file.type.match( '^text/' ) ) {
+              const reader = new FileReader();
+
+              reader.onload = (el)=> {
+                const fileContent = el.target.result;
+                // Get main graph
+                const g = getMainGraph();
+                const category = ( e.shiftKey? 'Hierarchy_CodeInFile': 'Hierarchy_CodeInGraph' );
+                const nodeData = g.getDSLData( category );
+                if( nodeData ) {
+                  nodeData.label = file.name;
+                  nodeData.fileType = file.type;
+                  const location = g.getDocXYFromView( e.x, e.y );
+
+                  g.addNode( nodeData, location.x, location.y );
+                  if( e.shiftKey ) {
+                    const graphURL = g.getGraphPath();
+                    const idx = graphURL.lastIndexOf( '.' );
+                    nodeData.fileURL = `${graphURL.substring( 0, idx )}_Data/${nodeData.key}_${file.name}`;
+                    const dataContent = fileContent.replace( /^data:text\/\w+;base64,/, '' );
+                    const nodeDataCopy = g.getNodeData( nodeData.key, true );
+                    nodeDataCopy.fileContent = dataContent;
+                    saveNodeContent( nodeDataCopy );
+                  } else {
+                    nodeData.fileContent = fileContent;
+                  }
+                } else {
+                  alert( 'Warning: drop ignored because I could not find HierarchyDSL' );
+                }
+              };
+
+              reader.readAsDataURL( file );
+            }
           } else if( item.kind == 'string'  && item.type.match( "^text/plain" ) ) {
             item.getAsString( (text)=> {
               console.log( 'text:', text, 'at', 'x:', e.x, 'y:', e.y );

@@ -343,11 +343,11 @@ class GraphEditor extends EditorBase {
   }
   saveEditorContent( onSaved ) {
     let nodeDataTemp = null; // Node used to save the graph
-    const graphImageData = { // Node used to save the image of the graph
-      fileURL: '',
-      fileContent: '',
-      fileEncoding: 'base64',
-    }
+    // const graphImageData = { // Node used to save the image of the graph
+    //   fileURL: '',
+    //   fileContent: '',
+    //   fileEncoding: 'base64',
+    // }
     const onImageSaved = ()=> {
       // Third, notify save done
       this.editorSaved();
@@ -362,10 +362,12 @@ class GraphEditor extends EditorBase {
         const idx = nodeDataTemp.fileURL.lastIndexOf( '.' );
         const ext = nodeDataTemp.fileURL.substring( idx );
         if( idx && ( ext == '.json' ) ) {
-          const imageData = image.replace( /^data:image\/\w+;base64,/, '' );
-          graphImageData.fileURL = nodeDataTemp.fileURL.substring( 0, idx )+'.png';
-          graphImageData.fileContent = imageData;
-          saveNodeContent( graphImageData, onImageSaved );
+          const fileContent = image.replace( /^data:image\/\w+;base64,/, '' );
+          const fileURL = nodeDataTemp.fileURL.substring( 0, idx )+'.png';
+          // graphImageData.fileURL = nodeDataTemp.fileURL.substring( 0, idx )+'.png';
+          // graphImageData.fileContent = imageData;
+          // saveNodeContent( graphImageData, onImageSaved );
+          saveBase64Data( fileURL, fileContent, onImageSaved )
         }
       }
     };

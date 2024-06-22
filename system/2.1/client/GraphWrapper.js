@@ -346,6 +346,40 @@ class GraphWrapper {
 	getDSLFieldNameList() {
 		return( Array.from( this.dslNodeFieldNameList ) );
 	}
+	getDocXYFromView( x, y ) {
+		const result = { x: 0, y: 0 };
+		const location = this.diagram.transformViewToDoc( new go.Point( x, y ) );
+		result.x = location.x;
+		result.y = location.y;
+		return( result );
+	}
+	getDSLData( category ) {
+		let result = null;
+
+		if( this.nodePalette ) {
+			const nodeData = this.nodePalette.model.nodeDataArray.find( d => d.category == category );
+			result = this._getDataCopy( nodeData );
+			delete result.location;
+			delete result.key;
+		}
+		return( result );
+	}
+	addNode( nodeData, x, y ) {
+		const vb = this.diagram.viewportBounds;
+		const vCenterX = vb.x+vb.width/2;
+		const vCenterY = vb.y+vb.height/2;
+		x = ( x == undefined? vCenterX: x );
+		y = ( y == undefined? vCenterY: y );
+
+		if( nodeData ) {
+			if( !nodeData.location ) {
+				nodeData.location = go.Point.stringify( new go.Point( x, y ) );
+			}
+			this.diagram.startTransaction("add node");
+				this.diagram.model.addNodeData( nodeData );
+			this.diagram.commitTransaction("add node");
+		}
+	}
 	resetFileURL( url ) {
 		if( url.startsWith( this.graphFileServerURLPrefix ) ) {
 			return( this.graphFileServerURLPrefix );

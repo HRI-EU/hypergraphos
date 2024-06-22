@@ -510,6 +510,14 @@ function loadCSSScript( url, onLoad, isAvoidCache ) {
   script.href = url+uniqueURL;
   document.head.append( script )
 }
+function saveBase64Data( fileURL, fileContent, onSaved ) {
+  const nodeData = { // Node used to save the data
+    fileURL,
+    fileContent,
+    fileEncoding: 'base64',
+  };
+  saveNodeContent( nodeData, onSaved );
+}
 function loadNodeContent( nodeData, onLoaded ) {
   // This is used in local mode (file:///...)
   if( nodeData.fileURL == 'noURL' ) {
