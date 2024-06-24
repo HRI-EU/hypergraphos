@@ -110,7 +110,8 @@ class HChat {
       const m = msgElList[i];
       const sender = m.getAttribute( 'sender' );
       const receiver = m.getAttribute( 'receiver' );
-      result.push( { text: m.innerText, sender, receiver } );
+      const messageText = m.getAttribute( 'messageText' );
+      result.push( { text: messageText, sender, receiver } );
     }
     return( result );
   }
@@ -135,7 +136,8 @@ class HChat {
       if( m ) {
         const sender = m.getAttribute( 'sender' );
         const receiver = m.getAttribute( 'receiver' );
-        result = { text: m.innerText, sender, receiver };
+        const messageText = m.getAttribute( 'messageText' );
+        result = { text: messageText, sender, receiver };
       }
     }
     return( result );
@@ -250,10 +252,16 @@ class HChat {
         textStyle = `${textStyle}; font-size: ${this.property.fontSize}`;
       }
       textStyle = textStyle+'"';
+      // Update text with HTML elements
+      const messageHTMLText = messageText.replaceAll( '\n', '<br>' );
       // Create message
       newMessage.innerHTML = `
         <img src="${senderImgSrc}" alt="Sender Icon" class="hchat-user-img" ${iconStyle}>
-        <div class="hchat-text hchat-anim" ${textStyle} sender="${sender}" receiver="${receiver}">${messageText}</div>
+        <div class="hchat-text hchat-anim" ${textStyle} 
+             sender="${sender}" 
+             receiver="${receiver}"
+             messageText="${messageText}"
+             >${messageHTMLText}</div>
         <img src="${receiverImgSrc}" alt="Receiver Icon" class="hchat-user-img" ${iconStyle}>
       `;
       // Remove bluring animation from last message
