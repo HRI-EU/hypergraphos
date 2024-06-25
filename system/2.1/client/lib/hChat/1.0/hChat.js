@@ -253,8 +253,9 @@ class HChat {
       }
       textStyle = textStyle+'"';
       // Update text with HTML elements
-      const messageHTMLText = messageText.replaceAll( '\n', '<br>' )
-                                         .replaceAll( '"', '\"');
+      messageText = messageText.replaceAll( '"', '\"' );
+      const messageHTMLText = messageText.replaceAll( '\n', '<br>' );
+                                         
       // Create message
       newMessage.innerHTML = `
         <img src="${senderImgSrc}" alt="Sender Icon" class="hchat-user-img" ${iconStyle}>
