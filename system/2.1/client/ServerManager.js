@@ -291,6 +291,13 @@ function getNewGraphFileServerURL( extension ) {
   const url = g.getNextGraphFileServerURL( extension );
   return( url );
 }
+function getNewWorkSpaceFileServerURL( nodeData, fileName ) {
+  const g = getMainGraph();
+  const graphURL = g.getGraphPath();
+  const idx = graphURL.lastIndexOf( '.' );
+  const fileURL = `${graphURL.substring( 0, idx )}_Data/${nodeData.key}_${fileName}`;
+  return( fileURL );
+}
 function getNewFileServerURL( extension, onDone ) {
   const fileIndexURL = `${config.host.fileServerSystemURL}/fileIndex.json`;
   
@@ -662,6 +669,12 @@ function _updataURLIfLocalMode( url ) {
   return( result );
 }
 function _openFile( url, onLoad, noTimeStamp ) {
+  // If url is empty, return empty source
+  if( !url ) {
+    onLoad( '' );
+    return;
+  }
+
   // Decide if attach a timestamp or not (timestamp used to avoid chache)
   noTimeStamp = ( noTimeStamp != undefined? noTimeStamp: false );
 

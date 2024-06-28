@@ -408,23 +408,34 @@ class GraphEditor extends EditorBase {
   }
   _verifyFileURL( nodeData, onDone ) {
     let isFileServer = false;
-    if( nodeData && !nodeData.isLink && ( nodeData.isDir || nodeData.isFile ) ) {
+    if( nodeData && ( nodeData.isDir || nodeData.isFile ) ) {
       if( nodeData.fileURL != undefined ) {
         if( ( nodeData.fileURL == '' ) || ( nodeData.fileURL == '/fileServer/' ) ) {
           // NOTE: file server case!!!
           isFileServer = true;
           // Initialize fileServer URL if is not complete
           const ext = getExtByFileType( nodeData.fileType );
-          getNewFileServerURL( ext, ( newURL )=> {
-            nodeData.fileURL = newURL;
-            // NOTE: the setNodeDataField trigger the editorChange event
-            //this.editor.setNodeDataField( nodeData.key, 'fileURL', url );
-            setNodeDataField( nodeData.key, 'fileURL', newURL );
-
+          if( nodeData.isFile ) {
+            const fileName = `${nodeData.key}.${ext}`;
+            const fileURL = getNewWorkSpaceFileServerURL( nodeData, fileName );
+            setNodeDataField( nodeData.key, 'fileURL', fileURL );
+            // Set also fileURL in nodeData (necessary for editor/viewers)
+            nodeData.fileURL = fileURL;
             if( onDone ) {
               onDone();
             }
-          });
+          } else { // case nodeData.isDir
+            getNewFileServerURL( ext, ( newURL )=> {
+              nodeData.fileURL = newURL;
+              // NOTE: the setNodeDataField trigger the editorChange event
+              //this.editor.setNodeDataField( nodeData.key, 'fileURL', url );
+              setNodeDataField( nodeData.key, 'fileURL', newURL );
+  
+              if( onDone ) {
+                onDone();
+              }
+            });
+          }
         } else if( nodeData.fileURL == 'graph://fileServer/' ) {
           // Initialize graphServer URL if is not complete
           const ext = getExtByFileType( nodeData.fileType );

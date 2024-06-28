@@ -181,33 +181,37 @@ Date: 10.07.2020
           // Set or save node content
           switch( fileNode.contentMethod ) {
             case 'SaveBase64Content': {
-              const graphURL = g.getGraphPath();
-              const idx = graphURL.lastIndexOf( '.' );
-              const fileURL = `${graphURL.substring( 0, idx )}_Data/${nodeData.key}_${file.name}`;
+              // const graphURL = g.getGraphPath();
+              // const idx = graphURL.lastIndexOf( '.' );
+              // const fileURL = `${graphURL.substring( 0, idx )}_Data/${nodeData.key}_${file.name}`;
+              const fileURL = getNewWorkSpaceFileServerURL( nodeData, file.name );
 
               const encodeContent = fileDataContent.replace( /^data:[^;]+;base64,/, '' );
               saveBase64Data( fileURL, encodeContent, ()=>{
-                setNodeDataField( nodeData, 'fileURL', fileURL );
+                setNodeDataField( nodeData.key, 'fileURL', fileURL );
               });
             } break;
             case 'SetEncodeContent': {
               setNodeDataField( nodeData, 'fileContent', fileDataContent );
             } break;
             case 'SaveUnencodeContent': {
-              const graphURL = g.getGraphPath();
-              const idx = graphURL.lastIndexOf( '.' );
-              nodeData.fileURL = `${graphURL.substring( 0, idx )}_Data/${nodeData.key}_${file.name}`;
+              // const graphURL = g.getGraphPath();
+              // const idx = graphURL.lastIndexOf( '.' );
+              // nodeData.fileURL = `${graphURL.substring( 0, idx )}_Data/${nodeData.key}_${file.name}`;
+              const fileURL = getNewWorkSpaceFileServerURL( nodeData, file.name );
+              setNodeDataField( nodeData.key, 'fileURL', fileURL );
 
               const dataContent = fileDataContent.replace( /^data:[^;]+;base64,/, '' );
               const unencodeFileContent = atob( dataContent );
               const nodeDataCopy = g.getNodeData( nodeData.key, true );
+              // Set fileContent in nodeDataCopy to be saved by the server
               nodeDataCopy.fileContent = unencodeFileContent;
               saveNodeContent( nodeDataCopy );
             } break;
             case 'SetUnencodeContent': {
               const dataContent = fileDataContent.replace( /^data:[^;]+;base64,/, '' );
               const unencodeFileContent = atob( dataContent );
-              setNodeDataField( nodeData, 'fileContent', unencodeFileContent );
+              setNodeDataField( nodeData.key, 'fileContent', unencodeFileContent );
             }
           }
         } else {
