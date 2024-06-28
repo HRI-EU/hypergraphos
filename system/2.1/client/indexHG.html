@@ -136,8 +136,111 @@ Date: 10.07.2020
     //   //logoutBtn.addEventListener("click", async (e) => { logOut() })
     // });
 
-    function dropFileIntoNode( file ) {
+    function prepareDropFileNode( e, file ) {
+      const fileNode = {
+        fileType: file.type,
+        label: file.name,
+        category: '',
+        contentMethod: '',
+      };
 
+      if( fileNode.fileType == 'application/json' ) {
+        fileNode.fileType = 'text/json';
+      }
+
+      if( fileNode.fileType.match( '^image/' ) ) {
+        fileNode.category = 'Pictures_Basic';
+        fileNode.contentMethod = ( e.shiftKey? 'SaveBase64Content': 'SetEncodeContent' );
+      } else if( fileNode.fileType.match( '^text/') ) {
+        fileNode.category = ( e.shiftKey? 'Hierarchy_CodeInFile': 'Hierarchy_CodeInGraph' );
+        fileNode.contentMethod = ( e.shiftKey? 'SaveUnencodeContent': 'SetUnencodeContent' );
+      } else {
+        fileNode.category = ( e.shiftKey? 'Hierarchy_DataInFile': 'Hierarchy_DataInGraph' );
+        fileNode.contentMethod = ( e.shiftKey? 'SaveBase64Content': 'SetTextContent' );
+      }
+      dropFileNodeIntoNode( e, file, fileNode );
+    }
+    function dropFileNodeIntoNode( e, file, fileNode ) {
+      const reader = new FileReader();
+
+      reader.onload = (el)=> {
+        const fileDataContent = el.target.result;
+        // Get main graph
+        const g = getMainGraph();
+        const nodeData = g.getDSLData( fileNode.category );
+        if( nodeData ) {
+          nodeData.label = fileNode.label;
+          if( fileNode.fileType ) {
+            nodeData.fileType = fileNode.fileType;
+          }
+          const location = g.getDocXYFromView( e.x, e.y );
+
+          // Add a new node
+          g.addNode( nodeData, location.x, location.y );
+
+          // Set or save node content
+          switch( fileNode.contentMethod ) {
+            case 'SaveBase64Content': {
+              const graphURL = g.getGraphPath();
+              const idx = graphURL.lastIndexOf( '.' );
+              const fileURL = `${graphURL.substring( 0, idx )}_Data/${nodeData.key}_${file.name}`;
+
+              const encodeContent = fileDataContent.replace( /^data:[^;]+;base64,/, '' );
+              saveBase64Data( fileURL, encodeContent, ()=>{
+                setNodeDataField( nodeData, 'fileURL', fileURL );
+              });
+            } break;
+            case 'SetEncodeContent': {
+              setNodeDataField( nodeData, 'fileContent', fileDataContent );
+            } break;
+            case 'SaveUnencodeContent': {
+              const graphURL = g.getGraphPath();
+              const idx = graphURL.lastIndexOf( '.' );
+              nodeData.fileURL = `${graphURL.substring( 0, idx )}_Data/${nodeData.key}_${file.name}`;
+
+              const dataContent = fileDataContent.replace( /^data:[^;]+;base64,/, '' );
+              const unencodeFileContent = atob( dataContent );
+              const nodeDataCopy = g.getNodeData( nodeData.key, true );
+              nodeDataCopy.fileContent = unencodeFileContent;
+              saveNodeContent( nodeDataCopy );
+            } break;
+            case 'SetUnencodeContent': {
+              const dataContent = fileDataContent.replace( /^data:[^;]+;base64,/, '' );
+              const unencodeFileContent = atob( dataContent );
+              setNodeDataField( nodeData, 'fileContent', unencodeFileContent );
+            }
+          }
+        } else {
+          alert( `Warning: drop ignored because I could not find DSL for ${fileNode.category}` );
+        }
+      };
+
+      reader.readAsDataURL( file );
+    }
+    function dropStringIntoNode( e, item ) {
+      item.getAsString( (text)=> {
+        console.log( 'text:', text, 'at', 'x:', e.x, 'y:', e.y );
+        
+        // if( text.trim().match( '^#([a-fA-F0-9]+)$' ) ) {
+        //   // If the string is a color => try to set color
+        //   const data = g.getFirstSelectedNodeData();
+        //   if( data ) {
+        //     if( ( data.color != undefined ) || ( data.category.startsWith( 'TextLabels_' ) ) ) {
+        //       setNodeDataField( data, 'color', text.trim() );
+        //     }
+        //   }  
+        // }
+        // Get main graph
+        const g = getMainGraph();
+        const nodeData = g.getDSLData( 'TextLabels_Size2' );
+        if( nodeData ) {
+          const location = g.getDocXYFromView( e.x, e.y );
+
+          // Add a new node
+          g.addNode( nodeData, location.x, location.y );
+          setNodeDataField( nodeData, 'label', text );
+        }
+      });
     }
     function dragOverHandler( e ) {
       // Prevent default behavior (Prevent file from being opened)
@@ -151,103 +254,21 @@ Date: 10.07.2020
 
       if (e.dataTransfer.items) {
         // Use DataTransferItemList interface to access the file(s)
-        [...e.dataTransfer.items].forEach((item, i) => {
+        for( const item of e.dataTransfer.items ) {
           // If dropped items aren't files, reject them
           if (item.kind === "file") {
             const file = item.getAsFile();
-            console.log(`… file[${i}].name = ${file.name}`);
-            console.log(`… file[${i}].type = ${file.type}`);
-            console.log(`… file[${i}].kind = ${file.kind}`);
-            if( file.type.match( '^image/') ) {
-              const reader = new FileReader();
+            // console.log( '-------------------------' );
+            // console.log(`… file.name = ${file.name}`);
+            // console.log(`… file.type = ${file.type}`);
+            // console.log(`… file.kind = ${file.kind}`);
+            // console.log( '-------------------------' );
 
-              reader.onload = (el)=> {
-                const fileContent = el.target.result;
-                // Get main graph
-                const g = getMainGraph();
-                const nodeData = g.getDSLData( 'Pictures_Basic' );
-                if( nodeData ) {
-                  nodeData.label = file.name;
-                  nodeData.fileType = file.type;
-                  const location = g.getDocXYFromView( e.x, e.y );
-
-                  g.addNode( nodeData, location.x, location.y );
-                  if( e.shiftKey ) {
-                    const graphURL = g.getGraphPath();
-                    const idx = graphURL.lastIndexOf( '.' );
-                    const fileURL = `${graphURL.substring( 0, idx )}_Data/${nodeData.key}_${file.name}`;
-                    //const dataContent = fileContent.replace( /^data:image\/\w+;base64,/, '' );
-                    const dataContent = fileContent.replace( /^data:[^;]+;base64,/, '' );
-                    saveBase64Data( fileURL, dataContent, ()=>{
-                      setNodeDataField( nodeData, 'fileURL', fileURL );
-                    });
-                  } else {
-                    nodeData.fileContent = fileContent;
-                  }
-                } else {
-                  alert( 'Warning: drop ignored because I could not find PictureDSL' );
-                }
-              };
-
-              reader.readAsDataURL( file );
-            } else if( file.type.match( '^text/' ) ) {
-              const reader = new FileReader();
-
-              reader.onload = (el)=>{
-                const fileContent = el.target.result;
-                const dataContent = fileContent.replace( /^data:[^;]+;base64,/, '' );
-                const textFileContent = atob( dataContent );
-                // Get main graph
-                const g = getMainGraph();
-                const category = ( e.shiftKey? 'Hierarchy_CodeInFile': 'Hierarchy_CodeInGraph' );
-                const nodeData = g.getDSLData( category );
-                if( nodeData ) {
-                  nodeData.label = file.name;
-                  nodeData.fileType = file.type;
-                  const location = g.getDocXYFromView( e.x, e.y );
-
-                  g.addNode( nodeData, location.x, location.y );
-                  if( e.shiftKey ) {
-                    const graphURL = g.getGraphPath();
-                    const idx = graphURL.lastIndexOf( '.' );
-                    nodeData.fileURL = `${graphURL.substring( 0, idx )}_Data/${nodeData.key}_${file.name}`;
-                    const nodeDataCopy = g.getNodeData( nodeData.key, true );
-                    nodeDataCopy.fileContent = textFileContent;
-                    saveNodeContent( nodeDataCopy );
-                  } else {
-                    nodeData.fileContent = textFileContent;
-                  }
-                } else {
-                  alert( 'Warning: drop ignored because I could not find HierarchyDSL' );
-                }
-              };
-
-              reader.readAsDataURL( file );
-            }
+            prepareDropFileNode( e, file );
           } else if( item.kind == 'string'  && item.type.match( "^text/plain" ) ) {
-            item.getAsString( (text)=> {
-              console.log( 'text:', text, 'at', 'x:', e.x, 'y:', e.y );
-              // Get main graph
-              const g = getMainGraph();
-
-              //const pos = g.diagram.lastInput.documentPoint;
-              //const pos = g.diagram.transformViewToDoc( new go.Point( e.x, e.y ) );
-              //const object = g.diagram.findObjectAt( pos );
-              //const data = ( object? object.part.data: null );
-
-              // If a single node is selected => clone it
-              const data = g.getFirstSelectedNodeData();
-              if( data ) {
-                if( text.trim().startsWith( '#' ) && 
-                    ( ( data.color != undefined ) || ( data.category.startsWith( 'TextLabels_' ) ) ) ) {
-                  setNodeDataField( data, 'color', text.trim() );
-                } else if( data.label != undefined ) {
-                  setNodeDataField( data, 'label', text );
-                }
-              }
-            });
+            dropStringIntoNode( e, item );
           }
-        });
+        }
       } else {
         // Use DataTransfer interface to access the file(s)
         [...e.dataTransfer.files].forEach((file, i) => {

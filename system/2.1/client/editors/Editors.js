@@ -1122,7 +1122,7 @@ class WebViewer extends EditorBase {
       }
   }
 }
-registerEditor({ name: 'WebViewer', fileType: (ft)=> ft == 'application/html', classRef: WebViewer });
+registerEditor({ name: 'WebViewer', fileType: (ft)=> ft == 'application/html' || ft == 'application/pdf', classRef: WebViewer });
 
 class WebViewer2 extends EditorBase {
   constructor( id, nodeData, position ) {

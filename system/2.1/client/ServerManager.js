@@ -27,6 +27,7 @@ const codeFileType = {
   "XML":            {color: "orange",         fileType: "text/xml",                       ext: "xml"},
   "HTML":           {color: "lightsalmon",    fileType: "text/html",                      ext: "html"},
   "Web Page":       {color: "lightsalmon",    fileType: "application/html",               ext: "html"},
+  "PDF":            {color: "lightsalmon",    fileType: "application/pdf",                ext: "pdf"},
   "CSS":            {color: "peachpuff",      fileType: "text/css",                       ext: "css"},
   "Python":         {color: "firebrick",      fileType: "text/python",                    ext: "py"},
   "C":              {color: "palegreen",      fileType: "text/c_cpp",                     ext: "c"},
