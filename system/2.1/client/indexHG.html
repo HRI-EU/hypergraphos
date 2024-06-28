@@ -136,6 +136,9 @@ Date: 10.07.2020
     //   //logoutBtn.addEventListener("click", async (e) => { logOut() })
     // });
 
+    function dropFileIntoNode( file ) {
+
+    }
     function dragOverHandler( e ) {
       // Prevent default behavior (Prevent file from being opened)
       e.preventDefault();
@@ -173,7 +176,8 @@ Date: 10.07.2020
                     const graphURL = g.getGraphPath();
                     const idx = graphURL.lastIndexOf( '.' );
                     const fileURL = `${graphURL.substring( 0, idx )}_Data/${nodeData.key}_${file.name}`;
-                    const dataContent = fileContent.replace( /^data:image\/\w+;base64,/, '' );
+                    //const dataContent = fileContent.replace( /^data:image\/\w+;base64,/, '' );
+                    const dataContent = fileContent.replace( /^data:[^;]+;base64,/, '' );
                     saveBase64Data( fileURL, dataContent, ()=>{
                       setNodeDataField( nodeData, 'fileURL', fileURL );
                     });
@@ -189,8 +193,10 @@ Date: 10.07.2020
             } else if( file.type.match( '^text/' ) ) {
               const reader = new FileReader();
 
-              reader.onload = (el)=> {
+              reader.onload = (el)=>{
                 const fileContent = el.target.result;
+                const dataContent = fileContent.replace( /^data:[^;]+;base64,/, '' );
+                const textFileContent = atob( dataContent );
                 // Get main graph
                 const g = getMainGraph();
                 const category = ( e.shiftKey? 'Hierarchy_CodeInFile': 'Hierarchy_CodeInGraph' );
@@ -205,12 +211,11 @@ Date: 10.07.2020
                     const graphURL = g.getGraphPath();
                     const idx = graphURL.lastIndexOf( '.' );
                     nodeData.fileURL = `${graphURL.substring( 0, idx )}_Data/${nodeData.key}_${file.name}`;
-                    const dataContent = fileContent.replace( /^data:text\/\w+;base64,/, '' );
                     const nodeDataCopy = g.getNodeData( nodeData.key, true );
-                    nodeDataCopy.fileContent = dataContent;
+                    nodeDataCopy.fileContent = textFileContent;
                     saveNodeContent( nodeDataCopy );
                   } else {
-                    nodeData.fileContent = fileContent;
+                    nodeData.fileContent = textFileContent;
                   }
                 } else {
                   alert( 'Warning: drop ignored because I could not find HierarchyDSL' );
