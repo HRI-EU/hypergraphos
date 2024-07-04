@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # <Output Test>
 #
@@ -12,6 +12,8 @@
 # ALL RIGHTS RESERVED.
 #
 #
+
+set -euo pipefail
 
 echo "test.sh executed" > ./output.txt
 echo "test.sh has been executed"

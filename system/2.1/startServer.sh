@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # <StartServer>
 #
@@ -13,6 +13,7 @@
 #
 #
 
+set -euo pipefail
 
 cd server
 if [[ ! -d "../node_modules" ]]; then
@@ -20,5 +21,4 @@ if [[ ! -d "../node_modules" ]]; then
     npm install
 fi
 
-#node server "$@" & echo kill -9 $!  > ../stopServer.sh
 node server "$@" & echo kill -9 $!  > ../stopServer.sh

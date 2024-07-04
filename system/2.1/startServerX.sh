@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # <StartServerX>
 #
@@ -13,6 +13,7 @@
 #
 #
 
+set -euo pipefail
 
 cd server
 if [[ ! -d "../node_modules" ]]; then

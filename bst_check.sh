@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # <Code Quality Checker>
 #
@@ -13,7 +13,9 @@
 #
 #
 
-# source /hri/sit/latest/DevelopmentTools/ToolBOSCore/4.3/BashSrc
+set -euo pipefail
+
+source /hri/sit/latest/DevelopmentTools/ToolBOSCore/4.3/BashSrc
 
 BST.py -q
 

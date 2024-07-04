@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # <StopMDDTool>
 #
@@ -12,5 +12,7 @@
 # ALL RIGHTS RESERVED.
 #
 #
+
+set -euo pipefail
 
 docker compose down

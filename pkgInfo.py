@@ -13,10 +13,12 @@
 #
 #
 
-sqOptOutRules    = [ 'DOC03' ]
+sqOptOutRules    = [ 'GEN07', 'DOC03' ]
 
 sqComments       = { 'DOC03': 'No code examples necessary, as examples are '
-                              'provided inside the workspace of the tool' }
+                              'provided inside the workspace of the tool',
+                     'GEN07': 'No unittests necessary, as the tests are included '
+                              'inside the workspace of the tool' }
 
 
 # EOF

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # <avatarsource>
 #
@@ -12,4 +12,7 @@
 # ALL RIGHTS RESERVED.
 #
 #
+
+set -euo pipefail
+
 echo "node server2 remoteHost:192.168.1.11 remotePort:7575 url:/testFile.txt sourceFile:testScp.js"

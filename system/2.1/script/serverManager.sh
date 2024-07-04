@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # <Start and stop the server>
 #
@@ -12,8 +12,11 @@
 # ALL RIGHTS RESERVED.
 #
 #
+
+set -euo pipefail
+
 scriptPath="$2"
-deployRoot=`node ./getConfigValue.js config.server.deployRoot | tail -1`
+deployRoot=$( node ./getConfigValue.js config.server.deployRoot | tail -1 )
 
 if [ -z "${scriptPath}" ]; then
   scriptPath=.
@@ -21,7 +24,7 @@ else
   scriptPath="script/${deployRoot}/${scriptPath}/"
 fi
 
-currDir=`pwd`
+currDir=$( pwd )
 cd ..
 if [ -n "$2" ]; then
   cd "${scriptPath}"

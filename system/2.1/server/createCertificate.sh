@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # <SSL>
 #
@@ -12,4 +12,7 @@
 # ALL RIGHTS RESERVED.
 #
 #
+
+set -euo pipefail
+
 openssl req -nodes -new -x509 -days 70360  -keyout server.key -out server.cert

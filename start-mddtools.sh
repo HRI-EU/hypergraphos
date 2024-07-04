@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # <docker>
 #
@@ -12,6 +12,8 @@
 # ALL RIGHTS RESERVED.
 #
 #
+
+set -euo pipefail
 
 docker compose up -d
 
