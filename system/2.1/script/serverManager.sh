@@ -1,9 +1,17 @@
-# Start and stop the server
+#!/bin/sh
 #
-#  Example:
-#   serverManager.sh start
-#   serverManager.sh stop
-
+# <Start and stop the server>
+#
+# Copyright (C)
+# Honda Research Institute Europe GmbH
+# Carl-Legien-Str. 30
+# 63073 Offenbach/Main
+# Germany
+#
+# UNPUBLISHED PROPRIETARY MATERIAL.
+# ALL RIGHTS RESERVED.
+#
+#
 scriptPath=$2
 deployRoot=`node ./getConfigValue.js config.server.deployRoot | tail -1`
 
