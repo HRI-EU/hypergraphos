@@ -12,26 +12,26 @@
 # ALL RIGHTS RESERVED.
 #
 #
-scriptPath=$2
+scriptPath="$2"
 deployRoot=`node ./getConfigValue.js config.server.deployRoot | tail -1`
 
-if [ -z "$scriptPath" ]; then
+if [ -z "${scriptPath}" ]; then
   scriptPath=.
 else
-  scriptPath=script/$deployRoot/$scriptPath/
+  scriptPath="script/${deployRoot}/${scriptPath}/"
 fi
 
 currDir=`pwd`
 cd ..
 if [ -n "$2" ]; then
-  cd $scriptPath
+  cd "${scriptPath}"
 fi
 
-if [[ $1 == start ]]; then
+if [[ "$1" == start ]]; then
   ./startServer.sh
 fi
-if [[ $1 == stop ]]; then
+if [[ "$1" == stop ]]; then
   ./stopServer.sh
 fi
 #cd script
-cd $currDir
+cd "${currDir}"

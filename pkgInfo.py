@@ -13,7 +13,10 @@
 #
 #
 
-sqLevel          = 'cleanLab'
+sqOptOutRules    = [ 'DOC03' ]
+
+sqComments       = { 'DOC03': 'No code examples necessary, as examples are '
+                              'provided inside the workspace of the tool' }
 
 
 # EOF
