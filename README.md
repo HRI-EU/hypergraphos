@@ -1,2 +1,2 @@
-# MDDTools
+# HyperGraphOS
 Graph-based Collaborative Platform
