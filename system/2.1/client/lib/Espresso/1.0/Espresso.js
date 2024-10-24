@@ -1,10 +1,14 @@
 /*
-=============================================================================
-Licensed Materials - Property of Antonello Ceravola.
-(C) Copyright Antonello Ceravola 2021, All Rights Reserved.
-France Government Users Restricted Rights - Use, duplication or disclosure
-restricted by GSA ADP Schedule Contract with Antonello Ceravola.
-=============================================================================
+Copyright (c) 2024 Antonello Ceravola, Frank Joublin, Honda Research Institute Europe GmbH
+
+This file is part of HyperGraphOS.
+
+This source code is licensed under the MIT License found in the
+LICENSE file in the root directory of this source tree.
+*/
+
+/*
+============================================================================
 Module: Espresso Route Web Server
 Date: 22.05.2020
 =============================================================================

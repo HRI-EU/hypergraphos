@@ -1,3 +1,12 @@
+/*
+Copyright (c) 2024 Antonello Ceravola, Frank Joublin, Honda Research Institute Europe GmbH
+
+This file is part of HyperGraphOS.
+
+This source code is licensed under the MIT License found in the
+LICENSE file in the root directory of this source tree.
+*/
+
 /**
  * This template generator is extremely simple. It just sabstitute
  * the tokens like [#key#] found in the template with the key/value 

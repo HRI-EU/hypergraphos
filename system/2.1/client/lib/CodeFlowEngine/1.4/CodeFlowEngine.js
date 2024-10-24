@@ -1,10 +1,14 @@
 /*
-=============================================================================
-Licensed Materials - Property of Frank Joublin and Antonio Ceravola.
-(C) Copyright Frank Joublin and Antonio Ceravola. 2021, All Rights Reserved.
-France Government Users Restricted Rights - Use, duplication or disclosure
-restricted by GSA ADP Schedule Contract with Frank Joublin and Antonio Ceravola.
-=============================================================================
+Copyright (c) 2024 Antonello Ceravola, Frank Joublin, Honda Research Institute Europe GmbH
+
+This file is part of HyperGraphOS.
+
+This source code is licensed under the MIT License found in the
+LICENSE file in the root directory of this source tree.
+*/
+
+/*
+============================================================================
 Module: CodeFlow Engine
 Date: 10.07.2020
 =============================================================================

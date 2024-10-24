@@ -41,9 +41,7 @@ def update_copyright_in_file(filepath):
 
 # Function to process all .js files in a directory recursively
 def process_all_js_files(directory):
-    print(f"Processing all files: {os.walk(directory)}")
     for root, dirs, files in os.walk(directory):
-        print(f"Processing root: {root}")
         for file in files:
             if file.endswith('.js'):
                 filepath = os.path.join(root, file)
@@ -60,11 +58,10 @@ def main():
         else:
             print(f"Error: {specific_file} is not a valid .js file.")
     else:
-        # If no file is specified, process all .js files in the hypergraphos directory
-        directory = '.'
+        # If no file is specified, process all .js files in the directory and subdirectories
+        directory = 'hypergraphos/system/2.1/client'
         print(f"Processing all .js files in directory: {directory}")
         process_all_js_files(directory)
 
 if __name__ == "__main__":
     main()
-
