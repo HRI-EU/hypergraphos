@@ -1,10 +1,12 @@
 @echo off
 REM
 REM =============================================================================
-REM Licensed Materials - Property of Frank Joublin and Antonio Ceravola.
-REM (C) Copyright Frank Joublin and Antonio Ceravola. 2021, All Rights Reserved.
-REM France Government Users Restricted Rights - Use, duplication or disclosure
-REM restricted by GSA ADP Schedule Contract with Frank Joublin and Antonio Ceravola.
+REM Copyright (c) 2024 Antonello Ceravola, Frank Joublin, Honda Research Institute Europe GmbH
+REM
+REM This file is part of HyperGraphOS.
+REM
+REM This source code is licensed under the MIT License found in the
+REM LICENSE file in the root directory of this source tree.
 REM =============================================================================
 REM Module: MDDTools Server Startup File
 REM Date: 10.07.2020
