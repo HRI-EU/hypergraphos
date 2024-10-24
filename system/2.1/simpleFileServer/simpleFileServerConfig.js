@@ -9,7 +9,7 @@ LICENSE file in the root directory of this source tree.
 
 /*
 =============================================================================
-Module: MDDTools Simple File Server Configuration File
+Module: HyperGraphOS Simple File Server Configuration File
 Date: 10.07.2020
 =============================================================================
 */
