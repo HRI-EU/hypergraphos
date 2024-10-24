@@ -8,7 +8,7 @@ REM
 REM This source code is licensed under the MIT License found in the
 REM LICENSE file in the root directory of this source tree.
 REM =============================================================================
-REM Module: MDDTools Server Startup File
+REM Module: HyperGraphOS Server Startup File
 REM Date: 10.07.2020
 REM =============================================================================
 REM
