@@ -67,7 +67,7 @@ const config = {
     scriptPlatform:    'win32',  // 'win32' | 'linux' ( not available 'winBash' | 'powershell'  )
     webServerProtocol: 'http',
     webServerName:     'localhost',
-    webServerPort:     80,
+    webServerPort:     8080,
     webSocketURL:      '', // Defined later...
     jwtSecretKey:      'kYcFIJXnPb1QvHdRd6oshxEGOzUppgy', // This is a string used for encription
     jwtExpiryInterval: '30d', // Expiration time for login
