@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link href="../explore-editor.min.css" rel="stylesheet" />
+		<script src="../explore-editor.min.js"></script>
+		<link rel="stylesheet" href="../../../KaTex/0.11.1/katex.min.css">
+		<script src="../../../katex/0.11.1/katex.min.js"></script>
+		<style>
+			.meta-powered-by {
+				display: none
+			}
+		</style>
+	</head>
+	<body>
+		<h1>test of explore-editor</h1>
+		<textarea id="editor-demo">Hi</textarea>
+
+		<script>
+			let explore_editor = null;
+			window.onload = function(){
+				/**
+				*'editor-demo'
+				* Cl ID : assName : 'explore-editor'
+				*/
+				// ID or DOM object
+				explore_editor = ExploreEditor.create((document.getElementById('editor-demo') || 'editor-demo'),{
+				    width: '100%',
+					height: 'auto',
+					//lang: ExploreEditor_LANG['en'],
+					//plugins: plugins,
+					katex: katex,
+					toolbarItem: [
+					  ['undo', 'redo'],
+					  ['font', 'fontSize', 'formatBlock'],
+					  ['bold', 'underline', 'italic', 'strike', 'subscript', 'superscript', 'fontColor', 'hiliteColor'],
+					  ['outdent', 'indent', 'align', 'list', 'horizontalRule'],
+					  ['link', 'table', 'image', 'audio', 'video'],
+					  '/', // Line break
+					  ['lineHeight', 'paragraphStyle', 'textStyle'],
+					  ['showBlocks', 'codeView'],
+					  ['math'],
+					  ['preview', 'print', 'fullScreen'],
+					  ['save', 'template'],
+					  ['removeFormat']
+					],
+					templates: [
+					  {
+						name: 'Template-1',
+						html: '<p>HTML source1</p>'
+					  },
+					  {
+						name: 'Template-2',
+						html: '<p>HTML source2</p>'
+					  },
+					],
+					charCounter: true,
+				});
+				explore_editor.onChange = function(contents) {
+				  console.log('onChange', contents);
+				};
+			};
+
+			function setSource( contentString ) {
+			  explore_editor.setContents( contentString );
+			}
+			function getSource() {
+			  return explore_editor.getContents();
+			}
+		</script>
+
+	</body>
+</html>

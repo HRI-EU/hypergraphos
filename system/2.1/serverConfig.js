@@ -57,9 +57,12 @@ const config = {
   server: {
     // Path relative to the server.js script location
     debugOnFileContentOn: true,
-    dataRoot:          '../../MDDToolsDataRoot',
-    deployRoot:        '../../MDDToolsDeployRoot',
-    tempRoot:          '../../MDDToolsTempRoot',
+	dataRoot: '../../../localFileServer/MDDToolsDataRoot',
+	deployRoot: '../../../localFileServer/MDDToolsDeployRoot',
+	tempRoot: '../../../localFileServer/MDDToolsTempRoot',
+    //dataRoot:          '../../MDDToolsDataRoot',
+    //deployRoot:        '../../MDDToolsDeployRoot',
+    //tempRoot:          '../../MDDToolsTempRoot',
     clientPath:        '../client',
     libPath:           '../client/lib',
     scriptPath:        '../script',
