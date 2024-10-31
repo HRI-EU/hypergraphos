@@ -1,0 +1,12 @@
+{
+    "CodeFlowDSL": "/fileServer/DSL/CodeFlowDSL.js",
+    "ConnectorsDSL": "/fileServer/DSL/ConnectorsDSL.js",
+    "DataFlowDSL": "/fileServer/DSL/DataFlowDSL.js",
+    "DefaultDSL": "/fileServer/DSL/Default/DefaultDSL.js",
+    "HierarchyDSL": "/fileServer/DSL/HierarchyDSL.js",
+    "NoteDSL": "/fileServer/DSL/NoteDSL.js",
+    "PicturesDSL": "/fileServer/DSL/Pictures/PicturesDSL.js",
+    "TableDSL": "/fileServer/DSL/TableDSL.js",
+    "TextLabelsDSL": "/fileServer/DSL/TextLabels/TextLabelsDSL.js",
+    "ThinkingDSL": "/fileServer/DSL/ThinkingDSL.js",
+  }
