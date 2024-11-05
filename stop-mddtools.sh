@@ -2,14 +2,11 @@
 #
 # <StopMDDTool>
 #
-# Copyright (C)
-# Honda Research Institute Europe GmbH
-# Carl-Legien-Str. 30
-# 63073 Offenbach/Main
-# Germany
 #
-# UNPUBLISHED PROPRIETARY MATERIAL.
-# ALL RIGHTS RESERVED.
+# Copyright (c) 2024 Antonello Ceravola, Frank Joublin, Honda Research Institute Europe GmbH
+# This file is part of HyperGraphOS.
+# This source code is licensed under the MIT License found in the
+# LICENSE file in the root directory of this source tree.
 #
 #
 
