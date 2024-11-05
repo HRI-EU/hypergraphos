@@ -3,7 +3,7 @@ Graph-based Collaborative Platform
 
 # HyperGraphOS Get Started
 - clone the repository
-- go in the following directories and download some dependencies necessary for the system. You will find a README.txt
+- go in the following directories and download some dependencies necessary for the system. You will find a README.txt (check sub-directories too)
     - system/2.1/client/lib:
         - ace
         - explore-editor
