@@ -81,9 +81,7 @@ class ChatGPT {
       const url = this.url;
       this.ajax.open( 'POST', url );
 
-      this.ajax.setRequestHeader( 'Authorization', 'Bearer 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' ); // Frank
-      //this.ajax.setRequestHeader( 'Authorization', 'Bearer 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' ); // Antonello
-      //this.ajax.setRequestHeader( 'Authorization', 'Bearer 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' ); // Jorg
+      this.ajax.setRequestHeader( 'Authorization', 'Bearer OPENAIKEY' ); 
       this.ajax.setRequestHeader( 'Content-Type', 'application/json' );
   
       const messages = ( typeof( promptOrMsg ) == 'object'? promptOrMsg: [
