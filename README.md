@@ -16,7 +16,7 @@ Graph-based Collaborative Platform
 - run server: ./startServer.sh
 - open chrome browser at: localhost:8080/indexHG.html?name:'NoName'
 - now you should see the landing page of HyperGraphOS
-- to create your DSL, or use existing DSLs. Kindly follow the examples in hypergraphos/Docs
+- to use existing DSLs. Kindly follow the examples in hypergraphos/Documentation
 - enjoy ♪♫
 
 # Dependencies
