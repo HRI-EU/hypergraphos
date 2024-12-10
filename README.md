@@ -21,5 +21,5 @@ Graph-based Collaborative Platform
 
 # Dependencies
 HyperGraphOS graphical engine is based on GoJS by Northwoods Software (https://gojs.net).
-This open source version is based on GoJS Evaluation Licence (https://gojs.net/latest/evaluationlicense.html) which allow you to evaluate the Operating System for a limited period.
+This open source version uses GoJS Evaluation Licence (https://gojs.net/latest/evaluationlicense.html) which allow you to evaluate the Operating System for a limited period.
 If you intend to use it or support development, you need to buy a GoJS license (https://nwoods.com/sales/index.html?p=GoJS). Consider that they offer also individual license targeting also startup and accademic licenses for non-commercial applications.
