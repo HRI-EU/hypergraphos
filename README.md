@@ -1,6 +1,10 @@
 # HyperGraphOS
 Graph-based Collaborative Platform
 
+<div align="center">
+  <img src="Documentation/Images/PaperHome.png" alt="JESN">
+</div>
+
 # HyperGraphOS Get Started
 - clone the repository
 - go in the following directories and download some dependencies necessary for the system. You will find a README.txt (check sub-directories too)
