@@ -11,6 +11,8 @@ Using a web-based architecture, HyperGraphOS can be started from a modern browse
     Your browser does not support the video tag.
 </video>
 
+[Click here to watch the video](Documentation/Videos/Hypergraphos1-1.m4v)
+
 # HyperGraphOS Get Started
 - clone the repository
 - go in the following directories and download some dependencies necessary for the system. You will find a README.txt (check sub-directories too)
