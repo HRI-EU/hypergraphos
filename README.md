@@ -6,7 +6,8 @@ Using a web-based architecture, HyperGraphOS can be started from a modern browse
 <div align="center">
   <img src="Documentation/Images/PaperHome.png" alt="JESN">
 </div>
-
+<video src='Documentation/Videos/HyperGraphOS1-small.mp4' width=180/>
+  
 # HyperGraphOS Get Started
 - clone the repository
 - go in the following directories and download some dependencies necessary for the system. You will find a README.txt (check sub-directories too)
