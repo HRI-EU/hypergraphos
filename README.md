@@ -34,6 +34,12 @@ Here some introductory videos that illustrate HyperGraphOS showing example usage
     <img src="Documentation/Videos/OmniSpaceTour.png" alt="OmniSpace and WorkSpace Concepts">
   </a>
 </div>
+<h3>DSL: Domain Specific Languages Tour<h3>
+<div align="center">
+  <a href="https://youtu.be/map0HBiBNCg?si=9ksQocRF9koKGCR-">
+    <img src="Documentation/Videos/DSLTour.png" alt="DSL: Domain Specific Languages">
+  </a>
+</div>
 
 # HyperGraphOS Get Started
 - clone the repository
