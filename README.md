@@ -19,16 +19,21 @@ Here some introductory videos that illustrate HyperGraphOS showing example usage
 <h3>Interactive Tour<h3>
 <div align="center">
   <a href="https://youtu.be/zUUT2P8JWiQ?si=p0XSm0kyhI_PcmxK">
-    <img src="Documentation/Videos/InteractiveTour.png" alt="Introduction to HyperGraph OS">
+    <img src="Documentation/Videos/InteractiveTour.png" alt="Interactive Tour around HyperGraph OS">
   </a>
 </div>
 <h3>HyperGraphOS Templates<h3>
 <div align="center">
   <a href="https://youtu.be/gitL1jwjuX0?si=mBt1Yr_UHPpqlF5P">
-    <img src="Documentation/Videos/TempalteTour.png" alt="Introduction to HyperGraph OS">
+    <img src="Documentation/Videos/TempalteTour.png" alt="HyperGraph OS Templates">
   </a>
 </div>
-
+<h3>OmniSpace and WorkSpace Concepts in HyperGraphOS<h3>
+<div align="center">
+  <a href="https://youtu.be/RmyTOS0A2Q4?si=vBb1-TvigQSqcbTV">
+    <img src="Documentation/Videos/OmniSpaceTour.png" alt="OmniSpace and WorkSpace Concepts">
+  </a>
+</div>
 
 # HyperGraphOS Get Started
 - clone the repository
