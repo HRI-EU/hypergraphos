@@ -18,7 +18,7 @@ Here some introductory videos that illustrate HyperGraphOS showing example usage
 </div>
 <h3>Interactive TourOS<h3>
 <div align="center">
-  <a href="[https://youtu.be/zUUT2P8JWiQ?si=p0XSm0kyhI_PcmxK">
+  <a href="https://youtu.be/zUUT2P8JWiQ?si=p0XSm0kyhI_PcmxK">
     <img src="Documentation/Videos/InteractiveTour.png" alt="Introduction to HyperGraph OS">
   </a>
 </div>
