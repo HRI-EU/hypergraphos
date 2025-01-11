@@ -10,12 +10,12 @@ Using a web-based architecture, HyperGraphOS can be started from a modern browse
 # Tutorial Videos
 Here some introductory videos that illustrate HyperGraphOS showing example usage:
 
-<a href="https://youtu.be/ZYWSdV1KF0E?si=KZJ2TA4p9U3ki3Ui">
-  <h3>Introduction to HyperGraph OS<h3>
-  <div align="center">
+<h3>Introduction to HyperGraph OS<h3>
+<div align="center">
+  <a href="https://youtu.be/ZYWSdV1KF0E?si=KZJ2TA4p9U3ki3Ui">
     <img src="Documentation/Videos/Hypergraphos1-1.m4v.png" alt="Introduction to HyperGraph OS">
-  </div>
-</a>
+  </a>
+</div>
 
 # HyperGraphOS Get Started
 - clone the repository
