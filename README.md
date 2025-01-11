@@ -16,6 +16,13 @@ Here some introductory videos that illustrate HyperGraphOS showing example usage
     <img src="Documentation/Videos/Hypergraphos1-1.m4v.png" alt="Introduction to HyperGraph OS">
   </a>
 </div>
+<h3>Interactive TourOS<h3>
+<div align="center">
+  <a href="https://youtu.be/ZYWSdV1KF0E?si=KZJ2TA4p9U3ki3Ui">
+    <img src="Documentation/Videos/InteractiveTour.png" alt="Introduction to HyperGraph OS">
+  </a>
+</div>
+
 
 # HyperGraphOS Get Started
 - clone the repository
