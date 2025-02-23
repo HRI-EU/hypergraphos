@@ -225,6 +225,16 @@ class GraphWrapper {
 																		do: (o)=> o.d.cmd.redo() },
 
 				  ]},
+					{ label: 'Order',       layout: 'vertical', subMenu: [
+            { label: 'Bring Front',	if: (o)=> this.getSelectionCount() > 0,
+                                    do: (o)=> this.doBringNode( 'front' ) },
+            { label: 'Bring Forward',if: (o)=> this.getSelectionCount() > 0,
+                                    do: (o)=> this.doBringNode( 'forward' ) },
+            { label: 'Send Backward',	if: (o)=> this.getSelectionCount() > 0,
+                                    do: (o)=> this.doBringNode( 'backward' ) },
+            { label: 'Send Back',if: (o)=> this.getSelectionCount() > 0,
+                                    do: (o)=> this.doBringNode( 'back' ) },
+          ]},
 					{ separator: '-' },
 					{ label: 'Content',       layout: 'vertical', subMenu: [
 						{ label: 'Append Interface Code', if: this.canGenerateNodeContent.bind(this),
@@ -1000,6 +1010,19 @@ class GraphWrapper {
 			});
 		}
 	}
+	doBringNode( position ) {
+    console.log( 'Bring Node to: ', position );
+    switch( position ) {
+      case 'front':
+        break;
+      case 'forward':
+        break;
+      case 'backward':
+        break;
+      case 'back':
+        break;
+    }
+  }
 	doShowGrid() {
 		this.diagram.grid.visible = !this.diagram.grid.visible;
 	}
