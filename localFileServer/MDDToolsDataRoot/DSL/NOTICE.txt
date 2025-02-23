@@ -2,8 +2,6 @@ NOTICE
 ------
 This folder contains code that includes portions of GoJS (© Northwoods Software), used under a commercial license. Northwoods Software reserves all rights to GoJS. For more information on GoJS, please visit: https://gojs.net.
 
-Affected files:
-- DSLComposeDSL.js
-- HierarchyDSL.js
+Affected files: all JavaScript files here
 
 Northwoods Software has provided a commercial license for GoJS for use in this project.
