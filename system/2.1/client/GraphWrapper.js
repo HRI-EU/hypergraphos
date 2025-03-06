@@ -308,6 +308,68 @@ class GraphWrapper {
 		];
 		this.dslNodeFieldNameList = new Set( ['key'] );
 	}
+
+	// Custom DraggingTool for handling proper ungrouping
+	DragOutsideGroupTool = class extends go.DraggingTool {
+		constructor() {
+			super();
+			this.nodesRemovedFromGroups = false;
+		}
+		
+		doActivate() {
+			super.doActivate();
+			this.nodesRemovedFromGroups = false;
+		}
+		
+		doMouseMove() {
+			const diagram = this.diagram;
+			if (diagram !== null && this.isActive) {
+				if ((diagram.lastInput.control || this.isNodeInKanbanGroup()) && !this.nodesRemovedFromGroups) {
+					const parts = diagram.selection.toArray();
+					const nodesToUngroup = [];
+					
+					parts.forEach(part => {
+						if (part instanceof go.Node && part.containingGroup !== null) {
+							if (part.containingGroup.data && 
+								(part.containingGroup.data.category === 'Group_BasicGroup' || 
+								 part.containingGroup.data.category === 'KanbanDSL_KanbanBoard')) {
+								nodesToUngroup.push(part);
+							}
+						}
+					});
+					
+					if (nodesToUngroup.length > 0) {
+						diagram.startTransaction("remove from groups");
+						nodesToUngroup.forEach(node => {
+							// Remove the node from its group
+							node.containingGroup = null;
+						});
+						diagram.commitTransaction("remove from groups");
+						this.nodesRemovedFromGroups = true;
+					}
+				}
+			}
+			
+			super.doMouseMove();
+			}
+		
+		isNodeInKanbanGroup() {
+			const diagram = this.diagram;
+			if (!diagram) return false;
+			
+			const parts = diagram.selection.toArray();
+			for (const part of parts) {
+				if (part instanceof go.Node && 
+					part.containingGroup !== null && 
+					part.containingGroup.data && 
+					part.containingGroup.data.category === 'KanbanDSL_KanbanBoard') {
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+
 	registerEvent( name, callback ) {
 		this.em.register( name, callback );
 	}
@@ -1831,6 +1893,9 @@ class GraphWrapper {
 		diagram.undoManager.isEnabled = true;
 		// Disable creation of nodes on double click
 		diagram.toolManager.clickCreatingTool = null
+
+		// Install custom dragging tool for CTRL key handling
+		diagram.toolManager.draggingTool = new this.DragOutsideGroupTool();
 
 		// Define grid
 		const mainColor = {

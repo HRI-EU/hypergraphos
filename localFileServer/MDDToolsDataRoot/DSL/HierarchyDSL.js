@@ -79,18 +79,26 @@ function HierarchyDSL_getDSL( g ) {
   // TODO: implement group using this https://gojs.net/latest/samples/regrouping.html
   const dsl_BasicGroup = ( param )=> {
     return $(go.Group, "Vertical",
-      { defaultStretch: go.GraphObject.Horizontal,
-        
+      { 
+        defaultStretch: go.GraphObject.Horizontal,
         ungroupable: true,  // enable Ctrl-Shift-G to ungroup a selected Group
-        mouseDrop: (e)=> { g._onFinishDrop( e, null ); },
-        mouseDragEnter: ( e, grp, prev )=> { 
-          if( e.control ) {
-            // This code ungroup the current dragged selection
-            const selection = e.diagram.selection;
-            e.diagram.commandHandler.addTopLevelParts( selection );
-            // NOTE: this do not work in this case: this.diagram.commandHandler.ungroupSelection();
-          }
+        
+        computesBoundsAfterDrag: true,
+        computesBoundsIncludingLocation: true,
+        handlesDragDropForMembers: true,
+        
+        mouseDragEnter: function(e, grp, prev) { 
+          highlightGroup(e, grp, true);
         },
+        mouseDragLeave: function(e, grp, next) { 
+          highlightGroup(e, grp, false);
+        },
+        mouseDrop: function(e, grp) {
+          if (grp instanceof go.Group) {
+            var ok = grp.addMembers(grp.diagram.selection, true);
+            if (!ok) e.diagram.currentTool.doCancel();
+          }
+        }
       },
       new go.Binding("location", "location", function( location ) {
         const values = location.split( ' ' );
@@ -105,6 +113,7 @@ function HierarchyDSL_getDSL( g ) {
       }),
       $(go.Panel, "Auto",
         {
+          pickable: true,
         },
         $(go.Shape, "Rectangle",
           { //fill: "gray",
@@ -135,10 +144,15 @@ function HierarchyDSL_getDSL( g ) {
       ),
       $(go.Panel, "Auto",
         { 
-          pickable: false,
+          pickable: true,
+          background: "transparent"
         },
         $(go.Shape, { fill: "rgba(128,128,128,0.2)" }),
-        $(go.Placeholder, { padding: 20 }),
+        $(go.Placeholder, { 
+          padding: 20,
+          pickable: true,
+          background: "transparent" 
+        }),
       ),
       { // this tooltip Adornment is shared by all groups
         toolTip: g.newGroupToolTip(),
