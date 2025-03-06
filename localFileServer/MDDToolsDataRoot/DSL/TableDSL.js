@@ -174,6 +174,7 @@ function TableDSL_getDSL( g ) {
             },
             new go.Binding( "location", "location", go.Point.parse).makeTwoWay(go.Point.stringify),
             new go.Binding("desiredSize", "size", go.Size.parse).makeTwoWay(go.Size.stringify),
+            new go.Binding('zOrder'),
             $(go.Panel, "Table",
               new go.Binding("itemArray", "table_").makeTwoWay(),
               { 

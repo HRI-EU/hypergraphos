@@ -53,6 +53,7 @@ function PicturesDSL_getDSL( g ) {
       // example Node binding sets Node.location to the value of Node.data.loc
       new go.Binding("location", "location",go.Point.parse).makeTwoWay(go.Point.stringify),
       new go.Binding("desiredSize", "size", go.Size.parse).makeTwoWay(go.Size.stringify),
+      new go.Binding('zOrder'),
       $(go.Picture,
         {
           name: "Picture",

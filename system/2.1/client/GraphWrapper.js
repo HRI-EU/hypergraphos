@@ -1010,18 +1010,135 @@ class GraphWrapper {
 			});
 		}
 	}
+	iterableToArray( iterable ) {
+		const res = [];
+		const it = iterable.iterator;
+		while( it.next() ) {
+			res.push( it.value );
+		}
+		return res;
+	}
 	doBringNode( position ) {
-    console.log( 'Bring Node to: ', position );
-    switch( position ) {
-      case 'front':
-        break;
-      case 'forward':
-        break;
-      case 'backward':
-        break;
-      case 'back':
-        break;
-    }
+		const findOverlappingNodes = ( node ) => {
+			const parts = this.diagram.findPartsIn( node.actualBounds.copy(), true );
+			return this.iterableToArray(
+				parts.filter( ( part ) => part instanceof go.Node )
+			);
+		}
+
+		const groupByGroup = ( nodes ) => {
+			const result = new go.Map();
+			nodes.forEach(( node ) => {
+				const group = node.containingGroup;
+				const currentSet = result.get( group );
+				if ( !currentSet ) {
+					const set = new go.Set();
+					set.add( node );
+					result.add( group, set );
+				} else {
+					currentSet.add( node );
+				}
+			});
+			return result;
+		}
+
+		const getNodeOrder = ( nodes ) => {
+			const nanZOrder = nodes.filter((node) => isNaN( node.zOrder ));
+
+			const sortedNonNaNZOrder = nodes.filter(
+				(node) => !isNaN(node.zOrder)
+			).sort((a, b) => a.zOrder - b.zOrder);
+	
+			const sortedNaNZOrderByDataArray = nanZOrder.sort(
+				(a, b) => {
+					const aIndex = this.diagram.model.nodeDataArray.findIndex(
+						( nodeData ) => this.diagram.model.getKeyForNodeData( nodeData ) === a.key
+					);
+					const bIndex = this.diagram.model.nodeDataArray.findIndex(
+						( nodeData ) => this.diagram.model.getKeyForNodeData( nodeData ) === b.key
+					);
+					return aIndex - bIndex;
+				});
+	
+			return [ ...sortedNaNZOrderByDataArray, ...sortedNonNaNZOrder ];
+		}
+
+		const selectedNodes = this.iterableToArray(
+			this.getSelection().filter(
+				( part ) => part instanceof go.Node
+			)
+		);
+
+		const groupedSelection = groupByGroup( selectedNodes );
+
+		groupedSelection.iteratorValues.each(( nodeSet ) => {
+			const allOverlappingNodes = new go.Set();
+			allOverlappingNodes.addAll( nodeSet );
+			const newOverlappingNodes = new go.Set();
+
+			let nodesToCheck = allOverlappingNodes;
+			
+			for (;;) {
+				const newNodesToCheck = new go.Set();
+				nodesToCheck.each(( node ) => {
+					const overlappingNodes = findOverlappingNodes( node );
+					overlappingNodes.forEach(( node ) => {
+						if (allOverlappingNodes.has( node )) {
+							return;
+						}
+						newNodesToCheck.add( node );
+						allOverlappingNodes.add( node );
+						newOverlappingNodes.add( node );
+					})
+				});
+				if (newNodesToCheck.count === 0) {
+					break;
+				}
+				nodesToCheck = newNodesToCheck;
+			}
+
+			const selectionOrder = getNodeOrder( this.iterableToArray( nodeSet.toList() ) );
+			const firstSelectionNode = selectionOrder[0];
+
+			if ( newOverlappingNodes.count === 0 || !firstSelectionNode ) {
+				return;
+			}
+
+			const allOverlappingNodesOrder = getNodeOrder( this.iterableToArray( allOverlappingNodes.toList() ) );
+
+			const selectionIndex = allOverlappingNodesOrder.findIndex(
+				( node ) => node.key === firstSelectionNode.key
+			);
+			const selectionLength = selectionOrder.length;
+
+			switch( position ) {
+				case 'front':
+					allOverlappingNodesOrder.splice( selectionIndex, selectionLength );
+					allOverlappingNodesOrder.push( ...selectionOrder );
+					break;
+				case 'forward':
+					if ( selectionIndex + selectionLength === allOverlappingNodesOrder.length ) {
+						break;
+					}
+					allOverlappingNodesOrder.splice( selectionIndex, selectionLength );
+					allOverlappingNodesOrder.splice( selectionIndex + 1, 0, ...selectionOrder );
+					break;
+				case 'backward':
+					if (selectionIndex === 0) {
+						break;
+					}
+					allOverlappingNodesOrder.splice( selectionIndex, selectionLength );
+					allOverlappingNodesOrder.splice( selectionIndex - 1, 0, ...selectionOrder );
+					break;
+				case 'back':
+					allOverlappingNodesOrder.splice( selectionIndex, selectionLength );
+					allOverlappingNodesOrder.splice( 0, 0, ...selectionOrder );
+					break;
+			}
+			allOverlappingNodesOrder.forEach((  node, index ) => {
+				this.diagram.model.set( node.data, 'zOrder', index );
+			});
+		})
   }
 	doShowGrid() {
 		this.diagram.grid.visible = !this.diagram.grid.visible;
@@ -1804,6 +1921,38 @@ class GraphWrapper {
 		);
 		return( palette );
 	}
+	addLinkingZoomInOut( diagram ) {
+		const tool = diagram.toolManager.linkingTool;
+		let zoom = diagram.scale;
+		let shiftPressed = false;
+		const doKeyDownBase = tool.doKeyDown.bind(tool);
+		const doKeyUpBase = tool.doKeyUp.bind(tool);
+		tool.doKeyDown = () => {
+			doKeyDownBase();
+			if (diagram.lastInput.key === 'Esc') {
+				return;
+			}
+			if (diagram.lastInput.shift) {
+				shiftPressed = true;
+				zoom = diagram.scale;
+				diagram.zoomToFit();
+			}
+		}
+
+		tool.doKeyUp = () => {
+			doKeyUpBase();
+			if (shiftPressed && !diagram.lastInput.shift) {
+				const cursorPosition = diagram.lastInput.documentPoint.copy();
+				const bounds = diagram.viewportBounds.copy();
+				shiftPressed = false;
+				diagram.position = new go.Point(
+					cursorPosition.x - bounds.width / 2,
+					cursorPosition.y - bounds.height / 2
+				);
+				diagram.scale = zoom;
+			}
+		}
+	}
 	newDiagram( divId ) {
 		// To be used in "function(){}" definitions
 		const graphThis = this;
@@ -1897,7 +2046,7 @@ class GraphWrapper {
 		diagram.toolManager.linkingTool = tool;
 		let reshapeTool = new SnapLinkReshapingTool();
 		diagram.toolManager.linkReshapingTool = reshapeTool;
-
+		this.addLinkingZoomInOut( diagram );
 		//////////////////////////////////
 		// BEGIN PATCH
 		// This code avoids showing a link at 0,0

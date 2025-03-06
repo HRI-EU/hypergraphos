@@ -18,6 +18,7 @@ function DefaultDSL_getDSL( g ) {
         return( 
           $(go.Node, "Auto",  // the Shape automatically fits around the TextBlock
             new go.Binding("location", "location",go.Point.parse).makeTwoWay(go.Point.stringify),
+            new go.Binding('zOrder'),
             $(go.Shape, "RoundedRectangle",  // use this kind of figure for the Shape
               // bind Shape.fill to Node.data.color
               new go.Binding("fill", "color")),
