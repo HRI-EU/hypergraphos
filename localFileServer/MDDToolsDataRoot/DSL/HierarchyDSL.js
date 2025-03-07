@@ -56,13 +56,22 @@ function HierarchyDSL_getDSL( g ) {
       // instead depend on the DraggingTool.draggedParts or .copiedParts
       var tool = grp.diagram.toolManager.draggingTool;
       var map = tool.draggedParts || tool.copiedParts;  // this is a Map
+      const mapKeys = map.toKeySet();
+      let hasExternalParts = false;
+      mapKeys.each(function(part) {
+        if (part.containingGroup !== grp) {
+          hasExternalParts = true;
+          return true;
+        }
+        return false;
+      });
       // now we can check to see if the Group will accept membership of the dragged Parts
-      if (grp.canAddMembers(map.toKeySet())) {
-        grp.isHighlighted = true;
+      if (hasExternalParts && grp.canAddMembers(mapKeys)) {
+        e.diagram.highlight(grp);
         return;
       }
     }
-    grp.isHighlighted = false;
+    e.diagram.clearHighlighteds();
   }
   // Upon a drop onto a Group, we try to add the selection as members of the Group.
   // Upon a drop onto the background, or onto a top-level Node, make selection top-level.
@@ -153,6 +162,7 @@ function HierarchyDSL_getDSL( g ) {
           pickable: true,
           background: "transparent" 
         }),
+        new go.Binding("background", "isHighlighted", h => h ? "rgba(0,0,0,0.2)" : "transparent").ofObject()
       ),
       { // this tooltip Adornment is shared by all groups
         toolTip: g.newGroupToolTip(),
