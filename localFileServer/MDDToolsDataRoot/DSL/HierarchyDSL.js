@@ -56,9 +56,8 @@ function HierarchyDSL_getDSL( g ) {
       // instead depend on the DraggingTool.draggedParts or .copiedParts
       var tool = grp.diagram.toolManager.draggingTool;
       var map = tool.draggedParts || tool.copiedParts;  // this is a Map
-      const mapKeys = map.toKeySet();
       let hasExternalParts = false;
-      mapKeys.each(function(part) {
+      e.diagram.selection.each(function(part) {
         if (part.containingGroup !== grp) {
           hasExternalParts = true;
           return true;
@@ -66,7 +65,7 @@ function HierarchyDSL_getDSL( g ) {
         return false;
       });
       // now we can check to see if the Group will accept membership of the dragged Parts
-      if (hasExternalParts && grp.canAddMembers(mapKeys)) {
+      if (hasExternalParts && grp.canAddMembers(map.toKeySet())) {
         e.diagram.highlight(grp);
         return;
       }
