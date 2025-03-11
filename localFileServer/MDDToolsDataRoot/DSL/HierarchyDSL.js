@@ -83,6 +83,19 @@ function HierarchyDSL_getDSL( g ) {
   }
   //g.diagram.mouseDrop = (e)=> finishDrop(e, null);
 
+  function getNodesOverTheGroup(group, nodes) {
+    const groupB = group.actualBounds;
+    const nodesOver = new go.List();
+    nodes.each(node => {
+      if (node instanceof go.Node) {
+        const nodeB = node.actualBounds;
+        if (groupB.containsRect(nodeB)) {
+          nodesOver.add(node);
+        }
+      }
+    });
+    return nodesOver;
+  }
 
   // TODO: implement group using this https://gojs.net/latest/samples/regrouping.html
   const dsl_BasicGroup = ( param )=> {
@@ -103,7 +116,8 @@ function HierarchyDSL_getDSL( g ) {
         },
         mouseDrop: function(e, grp) {
           if (grp instanceof go.Group) {
-            var ok = grp.addMembers(grp.diagram.selection, true);
+            const nodesToAdd = getNodesOverTheGroup(grp, e.diagram.selection);
+            var ok = grp.addMembers(nodesToAdd, true);
             if (!ok) e.diagram.currentTool.doCancel();
           }
         }

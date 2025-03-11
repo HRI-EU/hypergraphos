@@ -116,6 +116,21 @@ function KanbanDSL_getDSL( g ) {
     if (hdr !== null) sz.width = Math.floor( Math.max(sz.width, hdr.actualBounds.width) );
     return sz;
   }
+
+  function getNodesOverTheGroup(group, nodes) {
+    const groupB = group.actualBounds;
+    const nodesOver = new go.List();
+    nodes.each(node => {
+      if (node instanceof go.Node) {
+        const nodeB = node.actualBounds;
+        if (groupB.containsRect(nodeB)) {
+          nodesOver.add(node);
+        }
+      }
+    });
+    return nodesOver;
+  }
+
   const dsl_KanbanBoardGroup = ()=> {
     return $(go.Group, "Vertical",
       {
@@ -147,32 +162,33 @@ function KanbanDSL_getDSL( g ) {
         mouseDrop: (e, grp) => {  // dropping a copy of some Nodes and Links onto this Group adds them to this Group
           // don't allow drag-and-dropping a mix of regular Nodes and Groups
           if (e.diagram.selection.all(n => !(n instanceof go.Group))) {
-            const ok = grp.addMembers(grp.diagram.selection, true);
+            const nodesToAdd = getNodesOverTheGroup(grp, e.diagram.selection);
+            const ok = grp.addMembers(nodesToAdd, true);
             if (!ok) grp.diagram.currentTool.doCancel();
             const shape = grp.selectionObject;
             const minlen = computeMinPoolLength();
             relayoutDiagram();
 
-            setInterval( ()=> {
-              if (shape !== null) {  // change the desiredSize to be big enough in both directions
-                const sz = computeLaneSize(grp);
-                const sWidth = (!isNaN(shape.width)) ? Math.max(shape.width, sz.width) : sz.width;
-                shape.width = Math.floor( sWidth );
-                // if you want the height of all of the lanes to shrink as the maximum needed height decreases:
-                shape.height = minlen;
-                // if you want the height of all of the lanes to remain at the maximum height ever needed:
-                // shape.height = (isNaN(shape.height) ? minlen : Math.max(shape.height, minlen));
-                const cell = grp.resizeCellSize;
-                if (!isNaN(shape.width) && !isNaN(cell.width) && cell.width > 0) {
-                  const sWidth = Math.ceil(shape.width / cell.width) * cell.width;
-                  shape.width = Math.floor( sWidth );
-                }
-                if (!isNaN(shape.height) && !isNaN(cell.height) && cell.height > 0) {
-                  const sHeight = Math.ceil(shape.height / cell.height) * cell.height;
-                  shape.height = Math.floor( sHeight );
-                }
-              }
-            }, 3000 );
+            // setInterval( ()=> {
+            //   if (shape !== null) {  // change the desiredSize to be big enough in both directions
+            //     const sz = computeLaneSize(grp);
+            //     const sWidth = (!isNaN(shape.width)) ? Math.max(shape.width, sz.width) : sz.width;
+            //     shape.width = Math.floor( sWidth );
+            //     // if you want the height of all of the lanes to shrink as the maximum needed height decreases:
+            //     shape.height = minlen;
+            //     // if you want the height of all of the lanes to remain at the maximum height ever needed:
+            //     // shape.height = (isNaN(shape.height) ? minlen : Math.max(shape.height, minlen));
+            //     const cell = grp.resizeCellSize;
+            //     if (!isNaN(shape.width) && !isNaN(cell.width) && cell.width > 0) {
+            //       const sWidth = Math.ceil(shape.width / cell.width) * cell.width;
+            //       shape.width = Math.floor( sWidth );
+            //     }
+            //     if (!isNaN(shape.height) && !isNaN(cell.height) && cell.height > 0) {
+            //       const sHeight = Math.ceil(shape.height / cell.height) * cell.height;
+            //       shape.height = Math.floor( sHeight );
+            //     }
+            //   }
+            // }, 3000 );
           }
         },
         subGraphExpandedChanged: grp => {

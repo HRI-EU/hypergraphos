@@ -327,6 +327,7 @@ class GraphWrapper {
 				if ((diagram.lastInput.control || this.isNodeInKanbanGroup()) && !this.nodesRemovedFromGroups) {
 					const parts = diagram.selection.toArray();
 					const nodesToUngroup = [];
+					const modifiedGroups = [];
 					
 					parts.forEach(part => {
 						if (part instanceof go.Node && part.containingGroup !== null) {
@@ -334,6 +335,7 @@ class GraphWrapper {
 								(part.containingGroup.data.category === 'Group_BasicGroup' || 
 								 part.containingGroup.data.category === 'KanbanDSL_KanbanBoard')) {
 								nodesToUngroup.push(part);
+								modifiedGroups.push(part.containingGroup);
 							}
 						}
 					});
@@ -341,17 +343,21 @@ class GraphWrapper {
 					if (nodesToUngroup.length > 0) {
 						diagram.startTransaction("remove from groups");
 						nodesToUngroup.forEach(node => {
-							// Remove the node from its group
-							node.containingGroup = null;
+							// node.containingGroup = null;
+							diagram.model.setGroupKeyForNodeData(node.data, undefined);
 						});
 						diagram.commitTransaction("remove from groups");
 						this.nodesRemovedFromGroups = true;
+						modifiedGroups.forEach(group => {
+							// TODO update group size
+							// group.expandSubGraph();
+						});
 					}
 				}
 			}
 			
 			super.doMouseMove();
-			}
+		}
 		
 		isNodeInKanbanGroup() {
 			const diagram = this.diagram;
