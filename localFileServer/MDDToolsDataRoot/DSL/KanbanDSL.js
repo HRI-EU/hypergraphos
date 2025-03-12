@@ -123,7 +123,7 @@ function KanbanDSL_getDSL( g ) {
     nodes.each(node => {
       if (node instanceof go.Node) {
         const nodeB = node.actualBounds;
-        if (groupB.containsRect(nodeB)) {
+        if (groupB.intersectsRect(nodeB)) {
           nodesOver.add(node);
         }
       }

@@ -1889,8 +1889,6 @@ class GraphWrapper {
 		diagram.clickCreatingTool = new InGroupClickCreatingTool();
 		// Avoid that the diagram comes slowly from the bottom in an animation
 		diagram.animationManager.isInitial = false;
-		// what to do when a drag-drop occurs in the Diagram's background
-		diagram.mouseDrop = (e)=> this._onFinishDrop( e, null );
 		// Use mouse wheel for zoom
 		diagram.toolManager.mouseWheelBehavior = go.ToolManager.WheelZoom;
 		// Disable port gravity (snap to port)
@@ -2194,24 +2192,6 @@ class GraphWrapper {
 								 "\n--- DSL ---------------\n"+
 								 dslList.join( '\n' );
 		return( info );
-	}
-	_onFinishDrop( e, grp ) {
-		// Upon a drop onto a Group, we try to add the selection as members of the Group.
-		// Upon a drop onto the background, or onto a top-level Node, make selection top-level.
-		// If this is OK, we're done; otherwise we cancel the operation to rollback everything.
-		let ok = false;
-		if( !grp ) {
-			const location = e.documentPoint;
-			const partList = e.diagram.findPartsAt( location );
-			if( partList.count > 0 ) {
-				partList.each( (part)=> {
-					const dataPart = part.data;
-					if( dataPart.isGroup ) {
-						ok = part.addMembers( e.diagram.selection, true );
-					}
-				});
-			}
-		}
 	}
 	_resetSelectionFromPalette() {
 		const selection = this.getSelection();
