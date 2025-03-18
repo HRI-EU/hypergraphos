@@ -163,13 +163,25 @@ function KanbanDSL_getDSL( g ) {
     }
   }
 
+  class GroupLayout extends go.GridLayout {
+    beforeDropLocation = null;
+ 
+    doLayout(thisGroup) {
+       super.doLayout(thisGroup);
+       if (this.beforeDropLocation) {
+          thisGroup.move(this.beforeDropLocation, true);
+          this.beforeDropLocation = null;
+       }
+    }
+ }
+
   const dsl_KanbanBoardGroup = ()=> {
     return $(go.Group, "Vertical",
       {
         selectable: true,
         selectionObjectName: "SHAPE", // even though its not selectable, this is used in the layout
         layerName: "Background",  // all lanes are always behind all nodes and links
-        layout: $(go.GridLayout,  // automatically lay out the lane's subgraph
+        layout: $(GroupLayout,  // automatically lay out the lane's subgraph
           {
             wrappingColumn: 1,
             cellSize: new go.Size(1, 1),
@@ -187,6 +199,7 @@ function KanbanDSL_getDSL( g ) {
         click: (e, grp) => {  // allow simple click on group to clear selection
           if (!e.shift && !e.control && !e.meta) e.diagram.clearSelection();
         },
+        locationSpot: go.Spot.TopLeft,
         computesBoundsAfterDrag: true,  // needed to prevent recomputing Group.placeholder bounds too soon
         handlesDragDropForMembers: true,  // don't need to define handlers on member Nodes and Links
         mouseDragEnter: (e, grp, prev) => highlightGroup(grp, true),
@@ -196,22 +209,9 @@ function KanbanDSL_getDSL( g ) {
           if (e.diagram.selection.all(n => !(n instanceof go.Group))) {
             const nodesToAdd = getNodesOverTheGroup(grp, e.diagram.selection);
             const oldPos = grp.location.copy();
+            grp.layout.beforeDropPosition = oldPos;
             const ok = grp.addMembers(nodesToAdd, true);
             if (!ok) grp.diagram.currentTool.doCancel();
-            window.requestAnimationFrame(() => {
-              grp.diagram.model.commit(m => {
-                resizeGroup(grp);
-                m.set(grp.data, "location", go.Point.stringify(oldPos));
-                const oldCanStart = grp.diagram.animationManager.canStart;
-                const revertAnimation = () => {
-                  grp.diagram.animationManager.canStart = oldCanStart;
-                  grp.diagram.removeDiagramListener('LayoutCompleted', revertAnimation);
-                }
-                grp.diagram.animationManager.canStart = (reason) => reason !== 'Layout';
-                grp.diagram.addDiagramListener('LayoutCompleted', revertAnimation);
-                grp.layout.invalidateLayout();
-              });            
-            });
           }
         },
         memberAdded: (grp) => resizeGroup(grp),
