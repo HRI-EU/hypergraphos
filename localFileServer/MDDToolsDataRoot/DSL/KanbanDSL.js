@@ -195,8 +195,23 @@ function KanbanDSL_getDSL( g ) {
           // don't allow drag-and-dropping a mix of regular Nodes and Groups
           if (e.diagram.selection.all(n => !(n instanceof go.Group))) {
             const nodesToAdd = getNodesOverTheGroup(grp, e.diagram.selection);
+            const oldPos = grp.location.copy();
             const ok = grp.addMembers(nodesToAdd, true);
             if (!ok) grp.diagram.currentTool.doCancel();
+            window.requestAnimationFrame(() => {
+              grp.diagram.model.commit(m => {
+                resizeGroup(grp);
+                m.set(grp.data, "location", go.Point.stringify(oldPos));
+                const oldCanStart = grp.diagram.animationManager.canStart;
+                const revertAnimation = () => {
+                  grp.diagram.animationManager.canStart = oldCanStart;
+                  grp.diagram.removeDiagramListener('LayoutCompleted', revertAnimation);
+                }
+                grp.diagram.animationManager.canStart = (reason) => reason !== 'Layout';
+                grp.diagram.addDiagramListener('LayoutCompleted', revertAnimation);
+                grp.layout.invalidateLayout();
+              });            
+            });
           }
         },
         memberAdded: (grp) => resizeGroup(grp),
