@@ -18,25 +18,29 @@ function HierarchyDSL_getDSL( g ) {
 
   const cm = g.contextMenu;
   cm.add( menuDSL, 'fileTypeMenu' );
+  cm.add( menuDSL, 'layoutMenu' );
   const fileTypeContextMenu = cm.getMenu( 'fileTypeMenu' );
+  const layoutContextMenu = cm.getMenu( 'layoutMenu' );
   
   //-----------------------
   // Define event handler
   //-----------------------
-  function makeLayout(horiz) {  // a Binding conversion function
-    if (horiz) {
-      return new go.GridLayout(
-        {
-          wrappingWidth: Infinity, alignment: go.GridLayout.Position,
-          cellSize: new go.Size(1, 1), spacing: new go.Size(4, 4)
-        });
-    } else {
+  function makeLayout(layout) {  // a Binding conversion function
+    if (layout === "Tree") {
+      return new go.TreeLayout();
+    } else if (layout === "Vertical") {
       return new go.GridLayout(
         {
           wrappingColumn: 1, alignment: go.GridLayout.Position,
           cellSize: new go.Size(1, 1), spacing: new go.Size(4, 4)
         });
     }
+    // horizontal layout as a default one
+    return new go.GridLayout(
+      {
+        wrappingWidth: Infinity, alignment: go.GridLayout.Position,
+        cellSize: new go.Size(1, 1), spacing: new go.Size(4, 4)
+      });
   }
 
   function defaultColor(horiz) {  // a Binding conversion function
@@ -190,6 +194,7 @@ function HierarchyDSL_getDSL( g ) {
   const dsl_LayoutGroup = ( param )=> {
     param = ( param? param: {} );
     param.g = ( param.g !== undefined? param.g: null );
+
     // GROUP SHAPE
     return $( go.Group, "Auto",
       {
@@ -208,7 +213,7 @@ function HierarchyDSL_getDSL( g ) {
         layout: makeLayout(false)
       },
       new go.Binding("location", "location",go.Point.parse).makeTwoWay(go.Point.stringify),
-      new go.Binding("layout", "horiz", makeLayout),
+      new go.Binding("layout", "layout", makeLayout),
       new go.Binding("background", "isHighlighted", h => h ? "rgba(255,0,0,0.2)" : "transparent").ofObject(),
       $(go.Shape, "RoundedRectangle",
         { 
@@ -234,7 +239,8 @@ function HierarchyDSL_getDSL( g ) {
               margin: 5,
               font: defaultFont(false),
               opacity: 0.95,  // allow some color to show through
-              stroke: "#404040"
+              stroke: "#404040",
+              contextMenu: layoutContextMenu,
             },
             new go.Binding("font", "horiz", defaultFont),
             new go.Binding("text", "label").makeTwoWay(),
@@ -632,7 +638,7 @@ function HierarchyDSL_getDSL( g ) {
     dataLinkList: [],
     templateGroupList: [
       { category: 'Group_BasicGroup', template: dsl_BasicGroup, param: { g, } },
-      { category: 'Group_HorizontalGroup', template: dsl_LayoutGroup, param: { g, isLayoutHorizontal: true} },
+      { category: 'Group_HorizontalGroup', template: dsl_LayoutGroup, param: { g, isLayoutHorizontal: true } },
     ],
     dataGroupList: [
       {
