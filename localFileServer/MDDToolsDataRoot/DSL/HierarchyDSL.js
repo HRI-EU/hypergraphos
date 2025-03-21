@@ -18,25 +18,29 @@ function HierarchyDSL_getDSL( g ) {
 
   const cm = g.contextMenu;
   cm.add( menuDSL, 'fileTypeMenu' );
+  cm.add( menuDSL, 'layoutMenu' );
   const fileTypeContextMenu = cm.getMenu( 'fileTypeMenu' );
+  const layoutContextMenu = cm.getMenu( 'layoutMenu' );
   
   //-----------------------
   // Define event handler
   //-----------------------
-  function makeLayout(horiz) {  // a Binding conversion function
-    if (horiz) {
-      return new go.GridLayout(
-        {
-          wrappingWidth: Infinity, alignment: go.GridLayout.Position,
-          cellSize: new go.Size(1, 1), spacing: new go.Size(4, 4)
-        });
-    } else {
+  function makeLayout(layout) {  // a Binding conversion function
+    if (layout === "Tree") {
+      return new go.TreeLayout();
+    } else if (layout === "Vertical") {
       return new go.GridLayout(
         {
           wrappingColumn: 1, alignment: go.GridLayout.Position,
           cellSize: new go.Size(1, 1), spacing: new go.Size(4, 4)
         });
     }
+    // horizontal layout as a default one
+    return new go.GridLayout(
+      {
+        wrappingWidth: Infinity, alignment: go.GridLayout.Position,
+        cellSize: new go.Size(1, 1), spacing: new go.Size(4, 4)
+      });
   }
 
   function defaultColor(horiz) {  // a Binding conversion function
@@ -56,13 +60,21 @@ function HierarchyDSL_getDSL( g ) {
       // instead depend on the DraggingTool.draggedParts or .copiedParts
       var tool = grp.diagram.toolManager.draggingTool;
       var map = tool.draggedParts || tool.copiedParts;  // this is a Map
+      let hasExternalParts = false;
+      e.diagram.selection.each(function(part) {
+        if (part.containingGroup !== grp) {
+          hasExternalParts = true;
+          return true;
+        }
+        return false;
+      });
       // now we can check to see if the Group will accept membership of the dragged Parts
-      if (grp.canAddMembers(map.toKeySet())) {
-        grp.isHighlighted = true;
+      if (hasExternalParts && grp.canAddMembers(map.toKeySet())) {
+        e.diagram.highlight(grp);
         return;
       }
     }
-    grp.isHighlighted = false;
+    e.diagram.clearHighlighteds();
   }
   // Upon a drop onto a Group, we try to add the selection as members of the Group.
   // Upon a drop onto the background, or onto a top-level Node, make selection top-level.
@@ -75,22 +87,46 @@ function HierarchyDSL_getDSL( g ) {
   }
   //g.diagram.mouseDrop = (e)=> finishDrop(e, null);
 
+  function getNodesOverTheGroup(group, nodes) {
+    const groupB = group.actualBounds;
+    const nodesOver = new go.List();
+    nodes.each(node => {
+      if (node instanceof go.Node) {
+        const nodeB = node.actualBounds;
+        if (groupB.intersectsRect(nodeB)) {
+          nodesOver.add(node);
+        }
+      }
+    });
+    return nodesOver;
+  }
 
   // TODO: implement group using this https://gojs.net/latest/samples/regrouping.html
   const dsl_BasicGroup = ( param )=> {
     return $(go.Group, "Vertical",
-      { defaultStretch: go.GraphObject.Horizontal,
-        
+      { 
+        defaultStretch: go.GraphObject.Horizontal,
         ungroupable: true,  // enable Ctrl-Shift-G to ungroup a selected Group
-        mouseDrop: (e)=> { g._onFinishDrop( e, null ); },
-        mouseDragEnter: ( e, grp, prev )=> { 
-          if( e.control ) {
-            // This code ungroup the current dragged selection
-            const selection = e.diagram.selection;
-            e.diagram.commandHandler.addTopLevelParts( selection );
-            // NOTE: this do not work in this case: this.diagram.commandHandler.ungroupSelection();
-          }
+        
+        computesBoundsAfterDrag: true,
+        computesBoundsIncludingLocation: true,
+        handlesDragDropForMembers: true,
+        
+        mouseDragEnter: function(e, grp, prev) { 
+          highlightGroup(e, grp, true);
         },
+        mouseDragLeave: function(e, grp, next) { 
+          highlightGroup(e, grp, false);
+        },
+        mouseDrop: function(e, grp) {
+          if (grp instanceof go.Group) {
+            const nodesToAdd = getNodesOverTheGroup(grp, e.diagram.selection);
+            console.log(nodesToAdd);
+            var ok = grp.addMembers(nodesToAdd, true);
+            console.log('OK', ok)
+            if (!ok) e.diagram.currentTool.doCancel();
+          }
+        }
       },
       new go.Binding("location", "location", function( location ) {
         const values = location.split( ' ' );
@@ -105,6 +141,7 @@ function HierarchyDSL_getDSL( g ) {
       }),
       $(go.Panel, "Auto",
         {
+          pickable: true,
         },
         $(go.Shape, "Rectangle",
           { //fill: "gray",
@@ -135,10 +172,16 @@ function HierarchyDSL_getDSL( g ) {
       ),
       $(go.Panel, "Auto",
         { 
-          pickable: false,
+          pickable: true,
+          background: "transparent"
         },
         $(go.Shape, { fill: "rgba(128,128,128,0.2)" }),
-        $(go.Placeholder, { padding: 20 }),
+        $(go.Placeholder, { 
+          padding: 20,
+          pickable: true,
+          background: "transparent" 
+        }),
+        new go.Binding("background", "isHighlighted", h => h ? "rgba(0,0,0,0.2)" : "transparent").ofObject()
       ),
       { // this tooltip Adornment is shared by all groups
         toolTip: g.newGroupToolTip(),
@@ -151,6 +194,7 @@ function HierarchyDSL_getDSL( g ) {
   const dsl_LayoutGroup = ( param )=> {
     param = ( param? param: {} );
     param.g = ( param.g !== undefined? param.g: null );
+
     // GROUP SHAPE
     return $( go.Group, "Auto",
       {
@@ -169,7 +213,7 @@ function HierarchyDSL_getDSL( g ) {
         layout: makeLayout(false)
       },
       new go.Binding("location", "location",go.Point.parse).makeTwoWay(go.Point.stringify),
-      new go.Binding("layout", "horiz", makeLayout),
+      new go.Binding("layout", "layout", makeLayout),
       new go.Binding("background", "isHighlighted", h => h ? "rgba(255,0,0,0.2)" : "transparent").ofObject(),
       $(go.Shape, "RoundedRectangle",
         { 
@@ -195,7 +239,8 @@ function HierarchyDSL_getDSL( g ) {
               margin: 5,
               font: defaultFont(false),
               opacity: 0.95,  // allow some color to show through
-              stroke: "#404040"
+              stroke: "#404040",
+              contextMenu: layoutContextMenu,
             },
             new go.Binding("font", "horiz", defaultFont),
             new go.Binding("text", "label").makeTwoWay(),
@@ -593,7 +638,7 @@ function HierarchyDSL_getDSL( g ) {
     dataLinkList: [],
     templateGroupList: [
       { category: 'Group_BasicGroup', template: dsl_BasicGroup, param: { g, } },
-      { category: 'Group_HorizontalGroup', template: dsl_LayoutGroup, param: { g, isLayoutHorizontal: true} },
+      { category: 'Group_HorizontalGroup', template: dsl_LayoutGroup, param: { g, isLayoutHorizontal: true } },
     ],
     dataGroupList: [
       {

@@ -712,6 +712,18 @@ LICENSE file in the root directory of this source tree.
   function getMenuItemTextType( o ) {
     getMenuItemText( o, 'type' );
   }
+  function getMenuItemTextLayout( o ) {
+    const menuItemText = o.item.label;
+    const diagram = o.d.diagram;
+    const it = diagram.selection.iterator;
+    const node = it.first();
+    if( node ) {
+      const data = node.data;
+      diagram.startTransaction("change layout");
+      diagram.model.setDataProperty( data, 'layout', menuItemText );
+      diagram.commitTransaction("change layout");
+    }
+  }
   var menuDSL = {
     'fileTypeMenu': createFileTypeMenu(),
     'figureMenu':
@@ -751,6 +763,11 @@ LICENSE file in the root directory of this source tree.
         { label: 'SquareLevelUp', if: ( o )=> true, do: getMenuItemTextValue },
         { label: 'SquareUShape', if: ( o )=> true, do: getMenuItemTextValue },
         { label: 'UShapeInternalArrowOut', if: ( o )=> true, do: getMenuItemTextValue   },
+      ]},
+    'layoutMenu': { layout: 'vertical', itemList: [
+        { label: 'Horizontal', if: ( o )=> true, do: getMenuItemTextLayout },
+        { label: 'Vertical', if: ( o )=> true, do: getMenuItemTextLayout },
+        { label: 'Tree', if: ( o )=> true, do: getMenuItemTextLayout },
       ]},
     'treeDataTypeMenu':
       { layout: 'vertical', itemList: [

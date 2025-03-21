@@ -308,6 +308,74 @@ class GraphWrapper {
 		];
 		this.dslNodeFieldNameList = new Set( ['key'] );
 	}
+
+	// Custom DraggingTool for handling proper ungrouping
+	DragOutsideGroupTool = class extends go.DraggingTool {
+		constructor() {
+			super();
+			this.nodesRemovedFromGroups = false;
+		}
+		
+		doActivate() {
+			super.doActivate();
+			this.nodesRemovedFromGroups = false;
+		}
+		
+		doMouseMove() {
+			const diagram = this.diagram;
+			if (diagram !== null && this.isActive) {
+				if ((diagram.lastInput.control || this.isNodeInKanbanGroup()) && !this.nodesRemovedFromGroups) {
+					const parts = diagram.selection.toArray();
+					const nodesToUngroup = [];
+					const modifiedGroups = [];
+					
+					parts.forEach(part => {
+						if (part instanceof go.Node && part.containingGroup !== null) {
+							if (part.containingGroup.data && 
+								(part.containingGroup.data.category === 'Group_BasicGroup' || 
+								 part.containingGroup.data.category === 'KanbanDSL_KanbanBoard')) {
+								nodesToUngroup.push(part);
+								modifiedGroups.push(part.containingGroup);
+							}
+						}
+					});
+					
+					if (nodesToUngroup.length > 0) {
+						diagram.startTransaction("remove from groups");
+						nodesToUngroup.forEach(node => {
+							// node.containingGroup = null;
+							diagram.model.setGroupKeyForNodeData(node.data, undefined);
+						});
+						diagram.commitTransaction("remove from groups");
+						this.nodesRemovedFromGroups = true;
+						modifiedGroups.forEach(group => {
+							// TODO update group size
+							// group.expandSubGraph();
+						});
+					}
+				}
+			}
+			
+			super.doMouseMove();
+		}
+		
+		isNodeInKanbanGroup() {
+			const diagram = this.diagram;
+			if (!diagram) return false;
+			
+			const parts = diagram.selection.toArray();
+			for (const part of parts) {
+				if (part instanceof go.Node && 
+					part.containingGroup !== null && 
+					part.containingGroup.data && 
+					part.containingGroup.data.category === 'KanbanDSL_KanbanBoard') {
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+
 	registerEvent( name, callback ) {
 		this.em.register( name, callback );
 	}
@@ -1821,8 +1889,6 @@ class GraphWrapper {
 		diagram.clickCreatingTool = new InGroupClickCreatingTool();
 		// Avoid that the diagram comes slowly from the bottom in an animation
 		diagram.animationManager.isInitial = false;
-		// what to do when a drag-drop occurs in the Diagram's background
-		diagram.mouseDrop = (e)=> this._onFinishDrop( e, null );
 		// Use mouse wheel for zoom
 		diagram.toolManager.mouseWheelBehavior = go.ToolManager.WheelZoom;
 		// Disable port gravity (snap to port)
@@ -1831,6 +1897,9 @@ class GraphWrapper {
 		diagram.undoManager.isEnabled = true;
 		// Disable creation of nodes on double click
 		diagram.toolManager.clickCreatingTool = null
+
+		// Install custom dragging tool for CTRL key handling
+		diagram.toolManager.draggingTool = new this.DragOutsideGroupTool();
 
 		// Define grid
 		const mainColor = {
@@ -2123,24 +2192,6 @@ class GraphWrapper {
 								 "\n--- DSL ---------------\n"+
 								 dslList.join( '\n' );
 		return( info );
-	}
-	_onFinishDrop( e, grp ) {
-		// Upon a drop onto a Group, we try to add the selection as members of the Group.
-		// Upon a drop onto the background, or onto a top-level Node, make selection top-level.
-		// If this is OK, we're done; otherwise we cancel the operation to rollback everything.
-		let ok = false;
-		if( !grp ) {
-			const location = e.documentPoint;
-			const partList = e.diagram.findPartsAt( location );
-			if( partList.count > 0 ) {
-				partList.each( (part)=> {
-					const dataPart = part.data;
-					if( dataPart.isGroup ) {
-						ok = part.addMembers( e.diagram.selection, true );
-					}
-				});
-			}
-		}
 	}
 	_resetSelectionFromPalette() {
 		const selection = this.getSelection();
