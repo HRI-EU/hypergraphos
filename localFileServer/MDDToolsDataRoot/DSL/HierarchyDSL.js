@@ -128,6 +128,7 @@ function HierarchyDSL_getDSL( g ) {
           }
         }
       },
+      new go.Binding('zOrder'),
       new go.Binding("location", "location", function( location ) {
         const values = location.split( ' ' );
         // TODO, the 10 comes from the grid size --> move this constant into a config file
@@ -212,6 +213,7 @@ function HierarchyDSL_getDSL( g ) {
         // Groups containing Groups layout their members horizontally
         layout: makeLayout(false)
       },
+      new go.Binding('zOrder'),
       new go.Binding("location", "location",go.Point.parse).makeTwoWay(go.Point.stringify),
       new go.Binding("layout", "layout", makeLayout),
       new go.Binding("background", "isHighlighted", h => h ? "rgba(255,0,0,0.2)" : "transparent").ofObject(),

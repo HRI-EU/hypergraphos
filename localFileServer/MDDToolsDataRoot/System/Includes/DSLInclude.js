@@ -1786,6 +1786,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
         locationSpot: go.Spot.Center,
       },
       new go.Binding("location", "location",go.Point.parse).makeTwoWay(go.Point.stringify),
+      new go.Binding('zOrder'),
       $(go.Panel, "Table",
         //---------
         // Body
@@ -2103,6 +2104,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
       },
       new go.Binding("location", "location",go.Point.parse).makeTwoWay(go.Point.stringify),
       new go.Binding("layerName","layerName"),
+      new go.Binding('zOrder'),
       $(go.Panel, "Spot",
         {        
           //padding: new go.Margin(10,10,10,10),
@@ -2287,6 +2289,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
       },
       new go.Binding( "location", "location", go.Point.parse).makeTwoWay(go.Point.stringify),
       new go.Binding( "layerName", "layerName"),
+      new go.Binding('zOrder'),
       $(go.Panel, "Spot",
         $(go.Shape, 
           Object.assign( 

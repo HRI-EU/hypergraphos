@@ -21,6 +21,7 @@ function KanbanDSL_getDSL( g ) {
   const dsl_KanbanCard = ()=> {
     return( $(go.Node, "Horizontal",
       new go.Binding("location", "location", go.Point.parse).makeTwoWay(go.Point.stringify),
+      new go.Binding('zOrder'),
       $(go.Shape, "Rectangle", 
         {
           fill: getNoteColor(0),
