@@ -210,7 +210,7 @@ function KanbanDSL_getDSL( g ) {
           if (e.diagram.selection.all(n => !(n instanceof go.Group))) {
             const nodesToAdd = getNodesOverTheGroup(grp, e.diagram.selection);
             const oldPos = grp.location.copy();
-            grp.layout.beforeDropPosition = oldPos;
+            grp.layout.beforeDropLocation = oldPos;
             const ok = grp.addMembers(nodesToAdd, true);
             if (!ok) grp.diagram.currentTool.doCancel();
           }
