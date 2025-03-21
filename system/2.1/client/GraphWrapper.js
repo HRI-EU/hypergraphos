@@ -1989,6 +1989,47 @@ class GraphWrapper {
 		);
 		return( palette );
 	}
+	updateHandles( diagram ) {
+		const viewportBounds = diagram.viewportBounds;
+		const scale = diagram.scale;
+		if (scale > 1) return;
+
+		diagram.groupSelectionAdornmentTemplate.elt(0).strokeWidth = 3 / scale;
+		diagram.linkSelectionAdornmentTemplate.findMainElement().strokeWidth = 3 / scale;
+		diagram.nodeSelectionAdornmentTemplate.elt(0).strokeWidth = 3 / scale;
+		diagram.toolManager.linkReshapingTool.handleArchetype.scale = 1 / scale;
+		diagram.toolManager.linkReshapingTool.midHandleArchetype.scale = 1 / scale;
+		diagram.toolManager.relinkingTool.fromHandleArchetype.scale = 1 / scale;
+		diagram.toolManager.relinkingTool.toHandleArchetype.scale = 1 / scale;
+		diagram.toolManager.resizingTool.handleArchetype.scale = 1 / scale;
+		diagram.toolManager.rotatingTool.handleArchetype.scale = 1 / scale;
+
+		diagram.nodes.each((n) => {
+			if (!n.actualBounds.intersectsRect(viewportBounds)) return;
+			n.adornments.each((a) => {
+				if (a.category === "Selection") {
+					const shape = a.elt(0);
+					if (shape instanceof go.Shape) shape.strokeWidth = 3 / scale;
+				} else {
+					a.elements.each((o) => {
+						if (!(o instanceof go.Placeholder)) o.scale = 1 / scale;
+					});
+				}
+			});
+		})
+		diagram.links.each((l) => {
+			if (!l.actualBounds.intersectsRect(viewportBounds)) return;
+			l.adornments.each((a) => {
+				if (a.category === "Selection") {
+					const shape = a.findMainElement();
+					if (shape instanceof go.Shape) shape.strokeWidth = 3 / scale;
+				} else {
+					a.elements.each((o) => { o.scale = 1 / scale; });
+				}
+			});
+		})
+	}
+
 	addLinkingZoomInOut( diagram ) {
 		const tool = diagram.toolManager.linkingTool;
 		let zoom = diagram.scale;
@@ -2046,6 +2087,10 @@ class GraphWrapper {
 		diagram.undoManager.isEnabled = true;
 		// Disable creation of nodes on double click
 		diagram.toolManager.clickCreatingTool = null
+
+		diagram.addDiagramListener( 'ViewportBoundsChanged', ( e )=> {
+			this.updateHandles( e.diagram );
+		});
 
 		// Install custom dragging tool for CTRL key handling
 		diagram.toolManager.draggingTool = new this.DragOutsideGroupTool();
