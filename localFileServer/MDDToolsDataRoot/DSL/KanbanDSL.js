@@ -165,13 +165,13 @@ function KanbanDSL_getDSL( g ) {
   }
 
   class GroupLayout extends go.GridLayout {
-    beforeDropLocation = null;
+    beforeDropPosition = null;
  
     doLayout(thisGroup) {
        super.doLayout(thisGroup);
-       if (this.beforeDropLocation) {
-          thisGroup.move(this.beforeDropLocation, true);
-          this.beforeDropLocation = null;
+       if (this.beforeDropPosition) {
+          thisGroup.move(this.beforeDropPosition, false);
+          this.beforeDropPosition = null;
        }
     }
  }
@@ -209,8 +209,8 @@ function KanbanDSL_getDSL( g ) {
           // don't allow drag-and-dropping a mix of regular Nodes and Groups
           if (e.diagram.selection.all(n => !(n instanceof go.Group))) {
             const nodesToAdd = getNodesOverTheGroup(grp, e.diagram.selection);
-            const oldPos = grp.location.copy();
-            grp.layout.beforeDropLocation = oldPos;
+            const oldPos = grp.position.copy();
+            grp.layout.beforeDropPosition = oldPos;
             const ok = grp.addMembers(nodesToAdd, true);
             if (!ok) grp.diagram.currentTool.doCancel();
           }
