@@ -331,19 +331,14 @@ class GraphWrapper {
 					
 					parts.forEach(part => {
 						if (part instanceof go.Node && part.containingGroup !== null) {
-							if (part.containingGroup.data && 
-								(part.containingGroup.data.category === 'Group_BasicGroup' || 
-								 part.containingGroup.data.category === 'KanbanDSL_KanbanBoard')) {
-								nodesToUngroup.push(part);
-								modifiedGroups.push(part.containingGroup);
-							}
+							nodesToUngroup.push(part);
+							modifiedGroups.push(part.containingGroup);
 						}
 					});
 					
 					if (nodesToUngroup.length > 0) {
 						diagram.startTransaction("remove from groups");
 						nodesToUngroup.forEach(node => {
-							// node.containingGroup = null;
 							diagram.model.setGroupKeyForNodeData(node.data, undefined);
 						});
 						diagram.commitTransaction("remove from groups");
