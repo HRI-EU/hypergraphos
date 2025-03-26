@@ -107,9 +107,6 @@ function HierarchyDSL_getDSL( g ) {
       { 
         defaultStretch: go.GraphObject.Horizontal,
         ungroupable: true,  // enable Ctrl-Shift-G to ungroup a selected Group
-        
-        computesBoundsAfterDrag: true,
-        computesBoundsIncludingLocation: true,
         handlesDragDropForMembers: true,
         
         mouseDragEnter: function(e, grp, prev) { 
