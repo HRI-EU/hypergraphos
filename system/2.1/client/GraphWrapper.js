@@ -16,6 +16,70 @@ Date: 10.07.2020
 
 var $ = go.GraphObject.make;  // for conciseness in defining templates
 
+class DragOutsideGroupTool extends go.DraggingTool {
+	constructor() {
+		super();
+	}
+	
+	doActivate() {
+		super.doActivate();
+	}
+	
+	doMouseMove() {
+		const diagram = this.diagram;
+		if (diagram !== null && this.isActive) {
+			if ((this.isProperKeyPressed() || this.isNodeInKanbanGroup()) && !this.nodesRemovedFromGroups) {
+				const parts = diagram.selection.toArray();
+				const nodesToUngroup = [];
+				const modifiedGroups = [];
+				
+				parts.forEach(part => {
+					if (part instanceof go.Node && part.containingGroup !== null) {
+						nodesToUngroup.push(part);
+						modifiedGroups.push(part.containingGroup);
+					}
+				});
+				
+				if (nodesToUngroup.length > 0) {
+					diagram.startTransaction("remove from groups");
+					nodesToUngroup.forEach(node => {
+						diagram.model.setGroupKeyForNodeData(node.data, undefined);
+					});
+					diagram.commitTransaction("remove from groups");
+				}
+			}
+		}
+		
+		super.doMouseMove();
+	}
+	
+	isNodeInKanbanGroup() {
+		const diagram = this.diagram;
+		if (!diagram) return false;
+		
+		const parts = diagram.selection.toArray();
+		for (const part of parts) {
+			if (part instanceof go.Node && 
+				part.containingGroup !== null && 
+				part.containingGroup.data && 
+				part.containingGroup.data.category === 'KanbanDSL_KanbanBoard') {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	isProperKeyPressed() {
+		const lastInput = this.diagram.lastInput;
+		const isMac = /Mac(intosh|Intel|PPC|68K)/i.test(navigator.userAgent);
+		if (isMac) {
+			return lastInput.control;
+		} else {
+			return lastInput.alt;
+		}
+	}
+}
+
 class GraphWrapper {
 	constructor( param ) {
 		// fullPaletteId, nodePaletteId, linkPaletteId, graphId
@@ -307,68 +371,6 @@ class GraphWrapper {
 			'points',
 		];
 		this.dslNodeFieldNameList = new Set( ['key'] );
-	}
-
-	// Custom DraggingTool for handling proper ungrouping
-	DragOutsideGroupTool = class extends go.DraggingTool {
-		constructor() {
-			super();
-			this.nodesRemovedFromGroups = false;
-		}
-		
-		doActivate() {
-			super.doActivate();
-			this.nodesRemovedFromGroups = false;
-		}
-		
-		doMouseMove() {
-			const diagram = this.diagram;
-			if (diagram !== null && this.isActive) {
-				if ((diagram.lastInput.control || this.isNodeInKanbanGroup()) && !this.nodesRemovedFromGroups) {
-					const parts = diagram.selection.toArray();
-					const nodesToUngroup = [];
-					const modifiedGroups = [];
-					
-					parts.forEach(part => {
-						if (part instanceof go.Node && part.containingGroup !== null) {
-							nodesToUngroup.push(part);
-							modifiedGroups.push(part.containingGroup);
-						}
-					});
-					
-					if (nodesToUngroup.length > 0) {
-						diagram.startTransaction("remove from groups");
-						nodesToUngroup.forEach(node => {
-							diagram.model.setGroupKeyForNodeData(node.data, undefined);
-						});
-						diagram.commitTransaction("remove from groups");
-						this.nodesRemovedFromGroups = true;
-						modifiedGroups.forEach(group => {
-							// TODO update group size
-							// group.expandSubGraph();
-						});
-					}
-				}
-			}
-			
-			super.doMouseMove();
-		}
-		
-		isNodeInKanbanGroup() {
-			const diagram = this.diagram;
-			if (!diagram) return false;
-			
-			const parts = diagram.selection.toArray();
-			for (const part of parts) {
-				if (part instanceof go.Node && 
-					part.containingGroup !== null && 
-					part.containingGroup.data && 
-					part.containingGroup.data.category === 'KanbanDSL_KanbanBoard') {
-					return true;
-				}
-			}
-			return false;
-		}
 	}
 
 	registerEvent( name, callback ) {
@@ -2088,7 +2090,7 @@ class GraphWrapper {
 		});
 
 		// Install custom dragging tool for CTRL key handling
-		diagram.toolManager.draggingTool = new this.DragOutsideGroupTool();
+		diagram.toolManager.draggingTool = new DragOutsideGroupTool();
 
 		// Define grid
 		const mainColor = {

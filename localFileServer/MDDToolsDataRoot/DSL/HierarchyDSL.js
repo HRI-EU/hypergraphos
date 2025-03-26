@@ -118,9 +118,7 @@ function HierarchyDSL_getDSL( g ) {
         mouseDrop: function(e, grp) {
           if (grp instanceof go.Group) {
             const nodesToAdd = getNodesOverTheGroup(grp, e.diagram.selection);
-            console.log(nodesToAdd);
             var ok = grp.addMembers(nodesToAdd, true);
-            console.log('OK', ok)
             if (!ok) e.diagram.currentTool.doCancel();
           }
         }
