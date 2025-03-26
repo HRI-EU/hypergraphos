@@ -2302,25 +2302,6 @@ class GraphWrapper {
 			}
 		});
 
-		diagram.addDiagramListener( 'SelectionGrouped', (event) => {
-			const group = event.subject;
-			if( group ) {
-				const firstNode = this.iterableToArray(group.findSubGraphParts()).find( (part) => part instanceof go.Node );
-				if( firstNode ) {
-					const oldPos = firstNode.position.copy();
-					const newPos = new go.Point( oldPos.x+1, oldPos.y+1 );
-					requestAnimationFrame( ()=> {
-						diagram.model.undoManager.isEnabled = false;
-						firstNode.move( newPos, false );
-						requestAnimationFrame( ()=> {
-							firstNode.move( oldPos, false );
-							diagram.model.undoManager.isEnabled = true;
-						} );
-					} );
-				}
-			}
-		});
-
 		return( diagram );
 	}
 	newNodeToolTip() {
