@@ -123,6 +123,7 @@ function HierarchyDSL_getDSL( g ) {
       $(go.Panel, "Auto",
         {
           pickable: true,
+          name: "Header",
         },
         $(go.Shape, "Rectangle",
           { //fill: "gray",

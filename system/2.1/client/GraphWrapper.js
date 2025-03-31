@@ -16,13 +16,26 @@ Date: 10.07.2020
 
 var $ = go.GraphObject.make;  // for conciseness in defining templates
 
-class DragOutsideGroupTool extends go.DraggingTool {
+class GroupDraggingTool extends go.DraggingTool {
 	constructor() {
 		super();
 	}
 	
-	doActivate() {
-		super.doActivate();
+	canStart() {
+		const currentPart = this.findDraggablePart();
+		// does it also need to be done for other groups?
+		if (currentPart?.category !== 'Group_BasicGroup') {
+			return super.canStart();
+		}
+		if (this.diagram.findObjectsNear(
+			this.diagram.lastInput.documentPoint, 
+			1, 
+			(graphObject) => graphObject.name === 'Header' ? graphObject : null).count !== 0
+		) {
+			return super.canStart();
+		} else {
+			return false;
+		}
 	}
 	
 	doMouseMove() {
@@ -77,6 +90,28 @@ class DragOutsideGroupTool extends go.DraggingTool {
 		} else {
 			return lastInput.alt;
 		}
+	}
+}
+
+class GroupDragSelectingTool extends go.DragSelectingTool {
+	constructor() {
+		super();
+	}
+
+	canStart() {
+		if (!this.isEnabled) return false;
+		const diagram = this.diagram;
+		if (diagram === null || !diagram.allowSelect) return false;
+		const e = diagram.lastInput;
+		// require left button & that it has moved far enough away from the mouse down point, so it isn't a click
+		if (!e.left) return false;
+		// don't include the following checks when this tool is running modally
+		if (diagram.currentTool !== this) {
+			if (!this.isBeyondDragSize()) return false;
+			// must wait for "delay" milliseconds before that tool can run
+			if (e.timestamp - diagram.firstInput.timestamp < this.delay) return false;
+		}
+		return true;
 	}
 }
 
@@ -2090,7 +2125,8 @@ class GraphWrapper {
 		});
 
 		// Install custom dragging tool for CTRL key handling
-		diagram.toolManager.draggingTool = new DragOutsideGroupTool();
+		diagram.toolManager.draggingTool = new GroupDraggingTool();
+		diagram.toolManager.dragSelectingTool = new GroupDragSelectingTool();
 
 		// Define grid
 		const mainColor = {
