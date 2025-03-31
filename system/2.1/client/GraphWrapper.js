@@ -2003,7 +2003,7 @@ class GraphWrapper {
 
 		diagram.nodes.each((n) => {
 			if (!n.actualBounds.intersectsRect(viewportBounds)) return;
-			n.adornments.each((a) => {
+			n.adornments.filter((a) => a.category !== "ToolTip").each((a) => {
 				if (a.category === "Selection") {
 					const shape = a.elt(0);
 					if (shape instanceof go.Shape) shape.strokeWidth = 3 / scale;
@@ -2016,7 +2016,7 @@ class GraphWrapper {
 		})
 		diagram.links.each((l) => {
 			if (!l.actualBounds.intersectsRect(viewportBounds)) return;
-			l.adornments.each((a) => {
+			l.adornments.filter((a) => a.category !== "ToolTip").each((a) => {
 				if (a.category === "Selection") {
 					const shape = a.findMainElement();
 					if (shape instanceof go.Shape) shape.strokeWidth = 3 / scale;
