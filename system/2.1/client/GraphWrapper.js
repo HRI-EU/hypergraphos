@@ -2023,8 +2023,10 @@ class GraphWrapper {
 	}
 	updateHandles( diagram ) {
 		const viewportBounds = diagram.viewportBounds;
-		const scale = diagram.scale;
-		if (scale > 1) return;
+		let scale = diagram.scale;
+		if ( scale > 1 ) {
+			scale = 1;
+		}
 
 		diagram.groupSelectionAdornmentTemplate.elt(0).strokeWidth = 3 / scale;
 		diagram.linkSelectionAdornmentTemplate.findMainElement().strokeWidth = 3 / scale;
