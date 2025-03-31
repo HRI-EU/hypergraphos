@@ -128,20 +128,6 @@ function KanbanDSL_getDSL( g ) {
     return sz;
   }
 
-  function getNodesOverTheGroup(group, nodes) {
-    const groupB = group.actualBounds;
-    const nodesOver = new go.List();
-    nodes.each(node => {
-      if (node instanceof go.Node) {
-        const nodeB = node.actualBounds;
-        if (groupB.intersectsRect(nodeB)) {
-          nodesOver.add(node);
-        }
-      }
-    });
-    return nodesOver;
-  }
-
   function resizeGroup(group) {
     const shape = group.selectionObject;
     const minlen = computeMinPoolLength();
@@ -208,10 +194,9 @@ function KanbanDSL_getDSL( g ) {
         mouseDrop: (e, grp) => {  // dropping a copy of some Nodes and Links onto this Group adds them to this Group
           // don't allow drag-and-dropping a mix of regular Nodes and Groups
           if (e.diagram.selection.all(n => !(n instanceof go.Group))) {
-            const nodesToAdd = getNodesOverTheGroup(grp, e.diagram.selection);
             const oldPos = grp.position.copy();
             grp.layout.beforeDropPosition = oldPos;
-            const ok = grp.addMembers(nodesToAdd, true);
+            const ok = grp.addMembers(e.diagram.selection, true);
             if (!ok) grp.diagram.currentTool.doCancel();
           }
         },
