@@ -23,13 +23,15 @@ class GroupDraggingTool extends go.DraggingTool {
 	
 	canStart() {
 		const currentPart = this.findDraggablePart();
-		// does it also need to be done for other groups?
+		// JUST AN EXAMPLE HOW IT SHOULD BE DONE
+		// here only for Group_BasicGroup - condition can be modified according to proper usage
 		if (currentPart?.category !== 'Group_BasicGroup') {
 			return super.canStart();
 		}
 		if (this.diagram.findObjectsNear(
 			this.diagram.lastInput.documentPoint, 
 			1, 
+			// we have to rely on a specific object name, so all draggable headers should have that name
 			(graphObject) => graphObject.name === 'Header' ? graphObject : null).count !== 0
 		) {
 			return super.canStart();
@@ -41,7 +43,7 @@ class GroupDraggingTool extends go.DraggingTool {
 	doMouseMove() {
 		const diagram = this.diagram;
 		if (diagram !== null && this.isActive) {
-			if ((this.isProperKeyPressed() || this.isNodeInKanbanGroup()) && !this.nodesRemovedFromGroups) {
+			if ((this.isProperKeyPressed() || this.isAutolayoutedGroup()) && !this.nodesRemovedFromGroups) {
 				const parts = diagram.selection.toArray();
 				const nodesToUngroup = [];
 				const modifiedGroups = [];
@@ -66,17 +68,14 @@ class GroupDraggingTool extends go.DraggingTool {
 		super.doMouseMove();
 	}
 	
-	isNodeInKanbanGroup() {
+	isAutolayoutedGroup() {
 		const diagram = this.diagram;
 		if (!diagram) return false;
-		
+
 		const parts = diagram.selection.toArray();
 		for (const part of parts) {
-			if (part instanceof go.Node && 
-				part.containingGroup !== null && 
-				part.containingGroup.data && 
-				part.containingGroup.data.category === 'KanbanDSL_KanbanBoard') {
-				return true;
+			if (part instanceof go.Node && part.containingGroup !== null) {
+				return Object.getPrototypeOf(part.containingGroup.layout) !== go.Layout.prototype
 			}
 		}
 		return false;
