@@ -2558,3 +2558,13 @@ console.log( 'Button Status: '+obj.data.checked );`;
   };
 
   
+  class SelectableGroup extends go.Group {
+    static HEADER_NAME = 'Header'
+
+    isActionOnHeader() {
+      return this.diagram.findObjectsNear(
+        this.diagram.lastInput.documentPoint, 
+        1,
+        (graphObject) => graphObject.name === SelectableGroup.HEADER_NAME ? graphObject : null).count !== 0;
+    }
+  }

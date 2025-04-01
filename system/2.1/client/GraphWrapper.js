@@ -23,20 +23,10 @@ class GroupDraggingTool extends go.DraggingTool {
 	
 	canStart() {
 		const currentPart = this.findDraggablePart();
-		// JUST AN EXAMPLE HOW IT SHOULD BE DONE
-		// here only for Group_BasicGroup - condition can be modified according to proper usage
-		if (currentPart?.category !== 'Group_BasicGroup') {
-			return super.canStart();
-		}
-		if (this.diagram.findObjectsNear(
-			this.diagram.lastInput.documentPoint, 
-			1, 
-			// we have to rely on a specific object name, so all draggable headers should have that name
-			(graphObject) => graphObject.name === 'Header' ? graphObject : null).count !== 0
-		) {
-			return super.canStart();
+		if (currentPart && currentPart instanceof SelectableGroup) {
+			return currentPart.isActionOnHeader();
 		} else {
-			return false;
+			return super.canStart();
 		}
 	}
 	
@@ -2298,7 +2288,12 @@ class GraphWrapper {
 			}
 		});
 		diagram.addDiagramListener( 'ObjectDoubleClicked', ()=> {
-			const data = this.getFirstSelectedNodeData();
+			const firstSelected = diagram.selection.first();
+			if ( firstSelected instanceof SelectableGroup && !firstSelected.isActionOnHeader() ) {
+				diagram.raiseDiagramEvent( 'BackgroundDoubleClicked' );
+				return;
+			}
+			const data = firstSelected.data;
 			if( data ) {
 				if ( data.isDir == true ) {
 					this.em.fire.onLoadGraph( data );

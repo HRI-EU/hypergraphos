@@ -89,7 +89,7 @@ function HierarchyDSL_getDSL( g ) {
 
   // TODO: implement group using this https://gojs.net/latest/samples/regrouping.html
   const dsl_BasicGroup = ( param )=> {
-    return $(go.Group, "Vertical",
+    return $(SelectableGroup, "Vertical",
       { 
         defaultStretch: go.GraphObject.Horizontal,
         ungroupable: true,  // enable Ctrl-Shift-G to ungroup a selected Group
@@ -123,7 +123,7 @@ function HierarchyDSL_getDSL( g ) {
       $(go.Panel, "Auto",
         {
           pickable: true,
-          name: "Header",
+          name: SelectableGroup.HEADER_NAME,
         },
         $(go.Shape, "Rectangle",
           { //fill: "gray",
@@ -155,7 +155,7 @@ function HierarchyDSL_getDSL( g ) {
       $(go.Panel, "Auto",
         { 
           pickable: true,
-          background: "transparent"
+          background: "transparent",
         },
         $(go.Shape, { fill: "rgba(128,128,128,0.2)" }),
         $(go.Placeholder, { 
