@@ -765,6 +765,7 @@ LICENSE file in the root directory of this source tree.
         { label: 'UShapeInternalArrowOut', if: ( o )=> true, do: getMenuItemTextValue   },
       ]},
     'layoutMenu': { layout: 'vertical', itemList: [
+        { label: 'No layout', if: ( o )=> o.obj.part instanceof SelectableGroup, do: getMenuItemTextLayout },
         { label: 'Horizontal', if: ( o )=> true, do: getMenuItemTextLayout },
         { label: 'Vertical', if: ( o )=> true, do: getMenuItemTextLayout },
         { label: 'Tree', if: ( o )=> true, do: getMenuItemTextLayout },

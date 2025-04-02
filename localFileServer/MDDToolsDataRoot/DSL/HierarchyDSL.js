@@ -25,22 +25,31 @@ function HierarchyDSL_getDSL( g ) {
   //-----------------------
   // Define event handler
   //-----------------------
-  function makeLayout(layout) {  // a Binding conversion function
-    if (layout === "Tree") {
-      return new go.TreeLayout();
-    } else if (layout === "Vertical") {
-      return new go.GridLayout(
-        {
-          wrappingColumn: 1, alignment: go.GridLayout.Position,
-          cellSize: new go.Size(1, 1), spacing: new go.Size(4, 4)
-        });
-    }
-    // horizontal layout as a default one
-    return new go.GridLayout(
+  const layoutFactories = {
+    "Tree": () => new go.TreeLayout(),
+    "Vertical": () => new go.GridLayout(
+      {
+        wrappingColumn: 1, alignment: go.GridLayout.Position,
+        cellSize: new go.Size(1, 1), spacing: new go.Size(4, 4)
+      }),
+    "Horizontal": () => new go.GridLayout(
       {
         wrappingWidth: Infinity, alignment: go.GridLayout.Position,
         cellSize: new go.Size(1, 1), spacing: new go.Size(4, 4)
-      });
+      })
+  }
+
+  function makeLayout(defaultLayout = '') {
+    return function (layout) {
+      if (layout in layoutFactories) {
+        return layoutFactories[layout]();
+      }
+      if (defaultLayout in layoutFactories) {
+        return layoutFactories[defaultLayout]();
+      }
+      // no layout as default
+      return new go.Layout();
+    }
   }
 
   function defaultColor(horiz) {  // a Binding conversion function
@@ -94,6 +103,7 @@ function HierarchyDSL_getDSL( g ) {
         defaultStretch: go.GraphObject.Horizontal,
         ungroupable: true,  // enable Ctrl-Shift-G to ungroup a selected Group
         handlesDragDropForMembers: true,
+        layout: makeLayout()(),
         
         mouseDragEnter: function(e, grp, prev) { 
           highlightGroup(e, grp, true);
@@ -109,6 +119,7 @@ function HierarchyDSL_getDSL( g ) {
         }
       },
       new go.Binding('zOrder'),
+      new go.Binding("layout", "layout", makeLayout()),
       new go.Binding("location", "location", function( location ) {
         const values = location.split( ' ' );
         // TODO, the 10 comes from the grid size --> move this constant into a config file
@@ -146,7 +157,8 @@ function HierarchyDSL_getDSL( g ) {
             stroke: "lightgray",
             font: "bold 40px sans-serif",
             isMultiline: true,
-            editable: true
+            editable: true,
+            contextMenu: layoutContextMenu
           },
           new go.Binding("text", "label").makeTwoWay(),
           new go.Binding("font", "font").makeTwoWay(),
@@ -192,11 +204,11 @@ function HierarchyDSL_getDSL( g ) {
         mouseDrop: finishDrop,
         handlesDragDropForMembers: true,  // don't need to define handlers on member Nodes and Links
         // Groups containing Groups layout their members horizontally
-        layout: makeLayout(false)
+        layout: makeLayout('Horizontal')(),
       },
       new go.Binding('zOrder'),
       new go.Binding("location", "location",go.Point.parse).makeTwoWay(go.Point.stringify),
-      new go.Binding("layout", "layout", makeLayout),
+      new go.Binding("layout", "layout", makeLayout('Horizontal')),
       new go.Binding("background", "isHighlighted", h => h ? "rgba(255,0,0,0.2)" : "transparent").ofObject(),
       $(go.Shape, "RoundedRectangle",
         { 
