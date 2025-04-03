@@ -24,7 +24,7 @@ class GroupDraggingTool extends go.DraggingTool {
 	canStart() {
 		const currentPart = this.findDraggablePart();
 		if (currentPart && currentPart instanceof SelectableGroup) {
-			return currentPart.isActionOnHeader();
+			return currentPart.isActionOnHeader() ? super.canStart() : false;
 		} else {
 			return super.canStart();
 		}
