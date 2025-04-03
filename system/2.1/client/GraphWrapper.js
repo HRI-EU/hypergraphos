@@ -1099,18 +1099,10 @@ class GraphWrapper {
 			});
 		}
 	}
-	iterableToArray( iterable ) {
-		const res = [];
-		const it = iterable.iterator;
-		while( it.next() ) {
-			res.push( it.value );
-		}
-		return res;
-	}
 	doBringNode( position ) {
 		const findOverlappingNodes = ( node ) => {
 			const parts = this.diagram.findPartsIn( node.actualBounds.copy(), true );
-			return this.iterableToArray(
+			return iterableToArray(
 				parts.filter( ( part ) => part instanceof go.Node )
 			);
 		}
@@ -1152,7 +1144,7 @@ class GraphWrapper {
 			return [ ...sortedNaNZOrderByDataArray, ...sortedNonNaNZOrder ];
 		}
 
-		const selectedNodes = this.iterableToArray(
+		const selectedNodes = iterableToArray(
 			this.getSelection().filter(
 				( part ) => part instanceof go.Node
 			)
@@ -1186,14 +1178,14 @@ class GraphWrapper {
 				nodesToCheck = newNodesToCheck;
 			}
 
-			const selectionOrder = getNodeOrder( this.iterableToArray( nodeSet.toList() ) );
+			const selectionOrder = getNodeOrder( iterableToArray( nodeSet.toList() ) );
 			const firstSelectionNode = selectionOrder[0];
 
 			if ( newOverlappingNodes.count === 0 || !firstSelectionNode ) {
 				return;
 			}
 
-			const allOverlappingNodesOrder = getNodeOrder( this.iterableToArray( allOverlappingNodes.toList() ) );
+			const allOverlappingNodesOrder = getNodeOrder( iterableToArray( allOverlappingNodes.toList() ) );
 
 			const selectionIndex = allOverlappingNodesOrder.findIndex(
 				( node ) => node.key === firstSelectionNode.key
@@ -2203,6 +2195,20 @@ class GraphWrapper {
 		});
 		// END PATCH
 		//////////////////////////////////
+
+		diagram.commandHandler.copyToClipboard = function(coll) {
+			const copied = iterableToArray(coll);
+			const model = diagram.model.nodeDataArray;
+			copied.sort((a,b) => {
+				if (a instanceof go.Node && b instanceof go.Node) {
+					const aIndex = model.findIndex(node => node.key === a.key);
+					const bIndex = model.findIndex(node => node.key === b.key);
+					return aIndex - bIndex;
+				}
+				return 0;
+			});
+			return go.CommandHandler.prototype.copyToClipboard.call(this, new go.List(copied));
+		}
 
 		diagram.commandHandler.doKeyDown = function() {
 			// Get last input

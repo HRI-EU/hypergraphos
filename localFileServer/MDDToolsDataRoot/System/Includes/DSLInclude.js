@@ -2558,6 +2558,14 @@ console.log( 'Button Status: '+obj.data.checked );`;
     diagram.commitTransaction( "turn off visibility of part on deselect" );
   };
 
+  function iterableToArray( iterable ) {
+		const res = [];
+		const it = iterable.iterator;
+		while( it.next() ) {
+			res.push( it.value );
+		}
+		return res;
+	}
   
   class SelectableGroup extends go.Group {
     static HEADER_NAME = 'Header'
