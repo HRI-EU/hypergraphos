@@ -2572,7 +2572,7 @@ console.log( 'Button Status: '+obj.data.checked );`;
 
     isActionOnHeader() {
       return this.diagram.findObjectsNear(
-        this.diagram.lastInput.documentPoint, 
+        this.diagram.firstInput.documentPoint, 
         1,
         (graphObject) => graphObject.name === SelectableGroup.HEADER_NAME ? graphObject : null).count !== 0;
     }
