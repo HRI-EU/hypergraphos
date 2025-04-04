@@ -7,144 +7,120 @@ This source code is licensed under the MIT License found in the
 LICENSE file in the root directory of this source tree.
 */
 
-/*
-   DSL for Tables
-*/
-function TableDSL_includeList() {
-  return([]);
+function findColumnDefinitionForName( nodedata, attrName)  {
+  const columns = nodedata.columnDefinitions_;
+  for( let i = 0; i < columns.length; ++i ) {
+    if( columns[i].attr === attrName ) {
+      return( columns[i] );
+    }
+  }
+  return( null );
 }
-function TableDSL_getDSL( g ) {
-  let diagram = (g.diagram? g.diagram: g.nodePalette);
 
-  function insertIntoTable( index, row ) {
-    const node = diagram.selection.first();
-    if( node != null ) {
-      const data = node.data;
-      
-      if( index == -1 ) {
-        index = data.table_.length;
-      }
-      
-      diagram.startTransaction( "insertIntoTable" );
-      diagram.model.insertArrayItem( data.table_, index, { row_: row } );
-      diagram.commitTransaction( "insertIntoTable" );
+function findColumnDefinitionForColumn( nodedata, index ) {
+  const columns = nodedata.columnDefinitions_;
+  for( let i = 0; i < columns.length; ++i ) {
+    if( columns[i].column === index ) {
+      return( columns[i] );
     }
   }
-  function addRow( index ) {
-    const node = diagram.selection.first();
-    if( node != null ) {
-      const data = node.data;
-      
-      const colDef = data.columnDefinitions_;
-      const row = [];
-      colDef.forEach( (d)=> row.push( { attr: d.attr, text: '' } ) );
-      insertIntoTable( index, row );
+  return( null );
+}
+
+class TableNode extends go.Node {
+  insertIntoTable( index, row ) {
+    if( index == -1 ) {
+      index = this.data.table_.length;
     }
+    
+    this.diagram.startTransaction( "insertIntoTable" );
+    this.diagram.model.insertArrayItem( this.data.table_, index, { row_: row } );
+    this.diagram.commitTransaction( "insertIntoTable" );
   }
-  function removeFromTable( index ) {
-    const node = diagram.selection.first();
-    if( node != null ) {
-      const data = node.data;
-      
-      diagram.startTransaction( "removeFromTable" );
-      // remove second item of list, at index #1
-      diagram.model.removeArrayItem( data.table_, index );
-      diagram.commitTransaction( "removeFromTable" );
+
+  addRow( index ) {
+    const colDef = this.data.columnDefinitions_;
+    const row = [];
+    colDef.forEach( (d)=> row.push( { attr: d.attr, text: '' } ) );
+    this.insertIntoTable( index, row );
+  }
+
+  removeFromTable( index ) {
+    this.diagram.startTransaction( "removeFromTable" );
+    // remove second item of list, at index #1
+    this.diagram.model.removeArrayItem( this.data.table_, index );
+    this.diagram.commitTransaction( "removeFromTable" );
+  }
+
+  addColumn( attrName, attrText ) {
+    // if name is not given, find an unused column name
+    if( ( attrName === undefined ) || ( attrName === "" ) ) {
+      attrName = "0";
+      let count = 0;
+      while( findColumnDefinitionForName( this.data, attrName ) !== null ) {
+        attrName = (count++).toString();
+      }
     }
-  }
-  function findColumnDefinitionForName( nodedata, attrName)  {
-    const columns = nodedata.columnDefinitions_;
-    for( let i = 0; i < columns.length; ++i ) {
-      if( columns[i].attr === attrName ) {
-        return( columns[i] );
-      }
+    if( !attrText ) {
+      attrText = 'Col'+attrName;
     }
-    return( null );
-  }
-  function findColumnDefinitionForColumn( nodedata, index ) {
-    const columns = nodedata.columnDefinitions_;
-    for( let i = 0; i < columns.length; ++i ) {
-      if( columns[i].column === index ) {
-        return( columns[i] );
-      }
+    // find an unused column #
+    let col = 0;
+    while( findColumnDefinitionForColumn( this.data, col ) !== null ) {
+      col++;
     }
-    return( null );
-  }
-  function addColumn( attrName, attrText ) {
-    const node = diagram.selection.first();
-    if( node != null ) {
-      const data = node.data;
-      // if name is not given, find an unused column name
-      if( ( attrName === undefined ) || ( attrName === "" ) ) {
-        attrName = "0";
-        let count = 0;
-        while( findColumnDefinitionForName( data, attrName ) !== null ) {
-          attrName = (count++).toString();
-        }
-      }
-      if( !attrText ) {
-        attrText = 'Col'+attrName;
-      }
-      // find an unused column #
-      let col = 0;
-      while( findColumnDefinitionForColumn( data, col ) !== null ) {
-        col++;
-      }
-      
-      diagram.startTransaction( "addColumn" );
-      const model = diagram.model;
-      // add a column definition for the node's whole table
-      model.addArrayItem( data.columnDefinitions_, {
+    
+    this.diagram.startTransaction( "addColumn" );
+    const model = this.diagram.model;
+    // add a column definition for the node's whole table
+    model.addArrayItem( this.data.columnDefinitions_, {
+      attr: attrName,
+      text: attrText,
+      column: col
+    });
+    // add cell to each person in the node's table.
+    const table = this.data.table_;
+    for( let j = 0; j < table.length; ++j ) {
+      const tableRow = table[j];
+      model.addArrayItem( tableRow.row_, {
         attr: attrName,
-        text: attrText,
-        column: col
+        text: '',
       });
-      // add cell to each person in the node's table.
-      const table = data.table_;
+    }
+    this.diagram.commitTransaction( "addColumn" );
+  }
+
+  removeColumn( index ) {
+    const colDef = this.data.columnDefinitions_[index];
+    if( colDef != undefined ) {
+      const attrName = colDef.attr;
+      
+      this.diagram.startTransaction( "removeColumn" );
+      const model = this.diagram.model;
+      model.removeArrayItem( this.data.columnDefinitions_, index );
+      node.findObject( "TABLE" ).removeColumnDefinition( colDef.column );
+      // update columns for each row in this table
+      const table = this.data.table_;
       for( let j = 0; j < table.length; ++j ) {
         const tableRow = table[j];
-        model.addArrayItem( tableRow.row_, {
-          attr: attrName,
-          text: '',
-        });
-      }
-      diagram.commitTransaction( "addColumn" );
-    }
-  }
-  function removeColumn( index ) {
-    const node = diagram.selection.first();
-    if( node != null ) {
-      const data = node.data;
-      const colDef = data.columnDefinitions_[index];
-      if( colDef != undefined ) {
-        const attrName = colDef.attr;
-        
-        diagram.startTransaction( "removeColumn" );
-        const model = diagram.model;
-        model.removeArrayItem( data.columnDefinitions_, index );
-        node.findObject( "TABLE" ).removeColumnDefinition( colDef.column );
-        // update columns for each row in this table
-        const table = data.table_;
-        for( let j = 0; j < table.length; ++j ) {
-          const tableRow = table[j];
-          const cols = tableRow.row_;
-          for( let k = 0; k < cols.length; ++k ) {
-            const cell = cols[k];
-            if( cell.attr === attrName ) {
-              // get rid of this attribute cell from the tableRow.row_ Array
-              model.removeArrayItem( cols, k );
-              break;
-            }
+        const cols = tableRow.row_;
+        for( let k = 0; k < cols.length; ++k ) {
+          const cell = cols[k];
+          if( cell.attr === attrName ) {
+            // get rid of this attribute cell from the tableRow.row_ Array
+            model.removeArrayItem( cols, k );
+            break;
           }
         }
-        diagram.commitTransaction( "removeColumn" );
       }
+      this.diagram.commitTransaction( "removeColumn" );
     }
   }
-  function swapTwoColumns( firstColName, secondColName ) {
-    diagram.startTransaction( "swapColumns" );
-    const model = diagram.model;
-    diagram.selection.each( node => {
+
+  swapTwoColumns( firstColName, secondColName ) {
+    this.diagram.startTransaction( "swapColumns" );
+    const model = this.diagram.model;
+    this.diagram.selection.each( node => {
       if( ( node instanceof go.Node ) ) {
         const data = node.data;
         const firstColDef = findColumnDefinitionForName( data, firstColName );
@@ -160,15 +136,23 @@ function TableDSL_getDSL( g ) {
         }
       }
     });
-    diagram.commitTransaction( "swapColumns" );
+    this.diagram.commitTransaction( "swapColumns" );
   }
+}
 
+/*
+   DSL for Tables
+*/
+function TableDSL_includeList() {
+  return([]);
+}
+function TableDSL_getDSL( g ) {
   const dsl = {
     // Define DSL templates
     templateNodeList: [
       { category: 'Table_HeaderTop', template: ()=>{
         return( 
-          $(go.Node, "Auto",
+          $(TableNode, "Auto",
             {
               resizable: true,
             },

@@ -724,6 +724,12 @@ LICENSE file in the root directory of this source tree.
       diagram.commitTransaction("change layout");
     }
   }
+  function getMenuItemTextTableCellAction( o ) {
+    //
+  }
+  function getMenuItemTextTableHeaderAction( o ) {
+    //
+  }
   var menuDSL = {
     'fileTypeMenu': createFileTypeMenu(),
     'figureMenu':
@@ -775,6 +781,22 @@ LICENSE file in the root directory of this source tree.
         { label: 'Object', if: ( o )=> true, do: getMenuItemTextType },
         { label: 'Array', if: ( o )=> true, do: getMenuItemTextType },
         { label: 'Data', if: ( o )=> true, do: getMenuItemTextType },
+      ]},
+    'tableCellMenu': { layout: 'vertical', itemList: [
+        { label: 'Add column before', if: ( o )=> true, do: getMenuItemTextTableCellAction },
+        { label: 'Add column after', if: ( o )=> true, do: getMenuItemTextTableCellAction },
+        { label: 'Delete current column', if: ( o )=> true, do: getMenuItemTextTableCellAction },
+        { label: 'Move column left', if: ( o )=> true, do: getMenuItemTextTableCellAction },
+        { label: 'Move column right', if: ( o )=> true, do: getMenuItemTextTableCellAction },
+        { label: 'Add row before', if: ( o )=> true, do: getMenuItemTextTableCellAction },
+        { label: 'Add row after', if: ( o )=> true, do: getMenuItemTextTableCellAction },
+        { label: 'Delete current row', if: ( o )=> true, do: getMenuItemTextTableCellAction },
+        { label: 'Move row up', if: ( o )=> true, do: getMenuItemTextTableCellAction },
+        { label: 'Move row down', if: ( o )=> true, do: getMenuItemTextTableCellAction },
+      ]},
+    'tableHeaderMenu': { layout: 'vertical', itemList: [
+        { label: 'Sort descending', if: ( o )=> true, do: getMenuItemTextTableHeaderAction },
+        { label: 'Sort ascending', if: ( o )=> true, do: getMenuItemTextTableHeaderAction },
       ]},
     'basicNodeMenu': 
       { layout: 'vertical', itemList: [
