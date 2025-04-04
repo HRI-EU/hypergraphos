@@ -1788,7 +1788,7 @@ class GraphWrapper {
 				const gInstance = item.template( param );
 				gInstance.contextMenu = this.nodeContextMenu;
 				gInstance.toolTip = this.newGroupToolTip();
-				gInstance.locationSpot = go.Spot.Left;
+				gInstance.locationSpot = go.Spot.TopLeft;
 				dGroupMap.add( category, gInstance );
 				const pInstance = item.template( param );
 				pInstance.locationSpot = go.Spot.Center;
