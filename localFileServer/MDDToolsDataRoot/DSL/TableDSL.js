@@ -138,6 +138,28 @@ class TableNode extends go.Node {
     });
     this.diagram.commitTransaction( "swapColumns" );
   }
+
+  sortByColumn ( columnIndex, isAscending ) {
+    const itemArrayCopy = this.data.table_.slice(0);
+    const sortedAttr = this.data.columnDefinitions_.find( (d) => d.column === columnIndex ).attr;
+    if (!sortedAttr) {
+      return;
+    }
+    itemArrayCopy.sort( (a, b) => {
+      const aValue = a.row_.find( (d) => d.attr === sortedAttr ).text;
+      const bValue = b.row_.find( (d) => d.attr === sortedAttr ).text;
+      if (aValue < bValue) {
+        return isAscending ? -1 : 1;
+      } else if (aValue > bValue) {
+        return isAscending ? 1 : -1;
+      } else {
+        return 0;
+      }
+    });
+    this.diagram.startTransaction("sorting table");
+    this.diagram.model.setDataProperty(this.data, 'itemArray', itemArrayCopy);
+    this.diagram.commitTransaction("sorting table");
+  }
 }
 
 /*
@@ -147,6 +169,13 @@ function TableDSL_includeList() {
   return([]);
 }
 function TableDSL_getDSL( g ) {
+  
+  const cm = g.contextMenu;
+  cm.add( menuDSL, 'tableCellMenu' );
+  cm.add( menuDSL, 'tableHeaderMenu' );
+  const cellContextMenu = cm.getMenu( 'tableCellMenu' );
+  const headerContextMenu = cm.getMenu( 'tableHeaderMenu' );
+
   const dsl = {
     // Define DSL templates
     templateNodeList: [
@@ -184,8 +213,10 @@ function TableDSL_getDSL( g ) {
                         {
                           margin: new go.Margin( 2, 2, 0, 2 ),
                           font: "bold 10pt sans-serif",
+                          contextMenu: headerContextMenu,
                         },
-                        new go.Binding( "text" )
+                        new go.Binding( "text" ),
+                        new go.Binding( "_column", "column" )
                       )
                     )
                 }
@@ -225,8 +256,11 @@ function TableDSL_getDSL( g ) {
                               //textAlign: 'center',
                               margin: new go.Margin( 2, 2, 0, 2 ),
                               wrap: go.TextBlock.None,
+                              contextMenu: cellContextMenu,
                             },
-                            new go.Binding( "text" ).makeTwoWay()
+                            new go.Binding( "text" ).makeTwoWay(),
+                            new go.Binding( "_column", "attr" ),
+                            new go.Binding( "_row", "row_" ),
                           )
                         )
                     }

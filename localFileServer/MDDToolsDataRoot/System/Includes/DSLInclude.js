@@ -725,10 +725,14 @@ LICENSE file in the root directory of this source tree.
     }
   }
   function getMenuItemTextTableCellAction( o ) {
+    debugger;
     //
   }
   function getMenuItemTextTableHeaderAction( o ) {
-    //
+    const column = o.d.obj._column;
+    const table = o.d.obj.part;
+    const isAscending = o.item.label == 'Sort ascending';
+    table.sortByColumn( column, isAscending );
   }
   var menuDSL = {
     'fileTypeMenu': createFileTypeMenu(),
