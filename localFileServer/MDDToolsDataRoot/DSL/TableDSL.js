@@ -140,12 +140,12 @@ class TableNode extends go.Node {
   }
 
   sortByColumn ( columnIndex, isAscending ) {
-    const itemArrayCopy = this.data.table_.slice(0);
+    const tableCopy = this.data.table_.slice(0);
     const sortedAttr = this.data.columnDefinitions_.find( (d) => d.column === columnIndex ).attr;
     if (!sortedAttr) {
       return;
     }
-    itemArrayCopy.sort( (a, b) => {
+    tableCopy.sort( (a, b) => {
       const aValue = a.row_.find( (d) => d.attr === sortedAttr ).text;
       const bValue = b.row_.find( (d) => d.attr === sortedAttr ).text;
       if (aValue < bValue) {
@@ -157,7 +157,7 @@ class TableNode extends go.Node {
       }
     });
     this.diagram.startTransaction("sorting table");
-    this.diagram.model.setDataProperty(this.data, 'itemArray', itemArrayCopy);
+    this.diagram.model.setDataProperty(this.data, 'table_', tableCopy);
     this.diagram.commitTransaction("sorting table");
   }
 }
