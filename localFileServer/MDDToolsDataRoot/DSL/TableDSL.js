@@ -45,14 +45,19 @@ class TableNode extends go.Node {
     this.insertIntoTable( index, row );
   }
 
-  removeFromTable( index ) {
+  removeRow( index ) {
     this.diagram.startTransaction( "removeFromTable" );
     // remove second item of list, at index #1
     this.diagram.model.removeArrayItem( this.data.table_, index );
     this.diagram.commitTransaction( "removeFromTable" );
   }
 
-  addColumn( attrName, attrText ) {
+  fixColumnOrder() {
+    this.diagram.model.setDataProperty( this.data, "columnDefinitions_", this.data.columnDefinitions_.map( (x, i) => ({ ...x, column: i }) ) );
+    this.diagram.model.updateTargetBindings( this.data );
+  }
+
+  addColumn( index, attrName, attrText ) {
     // if name is not given, find an unused column name
     if( ( attrName === undefined ) || ( attrName === "" ) ) {
       attrName = "0";
@@ -64,28 +69,24 @@ class TableNode extends go.Node {
     if( !attrText ) {
       attrText = 'Col'+attrName;
     }
-    // find an unused column #
-    let col = 0;
-    while( findColumnDefinitionForColumn( this.data, col ) !== null ) {
-      col++;
-    }
-    
+
     this.diagram.startTransaction( "addColumn" );
     const model = this.diagram.model;
     // add a column definition for the node's whole table
-    model.addArrayItem( this.data.columnDefinitions_, {
+    model.insertArrayItem( this.data.columnDefinitions_, index, {
       attr: attrName,
       text: attrText,
-      column: col
+      column: index
     });
     // add cell to each person in the node's table.
     const table = this.data.table_;
     for( let j = 0; j < table.length; ++j ) {
       const tableRow = table[j];
-      model.addArrayItem( tableRow.row_, {
+      model.insertArrayItem( tableRow.row_, index, {
         attr: attrName,
         text: '',
       });
+      this.fixColumnOrder();
     }
     this.diagram.commitTransaction( "addColumn" );
   }
@@ -98,7 +99,7 @@ class TableNode extends go.Node {
       this.diagram.startTransaction( "removeColumn" );
       const model = this.diagram.model;
       model.removeArrayItem( this.data.columnDefinitions_, index );
-      node.findObject( "TABLE" ).removeColumnDefinition( colDef.column );
+      this.findObject( "TABLE" ).removeColumnDefinition( colDef.column );
       // update columns for each row in this table
       const table = this.data.table_;
       for( let j = 0; j < table.length; ++j ) {
@@ -113,6 +114,7 @@ class TableNode extends go.Node {
           }
         }
       }
+      this.fixColumnOrder();
       this.diagram.commitTransaction( "removeColumn" );
     }
   }
@@ -120,22 +122,35 @@ class TableNode extends go.Node {
   swapTwoColumns( firstColName, secondColName ) {
     this.diagram.startTransaction( "swapColumns" );
     const model = this.diagram.model;
-    this.diagram.selection.each( node => {
-      if( ( node instanceof go.Node ) ) {
-        const data = node.data;
-        const firstColDef = findColumnDefinitionForName( data, firstColName );
-        if( firstColDef != null ) {
-          const firstColumn = firstColDef.column;  // remember the column number
-          const secondColDef = findColumnDefinitionForName( data, secondColName );
-          if( secondColDef != null) {
-            const secondColumn = secondColDef.column;  // and this one too
-            model.setDataProperty( firstColDef, "column", secondColumn );
-            model.setDataProperty( secondColDef, "column", firstColumn );
-            model.updateTargetBindings( data );  // update all bindings, to get the cells right
-          }
-        }
+    const data = this.data;
+    const firstColDef = findColumnDefinitionForName( data, firstColName );
+    if( firstColDef != null ) {
+      const firstColumn = firstColDef.column;  // remember the column number
+      const secondColDef = findColumnDefinitionForName( data, secondColName );
+      if( secondColDef != null) {
+        const secondColumn = secondColDef.column;  // and this one too
+        model.setDataProperty( firstColDef, "column", secondColumn );
+        model.setDataProperty( secondColDef, "column", firstColumn );
+        model.updateTargetBindings( data );  // update all bindings, to get the cells right
       }
-    });
+    }
+    this.fixColumnOrder();
+    this.diagram.commitTransaction( "swapColumns" );
+  }
+
+  swapTwoColumnsByIndex ( firstColIndex, secondColIndex ) {
+    const first = Math.min(firstColIndex, secondColIndex);
+    const second = Math.max(firstColIndex, secondColIndex);
+    const model = this.diagram.model;
+    const data = this.data;
+    this.diagram.startTransaction( "swapColumns" );
+    const firstColDef = findColumnDefinitionForColumn( data, first );
+    const secondColDef = findColumnDefinitionForColumn( data, second );
+    model.removeArrayItem( data.columnDefinitions_, second );
+    model.removeArrayItem ( data.columnDefinitions_, first );
+    model.insertArrayItem( data.columnDefinitions_, first, secondColDef );
+    model.insertArrayItem( data.columnDefinitions_, second, firstColDef );
+    this.fixColumnOrder();
     this.diagram.commitTransaction( "swapColumns" );
   }
 
@@ -159,6 +174,18 @@ class TableNode extends go.Node {
     this.diagram.startTransaction("sorting table");
     this.diagram.model.setDataProperty(this.data, 'table_', tableCopy);
     this.diagram.commitTransaction("sorting table");
+  }
+
+  moveColumnLeft( columnIndex ) {
+    if( columnIndex > 0 ) {
+      this.swapTwoColumnsByIndex( columnIndex, columnIndex-1 );
+    }
+  }
+
+  moveColumnRight( columnIndex ) {
+    if( columnIndex < this.data.columnDefinitions_.length - 1 ) {
+      this.swapTwoColumnsByIndex( columnIndex, columnIndex+1 );
+    }
   }
 }
 
@@ -256,11 +283,13 @@ function TableDSL_getDSL( g ) {
                               //textAlign: 'center',
                               margin: new go.Margin( 2, 2, 0, 2 ),
                               wrap: go.TextBlock.None,
+                              background: 'transparent',
+                              stretch: go.GraphObject.Horizontal,
                               contextMenu: cellContextMenu,
                             },
                             new go.Binding( "text" ).makeTwoWay(),
                             new go.Binding( "_column", "attr" ),
-                            new go.Binding( "_row", "row_" ),
+                            new go.Binding( "_row", "" ),
                           )
                         )
                     }

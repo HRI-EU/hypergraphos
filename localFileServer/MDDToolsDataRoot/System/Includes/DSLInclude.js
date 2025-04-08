@@ -725,8 +725,42 @@ LICENSE file in the root directory of this source tree.
     }
   }
   function getMenuItemTextTableCellAction( o ) {
-    debugger;
-    //
+    const row = o.d.obj._row 
+    const columnName = o.d.obj._column
+    const table = o.d.obj.part;
+    const rowIndex = table.data.table_.findIndex( x => x.row_.includes( row ) );
+    const colIndex = table.data.table_[rowIndex].row_.findIndex( x => x.attr === columnName );
+    const action = o.item.label;
+
+    console.log(colIndex)
+
+    switch ( action ) {
+      case 'Add column before':
+        table.addColumn(colIndex);
+        break;
+      case 'Add column after':
+        table.addColumn(colIndex + 1);
+        break;
+      case 'Delete current column':
+        table.removeColumn(colIndex);
+        break;
+      case 'Move column left':
+        table.moveColumnLeft(colIndex);
+        break;      
+      case 'Move column right':
+        table.moveColumnRight(colIndex);
+        break;
+      case 'Add row before':
+        break;
+      case 'Add row after':
+        break;
+      case 'Delete current row':
+        break;
+      case 'Move row up':
+        break;
+      case 'Move row down':
+        break;
+    }
   }
   function getMenuItemTextTableHeaderAction( o ) {
     const column = o.d.obj._column;
