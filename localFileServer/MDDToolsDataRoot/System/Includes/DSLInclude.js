@@ -729,10 +729,8 @@ LICENSE file in the root directory of this source tree.
     const columnName = o.d.obj._column
     const table = o.d.obj.part;
     const rowIndex = table.data.table_.findIndex( x => x.row_.includes( row ) );
-    const colIndex = table.data.table_[rowIndex].row_.findIndex( x => x.attr === columnName );
+    const colIndex = table.data.columnDefinitions_.find( x => x.attr == columnName ).column;
     const action = o.item.label;
-
-    console.log(colIndex)
 
     switch ( action ) {
       case 'Add column before':
@@ -751,14 +749,19 @@ LICENSE file in the root directory of this source tree.
         table.moveColumnRight(colIndex);
         break;
       case 'Add row before':
+        table.addRow(rowIndex);
         break;
       case 'Add row after':
+        table.addRow(rowIndex + 1);
         break;
       case 'Delete current row':
+        table.removeRow(rowIndex);
         break;
       case 'Move row up':
+        table.moveRowUp(rowIndex);
         break;
       case 'Move row down':
+        table.moveRowDown(rowIndex);
         break;
     }
   }

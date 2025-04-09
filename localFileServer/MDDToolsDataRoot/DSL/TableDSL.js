@@ -119,25 +119,6 @@ class TableNode extends go.Node {
     }
   }
 
-  swapTwoColumns( firstColName, secondColName ) {
-    this.diagram.startTransaction( "swapColumns" );
-    const model = this.diagram.model;
-    const data = this.data;
-    const firstColDef = findColumnDefinitionForName( data, firstColName );
-    if( firstColDef != null ) {
-      const firstColumn = firstColDef.column;  // remember the column number
-      const secondColDef = findColumnDefinitionForName( data, secondColName );
-      if( secondColDef != null) {
-        const secondColumn = secondColDef.column;  // and this one too
-        model.setDataProperty( firstColDef, "column", secondColumn );
-        model.setDataProperty( secondColDef, "column", firstColumn );
-        model.updateTargetBindings( data );  // update all bindings, to get the cells right
-      }
-    }
-    this.fixColumnOrder();
-    this.diagram.commitTransaction( "swapColumns" );
-  }
-
   swapTwoColumnsByIndex ( firstColIndex, secondColIndex ) {
     const first = Math.min(firstColIndex, secondColIndex);
     const second = Math.max(firstColIndex, secondColIndex);
@@ -152,6 +133,21 @@ class TableNode extends go.Node {
     model.insertArrayItem( data.columnDefinitions_, second, firstColDef );
     this.fixColumnOrder();
     this.diagram.commitTransaction( "swapColumns" );
+  }
+
+  swapTwoRowsByIndex ( firstRowIndex, secondRowIndex ) {
+    const first = Math.min(firstRowIndex, secondRowIndex);
+    const second = Math.max(firstRowIndex, secondRowIndex);
+    const model = this.diagram.model;
+    const data = this.data;
+    this.diagram.startTransaction( "swapRows" );
+    const firstRow = data.table_[first];
+    const secondRow = data.table_[second];
+    model.removeArrayItem( data.table_, second );
+    model.removeArrayItem( data.table_, first );
+    model.insertArrayItem( data.table_, first, secondRow );
+    model.insertArrayItem( data.table_, second, firstRow );
+    this.diagram.commitTransaction( "swapRows" );
   }
 
   sortByColumn ( columnIndex, isAscending ) {
@@ -185,6 +181,18 @@ class TableNode extends go.Node {
   moveColumnRight( columnIndex ) {
     if( columnIndex < this.data.columnDefinitions_.length - 1 ) {
       this.swapTwoColumnsByIndex( columnIndex, columnIndex+1 );
+    }
+  }
+
+  moveRowUp ( rowIndex ) {
+    if( rowIndex > 0 ) {
+      this.swapTwoRowsByIndex( rowIndex, rowIndex-1 );
+    }
+  }
+
+  moveRowDown ( rowIndex ) {
+    if( rowIndex < this.data.table_.length - 1 ) {
+      this.swapTwoRowsByIndex( rowIndex, rowIndex+1 );
     }
   }
 }
